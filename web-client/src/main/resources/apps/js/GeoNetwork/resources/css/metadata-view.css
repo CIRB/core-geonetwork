@@ -167,6 +167,7 @@ div.md-contact {
 
 span.md-action-menu {
   visibility : hidden;
+  cursor:pointer;
 }
 
 .md-view ul li.x-view-selected {

@@ -408,7 +408,26 @@ public class SchemaManager {
 		}
 	}
 
-	/**
+    /**
+     * Returns the schema csw presentation directory.
+     *
+     * @param name the metadata schema we want the csw present info directory
+     * @return
+     */
+    public String getSchemaConvertDir(String name) {
+        beforeRead();
+        try {
+            String dir = getSchemaDir(name);
+
+            dir = dir +"convert";
+
+            return dir;
+        } finally {
+            afterRead();
+        }
+    }
+
+    /**
      * Return the schema information (usually localized codelists, labels etc) XmlFile objects.
 	 *
 	 * @param name the metadata schema we want schema info for

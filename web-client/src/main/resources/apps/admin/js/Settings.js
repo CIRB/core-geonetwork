@@ -45,6 +45,14 @@ Proj4js.defs["EPSG:2154"] = "+proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 
 
 // Config for WGS84 based maps
 GeoNetwork.map.PROJECTION = "EPSG:4326";
+/*
+* Changed by GVB
+* Replaced the default map configuration 
+*/
+GeoNetwork.map.EXTENT=new OpenLayers.Bounds(4.20,50.7,4.53,50.96);
+GeoNetwork.map.BACKGROUND_LAYERS=[new OpenLayers.Layer.WMS("Background layer","http://geoserver.gis.irisnetlab.be/geoserver/wms",{layers:"urbisFR",format:"image/jpeg"},{isBaseLayer:true})];
+GeoNetwork.map.MAP_OPTIONS={projection:GeoNetwork.map.PROJECTION,restrictedExtent:GeoNetwork.map.EXTENT,controls:[]};
+/*
 GeoNetwork.map.EXTENT = new OpenLayers.Bounds(-180,-90,180,90);
 
 GeoNetwork.map.BACKGROUND_LAYERS = [
@@ -57,3 +65,4 @@ GeoNetwork.map.MAP_OPTIONS = {
     restrictedExtent: GeoNetwork.map.EXTENT,
     controls: []
 };
+*/

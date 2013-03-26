@@ -33,6 +33,15 @@ GeoNetwork.map.printCapabilities = "../../pdf";
 
 // Config for WGS84 based maps
 GeoNetwork.map.PROJECTION = "EPSG:4326";
+/*
+* Changed by GVB
+* Replaced the default map configuration 
+*/
+GeoNetwork.map.EXTENT=new OpenLayers.Bounds(4.20,50.7,4.53,50.96);
+GeoNetwork.map.BACKGROUND_LAYERS=[new OpenLayers.Layer.WMS("Background layer","http://geoserver.gis.irisnetlab.be/geoserver/wms",{layers:"urbisFR",format:"image/jpeg"},{isBaseLayer:true})];
+GeoNetwork.map.MAP_OPTIONS={projection:GeoNetwork.map.PROJECTION,restrictedExtent:GeoNetwork.map.EXTENT,controls:[]};
+GeoNetwork.map.MAIN_MAP_OPTIONS={projection:GeoNetwork.map.PROJECTION,restrictedExtent:GeoNetwork.map.EXTENT,controls:[]};Ext.namespace("GeoNetwork");
+/*
 GeoNetwork.map.EXTENT = new OpenLayers.Bounds(-180,-90,180,90);
 //GeoNetwork.map.EXTENT = new OpenLayers.Bounds(-5.1,41,9.7,51);
 
@@ -62,3 +71,4 @@ GeoNetwork.map.MAIN_MAP_OPTIONS = {
     restrictedExtent: GeoNetwork.map.EXTENT,
     controls: []
 };
+*/

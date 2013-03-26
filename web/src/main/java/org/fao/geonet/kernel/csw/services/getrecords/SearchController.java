@@ -302,6 +302,9 @@ public class SearchController {
 		if (schema.equals("fgdc-std") || schema.equals("dublin-core"))
 		    if(outSchema != OutputSchema.OGC_CORE)
 		    	return null;
+
+		// apply requested outputschema
+        res = applyOutputSchema(context, scm, schema, res, outSchema, id);
         //
 		// apply stylesheet according to setName and schema
         //
@@ -331,6 +334,95 @@ public class SearchController {
     }
   }
 
+	private static Element applyOutputSchema(ServiceContext context,
+			SchemaManager schemaManager, String schema, Element result,
+			OutputSchema outputSchema, String id) {
+
+		System.out.println("\n\n\n\n*** applyOutputSchema received schema "
+				+ schema + " and outputschema " + outputSchema.name()
+				+ "\n\n\n\n");
+		String conversionFilename;
+		if (outputSchema == OutputSchema.ISO_PROFILE
+				&& schema.equals("iso19139.geobru")) {
+			System.out
+					.println("transforming GEOBRU metadata to requested outputschema ISO");
+			conversionFilename = "to19139";
+
+			String schemaDir = schemaManager.getSchemaConvertDir(schema)
+					+ File.separator;
+			String styleSheet = schemaDir + conversionFilename + ".xsl";
+
+			System.out
+					.println("\n\n\n\n*** applyElementSetName determined stylesheet "
+							+ styleSheet + "\n\n\n\n");
+
+			try {
+				result = Xml.transform(result, styleSheet);
+			} catch (Exception e) {
+				System.out
+						.println("error transforming to requested outputschema: "
+								+ e.getMessage()
+								+ ". Probably schema "
+								+ schema
+								+ " has no transformation to outputschema "
+								+ outputSchema);
+				e.printStackTrace();
+				context.error("Error while transforming metadata with id : "
+						+ id + " using " + styleSheet);
+				context.error("  (C) StackTrace:\n" + Util.getStackTrace(e));
+				return null;
+			}
+			return result;
+
+		} else if (outputSchema == OutputSchema.GEOBRU
+				&& schema.equals("iso19139.geobru")) {
+			System.out
+					.println("no need to transform GEOBRU metadata to requested outputschema GEOBRU");
+			// no conversion necessary
+			return result;
+		} else if (outputSchema == OutputSchema.OGC_CORE
+				&& schema.equals("iso19139.geobru")) {
+			// convert to iso and let pre-existing iso-to-ogc short/summary/full
+			// conversions do the rest
+			System.out
+					.println("transforming GEOBRU metadata to ISO, requested outputschema is OGC (further conversion will be handled in applyElementSetName()");
+			conversionFilename = "to19139";
+
+			String schemaDir = schemaManager.getSchemaConvertDir(schema)
+					+ File.separator;
+			String styleSheet = schemaDir + conversionFilename + ".xsl";
+
+			System.out
+					.println("\n\n\n\n*** applyElementSetName determined stylesheet "
+							+ styleSheet + "\n\n\n\n");
+
+			try {
+				result = Xml.transform(result, styleSheet);
+			} catch (Exception e) {
+				System.out
+						.println("error transforming to requested outputschema: "
+								+ e.getMessage()
+								+ ". Probably schema "
+								+ schema
+								+ " has no transformation to outputschema "
+								+ outputSchema);
+				e.printStackTrace();
+				context.error("Error while transforming metadata with id : "
+						+ id + " using " + styleSheet);
+				context.error("  (C) StackTrace:\n" + Util.getStackTrace(e));
+				return null;
+			}
+			return result;
+		}
+		// e.g. if md is schema is iso19139, we don't convert to iso19139.geobru
+		else {
+			context.warning("Unable to convert metadata with schema " + schema
+					+ " to requested outputschema " + outputSchema.name());
+			return null;
+		}
+
+	}
+
     /**
      * Applies stylesheet according to ElementSetName and schema.
      *
@@ -348,6 +440,7 @@ public class SearchController {
     private static Element applyElementSetName(ServiceContext context, SchemaManager schemaManager, String schema,
                                                Element result, OutputSchema outputSchema, ElementSetName elementSetName,
                                                ResultType resultType, String id) throws InvalidParameterValueEx {
+        System.out.println("\n\n\n\n*** applyElementSetName received schema " + schema +  " and outputschema " + outputSchema.name() + "\n\n\n\n");
         String prefix ;
         if (outputSchema == OutputSchema.OGC_CORE) {
             prefix = "ogc";
@@ -355,12 +448,19 @@ public class SearchController {
         else if (outputSchema == OutputSchema.ISO_PROFILE) {
             prefix = "iso";
         }
+        else if (outputSchema == OutputSchema.GEOBRU) {
+            prefix = "geobru";
+        }
         else {
             throw new InvalidParameterValueEx("outputSchema not supported for metadata " + id + " schema.", schema);
         }
 
+        System.out.println("\n\n\n\n*** applyElementSetName determined prefix " + prefix + "\n\n\n\n");
+        
 		String schemaDir  = schemaManager.getSchemaCSWPresentDir(schema)+ File.separator;
 		String styleSheet = schemaDir + prefix +"-"+ elementSetName +".xsl";
+		
+        System.out.println("\n\n\n\n*** applyElementSetName determined stylesheet " + styleSheet + "\n\n\n\n");
 
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("lang", context.getLanguage());
@@ -370,6 +470,8 @@ public class SearchController {
 		    result = Xml.transform(result, styleSheet, params);
 		}
         catch (Exception e) {
+            System.out.println("error transforming to requested outputschema and elementsetname: " + e.getMessage() + ". Probably schema " + schema + " has no transformation to outputschema " + outputSchema);
+            e.printStackTrace();
 		    context.error("Error while transforming metadata with id : " + id + " using " + styleSheet);
 	        context.error("  (C) StackTrace:\n" + Util.getStackTrace(e));
 		    return null;

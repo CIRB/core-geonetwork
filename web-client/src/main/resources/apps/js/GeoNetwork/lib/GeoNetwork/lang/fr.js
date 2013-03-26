@@ -504,13 +504,19 @@ GeoNetwork.Lang.fr = {
 	'keyword': "mot-clé",
 	'When': "Quand",
 	'Where': "Ou",
-	'What': "Que",
+/*
+Modified by GVB
+*/
+	'What': "Quoi",
 	'advancedSearchOptions': "Options de recherche avancées",
 	'hitsPerPage': "résultats par page",
 	'Searchforspatialdataon': "Rechercher des données spatiales sur les",
 	'search': "rechercher",
 	'fullTextSearch': "Recherche texte intégral",
-	'reset': "remettre",
+/*
+Modified by GVB
+*/
+	'reset': "réinitialiser",
 	'resetSearchForm': "réinitialiser le formulaire de recherche",
 	'Advanced': "Avancées",
 	'newWindow': "nouvelle fenêtre",

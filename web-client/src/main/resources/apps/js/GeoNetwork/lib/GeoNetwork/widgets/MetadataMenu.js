@@ -230,7 +230,10 @@ GeoNetwork.MetadataMenu = Ext.extend(Ext.menu.Menu, {
         
         
         /* Rating menu */
-        if (Ext.ux.RatingItem) { // Check required widget are loaded before displaying context menu
+/*
+* Modified by GVB
+*/
+        if (false/*Ext.ux.RatingItem*/) { // Check required widget are loaded before displaying context menu
             // If more actions are placed in context menu, this needs improvements.
             this.ratingWidget = new Ext.ux.RatingItem(null, {
                 canReset: false,

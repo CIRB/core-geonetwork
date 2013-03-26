@@ -109,6 +109,7 @@
             </ows:Parameter>
             <ows:Parameter name="outputSchema">
                 <ows:Value>http://www.opengis.net/cat/csw/2.0.2</ows:Value>
+                <ows:Value>http://geobru.irisnet.be</ows:Value>
                 <ows:Value>http://www.isotc211.org/2005/gmd</ows:Value>
             </ows:Parameter>
             <ows:Parameter name="typeNames">
@@ -132,6 +133,7 @@
                 </ows:HTTP>
             </ows:DCP>
             <ows:Parameter name="outputSchema">
+                <ows:Value>http://geobru.irisnet.be</ows:Value>
                 <ows:Value>http://www.opengis.net/cat/csw/2.0.2</ows:Value>
                 <ows:Value>http://www.isotc211.org/2005/gmd</ows:Value>
             </ows:Parameter>
@@ -217,10 +219,10 @@
                 <ogc:ComparisonOperator>Like</ogc:ComparisonOperator>
                 <ogc:ComparisonOperator>LessThan</ogc:ComparisonOperator>
                 <ogc:ComparisonOperator>GreaterThan</ogc:ComparisonOperator>
-								<!-- LessThanOrEqualTo is in OGC Filter Spec, LessThanEqualTo is in OGC CSW schema -->
+                <!-- LessThanOrEqualTo is in OGC Filter Spec, LessThanEqualTo is in OGC CSW schema -->
                 <ogc:ComparisonOperator>LessThanEqualTo</ogc:ComparisonOperator>
                 <ogc:ComparisonOperator>LessThanOrEqualTo</ogc:ComparisonOperator>
-								<!-- GreaterThanOrEqualTo is in OGC Filter Spec, GreaterThanEqualTo is in OGC CSW schema -->
+                <!-- GreaterThanOrEqualTo is in OGC Filter Spec, GreaterThanEqualTo is in OGC CSW schema -->
                 <ogc:ComparisonOperator>GreaterThanEqualTo</ogc:ComparisonOperator>
                 <ogc:ComparisonOperator>GreaterThanOrEqualTo</ogc:ComparisonOperator>
                 <ogc:ComparisonOperator>NotEqualTo</ogc:ComparisonOperator>

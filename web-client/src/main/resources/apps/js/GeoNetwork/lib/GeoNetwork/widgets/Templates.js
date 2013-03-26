@@ -229,7 +229,10 @@ GeoNetwork.Templates.FULL = new Ext.XTemplate(
                         '</tpl>',
                     '</div>',
                 '</td><td class="thumb">',
-                        GeoNetwork.Templates.RATING_TPL,
+/*
+* Removed by GVB
+*/
+//                        GeoNetwork.Templates.RATING_TPL,
                         '<div class="thumbnail">',
                             '<tpl if="thumbnail">',
                                 '<a rel="lightbox" href="{thumbnail}"><img src="{thumbnail}" alt="Thumbnail"/></a>', 

@@ -48,7 +48,7 @@ public class Csw {
     public static final Namespace NAMESPACE_INSPIRE_DS = Namespace.getNamespace("inspire_ds", "http://inspire.ec.europa.eu/schemas/inspire_ds/1.0");
     public static final Namespace NAMESPACE_INSPIRE_COM = Namespace.getNamespace("inspire_common", "http://inspire.ec.europa.eu/schemas/common/1.0");
 	public static final Namespace NAMESPACE_SRV = Namespace.getNamespace("srv", "http://www.isotc211.org/2005/srv");
-	
+	public static final Namespace NAMESPACE_GEOBRU = Namespace.getNamespace("geobru", "http://geobru.irisnet.be");
 	//---------------------------------------------------------------------------
 	//---
 	//--- Strings

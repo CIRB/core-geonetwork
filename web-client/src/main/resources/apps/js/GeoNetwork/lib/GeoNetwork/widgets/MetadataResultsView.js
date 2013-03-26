@@ -642,7 +642,10 @@ GeoNetwork.MetadataResultsView = Ext.extend(Ext.DataView, {
     initRatingWidget: function(){
         var ratingWidgets = Ext.DomQuery.select('div.rating'), idx;
         for (idx = 0; idx < ratingWidgets.length; ++idx) {
-            if (Ext.ux.RatingItem) {
+/*
+* Modified by GVB
+*/
+            if (false/*Ext.ux.RatingItem*/) {
                 var ri = new Ext.ux.RatingItem(ratingWidgets[idx], {
                     disabled: true,
                     name: 'rating' + idx

@@ -143,7 +143,7 @@
 	-->
 
 	<resources>
-		<resource enabled="true">
+		<resource enabled="false">
 			<name>main-db</name>
 			<provider>jeeves.resources.dbms.ApacheDBCPool</provider>
 			<config>
@@ -256,6 +256,19 @@
 			</config>
 		</resource>
 
+        <resource enabled="false">
+                <name>main-db</name>
+                <provider>jeeves.resources.dbms.ApacheDBCPool</provider>
+                <config>
+                        <user>geonetwork</user>
+                        <password>geonetwork256</password>
+                        <driver>oracle.jdbc.driver.OracleDriver</driver>
+                        <url>jdbc:oracle:thin:@cody3.irisnet.be:1521:orat10g</url>
+                        <poolSize>50</poolSize>
+                        <validationQuery>SELECT 1 FROM DUAL</validationQuery>
+                </config>
+        </resource>
+
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 		<!-- db2 -->
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -278,12 +291,12 @@
 		<!-- postgresql -->
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-		<resource enabled="false">
+		<resource enabled="true">
 			<name>main-db</name>
 			<provider>jeeves.resources.dbms.ApacheDBCPool</provider>
 			<config>
-				<user>www-data</user>
-				<password>www-data</password>
+				<user>geonetwork</user>
+				<password>geonetwork28</password>
 				<!-- we use org.postgis.DriverWrapper in place of
 				org.postgresql.Driver to support both postgresql and postgis -->
 				<driver>org.postgresql.Driver</driver>
@@ -343,7 +356,7 @@
 			interested for having metadata in a specific
 			ISO profil.
 		-->
-		<param name="preferredSchema" value="iso19139" />
+		<param name="preferredSchema" value="iso19139.geobru" />
 		<param name="jzkitConfig" value="JZkitApplicationContext.xml" />
 		<param name="metadataNotifierConfig" value="WEB-INF/config-notifier.xml" />
 

@@ -4,7 +4,7 @@ import org.fao.geonet.csw.common.exceptions.InvalidParameterValueEx;
 
 public enum OutputSchema
 {
-	OGC_CORE("Record"), ISO_PROFILE("IsoRecord");
+	OGC_CORE("Record"), ISO_PROFILE("IsoRecord"), GEOBRU("GeoBru");
 
 	//------------------------------------------------------------------------
 
@@ -53,14 +53,15 @@ public enum OutputSchema
      */
 	public static OutputSchema parse(String schema) throws InvalidParameterValueEx
 	{
-		if (schema == null)						return OGC_CORE;
+		if (schema == null)						return GEOBRU;
         // TODO heikki: seems to me the following two values are invalid and should be rejected
 		if (schema.equals("csw:Record"))		return OGC_CORE;
 		if (schema.equals("csw:IsoRecord")) return ISO_PROFILE;
 		
 		if (schema.equals(Csw.NAMESPACE_CSW.getURI())) return OGC_CORE;
 		if (schema.equals(Csw.NAMESPACE_GMD.getURI())) return ISO_PROFILE;
-
+		if (schema.equals(Csw.NAMESPACE_GEOBRU.getURI())) return GEOBRU;
+		
 		throw new InvalidParameterValueEx("outputSchema", schema);
 	}
 
