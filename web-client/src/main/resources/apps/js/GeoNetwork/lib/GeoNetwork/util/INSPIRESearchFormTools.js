@@ -189,6 +189,10 @@ GeoNetwork.util.INSPIRESearchFormTools = {
                 mode : 'local',
                 triggerAction : 'all',
                 fieldLabel : OpenLayers.i18n('inspiretheme'),
+                /*
+                * Added by GVB
+                */
+                emptyText : OpenLayers.i18n('inspirethemeEmptyText'),
                 store : themesStore,
                 valueField : 'value',
                 displayField : 'value'

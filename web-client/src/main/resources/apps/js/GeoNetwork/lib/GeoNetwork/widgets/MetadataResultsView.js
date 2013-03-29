@@ -226,7 +226,11 @@ GeoNetwork.MetadataResultsView = Ext.extend(Ext.DataView, {
         /**
          * Zoom to feature
          */
-        dblclick: {
+/*
+ * Removed by GVB
+ */
+/*
+    	dblclick: {
             fn: function(dv, idx, node, e){
                 if (this.maps.length !== 0) {
                     var record = this.getStore().getAt(idx);
@@ -235,12 +239,17 @@ GeoNetwork.MetadataResultsView = Ext.extend(Ext.DataView, {
                 }
             }
         },
+*/
         /**
          * Highligth bounding box on node over
          */
         mouseenter: {
             fn: function(dv, idx, node, e){
-                var i, j;
+/*
+ * Removed by GVB
+ */
+/*
+            	var i, j;
                 
                 if (this.maps.length !== 0) {
                     var record = this.getStore().getAt(idx);
@@ -261,7 +270,8 @@ GeoNetwork.MetadataResultsView = Ext.extend(Ext.DataView, {
                         }
                     }
                 }
-                this.actionMenuInit(idx, node);
+*/
+				this.actionMenuInit(idx, node);
             }
         },
         mouseleave: {
@@ -271,7 +281,10 @@ GeoNetwork.MetadataResultsView = Ext.extend(Ext.DataView, {
                     this.acMenu.hide();
                 }
                 this.acMenu = undefined;
-                
+/*
+ * Removed by GVB
+ */
+/*                
                 for (i = 0; i < this.maps.length; i++) {
                     if (this.hover_feature[i]) {
                         var l = this.maps[i].layer;
@@ -280,6 +293,7 @@ GeoNetwork.MetadataResultsView = Ext.extend(Ext.DataView, {
                         continue;
                     }
                 }
+*/
             }
         },
         contextmenu: {

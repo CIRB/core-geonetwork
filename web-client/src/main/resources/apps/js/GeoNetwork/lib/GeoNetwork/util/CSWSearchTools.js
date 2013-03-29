@@ -312,8 +312,15 @@ GeoNetwork.util.CSWSearchTools = {
      *  Define default sort order to use for each kind of sort field.
      */
     sortByMappings: {
-        relevance: {
+    	relevance: {
             name: 'relevance',
+            order: 'D'
+        },
+/*
+ * Added by GVB
+ */
+        changeDate: {
+            name: 'changeDate',
             order: 'D'
         },
         rating: {
@@ -324,7 +331,7 @@ GeoNetwork.util.CSWSearchTools = {
             name: 'popularity',
             order: 'D'
         },
-        date: {
+    	date: {
             name: 'date',
             order: 'D'
         },

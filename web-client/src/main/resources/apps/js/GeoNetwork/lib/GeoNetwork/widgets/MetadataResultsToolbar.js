@@ -151,7 +151,10 @@ GeoNetwork.MetadataResultsToolbar = Ext.extend(Ext.Toolbar, {
             mode: 'local',
             id: 'sortByToolBar',
             triggerAction: 'all',
-            value: 'relevance',
+/*
+* Modified by GVB
+*/
+            value: 'changeDate',
             width: 130,
             store: GeoNetwork.util.SearchFormTools.getSortByStore(),
             valueField: 'id',

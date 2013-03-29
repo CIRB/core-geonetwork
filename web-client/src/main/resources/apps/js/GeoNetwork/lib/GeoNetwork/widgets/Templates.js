@@ -206,9 +206,12 @@ GeoNetwork.Templates.FULL = new Ext.XTemplate(
                     // FIXME : this call require the catalogue to be named catalogue, static call ?
                     // FIXME : ref to app
                         '<tpl for="links">',
-                            '<tpl if="parent.dynamic==\'true\' && (values.type == \'application/vnd.ogc.wms_xml\' || values.type == \'OGC:WMS\')">',
-                                '<a href="#" class="md-mn addLayer" title="' + OpenLayers.i18n('addToMap') + ' {title}" alt="Add layer to map" onclick="app.switchMode(\'1\', true);app.getIMap().addWMSLayer([[\'{[escape(values.title)]}\', \'{href}\', \'{name}\', \'{id}\']]);">&nbsp;</a>',
-                            '</tpl>',
+/*
+* Removed by GVB
+*/
+//                            '<tpl if="parent.dynamic==\'true\' && (values.type == \'application/vnd.ogc.wms_xml\' || values.type == \'OGC:WMS\')">',
+//                                '<a href="#" class="md-mn addLayer" title="' + OpenLayers.i18n('addToMap') + ' {title}" alt="Add layer to map" onclick="app.switchMode(\'1\', true);app.getIMap().addWMSLayer([[\'{[escape(values.title)]}\', \'{href}\', \'{name}\', \'{id}\']]);">&nbsp;</a>',
+//                            '</tpl>',
                             '<tpl if="parent.dynamic==\'true\' && values.type == \'application/vnd.google-earth.kml+xml\'">',
                                 '<a href="{href}" class="md-mn md-mn-kml" title="' + OpenLayers.i18n('viewKml') + ' {title}" alt="Open kml">&nbsp;</a>',
                             '</tpl>',

@@ -53,7 +53,10 @@ GeoNetwork.util.SearchTools = {
      */
     fast: 'false',
     output: 'full',
-    sortBy: 'relevance',
+/*
+ * Modified by GVB
+ */
+    sortBy: 'date',
     hitsPerPage: '50',
     
     
@@ -308,19 +311,29 @@ GeoNetwork.util.SearchTools = {
      *  Define default sort order to use for each kind of sort field.
      */
     sortByMappings: {
-        relevance: {
+    	relevance: {
             name: 'relevance',
             order: ''
         },
-        rating: {
+        /*
+         * Added by GVB
+         */
+        changeData: {
             name: 'changeDate',
+            order: ''
+        },
+        /*
+         * Modified by GVB
+         */
+        rating: {
+            name: 'rating',
             order: ''
         },
         popularity: {
             name: 'popularity',
             order: ''
         },
-        date: {
+    	date: {
             name: 'date',
             order: ''
         },

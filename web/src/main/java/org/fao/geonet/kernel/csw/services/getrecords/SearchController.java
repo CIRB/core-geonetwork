@@ -304,7 +304,9 @@ public class SearchController {
 		    	return null;
 
 		// apply requested outputschema
-        res = applyOutputSchema(context, scm, schema, res, outSchema, id);
+		if (schema.equals("iso19139.geobru")) {
+			res = applyOutputSchema(context, scm, schema, res, outSchema, id);
+		}
         //
 		// apply stylesheet according to setName and schema
         //
@@ -342,8 +344,7 @@ public class SearchController {
 				+ schema + " and outputschema " + outputSchema.name()
 				+ "\n\n\n\n");
 		String conversionFilename;
-		if (outputSchema == OutputSchema.ISO_PROFILE
-				&& schema.equals("iso19139.geobru")) {
+		if (outputSchema == OutputSchema.ISO_PROFILE) {
 			System.out
 					.println("transforming GEOBRU metadata to requested outputschema ISO");
 			conversionFilename = "to19139";
@@ -374,14 +375,12 @@ public class SearchController {
 			}
 			return result;
 
-		} else if (outputSchema == OutputSchema.GEOBRU
-				&& schema.equals("iso19139.geobru")) {
+		} else if (outputSchema == OutputSchema.GEOBRU) {
 			System.out
 					.println("no need to transform GEOBRU metadata to requested outputschema GEOBRU");
 			// no conversion necessary
 			return result;
-		} else if (outputSchema == OutputSchema.OGC_CORE
-				&& schema.equals("iso19139.geobru")) {
+		} else if (outputSchema == OutputSchema.OGC_CORE) {
 			// convert to iso and let pre-existing iso-to-ogc short/summary/full
 			// conversions do the rest
 			System.out

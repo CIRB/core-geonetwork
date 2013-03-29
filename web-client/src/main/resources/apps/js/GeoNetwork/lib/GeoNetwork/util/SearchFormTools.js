@@ -383,7 +383,10 @@ GeoNetwork.util.SearchFormTools = {
             inputType: 'hidden',
             linkedCombo: combo
         });
-        combo.setValue(defaultValue || 'relevance#');
+/*
+ * Modified by GVB
+ */
+        combo.setValue(defaultValue || 'changeDate#');
         return [sortByField, sortOrderField, combo];
     },
     /** api:method[getSortByStore]
@@ -394,13 +397,20 @@ GeoNetwork.util.SearchFormTools = {
         return new Ext.data.ArrayStore({
             id: 0,
             fields: ['id', 'name'],
-            data: [['relevance#', OpenLayers.i18n('relevance')], 
-                    ['title#reverse', OpenLayers.i18n('title')], 
-                    ['changeDate#', OpenLayers.i18n('changeDate')], 
-                    ['rating#', OpenLayers.i18n('rating')], 
-                    ['popularity#', OpenLayers.i18n('popularity')], 
-                    ['denominator#', OpenLayers.i18n('scaleDesc')], 
-                    ['denominator#reverse', OpenLayers.i18n('scaleAsc')]]
+            data: [
+				['relevance#', OpenLayers.i18n('relevance')], 
+                ['title#reverse', OpenLayers.i18n('title')], 
+                ['changeDate#', OpenLayers.i18n('changeDate')] 
+/*
+ * Removed by GVB
+ */
+/*
+				,['rating#', OpenLayers.i18n('rating')], 
+                ['popularity#', OpenLayers.i18n('popularity')], 
+                ['denominator#', OpenLayers.i18n('scaleDesc')], 
+                ['denominator#reverse', OpenLayers.i18n('scaleAsc')]
+*/
+			]
         });
     },
     /** api:method[getFullTextField]
@@ -477,6 +487,7 @@ GeoNetwork.util.SearchFormTools = {
                 mode: 'local',
                 triggerAction: 'all',
                 fieldLabel: OpenLayers.i18n('catalogue'),
+                emptyText: OpenLayers.i18n('catalogueEmptyText'),
                 store: catStore,
                 valueField: 'id',
                 displayField: 'name',
@@ -511,6 +522,10 @@ GeoNetwork.util.SearchFormTools = {
                 mode: 'local',
                 triggerAction: 'all',
                 fieldLabel: OpenLayers.i18n('group'),
+                /*
+                 * Added by GVB
+                 */
+                emptyText: OpenLayers.i18n('groupEmptyText'),
                 store: groupStore,
                 valueField: 'id',
                 displayField: 'name',
@@ -548,6 +563,10 @@ GeoNetwork.util.SearchFormTools = {
                 mode: 'local',
                 triggerAction: 'all',
                 fieldLabel: OpenLayers.i18n('kind'),
+                /*
+                 * Added by GVB
+                 */
+                emptyText: OpenLayers.i18n('kindEmptyText'),
                 store: new Ext.data.ArrayStore({
                     id: 0,
                     fields: ['id', 'name'],
@@ -1024,6 +1043,10 @@ GeoNetwork.util.SearchFormTools = {
                     autoSelect: false,
                     triggerAction: 'all',
                     fieldLabel: OpenLayers.i18n('resourceType'),
+                    /*
+                     * Added by GVB
+                     */
+                    emptyText: OpenLayers.i18n('resourceTypeEmptyText'),
                     store: new Ext.data.ArrayStore({
                         id: 0,
                         fields: ['id', 'name'],
@@ -1064,6 +1087,10 @@ GeoNetwork.util.SearchFormTools = {
                     autoSelect: false,
                     triggerAction: 'all',
                     fieldLabel: OpenLayers.i18n('spatialRepType'),
+                    /*
+                     * Added by GVB
+                     */
+                    emptyText: OpenLayers.i18n('spatialRepTypeEmptyText'),
                     store: new Ext.data.ArrayStore({
                         id: 0,
                         fields: ['id', 'name'],

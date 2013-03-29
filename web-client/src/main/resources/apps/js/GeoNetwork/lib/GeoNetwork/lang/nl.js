@@ -142,15 +142,17 @@ GeoNetwork.Lang.nl = {
     'wmsTimeUpdateButtonText': "Doorvoeren",
     'WMSTimeAnimationCheckbox': "Speel laatste ${steps} tijdstippen af",
 	'fullTextSearch': "Volledige tekst zoeken",
-    'keyword': "Trefwoord",
-    'org': "Organisatie",
     'mapTypes': "Kaarttypes",
     'rsIdentifier': "Bronidentificator",
     'inspireSearchOptions': "INSPIRE criteria",
     'inspireannex': "INSPIRE annex",
     'inspirerelated': "Gerelateerd aan INSPIRE",
     'inspirerelatedtt': "INSPIRE dataset met rapport over de conformiteit volgens de data specificaties",
-    'inspiretheme': "INSPIRE thema",
+    'inspiretheme': "INSPIRE thema's",
+    /*
+    * Added by GVB
+    */
+    'inspirethemeEmptyText': "Selecteer een thema",
     'inspireClassificationDataServices': "INSPIRE classificatie data services",
     'serviceType': "Service type",
     'serviceType_discovery': "Discovery Service (ontdekken)",
@@ -176,6 +178,10 @@ GeoNetwork.Lang.nl = {
     'scaleAsc': "Schaal (oplopend)",
     'abstract': "Samenvatting",
     'catalogue': "Catalogus",
+    /*
+     * Added by GVB
+     */
+    'catalogueEmptyText': 'Selecteer een catalogus',
     'group': "Groep",
     'chooseGroup': "Selecteer een groep",
     'md': "Metadata",
@@ -206,18 +212,33 @@ GeoNetwork.Lang.nl = {
     'download': "Download",
     'downloadable': "Download",
     'interactive': "Interactief",
-    'resourceType': "Type",
+    'resourceType': "Bron type",
+    /*
+     * Added by GVB
+     */
+    'resourceTypeEmptyText': 'Selecteer een bron type',
     'dataset': "Dataset",
     'series': "Datasetserie",
     'service': "Service",
-    'spatialRepType': "Ruimtelijke voorstelling",
+    'spatialRepType': "Grafische voorstelling",
+    /*
+     * Added by GVB
+     */
+    'spatialRepTypeEmptyText': 'Selecteer een grafische voorstelling',
     'video': "Video",
     'vector': "Vector",
     'textTable': "Tekst, tabel",
     'tin': "Tin",
     'stereoModel': "Stereo model",
     'grid': "Grid",
-    'kind': "Soort",
+    /*
+     * Modified by GVB
+     */
+    'kind': 'Template/Metadata',
+    /*
+     * Added by GVB
+     */
+    'kindEmptyText': 'Selecteer template or metadata',
     'enterGetCapURL': "Geef een GetCapabilities URL voor het registreren van een nieuwe service.",
     'edit': "Editeer",
     'duplicate': "Dupliceer",
@@ -277,7 +298,10 @@ GeoNetwork.Lang.nl = {
     'updateChildren': "Wijzigen kinderen",
     'records': "records",
     'record': "record",
-    'help': "Help",
+    /*
+    Modified by GVB
+    */
+    'Help': "Help",
     'publishError': "Publicatie gefaald.",
     'outOfMemoryError': "Out of memory fout.",
     'publishErrorCode': "foutcode:",
@@ -349,8 +373,10 @@ GeoNetwork.Lang.nl = {
     'drawCircle': "Teken cirkel",
     'discovery': "Ontdekken",
     'visualization': "Visualisatie",
-    'when': "Wanneer?",
-    'anyTime': "Altijd",
+    /*
+     * Modified by GVB
+     */
+    'anyTime': "Niet gepreciseerd",
     'onSelection': "Op selectie",
     'adminAction': "Ander",
     'newMetadata': "Nieuwe metadata",
@@ -492,17 +518,27 @@ GeoNetwork.Lang.nl = {
 	'Poweredby': "Door",
 	'About': "Over",
 	'org': "Organisatie",
-	'keyword': "zoekterm",
-	'When': "Wanneer",
-	'Where': "Waar",
-	'What': "Wat",
+    /*
+     * Added by GVB
+     */
+    'orgEmptyText': 'Selecteer een organisatie',
+    'keyword': "Trefwoord",
+	/*
+	* Added by GVB
+	*/
+    'keywordEmptyText': "Selecteer een trefwoord",
+	'when': "Wanneer",
+	'where': "Waar",
+	'what': "Wat",
 	'advancedSearchOptions': "Geavanceerde zoek opties",
 	'hitsPerPage': "REsultaten per pagina",
 	'Searchforspatialdataon': "Zoek ruimtelijke data over",
 	'search': "zoeken",
 	'fullTextSearch': "Gehele tekst doorzoeken",
-	'reset': "reset",
-	'resetSearchForm': "Zoek formulier resetten",
+/*
+Added by GVB
+*/
+	'Simple': "Eenvoudig",
 	'Advanced': "Geavanceerd",
 	'newWindow': "nieuw venster",
 	'mdEditor': "Metadata editor",

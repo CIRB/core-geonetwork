@@ -208,7 +208,11 @@ GeoNetwork.app = function() {
 			displayField : 'value',
 			valueDelimiter : ' or ',
 			// tpl: tpl,
-			fieldLabel : OpenLayers.i18n('org')
+			fieldLabel : OpenLayers.i18n('org'),
+            /*
+             * Added by GVB
+             */
+            emptyText: OpenLayers.i18n('orgEmptyText'),
 		});
 
 		// Multi select keyword
@@ -232,6 +236,10 @@ GeoNetwork.app = function() {
 			displayField : 'value',
 			valueDelimiter : ' or ',
 			fieldLabel : OpenLayers.i18n('keyword')
+			/*
+			* Added by GVB
+			*/
+			, emptyText : OpenLayers.i18n('keywordEmptyText')
 		});
 
 		var catalogueField = GeoNetwork.util.SearchFormTools.getCatalogueField(
@@ -245,6 +253,8 @@ GeoNetwork.app = function() {
 		var validField = GeoNetwork.util.SearchFormTools.getValidField(true);
 		var spatialTypes = GeoNetwork.util.SearchFormTools
 				.getSpatialRepresentationTypeField(null, true);
+		var resourceTypeField = GeoNetwork.util.SearchFormTools
+				.getTypesField(null, true);
 		var denominatorField = GeoNetwork.util.SearchFormTools
 				.getScaleDenominatorField(true);
 
@@ -273,6 +283,10 @@ GeoNetwork.app = function() {
 */
 				//categoryField,
 				spatialTypes,
+/*
+* Added by GVB
+*/
+				resourceTypeField,
 /*
 * Removed by GVB
 */
@@ -313,13 +327,24 @@ GeoNetwork.app = function() {
 			Ext.each(adminFields, function(item) {
 				item.setVisible(true);
 			});
-			GeoNetwork.util.SearchFormTools.refreshGroupFieldValues();
+			/*
+			* Modified by GVB
+			*/
+			refreshGroupFieldValues(groupField);
+			/*
+			* Added by GVB
+			*/
+			Ext.getCmp("advSearchTabs").doLayout();
 		});
 		catalogue.on('afterLogout', function() {
 			Ext.each(adminFields, function(item) {
 				item.setVisible(false);
 			});
-			GeoNetwork.util.SearchFormTools.refreshGroupFieldValues();
+			refreshGroupFieldValues(groupField);
+			/*
+			* Added by GVB
+			*/
+			Ext.getCmp("advSearchTabs").doLayout();
 		});
 
 		var hideInspirePanel = catalogue.getInspireInfo().enable === "false";
@@ -349,7 +374,7 @@ GeoNetwork.app = function() {
 					searchBt : null,
 					resetBt : null,
 					items : [
-	/*						// Simple search form and search buttons
+							// Simple search form and search buttons
 							{
 								bodyStyle : {
 									'padding-top' : '50px'
@@ -413,7 +438,6 @@ GeoNetwork.app = function() {
 													}
 												}) ]
 							},
-*/
 							// Panel with Advanced search, Help and About Links
 							{
 								layout : {
@@ -431,51 +455,38 @@ GeoNetwork.app = function() {
 									border : false
 								},
 								items : [
+										/*
+										* Modified by GVB
+										*/
 										{
-											html : '<a href=javascript:void(Ext.get("advSearchTabs").toggle())>'
+											html : "<a href='javascript:void(0)' onclick='this.innerHTML=(this.innerHTML==\""
 													+ OpenLayers
-															.i18n('Advanced')
-													+ '</a>'
+														.i18n('Simple')
+													+ "\"?\""
+													+ OpenLayers
+														.i18n('Advanced')
+													+ "\":\""
+													+ OpenLayers
+													.i18n('Simple')
+													+ "\");Ext.get(\"advSearchTabs\").toggle();'>"
+													+ OpenLayers
+														.i18n('Advanced')
+													+ "</a>"
 										},
 										{
 											html : '<a href="javascript:void(app.getHelpWindow().show());">'
 													+ OpenLayers.i18n('Help')
 													+ '</a>'
-										},
-										{
+										}
+										/*
+										* Removed by GVB
+										*/
+/*
+										,{
 											html : '<a href="javascript:void(app.getAboutWindow().show());">'
 													+ OpenLayers.i18n('About')
 													+ '</a><br/><br/>'
-										} ]
-							},
-							{
-								title: OpenLayers.i18n('Searchforspatialdataon'),
-								id : 'simpleSearchTabs',
-								layout : {
-									type : 'hbox',
-									pack : 'center',
-									align : 'center'
-								},
-								plain : true,
-								autoHeight : true,
-								border : false,
-								autoScroll : true,
-								deferredRender : false,
-								defaults : {
-									bodyStyle : 'padding:10px'
-								},
-								items : [
-									new GeoNetwork.form.OpenSearchSuggestionTextField(
-											{
-												// hideLabel: true,
-												width : 285,
-												height : 40,
-												minChars : 2,
-												loadingText : '...',
-												hideTrigger : true,
-												url : catalogue.services.opensearchSuggest
-											})
-								]
+										}*/ ]
 							},
 							// Advanced search form
 							{
@@ -495,9 +506,13 @@ GeoNetwork.app = function() {
 								},
 								items : [
 										{
-											title : OpenLayers.i18n('What'),
+											title : OpenLayers.i18n('what'),
 											margins : '0 5 0 0',
 											layout : 'form',
+											/*
+											* Added by GVB
+											*/
+											labelWidth : 150,
 											items : [
 													advancedCriteria
 /*
@@ -511,7 +526,7 @@ GeoNetwork.app = function() {
 										 */
 										// Where panel
 										/*
-										 * ,{ title : OpenLayers.i18n('Where'),
+										 * ,{ title : OpenLayers.i18n('where'),
 										 * margins : '0 5 0 5', bodyStyle :
 										 * 'padding:0px', layout : 'form', items : [
 										 * GeoNetwork.util.SearchFormTools
@@ -521,13 +536,20 @@ GeoNetwork.app = function() {
 										 */,
 										// When & Options panel
 										{
-											title : OpenLayers.i18n('When')
+											/*
+											 * Modified by GVB
+											 */
+											title : OpenLayers.i18n('when')/*
 													+ ' & '
 													+ OpenLayers
-															.i18n('Options'),
+															.i18n('Options')*/,
 											margins : '0 5 0 5',
 											defaultType : 'datefield',
 											layout : 'form',
+											/*
+											* Added by GVB
+											*/
+											labelWidth : 150,
 											items : [
 													GeoNetwork.util.SearchFormTools
 															.getWhen()
@@ -556,63 +578,21 @@ GeoNetwork.app = function() {
 								 * .getINSPIREFields( catalogue.services, true) }
 								 */
 								]
-							},
-							{
-								id : 'buttonsTab',
-								layout : {
-									type : 'hbox',
-									pack : 'center',
-									align : 'center'
-								},
-								plain : true,
-								autoHeight : true,
-								border : false,
-								autoScroll : true,
-								deferredRender : false,
-								defaults : {
-									bodyStyle : 'padding:10px'
-								},
-								items : [
-									new Ext.Button(
-											{
-												text : OpenLayers
-														.i18n('search'),
-												id : 'searchBt',
-												margins : '3 5 3 5',
-												icon : '../images/default/find.png',
-												iconAlign : 'right',
-												listeners : {
-													click : searchCb
-												}
-											}),
-									new Ext.Button(
-											{
-												text : OpenLayers
-														.i18n('reset'),
-												tooltip : OpenLayers
-														.i18n('resetSearchForm'),
-												// iconCls: 'md-mn-reset',
-												id : 'resetBt',
-												margins : '3 5 3 5',
-												icon : '../images/default/cross.png',
-												iconAlign : 'right',
-												listeners : {
-													click : function() {
-														Ext
-																.getCmp(
-																		'searchForm')
-																.getForm()
-																.reset();
-													}
-												}
-											})
-								]
-							}
-							]
+							} ]
 				});
 	}
 
-	function search() {
+	/*
+	* Added by GVB
+	*/
+	function refreshGroupFieldValues(groupField) {
+        if (groupField != null) {
+            groupField.store.removeAll();
+            groupField.store.reload();
+        }
+    }
+
+    function search() {
 		searching = true;
 		catalogue.search('searchForm', app.loadResults, null,
 				catalogue.startRecord, true);
@@ -1324,6 +1304,10 @@ Ext.onReady(function() {
 
 			// Override zoomToAction (maye better way?). TODO: Check as seem
 			// calling old handler code
+/*
+ * Removed by GVB
+ */
+/*
 			aResTab.actionMenu.zoomToAction.setHandler(function() {
 				var uuid = this.record.get('uuid');
 				this.resultsView.zoomTo(uuid);
@@ -1331,7 +1315,7 @@ Ext.onReady(function() {
 				// Custom code to display Map tab
 				tabPanel.setActiveTab(tabPanel.items.itemAt(2));
 			}, aResTab.actionMenu);
-
+*/
 			aResTab.actionMenu.viewAction.hide();
 
 			tabPanel.add({

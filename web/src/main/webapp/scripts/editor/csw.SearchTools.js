@@ -237,10 +237,14 @@ var CSWSearchTools = {
      * Define default sort order to use for each kind of sort field.
      */
     sortByMappings: {
-        relevance: {name:'relevance', order: 'D'},
+    	relevance: {name:'relevance', order: 'D'},
+/*
+ * Added by GVB
+ */    	
+        changeDate: {name: 'changeDate', order: 'D'},
         rating: {name: 'rating', order: 'D'},
         popularity: {name: 'popularity', order: 'D'},
-        date: {name: 'date', order: 'D'},
+    	date: {name: 'date', order: 'D'},
         title: {name: 'title', order: 'A'}
     },
 

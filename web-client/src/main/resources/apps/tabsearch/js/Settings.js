@@ -54,6 +54,9 @@ GeoNetwork.MapModule = true;
 GeoNetwork.ProjectionList = [['EPSG:4326', 'WGS84 (lat/lon)']];
 GeoNetwork.WMSList = [['Geoserver', 'http://localhost/geoserver/wms?']];
 
-GeoNetwork.defaultViewMode = 'view-simple';
+/*
+ * Modified by GVB
+ */
+GeoNetwork.defaultViewMode = 'simple';
 
 Ext.BLANK_IMAGE_URL = '../js/ext/resources/images/default/s.gif';

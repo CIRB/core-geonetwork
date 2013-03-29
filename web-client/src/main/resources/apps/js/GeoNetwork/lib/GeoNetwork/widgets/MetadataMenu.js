@@ -183,7 +183,10 @@ GeoNetwork.MetadataMenu = Ext.extend(Ext.menu.Menu, {
             scope: this
         });
         this.add(this.viewAction);
-        
+/*
+ * Removed by GVB
+ */        
+/*
         this.zoomToAction = new Ext.Action({
             text: OpenLayers.i18n('zoomTo'),
             iconCls: 'zoomlayer',
@@ -194,7 +197,7 @@ GeoNetwork.MetadataMenu = Ext.extend(Ext.menu.Menu, {
             scope: this
         });
         this.add(this.zoomToAction);
-        
+*/        
         this.viewXMLAction = new Ext.Action({
             text: OpenLayers.i18n('saveXml'),
             iconCls: 'xmlIcon',

@@ -9732,7 +9732,7 @@ b<a.length;
 }}},addFilterImpl:function(c,b,a,d){if(b.charAt(0)=="E"){c.push(a+"="+escape(d)+"")
 }else{if(b=="B"){c.push(a+"="+(d?"on":"off")+"")
 }else{alert("Cannot parse "+b)
-}}},sortByMappings:{relevance:{name:"relevance",order:""},rating:{name:"changeDate",order:""},popularity:{name:"popularity",order:""},date:{name:"date",order:""},title:{name:"title",order:"reverse"}},buildQueryGET:function(b,a,d){var c="fast="+GeoNetwork.util.SearchTools.fast+"&";
+}}},sortByMappings:{relevance:{name:"relevance",order:""},rating:{name:"rating",order:""},popularity:{name:"popularity",order:""},date:{name:"date",order:""},title:{name:"title",order:"reverse"}},buildQueryGET:function(b,a,d){var c="fast="+GeoNetwork.util.SearchTools.fast+"&";
 if(d){}if(b){c+=b.join("&")
 }return c
 },getFormValues:function(b){var a=b.getForm().getValues()||{};

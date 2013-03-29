@@ -123,7 +123,6 @@ GeoNetwork.lang.en = {
     'gazetteerAddressField4Label': "Municipality",
     'gazetteerAddressField5Label': "House number",
     'searchOptionButton': "Search",
-    'resetSearchForm': "Reset search form values.",
     'GazetteerWindowTitle': "Search for address",
     'searchResults': "Search results",
     'errorTitle': "Error",
@@ -144,15 +143,17 @@ GeoNetwork.lang.en = {
     'wmsTimeUpdateButtonText': "Apply",
     'WMSTimeAnimationCheckbox': "Play a movie loop spanning the last ${steps} time positions",
     'fullTextSearch': "Full text search",
-    'keyword': "Keyword",
-    'org': "Organisation",
     'mapTypes': "Map types",
     'rsIdentifier': "Resource identifier",
     'inspireSearchOptions': 'INSPIRE criteria',
     'inspireannex': 'INSPIRE annex',
     'inspirerelated': 'Related to INSPIRE',
     'inspirerelatedtt': 'INSPIRE dataset with report on the conformity regarding the data specification',
-    'inspiretheme': 'INSPIRE theme',
+    'inspiretheme': 'INSPIRE themes',
+    /*
+    * Added by GVB
+    */
+    'inspirethemeEmptyText': "Select a theme",
     'inspireClassificationDataServices': 'INSPIRE classification data services',
     'serviceType': 'Service type',
     'serviceType_discovery': 'Discovery Service (discovery)',
@@ -178,6 +179,10 @@ GeoNetwork.lang.en = {
     'scaleAsc': 'Scale (asc)',
     'abstract': 'Abstract',
     'catalogue': 'Catalogue',
+    /*
+     * Added by GVB
+     */
+    'catalogueEmptyText': 'Select a catalogue',
     'group': 'Group',
     'chooseGroup': 'Select a group',
     'md': 'Metadata',
@@ -209,18 +214,33 @@ GeoNetwork.lang.en = {
     'downloadable': 'Download',
     'interactive': 'Interactive',
     'resourceType': 'Resource type',
+    /*
+     * Added by GVB
+     */
+    'resourceTypeEmptyText': 'Select un resource type',
     'dataset': 'Dataset',
     'series': 'Series',
     'service': 'Service',
     'model': 'Feature catalogue',
-    'spatialRepType': 'Spatial representation',
+    'spatialRepType': 'Graphical representation',
+    /*
+     * Added by GVB
+     */
+    'spatialRepTypeEmptyText': 'Select a graphical representation',
     'video': 'Video',
     'vector': 'Vector',
     'textTable': 'Text, table',
     'tin': 'Tin',
     'stereoModel': 'Stereo model',
     'grid': 'Grid',
-    'kind': 'Kind',
+    /*
+     * Modified by GVB
+     */
+    'kind': 'Template/Metadata',
+    /*
+     * Added by GVB
+     */
+    'kindEmptyText': 'Select template or metadata',
     'enterGetCapURL': 'Enter a GetCapabilities URL to register a new service.',
     'edit': 'Edit',
     'duplicate': 'Duplicate',
@@ -289,7 +309,10 @@ GeoNetwork.lang.en = {
     'updateChildren': 'Update children',
     'records': 'records',
     'record': 'record',
-    'help': 'Help',
+    /*
+    Modified by GVB
+    */
+    'Help': 'Help',
     'publishError': 'Publication failed.',
     'outOfMemoryError': 'Out of memory error.',
     'publishErrorCode': 'Error code:',
@@ -351,7 +374,6 @@ GeoNetwork.lang.en = {
     'fileUploadWindow': 'Upload data or document',
     'selectedCRS': "Selected coordinate systems",
     'foundCRS': "Available coordinate systems",
-    'search': 'Search',
     'restrictSearchToMap': 'Restrict search to map extent',
     'selected': 'selected',
     'selectRegion': 'Select a region ...',
@@ -361,8 +383,10 @@ GeoNetwork.lang.en = {
     'drawCircle': 'Draw circle',
     'discovery': 'Discovery',
     'visualization': 'Visualization',
-    'when': 'When ?',
-    'anyTime': 'Anytime',
+    /*
+     * Modified by GVB
+     */
+    'anyTime': 'Not precised',
     'onSelection': 'On selection',
     'adminAction': 'Other',
     'newMetadata': 'New metadata',
@@ -439,7 +463,7 @@ GeoNetwork.lang.en = {
     'focusOnAny': 'Move focus to the full text search field.',
     'hideSearchForm': 'Hide or display search form.',
     'switchMode': 'Switch visualization mode.',
-    'resetSearchForm': 'Reset search form.',
+    'resetSearchForm': "Reset search form values.",
     'focusOnLogin': 'Focus on the login form to access catalogue administration or logout if already logged in.',
     'openAdmin': 'Go to administration',
     'displayInfoPanel': 'Display the information panel.',
@@ -503,15 +527,27 @@ GeoNetwork.lang.en = {
 	'Poweredby': "Powered by",
 	'About': "About",
 	'org': "Organisation",
-	'keyword': "keyword",
-	'when': "when",
+    /*
+     * Added by GVB
+     */
+    'orgEmptyText': 'Select an organisation',
+	'keyword': "Keyword",
+	/*
+	* Added by GVB
+	*/
+    'keywordEmptyText': "Select a keyword",
+	'when': "When",
+	'where': "Where",
+	'what': "What",
 	'advancedSearchOptions': "Advanced Search Options",
 	'hitsPerPage': "Hits Per Page",
 	'Searchforspatialdataon': "Search for spatial data on",
-	'search': "search",
+	'search': "Search",
 	'fullTextSearch': "Full Text Search",
-	'reset': "reset",
-	'resetSearchForm': "Reset Search Form",
+/*
+Added by GVB
+*/
+	'Simple': "Simple",
 	'Advanced': "Advanced",
 	'newWindow': "New Window",
 	'mdEditor': "Metadata editor",
