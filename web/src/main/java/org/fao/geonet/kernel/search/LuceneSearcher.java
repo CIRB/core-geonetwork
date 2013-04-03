@@ -241,7 +241,23 @@ public class LuceneSearcher extends MetaSearcher {
 		if (srvContext != null)
 			gc = (GeonetContext) srvContext.getHandlerContext(Geonet.CONTEXT_NAME);
 
-		String sFast = request.getChildText(Geonet.SearchResult.FAST);
+        /*
+         * Added by GVB
+         * Supporting sortBy and sortOrder
+         */
+		String sortBy = Util.getParam(request, Geonet.SearchResult.SORT_BY, Geonet.SearchResult.SortBy.RELEVANCE);
+		boolean sortOrder = (Util.getParam(request, Geonet.SearchResult.SORT_ORDER, "").equals(""));
+        if(Log.isDebugEnabled(Geonet.SEARCH_ENGINE))
+            Log.debug(Geonet.SEARCH_ENGINE, "Sorting by : " + sortBy);
+
+        SettingInfo settingInfo = _sm.get_settingInfo();
+        boolean sortRequestedLanguageOnTop = settingInfo.getRequestedLanguageOnTop();
+        if(Log.isDebugEnabled(Geonet.LUCENE))
+            Log.debug(Geonet.LUCENE, "sortRequestedLanguageOnTop: " + sortRequestedLanguageOnTop);
+
+        _sort = LuceneSearcher.makeSort(Collections.singletonList(Pair.read(sortBy, sortOrder)), _language, sortRequestedLanguageOnTop);
+
+        String sFast = request.getChildText(Geonet.SearchResult.FAST);
 		boolean fast = sFast != null && sFast.equals("true");
 		boolean inFastMode = fast || "index".equals(sFast);
 		
