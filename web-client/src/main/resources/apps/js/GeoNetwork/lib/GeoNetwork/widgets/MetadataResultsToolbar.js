@@ -138,12 +138,9 @@ GeoNetwork.MetadataResultsToolbar = Ext.extend(Ext.Toolbar, {
             cmp.push(GeoNetwork.Util.buildPermalinkMenu(l, this.permalinkProvider));
         }
         
-        /*
-         * Moved by GVB
-         */
-        this.add(cmp);
         GeoNetwork.MetadataResultsToolbar.superclass.initComponent.call(this);
         
+        this.add(cmp);
         this.catalogue.on('selectionchange', this.updateSelectionInfo, this);
         this.catalogue.on('afterLogin', this.updatePrivileges, this);
         this.catalogue.on('afterLogout', this.updatePrivileges, this);
