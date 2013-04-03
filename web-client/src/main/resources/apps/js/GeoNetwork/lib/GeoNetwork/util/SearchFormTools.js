@@ -55,6 +55,9 @@ GeoNetwork.util.SearchFormTools = {
         if (services) {
             fields.push(new GeoNetwork.form.OpenSearchSuggestionTextField({
                 hideLabel: true,
+/*
+ * Modified by GVB
+ */
                 width: 285,
                 minChars: 2,
                 loadingText: '...',
@@ -99,6 +102,9 @@ GeoNetwork.util.SearchFormTools = {
         if (services) {
             fullTextField = new GeoNetwork.form.OpenSearchSuggestionTextField({
                 hideLabel: true,
+/*
+ * Modified by GVB
+ */
                 width: 285, // FIXME
                 minChars: 2,
                 loadingText: '...',
@@ -288,7 +294,10 @@ GeoNetwork.util.SearchFormTools = {
             items.push(GeoNetwork.util.SearchFormTools.getRequestedLanguageCombo(services.getIsoLanguages));
         }
         
-        items.push(GeoNetwork.util.SearchFormTools.getSortByCombo());
+        /*
+         * Modified by GVB
+         */
+        items.push(GeoNetwork.util.SearchFormTools.getSortByCombo('changeDate#'));
         
         items.push(new Ext.form.ComboBox({
             id: 'E_hitsperpage',
@@ -356,12 +365,20 @@ GeoNetwork.util.SearchFormTools = {
     getSortByCombo: function(defaultValue){
         var store = GeoNetwork.util.SearchFormTools.getSortByStore();
         var combo = new Ext.form.ComboBox({
+			/*
+			 * Added by GVB
+			 */ 
+			hidden: true,
             mode: 'local',
             fieldLabel: OpenLayers.i18n('sortBy'),
             triggerAction: 'all',
             store: store,
             valueField: 'id',
             displayField: 'name',
+            /*
+             * Added by GVB
+             */
+            value: defaultValue,
             listeners: {
                 change: function(cb, newValue, oldValue){
                     /* Adapt sort order according to sort field */
@@ -371,22 +388,34 @@ GeoNetwork.util.SearchFormTools = {
                 }
             }
         });
+        /*
+         * Added by GVB
+         */
+        var tokens = defaultValue.split('#');
         var sortByField = new Ext.form.TextField({
             name: 'E_sortBy',
             id: 'E_sortBy',
             inputType: 'hidden',
             linkedCombo: combo
+            /*
+             * Added by GVB
+             */
+            ,value: tokens[0]
         });
         var sortOrderField = new Ext.form.TextField({
             name: 'E_sortOrder',
             id: 'sortOrder',
             inputType: 'hidden',
             linkedCombo: combo
+            /*
+             * Added by GVB
+             */
+            ,value: tokens[1]
         });
 /*
- * Modified by GVB
+ * Modified and removed by GVB
  */
-        combo.setValue(defaultValue || 'changeDate#');
+//        combo.setValue(defaultValue);
         return [sortByField, sortOrderField, combo];
     },
     /** api:method[getSortByStore]
@@ -790,6 +819,7 @@ GeoNetwork.util.SearchFormTools = {
     getWhen: function(){
         var anyTime = new Ext.form.Checkbox({
                 name: 'timeType',
+                type: 'hidden',
                 checked: true,
                 fieldLabel: OpenLayers.i18n('anyTime'),
                 handler: function(ck, checked){
@@ -846,9 +876,10 @@ GeoNetwork.util.SearchFormTools = {
     getDateRangeFields: function(nameFrom, labelFrom, idFrom, nameTo, labelTo, idTo, anyTime){
         GeoNetwork.util.SearchFormTools.registerDateVtype();
         var changeCb = function(field, newValue, oldValue){
-                    if (this && newValue !== '') {
-                        this.setValue(false);
-                    }
+/*
+ * Modified by GVB
+ */
+                    this.setValue(!(newValue !== ''));
                 };
         return [{
             fieldLabel: OpenLayers.i18n(labelFrom),

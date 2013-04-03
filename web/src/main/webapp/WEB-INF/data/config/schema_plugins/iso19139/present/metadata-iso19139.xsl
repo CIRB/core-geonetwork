@@ -3974,9 +3974,9 @@
 		(ie. no value for default metadata language) .
 	-->
 	<xsl:template mode="iso19139"
-		match="gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString|
-		srv:*[gco:CharacterString or gmd:PT_FreeText]|
-		gco:aName[gco:CharacterString]"
+		match="gmd:citation/gmd:CI_Citation/gmd:title[gco:CharacterString or gmd:PT_FreeText]|
+        gmd:abstract[gco:CharacterString or gmd:PT_FreeText]|
+        gmd:CI_ResponsibleParty/gmd:organisationName[gco:CharacterString or gmd:PT_FreeText]"
 		>
 		<xsl:param name="schema" />
 		<xsl:param name="edit" />

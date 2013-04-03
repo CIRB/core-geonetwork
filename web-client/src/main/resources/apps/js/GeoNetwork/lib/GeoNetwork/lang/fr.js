@@ -565,7 +565,7 @@ GeoNetwork.Lang.fr = {
 	 * Added by GVB
 	 */
 	'Simple' : "Simple",
-	'Advanced' : "Avancées",
+	'Advanced' : "Avancée",
 	'newWindow' : "nouvelle fenêtre",
 	'mdEditor' : "Editeur de métadonnées",
 	'List' : "Liste"

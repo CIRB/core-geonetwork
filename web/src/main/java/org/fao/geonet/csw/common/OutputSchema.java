@@ -53,7 +53,7 @@ public enum OutputSchema
      */
 	public static OutputSchema parse(String schema) throws InvalidParameterValueEx
 	{
-		if (schema == null)						return GEOBRU;
+		if (schema == null)						return ISO_PROFILE;
         // TODO heikki: seems to me the following two values are invalid and should be rejected
 		if (schema.equals("csw:Record"))		return OGC_CORE;
 		if (schema.equals("csw:IsoRecord")) return ISO_PROFILE;

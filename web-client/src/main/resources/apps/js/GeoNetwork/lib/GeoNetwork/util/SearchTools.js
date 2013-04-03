@@ -56,8 +56,11 @@ GeoNetwork.util.SearchTools = {
 /*
  * Modified by GVB
  */
-    sortBy: 'date',
-    hitsPerPage: '50',
+    sortBy: 'changeDate',
+    /*
+     * Modified by GVB
+     */
+    hitsPerPage: '20',
     
     
     /** api:method[doQuery]
@@ -255,7 +258,15 @@ GeoNetwork.util.SearchTools = {
         }
         
         if (!hits) {
-            hits = GeoNetwork.util.SearchTools.hitsPerPage;
+        	/*
+        	 * Modified by GVB
+        	 */ 
+        	var hitsperpageCombo= Ext.getCmp('E_hitsperpage');
+        	if (hitsperpageCombo) {
+        		hits = hitsperpageCombo.getValue();
+        	} else {
+                hits = GeoNetwork.util.SearchTools.hitsPerPage;
+        	}
         }
         var to = parseInt(startRecord, 10) + parseInt(hits, 10) - 1;
         GeoNetwork.util.SearchTools.addFilter(filters, 'E_from', startRecord);
@@ -318,7 +329,7 @@ GeoNetwork.util.SearchTools = {
         /*
          * Added by GVB
          */
-        changeData: {
+        changeDate: {
             name: 'changeDate',
             order: ''
         },

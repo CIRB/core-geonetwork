@@ -123,7 +123,10 @@ GeoNetwork.MetadataResultsToolbar = Ext.extend(Ext.Toolbar, {
         
         cmp.push(['->']);
         
-        var sortOption = this.getSortByCombo();
+        /*
+        * Modified by GVB
+        */
+        var sortOption = this.getSortByCombo('changeDate#');
         cmp.push(OpenLayers.i18n('sortBy'), sortOption, '|');
         
         cmp.push(this.createTemplateMenu());
@@ -135,16 +138,22 @@ GeoNetwork.MetadataResultsToolbar = Ext.extend(Ext.Toolbar, {
             cmp.push(GeoNetwork.Util.buildPermalinkMenu(l, this.permalinkProvider));
         }
         
+        /*
+         * Moved by GVB
+         */
+        this.add(cmp);
         GeoNetwork.MetadataResultsToolbar.superclass.initComponent.call(this);
         
-        this.add(cmp);
         this.catalogue.on('selectionchange', this.updateSelectionInfo, this);
         this.catalogue.on('afterLogin', this.updatePrivileges, this);
         this.catalogue.on('afterLogout', this.updatePrivileges, this);
         
         this.updateSelectionInfo(this.catalogue, 0);
     },
-    getSortByCombo: function(){
+    /*
+    * Modified by GVB
+    */
+    getSortByCombo: function(defaultValue){
         var tb = this;
         
         this.sortByCombo = new Ext.form.ComboBox({
@@ -154,7 +163,7 @@ GeoNetwork.MetadataResultsToolbar = Ext.extend(Ext.Toolbar, {
 /*
 * Modified by GVB
 */
-            value: 'changeDate',
+            value: defaultValue,
             width: 130,
             store: GeoNetwork.util.SearchFormTools.getSortByStore(),
             valueField: 'id',

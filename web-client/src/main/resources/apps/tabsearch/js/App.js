@@ -404,6 +404,46 @@ GeoNetwork.app = function() {
 													hideTrigger : true,
 													url : catalogue.services.opensearchSuggest
 												}),
+												new Ext.Button(
+														{
+															text : OpenLayers
+																	.i18n('Simple'),
+															tooltip : OpenLayers
+																	.i18n('resetSearchForm'),
+															// iconCls: 'md-mn-reset',
+															id : 'toggleSearchTypeBt',
+															margins : '3 5 3 5',
+															listeners : {
+																click : function() {
+																	app.toggleSearchType(this);
+																}
+															}
+														})
+										/*
+										* Removed by GVB
+										*/
+										/*
+										,new Ext.Button(
+												{
+													text : OpenLayers
+															.i18n('reset'),
+													tooltip : OpenLayers
+															.i18n('resetSearchForm'),
+													// iconCls: 'md-mn-reset',
+													id : 'resetBt',
+													margins : '3 5 3 5',
+													icon : '../images/default/cross.png',
+													iconAlign : 'right',
+													listeners : {
+														click : function() {
+															Ext
+																	.getCmp(
+																			'searchForm')
+																	.getForm()
+																	.reset();
+														}
+													}
+												}),
 										new Ext.Button(
 												{
 													text : OpenLayers
@@ -436,8 +476,13 @@ GeoNetwork.app = function() {
 																	.reset();
 														}
 													}
-												}) ]
+												})*/
+								]
 							},
+							/*
+							* Removed by GVB
+							*/
+/*
 							// Panel with Advanced search, Help and About Links
 							{
 								layout : {
@@ -455,9 +500,6 @@ GeoNetwork.app = function() {
 									border : false
 								},
 								items : [
-										/*
-										* Modified by GVB
-										*/
 										{
 											html : "<a href='javascript:void(0)' onclick='this.innerHTML=(this.innerHTML==\""
 													+ OpenLayers
@@ -478,18 +520,20 @@ GeoNetwork.app = function() {
 													+ OpenLayers.i18n('Help')
 													+ '</a>'
 										}
-										/*
-										* Removed by GVB
-										*/
-/*
 										,{
 											html : '<a href="javascript:void(app.getAboutWindow().show());">'
 													+ OpenLayers.i18n('About')
 													+ '</a><br/><br/>'
-										}*/ ]
+										} ]
 							},
+*/
 							// Advanced search form
+/*
+ * Modified by GVB
+ */
 							{
+//								hidden:true,
+//								collapsed:true,
 								id : 'advSearchTabs',
 								layout : {
 									type : 'hbox',
@@ -505,67 +549,67 @@ GeoNetwork.app = function() {
 									bodyStyle : 'padding:10px'
 								},
 								items : [
-										{
-											title : OpenLayers.i18n('what'),
-											margins : '0 5 0 0',
-											layout : 'form',
-											/*
-											* Added by GVB
-											*/
-											labelWidth : 150,
-											items : [
-													advancedCriteria
+									{
+										title : OpenLayers.i18n('what'),
+										margins : '0 5 0 0',
+										layout : 'form',
+										/*
+										* Added by GVB
+										*/
+										labelWidth : 150,
+										items : [
+												advancedCriteria
 /*
 * Removed by GVB
 */
-//													,GeoNetwork.util.SearchFormTools.getTypesField(GeoNetwork.searchDefault.activeMapControlExtent,true)
-											]
-										}
+//												,GeoNetwork.util.SearchFormTools.getTypesField(GeoNetwork.searchDefault.activeMapControlExtent,true)
+										]
+									},
+									/*
+									 * Modified by GVB
+									 */
+									// Where panel
+									/*
+									 { title : OpenLayers.i18n('where'),
+									 * margins : '0 5 0 5', bodyStyle :
+									 * 'padding:0px', layout : 'form', items : [
+									 * GeoNetwork.util.SearchFormTools
+									 * .getSimpleMap(
+									 * GeoNetwork.map.BACKGROUND_LAYERS,
+									 * GeoNetwork.map.MAP_OPTIONS, false) ] }
+									 */
+									// When & Options panel
+									{
 										/*
 										 * Modified by GVB
 										 */
-										// Where panel
+										title : OpenLayers.i18n('when')/*
+												+ ' & '
+												+ OpenLayers
+														.i18n('Options')*/,
+										margins : '0 5 0 5',
+										defaultType : 'datefield',
+										layout : 'form',
 										/*
-										 * ,{ title : OpenLayers.i18n('where'),
-										 * margins : '0 5 0 5', bodyStyle :
-										 * 'padding:0px', layout : 'form', items : [
-										 * GeoNetwork.util.SearchFormTools
-										 * .getSimpleMap(
-										 * GeoNetwork.map.BACKGROUND_LAYERS,
-										 * GeoNetwork.map.MAP_OPTIONS, false) ] }
-										 */,
-										// When & Options panel
-										{
-											/*
-											 * Modified by GVB
-											 */
-											title : OpenLayers.i18n('when')/*
-													+ ' & '
-													+ OpenLayers
-															.i18n('Options')*/,
-											margins : '0 5 0 5',
-											defaultType : 'datefield',
-											layout : 'form',
-											/*
-											* Added by GVB
-											*/
-											labelWidth : 150,
-											items : [
-													GeoNetwork.util.SearchFormTools
-															.getWhen()
+										* Added by GVB
+										*/
+										labelWidth : 150,
+										items : [
+											GeoNetwork.util.SearchFormTools
+													.getWhen(),
 /*
 * Removed by GVB
 */
 /*
-													, {
-														xtype : 'box',
-														autoEl : 'div',
-														height : 20
-													},
-													optionsForm
+											{
+												xtype : 'box',
+												autoEl : 'div',
+												height : 20
+											},
 */
-												]
-										}
+											optionsForm
+										]
+									}
 								/*
 								 * Modified by GVB
 								 */
@@ -578,9 +622,57 @@ GeoNetwork.app = function() {
 								 * .getINSPIREFields( catalogue.services, true) }
 								 */
 								]
-							} ]
+							},
+							{
+								bodyStyle : {
+									'padding-top' : '50px'
+								},
+								layout : {
+									type : 'hbox',
+									pack : 'center',
+									align : 'center'
+								},
+								border : false,
+								items : [
+										new Ext.Button(
+												{
+													text : OpenLayers
+															.i18n('search'),
+													id : 'searchBt',
+													margins : '3 5 3 5',
+													icon : '../images/default/find.png',
+													iconAlign : 'right',
+													listeners : {
+														click : searchCb
+													}
+												}),
+										new Ext.Button(
+												{
+													text : OpenLayers
+															.i18n('reset'),
+													tooltip : OpenLayers
+															.i18n('resetSearchForm'),
+													// iconCls: 'md-mn-reset',
+													id : 'resetBt',
+													margins : '3 5 3 5',
+													icon : '../images/default/cross.png',
+													iconAlign : 'right',
+													listeners : {
+														click : function() {
+															Ext
+																	.getCmp(
+																			'searchForm')
+																	.getForm()
+																	.reset();
+														}
+													}
+												})
+									]
+							}
+						]
 				});
 	}
+
 
 	/*
 	* Added by GVB
@@ -636,13 +728,44 @@ GeoNetwork.app = function() {
 			},
 			scope : this
 		});
-
-		return new Ext.Toolbar({
+		/*
+		 * Added by GVB
+		 */
+		var hitsPerPage = [ [ '10' ], [ '20' ], [ '50' ], [ '100' ] ];
+		return new Ext.Toolbar(
+			{
 			items : [ previousAction, '|', nextAction, '|', {
-				xtype : 'tbtext',
-				text : '',
-				id : 'info'
-			} ]
+					xtype : 'tbtext',
+					text : '',
+					id : 'info'
+				}
+/*
+ * Added by GVB
+ */
+				,'| '+OpenLayers.i18n('hitsPerPage'),
+				new Ext.form.ComboBox({
+					id : 'E_hitsperpage',
+					name : 'E_hitsperpage',
+					width : 80,
+					mode : 'local',
+					triggerAction : 'all',
+					fieldLabel : OpenLayers.i18n('hitsPerPage'),
+					value : hitsPerPage[0], // Set arbitrarily the second value of the
+					// array as the default one.
+					store : new Ext.data.ArrayStore({
+						id : 0,
+						fields : [ 'id' ],
+						data : hitsPerPage
+					}),
+					valueField : 'id',
+					displayField : 'id',
+		            listeners: {
+		                select: function(cb, record, idx){
+		                	Ext.getCmp('searchBt').fireEvent('click');
+		                }
+		            }
+				})
+			]
 		});
 
 	}
@@ -665,7 +788,10 @@ GeoNetwork.app = function() {
 		tBar = new GeoNetwork.MetadataResultsToolbar({
 			catalogue : catalogue,
 			searchBtCmp : Ext.getCmp('searchBt'),
-			sortByCmp : Ext.getCmp('E_sortBy'),
+/*
+ * Modified by GVB
+ */
+			sortByCmp : Ext.getCmp('E_sortBy').linkedCombo,
 			metadataResultsView : metadataResultsView,
 			permalinkProvider : permalinkProvider
 		});
@@ -856,10 +982,19 @@ GeoNetwork.app = function() {
 		}
 	}
 	function createOptionsForm() {
-		var hitsPerPage = [ [ '10' ], [ '20' ], [ '50' ], [ '100' ] ], items = [];
+	/*
+	 * Modified by GVB
+	 */
+		var /*hitsPerPage = [ [ '10' ], [ '20' ], [ '50' ], [ '100' ] ],*/ items = [];
 
-		items.push(GeoNetwork.util.SearchFormTools.getSortByCombo());
-
+		/*
+		 * Modified by GVB
+		 */
+		items.push(GeoNetwork.util.SearchFormTools.getSortByCombo('changeDate#'));
+		/*
+		 * Removed by GVB
+		 */
+/*
 		items.push(new Ext.form.ComboBox({
 			id : 'E_hitsperpage',
 			name : 'E_hitsperpage',
@@ -876,7 +1011,7 @@ GeoNetwork.app = function() {
 			valueField : 'id',
 			displayField : 'id'
 		}));
-
+*/
 		return items;
 	}
 
@@ -1090,7 +1225,10 @@ GeoNetwork.app = function() {
 					});
 
 			// Hide advanced search options
-			Ext.get("advSearchTabs").hide();
+/*
+ * Removed by GVB
+ */			
+//			Ext.get("advSearchTabs").hide();
 
 			// Ext.getCmp('mapprojectionselector').syncSize();
 			// Ext.getCmp('mapprojectionselector').setWidth(130);
@@ -1215,16 +1353,17 @@ GeoNetwork.app = function() {
 					catalogue.startRecord
 							+ parseInt(Ext.getCmp('E_hitsperpage').getValue(),
 									10) > catalogue.metadataStore.totalLength);
-			if (Ext.getCmp('E_sortBy').getValue()) {
-				Ext.getCmp('sortByToolBar').setValue(
-						Ext.getCmp('E_sortBy').getValue() + "#"
-								+ Ext.getCmp('sortOrder').getValue());
+			/*
+			 * Modified by GVB
+			 */
+			if (Ext.getCmp('E_sortBy').linkedCombo.getValue()) {
+				Ext.getCmp('sortByToolBar').setValue(Ext.getCmp('E_sortBy').linkedCombo.getValue());
 
-			} else {
+			}/* else {
 				Ext.getCmp('sortByToolBar').setValue(
 						Ext.getCmp('E_sortBy').getValue());
 
-			}
+			}*/
 
 			// Fix for width sortBy combo in toolbar
 			// See this:
@@ -1241,7 +1380,27 @@ GeoNetwork.app = function() {
 		 */
 		switchMode : function() {
 			setTab('map');
+		},
+
+		/*
+		* Added by GVB
+		*/
+		toggleSearchType : function(button){
+			var advSearchTabsPanel = Ext.getCmp("advSearchTabs");
+			if (button.getText()==OpenLayers.i18n('Simple')) {
+				button.setText(OpenLayers.i18n('Advanced'));
+				Ext
+				.getCmp(
+						'searchForm')
+				.getForm()
+				.reset();
+				advSearchTabsPanel.collapse();
+			} else {
+				button.setText(OpenLayers.i18n('Simple'));
+				advSearchTabsPanel.expand();
+			}
 		}
+				
 	};
 };
 
