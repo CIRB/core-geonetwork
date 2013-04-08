@@ -377,7 +377,7 @@ GeoNetwork.app = function() {
 							// Simple search form and search buttons
 							{
 								bodyStyle : {
-									'padding-top' : '50px'
+									'padding-top' : '10px'
 								},
 								layout : {
 									type : 'hbox',
@@ -625,7 +625,7 @@ GeoNetwork.app = function() {
 							},
 							{
 								bodyStyle : {
-									'padding-top' : '50px'
+									'padding-top' : '10px'
 								},
 								layout : {
 									type : 'hbox',
