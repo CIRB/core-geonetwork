@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<strings>
+
+	<annex1>Annexe 1</annex1>
+	<annex2>Annexe 2</annex2>
+	<annex4>Annexe 4</annex4>
+	<annex5>Annexe 5</annex5>
+	<annex6>Annexe 6</annex6>
+	<annex7>Annexe 7</annex7>
+	<annex8>Annexe 8</annex8>
+	<annex10>Annexe 10</annex10>
+	
+    <alert.MG115><div>Une ressource en ligne n'est pas fournie</div></alert.MG115>
+    <report.MG115><div>Une ressource en ligne a été fournie</div></report.MG115>
+	
+	<alert.MG117><div>La ressource couplée n'est pas fournie</div></alert.MG117>
+    
+    <alert.MG121><div>La version GeoBRU n'est pas fournie</div></alert.MG121>
+    <report.MG121><div>La version GeoBRU est: </div></report.MG121>
+
+    <alert.MG122><div>Le système de coordonnées n'est pas fourni</div></alert.MG122>
+    <alert.MG122.def><div>Le système de coordonnées n'est pas encodé correctement(code et codeSpace sont obligatoires)</div></alert.MG122.def>
+    <report.MG122><div>Le système de coordonnées est :</div></report.MG122>
+
+    <alert.MG123><div>One distributor format is needed -  count (distributionFormat + distributor/MD_Distributor/distributorFormat) &gt; 0</div></alert.MG123>
+    <report.MG123> distributor format(s) found</report.MG123>
+    
+    <!-- INSPIRE M41 -->
+    <alert.MG153><div>L'enveloppe géographique n'est pas fournie</div></alert.MG153>
+    <alert.MG153.N><div>&gt;La limite nord de l'enveloppe n'est pas fournie ou a une valeur incorrecte</div></alert.MG153.N>
+    <alert.MG153.S><div>La limite sud de l'enveloppe n'est pas fournie ou a une valeur incorrecte</div></alert.MG153.S>
+    <alert.MG153.E><div>La limite est de l'enveloppe n'est pas fournie ou a une valeur incorrecte</div></alert.MG153.E>
+    <alert.MG153.W><div>La limite ouest de l'enveloppe n'est pas fournie ou a une valeur incorrecte</div></alert.MG153.W>
+    <report.MG153.N><div>La limite nord de l'enveloppe trouvée: </div></report.MG153.N>
+    <report.MG153.S><div>La limite sud de l'enveloppe trouvée: </div></report.MG153.S>
+    <report.MG153.E><div>La limite est de l'enveloppe trouvée: </div></report.MG153.E>
+    <report.MG153.W><div>La limite ouest de l'enveloppe trouvée: </div></report.MG153.W>
+ 
+    <alert.MG161><div>Limite temporelle : la date de fin doit être fournie lorsque la date de début est fournie</div></alert.MG161>
+    <alert.MG162><div>Limite temporelle : la date de début doit être fournie lorsque la date de fin est fournie</div></alert.MG162>
+    
+    <alert.MG163><div>Une date de publication, de création ou de révision doit être fournie</div></alert.MG163>
+    <report.MG163><div>Une date de publication, de création ou de révision a été fournie</div></report.MG163>
+
+    <alert.MG171><div>La généalogie n'a pas été fournie</div></alert.MG171>
+    <report.MG171><div>La généalogie est définie</div></report.MG171>
+
+    <alert.MG172><div>La résolution spatiale n'a pas été fournie</div></alert.MG172>
+    <report.MG172><div>La résolution spatiale est définie</div></report.MG172>
+
+    <alert.MG173><div>La complétude n'a pas été fournie</div></alert.MG173>
+    <report.MG173><div>La complétude a été définie</div></report.MG173>
+
+    <report.MG174><div>Généalogie - la qualité globale a été définie</div></report.MG174>
+
+    <report.MG175><div>Généalogie - Le jeu de données ou la série de jeux de données a été validé(e) ou a été l'objet d'un contrôle de qualité: </div></report.MG175>
+
+    <report.MG176><div>Généalogie - Cette version est-elle la version officielle ? </div></report.MG176>
+	
+    <report.MG177><div>Lineage - Ce fichier a-t-il une valeur légale ? </div></report.MG177>
+
+    <alert.MG181><div>Les conditions relatives à l'accès et l'utilisation n'ont pas été fournies</div></alert.MG181>
+    <report.MG181><div>Les conditions relatives à l'accès et l'utilisation sont : </div></report.MG181>
+
+    <alert.MG182><div>Les limitations relatives à l'accès public n'ont pas été fournies</div></alert.MG182>
+    <report.MG182><div>Les limitations relatives à l'accès public sont : </div></report.MG182>
+    
+    <alert.MG1101><div>L'identifiant de fichier n'a pas été fourni</div></alert.MG1101>
+    <report.MG1101><div>L'identifiant de fichier est: </div></report.MG1101>
+
+</strings>

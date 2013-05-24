@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<strings>
+
+	<annex1>Annex 1</annex1>
+	<annex2>Annex 2</annex2>
+	<annex4>Annex 4</annex4>
+	<annex5>Annex 5</annex5>
+	<annex6>Annex 6</annex6>
+	<annex7>Annex 7</annex7>
+	<annex8>Annex 8</annex8>
+	<annex10>Annex 10</annex10>
+	
+    <alert.MG115><div>Online resource is missing</div></alert.MG115>
+    <report.MG115><div>Online resource has been provided</div></report.MG115>
+	
+	<alert.MG117><div>Coupled resource missing</div></alert.MG117>
+    
+    <alert.MG121><div>GeoBRU version is missing</div></alert.MG121>
+    <report.MG121><div>GeoBRU version is: </div></report.MG121>
+
+    <alert.MG122><div>Coordinate system is missing</div></alert.MG122>
+    <alert.MG122.def><div>Coordinate system is not defined correctly (code et codeSpace are mandatory)</div></alert.MG122.def>
+    <report.MG122><div>Coordinate system is: </div></report.MG122>
+
+    <alert.MG123><div>One distributor format is needed -  count (distributionFormat + distributor/MD_Distributor/distributorFormat) &gt; 0</div></alert.MG123>
+    <report.MG123> distributor format(s) found</report.MG123>
+    
+    <!-- INSPIRE M41 -->
+    <alert.MG153><div>Geographic bounding box is missing</div></alert.MG153>
+    <alert.MG153.N><div>>NorthBoundLongitude is missing or has wrong value</div></alert.MG153.N>
+    <alert.MG153.S><div>SouthBoundLongitude is missing or has wrong value</div></alert.MG153.S>
+    <alert.MG153.E><div>EastBoundLongitude is missing or has wrong value</div></alert.MG153.E>
+    <alert.MG153.W><div>WestBoundLongitude is missing or has wrong value</div></alert.MG153.W>
+    <report.MG153.N><div>NorthBoundLongitude found: </div></report.MG153.N>
+    <report.MG153.S><div>SouthBoundLongitude found: </div></report.MG153.S>
+    <report.MG153.E><div>EastBoundLongitude found: </div></report.MG153.E>
+    <report.MG153.W><div>WestBoundLongitude found: </div></report.MG153.W>
+ 
+    <alert.MG161><div>Temporal extent: end date must be provided when begin date is provided</div></alert.MG161>
+    <alert.MG162><div>Temporal extent: begin date must be provided when end date is provided</div></alert.MG162>
+    
+    <alert.MG163><div>A publication, creation or revision date must be provided</div></alert.MG163>
+    <report.MG163><div>A publication, creation or revision date has been provided</div></report.MG163>
+
+    <alert.MG171><div>Lineage is missing</div></alert.MG171>
+    <report.MG171><div>Lineage is set</div></report.MG171>
+
+    <alert.MG172><div>Spatial resolution is missing</div></alert.MG172>
+    <report.MG172><div>Spatial resolution is set</div></report.MG172>
+
+    <alert.MG173><div>Completeness is missing</div></alert.MG173>
+    <report.MG173><div>Completeness is se.</div></report.MG173>
+
+    <report.MG174><div>Lineage - General quality is set</div></report.MG174>
+
+    <report.MG175><div>Lineage - The dataset (series) has been validated or has been subject to a quality control: </div></report.MG175>
+
+    <report.MG176><div>Lineage - Is this the official version: </div></report.MG176>
+	
+    <report.MG177><div>Lineage - The dataset has a legal value: </div></report.MG177>
+
+    <alert.MG181><div>Conditions applying to access and use are missing</div></alert.MG181>
+    <report.MG181><div>Conditions applying to access and use found: </div></report.MG181>
+
+    <alert.MG182><div>Limitations on public access are missing</div></alert.MG182>
+    <report.MG182><div>Limitations on public access found</div></report.MG182>
+    
+    <alert.MG1101><div>FileIdentifier is missing</div></alert.MG1101>
+    <report.MG1101><div>FileIdentifier is: </div></report.MG1101>
+
+</strings>

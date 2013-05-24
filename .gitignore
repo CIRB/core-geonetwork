@@ -7,8 +7,6 @@ web/src/main/webapp/WEB-INF/data/config/schema_plugins/*/schematron-rules-geonet
 web/src/main/webapp/WEB-INF/data/config/schema_plugins/*/schematron-rules-inspire.xsl
 web/src/main/webapp/WEB-INF/data/config/schema_plugins/*/schematron-rules-iso.xsl
 web/src/main/webapp/WEB-INF/data/config/schema_plugins/*/schematron-rules-none.xsl
-web/src/main/webapp/WEB-INF/data/config/schema_plugins/iso19139.geobru/loc/*/schematron-rules-geobru.xml
-web/src/main/webapp/WEB-INF/data/config/schema_plugins/iso19139.geobru/schematron-rules-geobruk.xsl
 web/src/main/webapp/scripts/lib/*
 web/src/main/webapp/images/logos/*
 web/src/main/webapp/WEB-INF/data/data/*
