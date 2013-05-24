@@ -129,6 +129,8 @@ GeoNetwork.Lang.fr = {
 	 */
 	'reset' : "Réinitialiser",
 	'resetSearchForm' : "Réinitialiser le formulaire de recherche.",
+	'simpleTooltip' : "Recherche simple",
+	'advancedTooltip' : "Afficher les critères de recherche avancées",
 	'errorTitle' : "Erreur",
 	'SearchOptionLoadFailureMsg' : "Pas de résultats trouvés. \n Le serveur peut être indisponible. \n",
 	'gazetteerTooltipTitle' : "Recherche basée sur l'adresse",
@@ -169,7 +171,7 @@ GeoNetwork.Lang.fr = {
 	'wkt' : 'Geométrie WKT',
 	'spatialSearch' : 'Critères géographiques',
 	'mdChangeDate' : 'Date de mise à jour des métadonnées',
-	'tempExtent' : 'Étendue temporelle',
+	'tempExtent' : 'Étendue temporelle (données/services)',
 	'hitsPerPage' : 'Nombre par page',
 	'sortBy' : 'Trier par',
 	'options' : 'Options',
@@ -558,7 +560,7 @@ GeoNetwork.Lang.fr = {
 	'what' : "Quoi",
 	'advancedSearchOptions' : "Options de recherche avancées",
 	'hitsPerPage' : "résultats par page",
-	'Searchforspatialdataon' : "Rechercher des données géographiques sur les",
+	'Searchforspatialdataon' : "Rechercher des données géographiques sur: ",
 	'search' : "Rechercher",
 	'fullTextSearch' : "Recherche texte intégral",
 	/*

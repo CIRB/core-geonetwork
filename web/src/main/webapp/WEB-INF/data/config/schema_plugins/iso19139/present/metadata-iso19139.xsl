@@ -3733,6 +3733,7 @@
 								<xsl:attribute name="disabled">disabled</xsl:attribute>
 							</xsl:if>
 						</input>
+<!--
 						<xsl:if test="not($isXLinked)">
 							<xsl:text> </xsl:text>
 							<select class="md"
@@ -3751,6 +3752,7 @@
 								</xsl:for-each>
 							</select>
 						</xsl:if>
+-->
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:value-of
@@ -3975,8 +3977,7 @@
 	-->
 	<xsl:template mode="iso19139"
 		match="gmd:citation/gmd:CI_Citation/gmd:title[gco:CharacterString or gmd:PT_FreeText]|
-        gmd:abstract[gco:CharacterString or gmd:PT_FreeText]|
-        gmd:CI_ResponsibleParty/gmd:organisationName[gco:CharacterString or gmd:PT_FreeText]"
+        gmd:abstract[gco:CharacterString or gmd:PT_FreeText]"
 		>
 		<xsl:param name="schema" />
 		<xsl:param name="edit" />

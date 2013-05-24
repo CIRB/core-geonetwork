@@ -819,7 +819,6 @@ GeoNetwork.util.SearchFormTools = {
     getWhen: function(){
         var anyTime = new Ext.form.Checkbox({
                 name: 'timeType',
-                type: 'hidden',
                 checked: true,
                 fieldLabel: OpenLayers.i18n('anyTime'),
                 handler: function(ck, checked){
@@ -833,7 +832,10 @@ GeoNetwork.util.SearchFormTools = {
                 }
             });
         
-        var items = [anyTime, {
+        /*
+         * Modified by GVB
+         */
+        var items = [/*anyTime, */{
                 xtype: 'label',
                 text: OpenLayers.i18n('mdChangeDate')
             }];
@@ -888,11 +890,15 @@ GeoNetwork.util.SearchFormTools = {
             width : 120,
             vtype: 'daterange',
             endDateField: idTo,
-            format: 'd/m/Y',
+            format: 'd/m/Y'
+        	/*
+        	 * Modified by GVB
+        	 */
+        	/*,
             listeners: {
                 change: changeCb,
                 scope: anyTime
-            }
+            }*/
         }, {
             fieldLabel: OpenLayers.i18n(labelTo),
             name: nameTo,
@@ -900,11 +906,15 @@ GeoNetwork.util.SearchFormTools = {
             width : 120,
             vtype: 'daterange',
             startDateField: idFrom,
-            format: 'd/m/Y',
+            format: 'd/m/Y'
+        	/*
+        	 * Modified by GVB
+        	 */
+            /*,
             listeners: {
                 change: changeCb,
                 scope: anyTime
-            }
+            }*/
         }];
     },
     /** api:method[getScaleDenominatorField]

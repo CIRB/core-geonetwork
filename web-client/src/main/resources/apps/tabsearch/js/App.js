@@ -348,6 +348,10 @@ GeoNetwork.app = function() {
 		});
 
 		var hideInspirePanel = catalogue.getInspireInfo().enable === "false";
+		/*
+		* Moved by GVB
+		*/
+
 		var searchCb = function() {
 			var any = Ext.get('E_any');
 			if (any) {
@@ -367,116 +371,127 @@ GeoNetwork.app = function() {
 
 		return new GeoNetwork.SearchFormPanel(
 				{
-					id : 'searchForm',
+               		id : 'searchForm',
 					stateId : 's',
 					bodyStyle : 'text-align: center;',
 					border : false,
 					searchBt : null,
 					resetBt : null,
-					items : [
-							// Simple search form and search buttons
-							{
-								bodyStyle : {
-									'padding-top' : '10px'
-								},
-								layout : {
-									type : 'hbox',
-									pack : 'center',
-									align : 'center'
-								},
-								border : false,
-								items : [
+		            autoScroll: true,
+		/*
+		            listeners: {
+		                afterrender: function(){
+		                    //Ext.getCmp("advSearchTabs").getEl().toggle();
+		                    }
+		            },
+		*/
+		            items:[
+		                // Simple search form and search buttons
+		                {
+		                    layout: {
+		                        type: 'hbox',
+		                        pack: 'center',
+		                        align: 'center'
+		                    },
+		                    bodyStyle:'padding-top:5px;border-width:0px',
+		                    border:true,
+		                    items:[
+		                   		new Ext.form.Label({
+		                    		text: OpenLayers.i18n('Searchforspatialdataon'),
+		        	               	style:'padding-top:5px;padding-right:10px;font-weight:bold;font-size:150%'/*,
+		                       		listeners: {
+		                    		   render: function(textField) {
+		                    			   Ext.QuickTips.register({
+		                    				   target: textField.getEl(),
+		                    				   text: "Zoek in alle tekstvelden en codelijsten"
+		                    			   });
+		                    		   }
+		                    	   }*/
+		                   		}),
+	                   			new GeoNetwork.form.OpenSearchSuggestionTextField(
+									{
+										id: 'openSearchSuggestionTextField',
+										// hideLabel: true,
+										width : 400,
+										height : 40,
+										minChars : 2,
+										loadingText : '...',
+										hideTrigger : true,
+										url : catalogue.services.opensearchSuggest
+									}),
+									/*
+									* Moved by GVB
+									*/
+									/*
+									,new Ext.Button(
 										{
-											html : '<h1>'
-													+ OpenLayers
-															.i18n('Searchforspatialdataon')
-													+ '</h1>',
-											margins : '5 10 5 10',
-											border : false
-										},
-										new GeoNetwork.form.OpenSearchSuggestionTextField(
-												{
-													// hideLabel: true,
-													width : 285,
-													height : 40,
-													minChars : 2,
-													loadingText : '...',
-													hideTrigger : true,
-													url : catalogue.services.opensearchSuggest
-												}),
-												new Ext.Button(
-														{
-															text : OpenLayers
-																	.i18n('Simple'),
-															tooltip : OpenLayers
-																	.i18n('resetSearchForm'),
-															// iconCls: 'md-mn-reset',
-															id : 'toggleSearchTypeBt',
-															margins : '3 5 3 5',
-															listeners : {
-																click : function() {
-																	app.toggleSearchType(this);
-																}
-															}
-														})
-										/*
-										* Removed by GVB
-										*/
-										/*
-										,new Ext.Button(
-												{
-													text : OpenLayers
-															.i18n('reset'),
-													tooltip : OpenLayers
-															.i18n('resetSearchForm'),
-													// iconCls: 'md-mn-reset',
-													id : 'resetBt',
-													margins : '3 5 3 5',
-													icon : '../images/default/cross.png',
-													iconAlign : 'right',
-													listeners : {
-														click : function() {
-															Ext
-																	.getCmp(
-																			'searchForm')
-																	.getForm()
-																	.reset();
-														}
-													}
-												}),
-										new Ext.Button(
-												{
-													text : OpenLayers
-															.i18n('search'),
-													id : 'searchBt',
-													margins : '3 5 3 5',
-													icon : '../images/default/find.png',
-													iconAlign : 'right',
-													listeners : {
-														click : searchCb
-													}
-												}),
-										new Ext.Button(
-												{
-													text : OpenLayers
-															.i18n('reset'),
-													tooltip : OpenLayers
-															.i18n('resetSearchForm'),
-													// iconCls: 'md-mn-reset',
-													id : 'resetBt',
-													margins : '3 5 3 5',
-													icon : '../images/default/cross.png',
-													iconAlign : 'right',
-													listeners : {
-														click : function() {
-															Ext
-																	.getCmp(
-																			'searchForm')
-																	.getForm()
-																	.reset();
-														}
-													}
-												})*/
+											text : OpenLayers
+													.i18n('Simple'),
+											tooltip : OpenLayers
+													.i18n('resetSearchForm'),
+											// iconCls: 'md-mn-reset',
+											id : 'toggleSearchTypeBt',
+											margins : '3 5 3 5',
+											listeners : {
+												click : function() {
+													app.toggleSearchType(this);
+												}
+											}
+										})
+									,new Ext.Button(
+										{
+											text : OpenLayers
+													.i18n('reset'),
+											tooltip : OpenLayers
+													.i18n('resetSearchForm'),
+											// iconCls: 'md-mn-reset',
+											id : 'resetBt',
+											margins : '3 5 3 5',
+											icon : '../images/default/cross.png',
+											iconAlign : 'right',
+											listeners : {
+												click : function() {
+													Ext
+															.getCmp(
+																	'searchForm')
+															.getForm()
+															.reset();
+												}
+											}
+										}),
+									new Ext.Button(
+										{
+											text : OpenLayers
+													.i18n('search'),
+											id : 'searchBt',
+											margins : '3 5 3 5',
+											icon : '../images/default/find.png',
+											iconAlign : 'right',
+											listeners : {
+												click : searchCb
+											}
+										}),
+									new Ext.Button(
+										{
+											text : OpenLayers
+													.i18n('reset'),
+											tooltip : OpenLayers
+													.i18n('resetSearchForm'),
+											// iconCls: 'md-mn-reset',
+											id : 'resetBt',
+											margins : '3 5 3 5',
+											icon : '../images/default/cross.png',
+											iconAlign : 'right',
+											listeners : {
+												click : function() {
+													Ext
+															.getCmp(
+																	'searchForm')
+															.getForm()
+															.reset();
+												}
+											}
+										})*/
 								]
 							},
 							/*
@@ -534,93 +549,88 @@ GeoNetwork.app = function() {
 							{
 //								hidden:true,
 //								collapsed:true,
-								id : 'advSearchTabs',
-								layout : {
-									type : 'hbox',
-									pack : 'center',
-									align : 'center'
-								},
-								plain : true,
-								autoHeight : true,
-								border : false,
-								autoScroll : true,
-								deferredRender : false,
-								defaults : {
-									bodyStyle : 'padding:10px'
-								},
+			                    id:'advSearchTabs',
+			                    plain:true,
+			                    layout: 'column',
+			                    layoutConfig: { pack: 'center', align: 'center' },
+			                    autoHeight: true,
+//			                    autoWidth: true,
+			                    boxMinWidth: 1070,
+	                            boxMaxWidth: 1870,
+			                    bodyStyle:'border-width:0px',
+			                    border:true,
+			                    deferredRender: false,
+			                    defaults:{style:'padding:15px',bodyStyle:'padding:5px'},
 								items : [
-									{
-										title : OpenLayers.i18n('what'),
-										margins : '0 5 0 0',
-										layout : 'form',
-										/*
-										* Added by GVB
-										*/
-										labelWidth : 150,
-										items : [
-												advancedCriteria
+			                        {
+			                       		border: false,
+			                        	columnWidth: 0.25
+			                        },
+			                        // What panel
+			                        {
+					                    frame: true,
+			                            title: OpenLayers.i18n('what'),
+			                            layout:'form',
+			                            labelWidth: 150,
+			                            autoHeight: true,
+//					                            width: 820,
+			                            boxMinWidth: 400,
+			                            boxMaxWidth: 800,
+			                        	columnWidth: 0.5,
+			                            items:[
+			                                advancedCriteria/*,GeoNetwork.util.SearchFormTools.getTypesField(GeoNetwork.searchDefault.activeMapControlExtent, true),
+			                                GeoNetwork.util.INSPIRESearchFormTools.getAnnexField(true),
+			                                GeoNetwork.util.INSPIRESearchFormTools.getThemesField(catalogue.services, true),
+			                                GeoNetwork.util.INSPIRESearchFormTools.getServiceTypeField(true)
+*/			                            ]
+			                        },
 /*
-* Removed by GVB
+			                        // Where panel
+			                        {
+			                            title: OpenLayers.i18n('where'),
+			                            bodyStyle:'padding:0px',
+			                            layout:'form',
+			                            autoHeight: true,
+			                            width: 270,
+			                            items:[
+			                                GeoNetwork.util.SearchFormTools.getSimpleMap(GeoNetwork.map.BACKGROUND_LAYERS, GeoNetwork.map.MAP_OPTIONS,false)]
+			                        },
 */
-//												,GeoNetwork.util.SearchFormTools.getTypesField(GeoNetwork.searchDefault.activeMapControlExtent,true)
-										]
-									},
-									/*
-									 * Modified by GVB
-									 */
-									// Where panel
-									/*
-									 { title : OpenLayers.i18n('where'),
-									 * margins : '0 5 0 5', bodyStyle :
-									 * 'padding:0px', layout : 'form', items : [
-									 * GeoNetwork.util.SearchFormTools
-									 * .getSimpleMap(
-									 * GeoNetwork.map.BACKGROUND_LAYERS,
-									 * GeoNetwork.map.MAP_OPTIONS, false) ] }
-									 */
-									// When & Options panel
-									{
-										/*
-										 * Modified by GVB
-										 */
-										title : OpenLayers.i18n('when')/*
-												+ ' & '
-												+ OpenLayers
-														.i18n('Options')*/,
-										margins : '0 5 0 5',
-										defaultType : 'datefield',
-										layout : 'form',
-										/*
-										* Added by GVB
-										*/
-										labelWidth : 150,
-										items : [
-											GeoNetwork.util.SearchFormTools
-													.getWhen(),
-/*
-* Removed by GVB
-*/
-/*
-											{
-												xtype : 'box',
-												autoEl : 'div',
-												height : 20
-											},
-*/
-											optionsForm
-										]
-									}
-								/*
-								 * Modified by GVB
-								 */
-								/*
-								 * , // INSPIRE panel { title : 'INSPIRE',
-								 * margins : '0 5 0 5', // hidden:
-								 * hideInspirePanel, defaultType : 'datefield',
-								 * layout : 'form', items :
-								 * GeoNetwork.util.INSPIRESearchFormTools
-								 * .getINSPIREFields( catalogue.services, true) }
-								 */
+			                        // When panel
+			                        {
+					                    frame: true,
+			                            title:OpenLayers.i18n('when'),
+			                            defaultType: 'datefield',
+			                            layout:'form',
+			                            autoHeight: true,
+			                            width: 270,
+			                            items:GeoNetwork.util.SearchFormTools.getWhen()
+			                        },
+			                       	// INSPIRE panel
+			                        /*
+                                    {
+                                        title:'INSPIRE',
+                                        hidden: hideInspirePanel,
+                                        defaultType: 'datefield',
+                                        layout:'form',
+                                        autoHeight: true,
+                                        width: 250,
+                                        items: GeoNetwork.util.INSPIRESearchFormTools.getINSPIREFields(catalogue.services, true)
+                                    },
+			                        */
+			                        //Options
+			                        {
+			                       		title:'Options',
+			                            layout:'form',
+			                            width:0,
+			                            autoHeight: true,
+			                            hidden: true,
+			                            items: optionsForm
+			                       	},
+			                        {
+			                       		border: false,
+			                        	columnWidth: 0.25
+			                        }
 								]
 							},
 							{
@@ -640,8 +650,9 @@ GeoNetwork.app = function() {
 															.i18n('search'),
 													id : 'searchBt',
 													margins : '3 5 3 5',
-													icon : '../images/default/find.png',
-													iconAlign : 'right',
+//													cls: 'search-red-btn',
+//													icon : '../images/default/find.png',
+//													iconAlign : 'right',
 													listeners : {
 														click : searchCb
 													}
@@ -652,11 +663,10 @@ GeoNetwork.app = function() {
 															.i18n('reset'),
 													tooltip : OpenLayers
 															.i18n('resetSearchForm'),
-													// iconCls: 'md-mn-reset',
 													id : 'resetBt',
 													margins : '3 5 3 5',
-													icon : '../images/default/cross.png',
-													iconAlign : 'right',
+//													icon : '../images/default/cross.png',
+//													iconAlign : 'right',
 													listeners : {
 														click : function() {
 															Ext
@@ -666,13 +676,27 @@ GeoNetwork.app = function() {
 																	.reset();
 														}
 													}
-												})
+												}),
+												new Ext.Button(
+														{
+															text : OpenLayers
+																	.i18n('Simple'),
+															tooltip : OpenLayers
+																	.i18n('simpleTooltip'),
+															// iconCls: 'md-mn-reset',
+															id : 'toggleSearchTypeBt',
+															margins : '3 5 3 5',
+															listeners : {
+																click : function() {
+																	app.toggleSearchType(this);
+																}
+															}
+														})
 									]
 							}
 						]
 				});
 	}
-
 
 	/*
 	* Added by GVB
@@ -776,12 +800,17 @@ GeoNetwork.app = function() {
 	 * @return
 	 */
 	function createResultsPanel(permalinkProvider) {
-		metadataResultsView = new GeoNetwork.MetadataResultsView({
-			catalogue : catalogue,
-			displaySerieMembers : true,
-			autoScroll : true,
-			tpl : GeoNetwork.Templates.FULL
-		});
+        metadataResultsView = new GeoNetwork.MetadataResultsView({
+            catalogue: catalogue,
+            displaySerieMembers: true,
+            border: false,
+            frame: false,
+            layout: 'fit',
+            bodyStyle:'padding:5px',
+            autoHeight: true,
+            autoWidth: true,
+            tpl: GeoNetwork.Templates.FULL
+        });
 
 		catalogue.resultsView = metadataResultsView;
 
@@ -800,13 +829,15 @@ GeoNetwork.app = function() {
 
 		resultPanel = new Ext.Panel({
 			id : 'resultsPanel',
-			border : false,
-			hidden : true,
-			bodyCssClass : 'md-view',
-			autoScroll : true,
-			autoWidth : true,
-			tbar : tBar,
-			layout : 'fit',
+			border: false,
+//			frame: false,
+			layout: 'fit',
+			autoWidth: true,
+//			autoHeight: true,
+			autoScroll:true,
+			hidden: true,
+			bodyCssClass: 'md-view',
+			tbar: tBar,
 			items : metadataResultsView,
 			// paging bar on the bottom
 			bbar : bBar
@@ -961,7 +992,7 @@ GeoNetwork.app = function() {
 						layout : 'fit',
 						modal : false,
 						items : this.editorPanel,
-						closeAction : 'hide',
+						closeAction : 'close',
 						collapsible : true,
 						collapsed : false,
 						maximizable : true,
@@ -971,7 +1002,13 @@ GeoNetwork.app = function() {
 						width : 980,
 						height : 800
 					});
-			this.editorPanel.setContainer(this.editorWindow);
+            
+            var this_ = this;
+            this.editorWindow.on('destroy', function() {
+                this_.editorWindow = undefined;
+                this_.editorPanel = undefined;
+            });
+            this.editorPanel.setContainer(this.editorWindow);
 			this.editorPanel.on('editorClosed', function() {
 				Ext.getCmp('searchBt').fireEvent('click');
 			});
@@ -1071,7 +1108,9 @@ GeoNetwork.app = function() {
 						metadataEditFn : edit
 					});
 
-			createHeader();
+            if (Ext.get("title")) {
+    			createHeader();
+            }
 
 			// Options Panel
 			optionsForm = createOptionsForm();
@@ -1081,8 +1120,12 @@ GeoNetwork.app = function() {
 
 			// Top navigation widgets
 			// createModeSwitcher();
-			createLanguageSwitcher(lang);
-			createLoginForm();
+            if (Ext.get("lang-form")) {
+            	createLanguageSwitcher(lang);
+            }
+            if (Ext.get("login-form")) {
+                createLoginForm();
+            }
 			edit();
 
 			// Results map
@@ -1118,20 +1161,24 @@ GeoNetwork.app = function() {
 									id : 'GNtabs',
 									deferredRender : false,
 									plain : true,
-									autoScroll : true,
-									defaults : {
-										autoScroll : true
-									},
+//									autoScroll : true,
+//									defaults : { autoScroll : true },
 									margins : '0 0 0 0',
 									border : false,
 									activeTab : 0,
 									items : [ {// basic search panel
-										title : OpenLayers.i18n('Home'),
-										// contentEl:'dvZoeken',
-										layout : 'fit',
-										closable : false,
-										autoScroll : true,
-										items : [ {
+		                                title:OpenLayers.i18n('Home'),
+		                                //contentEl:'dvZoeken',
+		                                layout:'fit',
+		                                layoutConfig: { pack: 'center', align: 'center' },
+		                                listeners: {
+		                                    activate: function(){
+		                                        this.doLayout();
+		                                    }
+		                                },
+		                                closable:false,
+//										autoScroll : true,
+										items : /*[ {
 											id : 'alignCenter',
 											border : false,
 											layout : 'column',
@@ -1152,11 +1199,11 @@ GeoNetwork.app = function() {
 												columnWidth : 0.05,
 												items : [ tagCloudViewPanel ]
 											} ]
-										} ]
+										} ]*/searchForm
 									}, {// search results panel
 										id : 'results',
 										title : OpenLayers.i18n('List'),
-										autoScroll : false,
+//										autoScroll : true,
 										layout : 'border',
 										items : [
 /*
@@ -1175,8 +1222,8 @@ GeoNetwork.app = function() {
 											layout : 'fit',
 											region : 'center',
 											border : false,
-											autoScroll : true,
-											items : [ resultPanel ]
+//											autoScroll : true,
+											items : resultsPanel
 										} ],
 										/*
 										 * Hide tab panel until a search is done
@@ -1255,7 +1302,7 @@ GeoNetwork.app = function() {
 			}
 
 			// FIXME : should be in Search field configuration
-			Ext.get('E_any').setWidth(285);
+			Ext.get('E_any').setWidth(400);
 			Ext.get('E_any').setHeight(28);
 
 			metadataResultsView.addMap(Ext.getCmp('resultsMap').map);
@@ -1389,6 +1436,7 @@ GeoNetwork.app = function() {
 			var advSearchTabsPanel = Ext.getCmp("advSearchTabs");
 			if (button.getText()==OpenLayers.i18n('Simple')) {
 				button.setText(OpenLayers.i18n('Advanced'));
+				button.setTooltip(OpenLayers.i18n('advancedTooltip'));
 				Ext
 				.getCmp(
 						'searchForm')
@@ -1397,6 +1445,7 @@ GeoNetwork.app = function() {
 				advSearchTabsPanel.collapse();
 			} else {
 				button.setText(OpenLayers.i18n('Simple'));
+				button.setTooltip(OpenLayers.i18n('simpleTooltip'));
 				advSearchTabsPanel.expand();
 			}
 		}
@@ -1418,6 +1467,15 @@ Ext.onReady(function() {
 
 	app = new GeoNetwork.app();
 	app.init();
+	var openSearchSuggestionTextField = Ext.getCmp('openSearchSuggestionTextField');
+	if (openSearchSuggestionTextField) {
+		new Ext.KeyNav(openSearchSuggestionTextField.el, {
+			"enter" : function(e){
+				Ext.getCmp('searchBt').fireEvent('click');
+			}/*,
+			scope: openSearchSuggestionTextField*/
+		});
+	}
 	catalogue = app.getCatalogue();
 
 	// overwrite default detail-click action
@@ -1448,11 +1506,11 @@ Ext.onReady(function() {
 			var aResTab = new GeoNetwork.view.ViewPanel({
 				serviceUrl : catalogue.services.mdView + '?uuid=' + uuid,
 				lang : catalogue.lang,
-				autoScroll : true,
+//				autoScroll : true,
 				resultsView : app.getMetadataResultsView(),
 				layout : 'fit',
 				// autoHeight:true,
-				padding : '5px 25px',
+//				padding : '5px 25px',
 				currTab : GeoNetwork.defaultViewMode || 'simple',
 				printDefaultForTabs : GeoNetwork.printDefaultForTabs || false,
 				catalogue : catalogue,
@@ -1479,6 +1537,7 @@ Ext.onReady(function() {
 
 			tabPanel.add({
 				title : RowLabel,
+				layout: 'fit',
 				tabTip : RowTitle,
 				iconCls : 'tabs',
 				id : uuid,

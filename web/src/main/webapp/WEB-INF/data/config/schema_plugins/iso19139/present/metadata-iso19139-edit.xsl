@@ -395,6 +395,7 @@
       <xsl:param name="edit" select="false()"/>
       <xsl:param name="validator" />
           <xsl:choose>
+<!--
               <xsl:when test="not(gco:*)">
                   <xsl:for-each select="gmd:PT_FreeText">
                       <xsl:call-template name="getElementText">
@@ -404,7 +405,18 @@
                           <xsl:with-param name="validator" select="$validator" />
                         </xsl:call-template>
                     </xsl:for-each>
-                </xsl:when>
+              </xsl:when>
+-->              
+              <xsl:when test="count(gmd:PT_FreeText/gmd:textGroup/gmd:LocalisedCharacterString[@locale=$langId])>0">
+                  <xsl:for-each select="gmd:PT_FreeText[gmd:textGroup/gmd:LocalisedCharacterString/@locale=$langId]">
+                      <xsl:call-template name="getElementText">
+                          <xsl:with-param name="edit" select="$edit" />
+                          <xsl:with-param name="schema" select="$schema" />
+                          <xsl:with-param name="langId" select="$langId" />
+                          <xsl:with-param name="validator" select="$validator" />
+                        </xsl:call-template>
+                    </xsl:for-each>
+              </xsl:when>
               <xsl:otherwise>
                   <xsl:for-each select="gco:*">
                       <xsl:call-template name="getElementText">
@@ -1119,10 +1131,21 @@
                 <xsl:call-template name="translatedString">
                   <xsl:with-param name="schema" select="$schema"/>
                   <xsl:with-param name="langId">
+				      <xsl:if test="$edit=true()">
                         <xsl:call-template name="getLangId">
                               <xsl:with-param name="langGui" select="/root/gui/language"/>
                               <xsl:with-param name="md" select="ancestor-or-self::*[name(.)='gmd:MD_Metadata' or @gco:isoType='gmd:MD_Metadata']" />
                           </xsl:call-template>
+				      </xsl:if>
+				      <xsl:if test="not($edit=true())">
+				            <xsl:value-of select="concat('#',upper-case(/root/gui/language))"/>
+				      </xsl:if>
+<!--
+                        <xsl:call-template name="getLangId">
+                              <xsl:with-param name="langGui" select="/root/gui/language"/>
+                              <xsl:with-param name="md" select="ancestor-or-self::*[name(.)='gmd:MD_Metadata' or @gco:isoType='gmd:MD_Metadata']" />
+                          </xsl:call-template>
+-->
                     </xsl:with-param>
                   </xsl:call-template>
 
@@ -3105,6 +3128,7 @@
                 <xsl:attribute name="disabled">disabled</xsl:attribute>
               </xsl:if>          
             </input>
+<!--
             <xsl:if test="not($isXLinked)">
               <xsl:text> </xsl:text>
               <select class="md"
@@ -3123,6 +3147,7 @@
                 </xsl:for-each>
               </select>
             </xsl:if>
+-->
           </xsl:when>
           <xsl:otherwise>
             <xsl:value-of
@@ -3349,8 +3374,7 @@
   -->
   <xsl:template mode="iso19139"
 		match="gmd:citation/gmd:CI_Citation/gmd:title[gco:CharacterString or gmd:PT_FreeText]|
-		gmd:abstract[gco:CharacterString or gmd:PT_FreeText]|
-		gmd:CI_ResponsibleParty/gmd:organisationName[gco:CharacterString or gmd:PT_FreeText]"
+		gmd:abstract[gco:CharacterString or gmd:PT_FreeText]"
     >
     <xsl:param name="schema" />
     <xsl:param name="edit" />
@@ -3485,11 +3509,16 @@
     <xsl:param name="class" select="''" />
     
     <xsl:variable name="langId">
-      <xsl:call-template name="getLangId">
-        <xsl:with-param name="langGui" select="/root/gui/language" />
-        <xsl:with-param name="md"
-          select="ancestor-or-self::*[name(.)='gmd:MD_Metadata' or @gco:isoType='gmd:MD_Metadata']" />
-      </xsl:call-template>
+      <xsl:if test="$edit=true()">
+	      <xsl:call-template name="getLangId">
+	        <xsl:with-param name="langGui" select="/root/gui/language" />
+	        <xsl:with-param name="md"
+	          select="ancestor-or-self::*[name(.)='gmd:MD_Metadata' or @gco:isoType='gmd:MD_Metadata']" />
+	      </xsl:call-template>
+      </xsl:if>
+      <xsl:if test="not($edit=true())">
+            <xsl:value-of select="concat('#',upper-case(/root/gui/language))"/>
+      </xsl:if>
     </xsl:variable>
     
     <xsl:variable name="widget">
@@ -3586,9 +3615,9 @@
                   </xsl:attribute>
                   <xsl:choose>
                     <xsl:when test="gco:*">
-                      <option value="_{gco:*/geonet:element/@ref}" code="{substring-after($mainLangId, '#')}">
+                      <option value="_{gco:*/geonet:element/@ref}" code="{substring-after($mainLangId, '#')}" selected="selected">
                         <xsl:value-of
-                              select="/root/gui/isoLang/record[code=$mainLang]/label/*[name(.)=/root/gui/language]" />
+                              select="/root/gui/isoLang/record[code=$mainLang]/label/*[name(.)=lower-case(substring-after($mainLangId, '#'))]" />
                       </option>
                       <xsl:for-each select="$ptFreeTextTree//gmd:LocalisedCharacterString[@locale!=$mainLangId]">
                         <option value="_{geonet:element/@ref}" code="{substring-after(@locale, '#')}">
@@ -3599,6 +3628,9 @@
                     <xsl:otherwise>
                       <xsl:for-each select="$ptFreeTextTree//gmd:LocalisedCharacterString">
                         <option value="_{geonet:element/@ref}" code="{substring-after(@locale, '#')}">
+                          <xsl:if test="@locale=$mainLangId">
+                              <xsl:attribute name="selected">selected</xsl:attribute>
+                          </xsl:if>
                           <xsl:value-of select="@language" />
                         </option>
                       </xsl:for-each>
@@ -3668,7 +3700,7 @@
     <xsl:variable name="currentNode" select="node()" />
     <xsl:for-each select="$languages">
       <xsl:variable name="langId"
-        select="concat('&#35;',string(../../../@id))" />
+        select="concat('&#35;',upper-case(.))" />
       <xsl:variable name="code">
         <xsl:call-template name="getLangCode">
           <xsl:with-param name="md"

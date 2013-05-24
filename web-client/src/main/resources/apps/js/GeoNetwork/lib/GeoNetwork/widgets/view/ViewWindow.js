@@ -44,6 +44,7 @@ GeoNetwork.view.ViewWindow = Ext.extend(Ext.Window, {
          *  The language to use to call GeoNetwork services in the print mode (which is opened in a new window).
          */
         lang: 'eng',
+        autoScroll: true,
         /** api: config[closeAction] 
          *  The close action. Default is 'destroy'.
          */

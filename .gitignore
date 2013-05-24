@@ -1,8 +1,17 @@
 web/src/main/webapp/xml/schemas/*/loc/*/schematron*
 web/src/main/webapp/xml/schemas/*/schematron*
+web/src/main/webapp/WEB-INF/data/config/schema_plugins/*/loc/*/schematron-rules-geonetwork.xml
+web/src/main/webapp/WEB-INF/data/config/schema_plugins/*/loc/*/schematron-rules-inspire.xml
+web/src/main/webapp/WEB-INF/data/config/schema_plugins/*/loc/*/schematron-rules-iso.xml
+web/src/main/webapp/WEB-INF/data/config/schema_plugins/*/schematron-rules-geonetwork.xsl
+web/src/main/webapp/WEB-INF/data/config/schema_plugins/*/schematron-rules-inspire.xsl
+web/src/main/webapp/WEB-INF/data/config/schema_plugins/*/schematron-rules-iso.xsl
+web/src/main/webapp/WEB-INF/data/config/schema_plugins/*/schematron-rules-none.xsl
+web/src/main/webapp/WEB-INF/data/config/schema_plugins/iso19139.geobru/loc/*/schematron-rules-geobru.xml
+web/src/main/webapp/WEB-INF/data/config/schema_plugins/iso19139.geobru/schematron-rules-geobruk.xsl
 web/src/main/webapp/scripts/lib/*
 web/src/main/webapp/images/logos/*
-web/src/main/webapp/WEB-INF/data/*
+web/src/main/webapp/WEB-INF/data/data/*
 web/src/main/webapp/WEB-INF/classes/JZKitConfig.xml
 web/logs/
 web/jcs_caching/
@@ -20,3 +29,4 @@ schematrons/.build
 docs/*/users/build
 /geonetwork-2.8.1/
 /.props/
+/classes

@@ -30,21 +30,22 @@ GeoNetwork.Util = {
      * Supported GeoNetwork GUI languages
      */
     locales: [
-            ['ar', 'عربي', 'ara'], 
+/*            ['ar', 'عربي', 'ara'], 
             ['ca', 'Català', 'cat'], 
             ['cn', '中文', 'chi'], 
             ['de', 'Deutsch', 'ger'], 
-            ['en', 'English', 'eng'], 
-            ['es', 'Español', 'spa'], 
+*/
+			['en', 'English', 'eng'], 
+//            ['es', 'Español', 'spa'], 
             ['fr', 'Français', 'fre'], 
-            ['it', 'Italiano', 'ita'], 
-            ['nl', 'Nederlands', 'dut'], 
+//            ['it', 'Italiano', 'ita'], 
+            ['nl', 'Nederlands', 'dut']/*, 
             ['no', 'Norsk', 'nor'],
             ['pl', 'Polski', 'pol'], 
             ['pt', 'Рortuguês', 'por'], 
             ['ru', 'Русский', 'rus'],
             ['fi', 'Suomeksi', 'fin'],
-            ['tr', 'Türkçe', 'tur']
+            ['tr', 'Türkçe', 'tur']*/
                        
     ],
     /** api: method[setLang] 

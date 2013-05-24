@@ -65,7 +65,7 @@ Ext.namespace('GeoNetwork.data');
 GeoNetwork.data.MetadataResultsStore = function(){
 
     function getTitle(v, record){
-        if (record.title && record.title[0]) {
+        if (record.title && record.title[0] && !Ext.isEmpty(record.title[0].value)) {
             return record.title[0].value;
         } else if (record.defaultTitle && record.defaultTitle[0]) {
             return record.defaultTitle[0].value;
@@ -220,8 +220,10 @@ GeoNetwork.data.MetadataResultsStore = function(){
         }
     }
     function getAbstract(v, record){
-        if (record['abstract']) {
+        if (record['abstract'] && record['abstract'][0] && !Ext.isEmpty(record['abstract'][0].value)) {
             return record['abstract'][0].value;
+        } else if (record.defaultAbstract && record.defaultAbstract[0]) {
+            return record.defaultAbstract[0].value;
         } else {
             return '';
         }

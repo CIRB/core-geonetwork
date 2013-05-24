@@ -51,7 +51,6 @@
     <xsl:template name="getLangId">
         <xsl:param name="langGui"/>
         <xsl:param name="md"/>
-
         <xsl:call-template name="getLangIdFromMetadata">
             <xsl:with-param name="lang" select="$langGui"/>
             <xsl:with-param name="md" select="$md"/>
@@ -68,10 +67,18 @@
         <xsl:param name="lang"/>
     
         <xsl:choose>
+<!--
             <xsl:when
                 test="$md/gmd:locale/gmd:PT_Locale[gmd:languageCode/gmd:LanguageCode/@codeListValue = $lang]/@id"
                     >#<xsl:value-of
                         select="$md/gmd:locale/gmd:PT_Locale[gmd:languageCode/gmd:LanguageCode/@codeListValue = $lang]/@id"
+                    />
+            </xsl:when>
+-->  
+            <xsl:when
+                test="$md/gmd:locale/gmd:PT_Locale/gmd:languageCode/gmd:LanguageCode[@codeListValue = lower-case($lang)]"
+                    >#<xsl:value-of
+                        select="upper-case($md/gmd:locale/gmd:PT_Locale/gmd:languageCode/gmd:LanguageCode[@codeListValue = lower-case($lang)]/@codeListValue)"
                     />
             </xsl:when>
             <xsl:otherwise>#<xsl:value-of select="upper-case($lang)"/></xsl:otherwise>
@@ -85,9 +92,9 @@
 
           <xsl:choose>
             <xsl:when
-                test="$md/gmd:locale/gmd:PT_Locale[@id=$langId]/gmd:languageCode/gmd:LanguageCode/@codeListValue"
+                test="$md/gmd:locale/gmd:PT_Locale/gmd:languageCode/gmd:LanguageCode[@codeListValue=lower-case($langId)]"
                     ><xsl:value-of
-                        select="$md/gmd:locale/gmd:PT_Locale[@id=$langId]/gmd:languageCode/gmd:LanguageCode/@codeListValue"
+                        select="$md/gmd:locale/gmd:PT_Locale/gmd:languageCode/gmd:LanguageCode[@codeListValue=lower-case($langId)]/@codeListValue"
                 /></xsl:when>
             <xsl:otherwise>eng</xsl:otherwise>            
         </xsl:choose>

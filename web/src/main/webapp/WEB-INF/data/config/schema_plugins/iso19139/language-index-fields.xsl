@@ -35,6 +35,12 @@
 						<xsl:variable name="title" select="/*[name(.)='gmd:MD_Metadata' or @gco:isoType='gmd:MD_Metadata']/gmd:identificationInfo//gmd:citation//gmd:title//gmd:LocalisedCharacterString[@locale=$poundLangId]"/>
 						<!-- not tokenized title for sorting -->
 						<Field name="_title" string="{string($title)}" store="true" index="true"/>
+                        <xsl:variable name="_defaultAbstract">
+                            <xsl:call-template name="defaultAbstract">
+                                <xsl:with-param name="isoDocLangId" select="$isoLangId"/>
+                            </xsl:call-template>
+                        </xsl:variable>
+                        <Field name="_defaultAbstract" string="{string($_defaultAbstract)}" store="true" index="true"/>
 						<xsl:apply-templates select="/*[name(.)='gmd:MD_Metadata' or @gco:isoType='gmd:MD_Metadata']" mode="metadata">
 							<xsl:with-param name="langId" select="$poundLangId"/>
 						</xsl:apply-templates>
@@ -125,10 +131,12 @@
 				</xsl:for-each>
 			</xsl:for-each>
 			<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<!-- 
 			<xsl:for-each select="gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:organisationName//gmd:LocalisedCharacterString[@locale=$langId]">
 				<Field name="orgName" string="{string(.)}" store="true" index="true"/>
 				<Field name="_orgName" string="{string(.)}" store="true" index="true"/>
 			</xsl:for-each>
+-->
 			<xsl:for-each select="gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName/gco:CharacterString|     gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualFirstName/gco:CharacterString|     gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualLastName/gco:CharacterString">
 				<Field name="creator" string="{string(.)}" store="true" index="true"/>
 			</xsl:for-each>

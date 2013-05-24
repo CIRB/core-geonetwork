@@ -159,6 +159,24 @@
         </xsl:choose>
     </xsl:template>
 
+    <xsl:template name="defaultAbstract">
+        <xsl:param name="isoDocLangId"/>
+
+        <xsl:variable name="poundLangId" select="concat('#',upper-case($isoDocLangId))" />
+
+        <xsl:choose>
+            <xsl:when    test="string-length(/*[name(.)='gmd:MD_Metadata' or @gco:isoType='gmd:MD_Metadata']/gmd:identificationInfo/*[name(.)='gmd:MD_DataIdentification' or @gco:isoType='gmd:MD_DataIdentification']/gmd:abstract//gmd:LocalisedCharacterString[@locale=$poundLangId and string-length(.) > 0]) != 0">
+                <xsl:value-of select="string(/*[name(.)='gmd:MD_Metadata' or @gco:isoType='gmd:MD_Metadata']/gmd:identificationInfo/*[name(.)='gmd:MD_DataIdentification' or @gco:isoType='gmd:MD_DataIdentification']/gmd:abstract//gmd:LocalisedCharacterString[@locale=$poundLangId and string-length(.) > 0])"/>
+            </xsl:when>
+            <xsl:when    test="string-length(/*[name(.)='gmd:MD_Metadata' or @gco:isoType='gmd:MD_Metadata']/gmd:identificationInfo/*[name(.)='gmd:MD_DataIdentification' or @gco:isoType='gmd:MD_DataIdentification']/gmd:abstract/gco:CharacterString[1]) != 0">
+                <xsl:value-of select="string(/*[name(.)='gmd:MD_Metadata' or @gco:isoType='gmd:MD_Metadata']/gmd:identificationInfo/*[name(.)='gmd:MD_DataIdentification' or @gco:isoType='gmd:MD_DataIdentification']/gmd:abstract/gco:CharacterString[1])"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="string((/*[name(.)='gmd:MD_Metadata' or @gco:isoType='gmd:MD_Metadata']/gmd:identificationInfo/*[name(.)='gmd:MD_DataIdentification' or @gco:isoType='gmd:MD_DataIdentification']/gmd:abstract//gmd:LocalisedCharacterString))"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    
     <!-- ================================================================== -->
 
 </xsl:stylesheet>

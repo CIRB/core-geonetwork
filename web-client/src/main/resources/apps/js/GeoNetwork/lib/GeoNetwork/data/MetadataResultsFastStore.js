@@ -42,7 +42,7 @@ GeoNetwork.data.MetadataResultsFastStore = function(){
 	var separator = "|";
 	
     function getTitle(v, record){
-        if (record.title && record.title[0]) {
+        if (record.title && record.title[0] && !Ext.isEmpty(record.title[0].value)) {
             return record.title[0].value;
         } else if (record.defaultTitle && record.defaultTitle[0]) {
             return record.defaultTitle[0].value;
@@ -226,8 +226,10 @@ GeoNetwork.data.MetadataResultsFastStore = function(){
         }
     }
     function getAbstract(v, record){
-        if (record['abstract'] && record['abstract'][0]) {
+        if (record['abstract'] && record['abstract'][0] && !Ext.isEmpty(record['abstract'][0].value)) {
             return record['abstract'][0].value;
+        } else if (record.defaultAbstract && record.defaultAbstract[0]) {
+        	return record.defaultAbstract[0].value;
         } else {
             return '';
         }

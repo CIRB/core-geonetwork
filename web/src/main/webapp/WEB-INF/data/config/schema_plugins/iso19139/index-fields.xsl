@@ -57,7 +57,13 @@
 			</xsl:variable>
 			<Field name="_defaultTitle" string="{string($_defaultTitle)}" store="true" index="true"/>
 			<!-- not tokenized title for sorting, needed for multilingual sorting -->
-            <Field name="_title" string="{string($_defaultTitle)}" store="true" index="true" token="false" />
+-           <Field name="_title" string="{string($_defaultTitle)}" store="true" index="true" token="false" />
+            <xsl:variable name="_defaultAbstract">
+                <xsl:call-template name="defaultAbstract">
+                    <xsl:with-param name="isoDocLangId" select="$isoLangId"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <Field name="_defaultAbstract" string="{string($_defaultAbstract)}" store="true" index="true"/>
 
 			<xsl:apply-templates select="*[name(.)='gmd:MD_Metadata' or @gco:isoType='gmd:MD_Metadata']" mode="metadata"/>
 		</Document>
@@ -86,6 +92,8 @@
 	
 				<xsl:for-each select="gmd:title/gco:CharacterString">
 					<Field name="title" string="{string(.)}" store="true" index="true"/>
+                    <!-- not tokenized title for sorting -->
+                    <Field name="_title" string="{string(.)}" store="false" index="true"/>
 				</xsl:for-each>
 	
 				<xsl:for-each select="gmd:alternateTitle/gco:CharacterString">

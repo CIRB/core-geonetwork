@@ -195,6 +195,11 @@ function initShortcut(){
         var html = '<table><tbody><tr><td>' + help + '</td></tr></tbody></table>';
         Ext.DomHelper.insertHtml('afterEnd', helpEl, html);
     }
+/*
+ * Deleted by GVB
+ * Doesn't work, searchBt is null in SearchFormPanel
+ */
+/*
     // Launch search when enter key press
     var formMap = new Ext.KeyMap("searchForm", [{
         key: [10, 13],
@@ -202,6 +207,6 @@ function initShortcut(){
             Ext.getCmp('searchForm').fireEvent('search');
         }
     }]);
-    
     formMap.enable();
+*/    
 }
