@@ -555,8 +555,8 @@ GeoNetwork.app = function() {
 			                    layoutConfig: { pack: 'center', align: 'center' },
 			                    autoHeight: true,
 //			                    autoWidth: true,
-			                    boxMinWidth: 1070,
-	                            boxMaxWidth: 1870,
+			                    boxMinWidth: 970,
+	                            boxMaxWidth: 1770,
 			                    bodyStyle:'border-width:0px',
 			                    border:true,
 			                    deferredRender: false,
@@ -564,7 +564,7 @@ GeoNetwork.app = function() {
 								items : [
 			                        {
 			                       		border: false,
-			                        	columnWidth: 0.25
+			                        	columnWidth: 0.2
 			                        },
 			                        // What panel
 			                        {
@@ -574,9 +574,9 @@ GeoNetwork.app = function() {
 			                            labelWidth: 150,
 			                            autoHeight: true,
 //					                            width: 820,
-			                            boxMinWidth: 400,
-			                            boxMaxWidth: 800,
-			                        	columnWidth: 0.5,
+			                            boxMinWidth: 420,
+			                            boxMaxWidth: 900,
+			                        	columnWidth: 0.6,
 			                            items:[
 			                                advancedCriteria/*,GeoNetwork.util.SearchFormTools.getTypesField(GeoNetwork.searchDefault.activeMapControlExtent, true),
 			                                GeoNetwork.util.INSPIRESearchFormTools.getAnnexField(true),
@@ -629,7 +629,7 @@ GeoNetwork.app = function() {
 			                       	},
 			                        {
 			                       		border: false,
-			                        	columnWidth: 0.25
+			                        	columnWidth: 0.2
 			                        }
 								]
 							},
