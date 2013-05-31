@@ -3373,46 +3373,71 @@
     (ie. no value for default metadata language) .
   -->
   <xsl:template mode="iso19139"
-		match="gmd:citation/gmd:CI_Citation/gmd:title[gco:CharacterString or gmd:PT_FreeText]|
-		gmd:abstract[gco:CharacterString or gmd:PT_FreeText]"
+    match="gmd:*[gco:CharacterString or gmd:PT_FreeText]|
+    srv:*[gco:CharacterString or gmd:PT_FreeText]|
+    gco:aName[gco:CharacterString]"
     >
     <xsl:param name="schema" />
     <xsl:param name="edit" />
-    
+    <xsl:variable name="isLocalizedCharStringField" select="(name(.)='gmd:title' and name(..)='gmd:CI_Citation' and name(../..)='gmd:citation') or name(.)='gmd:abstract'"/>
+    <xsl:if test="$isLocalizedCharStringField">
     <!-- Define a class variable if form element as
       to be a textarea instead of a simple text input.
       This parameter define the class of the textarea (see CSS). -->
-    <xsl:variable name="class">
-      <xsl:choose>
-        <xsl:when test="name(.)='gmd:title' and name(../../../..)='gmd:identificationInfo'">title</xsl:when>
-        <xsl:when test="name(.)='gmd:abstract'">large</xsl:when>
-        <xsl:when test="name(.)='gmd:supplementalInformation'
-          or name(.)='gmd:purpose'
-          or name(.)='gmd:statement'">medium</xsl:when>
-        <xsl:when test="name(.)='gmd:description'
-          or name(.)='gmd:specificUsage'
-          or name(.)='gmd:explanation'
-          or name(.)='gmd:credit'
-          or name(.)='gmd:evaluationMethodDescription'
-          or name(.)='gmd:measureDescription'
-          or name(.)='gmd:maintenanceNote'
-          or name(.)='gmd:useLimitation'
-          or name(.)='gmd:otherConstraints'
-          or name(.)='gmd:handlingDescription'
-          or name(.)='gmd:userNote'
-          or name(.)='gmd:checkPointDescription'
-          or name(.)='gmd:evaluationMethodDescription'
-          or name(.)='gmd:measureDescription'
-          ">small</xsl:when>
-        <xsl:otherwise></xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-    
-    <xsl:call-template name="localizedCharStringField">
-      <xsl:with-param name="schema" select="$schema" />
-      <xsl:with-param name="edit" select="$edit" />
-      <xsl:with-param name="class" select="$class" />
-    </xsl:call-template>
+	    <xsl:variable name="class">
+	      <xsl:choose>
+	        <xsl:when test="name(.)='gmd:title' and name(../../../..)='gmd:identificationInfo'">title</xsl:when>
+	        <xsl:when test="name(.)='gmd:abstract'">large</xsl:when>
+	        <xsl:when test="name(.)='gmd:supplementalInformation'
+	          or name(.)='gmd:purpose'
+	          or name(.)='gmd:statement'">medium</xsl:when>
+	        <xsl:when test="name(.)='gmd:description'
+	          or name(.)='gmd:specificUsage'
+	          or name(.)='gmd:explanation'
+	          or name(.)='gmd:credit'
+	          or name(.)='gmd:evaluationMethodDescription'
+	          or name(.)='gmd:measureDescription'
+	          or name(.)='gmd:maintenanceNote'
+	          or name(.)='gmd:useLimitation'
+	          or name(.)='gmd:otherConstraints'
+	          or name(.)='gmd:handlingDescription'
+	          or name(.)='gmd:userNote'
+	          or name(.)='gmd:checkPointDescription'
+	          or name(.)='gmd:evaluationMethodDescription'
+	          or name(.)='gmd:measureDescription'
+	          ">small</xsl:when>
+	        <xsl:otherwise></xsl:otherwise>
+	      </xsl:choose>
+	    </xsl:variable>
+	    <xsl:call-template name="localizedCharStringField">
+	      <xsl:with-param name="schema" select="$schema" />
+	      <xsl:with-param name="edit" select="$edit" />
+	      <xsl:with-param name="class" select="$class" />
+	    </xsl:call-template>
+    </xsl:if>
+    <xsl:if test="not($isLocalizedCharStringField)">
+	    <xsl:choose>
+	      <xsl:when test="$edit=true()">
+	        <xsl:call-template name="iso19139String">
+	          <xsl:with-param name="schema" select="$schema"/>
+	          <xsl:with-param name="edit"   select="true()"/>
+	        </xsl:call-template>
+	      </xsl:when>
+	      <xsl:otherwise>
+            <xsl:apply-templates mode="simpleElement" select=".">
+              <xsl:with-param name="schema"   select="$schema"/>
+              <xsl:with-param name="edit"     select="$edit"/>
+              <xsl:with-param name="title">
+                <xsl:call-template name="getTitle">
+                  <xsl:with-param name="name"   select="name(.)"/>
+                  <xsl:with-param name="schema" select="$schema"/>
+                </xsl:call-template>
+              </xsl:with-param>
+              <xsl:with-param name="text" select="gco:CharacterString"/>
+            </xsl:apply-templates>
+	      </xsl:otherwise>
+	    </xsl:choose>
+    </xsl:if>
   </xsl:template>
   
   <!-- =====================================================================        

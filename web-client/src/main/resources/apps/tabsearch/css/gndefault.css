@@ -411,3 +411,24 @@ dl.xml {
 dl.xml * dd {
   padding-left : 2px;
 }
+.geonode_button {
+    display: block;
+    height: 28px;
+    line-height: 28px;
+    padding: 0 7px;
+    text-align: center;
+    text-transform: uppercase;
+    text-decoration: none;
+    width: 137px;
+    font-family: Calibri,Candara,Segoe,"Segoe UI",Optima,Arial,sans-serif;
+}
+.geonode_button.gray {
+    background: none repeat scroll 0 0 #BEBEBF;
+    border: medium none;
+    color: #424242;
+}
+.geonode_button.red {
+    background: none repeat scroll 0 0 #C52424;
+    border: medium none;
+    color: #FFFFFF;
+}

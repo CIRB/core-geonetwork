@@ -41,10 +41,18 @@ Ext.namespace('GeoNetwork.data');
  *                  );
  *  
  */
+GeoNetwork.data.convertHref = function (v, record) {
+	if (v) {
+        return v.replace('&amp;','&');
+	} else {
+		return "";
+	}
+};
+
 GeoNetwork.data.MetadataThumbnailStore = function(url, params){
 
     var fields = [{
-        name: 'href'
+        name: 'href'/*, convert: GeoNetwork.data.convertHref*/ 
     }, {
         name: 'desc'
     }, {

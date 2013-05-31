@@ -644,54 +644,45 @@ GeoNetwork.app = function() {
 								},
 								border : false,
 								items : [
-										new Ext.Button(
-												{
-													text : OpenLayers
-															.i18n('search'),
-													id : 'searchBt',
-													margins : '3 5 3 5',
-//													cls: 'search-red-btn',
-//													icon : '../images/default/find.png',
-//													iconAlign : 'right',
-													listeners : {
-														click : searchCb
+				                   		new Ext.form.Label({
+											html : '<span ext:qtip="' + OpenLayers.i18n('searchOptionButton') + '">' + OpenLayers.i18n('search') + '</span>',
+											cls: 'geonode_button red',
+											id : 'searchBt',
+											margins : '3 5 3 5',
+											listeners: {
+												render: function(c){
+													c.getEl().on('click', searchCb, c);
+												}
+											}
+										}),
+				                   		new Ext.form.Label({
+											html : '<span ext:qtip="' + OpenLayers.i18n('resetSearchForm') + '">' + OpenLayers.i18n('reset') + '</span>',
+											cls: 'geonode_button gray',
+											id : 'resetBt',
+											margins : '3 5 3 5',
+											listeners: {
+												render: function(c){
+													c.getEl().on('click', function() {
+															Ext.getCmp('searchForm').getForm().reset();
+														}, c);
+												}
+											}
+										}),
+										new Ext.form.Label(
+											{
+												text : OpenLayers.i18n('Simple'),
+												cls : 'geonode_button gray',
+//												tooltip : OpenLayers.i18n('simpleTooltip'),
+												id : 'toggleSearchTypeBt',
+												margins : '3 5 3 5',
+												listeners: {
+													render: function(c){
+														c.getEl().on('click', function() {
+																app.toggleSearchType(this);
+															}, c);
 													}
-												}),
-										new Ext.Button(
-												{
-													text : OpenLayers
-															.i18n('reset'),
-													tooltip : OpenLayers
-															.i18n('resetSearchForm'),
-													id : 'resetBt',
-													margins : '3 5 3 5',
-//													icon : '../images/default/cross.png',
-//													iconAlign : 'right',
-													listeners : {
-														click : function() {
-															Ext
-																	.getCmp(
-																			'searchForm')
-																	.getForm()
-																	.reset();
-														}
-													}
-												}),
-												new Ext.Button(
-														{
-															text : OpenLayers
-																	.i18n('Simple'),
-															tooltip : OpenLayers
-																	.i18n('simpleTooltip'),
-															// iconCls: 'md-mn-reset',
-															id : 'toggleSearchTypeBt',
-															margins : '3 5 3 5',
-															listeners : {
-																click : function() {
-																	app.toggleSearchType(this);
-																}
-															}
-														})
+												}
+											})
 									]
 							}
 						]
@@ -1434,9 +1425,9 @@ GeoNetwork.app = function() {
 		*/
 		toggleSearchType : function(button){
 			var advSearchTabsPanel = Ext.getCmp("advSearchTabs");
-			if (button.getText()==OpenLayers.i18n('Simple')) {
+			if (button.text==OpenLayers.i18n('Simple')) {
 				button.setText(OpenLayers.i18n('Advanced'));
-				button.setTooltip(OpenLayers.i18n('advancedTooltip'));
+//				button.setTooltip(OpenLayers.i18n('advancedTooltip'));
 				Ext
 				.getCmp(
 						'searchForm')
@@ -1445,7 +1436,7 @@ GeoNetwork.app = function() {
 				advSearchTabsPanel.collapse();
 			} else {
 				button.setText(OpenLayers.i18n('Simple'));
-				button.setTooltip(OpenLayers.i18n('simpleTooltip'));
+//				button.setTooltip(OpenLayers.i18n('simpleTooltip'));
 				advSearchTabsPanel.expand();
 			}
 		}
