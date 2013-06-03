@@ -13,7 +13,7 @@ xsi:schemaLocation="http://geonetwork-opensource.org/schemas/schema-ident http:/
 	<!-- heikki: how to detect if a document is a geobru document ? Presence of mandatory element specific to geobru: -->
 	<autodetect xmlns:geobru="http://geobru.irisnet.be">
 		<elements type="search">
-			<geobru:BXL_Address/>
+			<geobru:* />
 		</elements>
 	</autodetect>
 </schema>

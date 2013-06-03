@@ -55,6 +55,7 @@ USA.
 -->
 
 	<sch:title xmlns="http://www.w3.org/2001/XMLSchema">INSPIRE metadata implementing rule validation</sch:title>
+    <sch:ns prefix="gmx" uri="http://www.isotc211.org/2005/gmx"/>
 	<sch:ns prefix="gml" uri="http://www.opengis.net/gml"/>
 	<sch:ns prefix="gmd" uri="http://www.isotc211.org/2005/gmd"/>
 	<sch:ns prefix="srv" uri="http://www.isotc211.org/2005/srv"/>
@@ -267,7 +268,7 @@ USA.
 			<sch:let name="thesaurus_date" value="gmd:descriptiveKeywords/*/gmd:thesaurusName/*/gmd:date/*/gmd:date/*/text()"/>
 			<sch:let name="thesaurus_dateType" value="gmd:descriptiveKeywords/*/gmd:thesaurusName/*/gmd:date/*/gmd:dateType/*/@codeListValue/text()"/>
 			<sch:let name="keyword" 
-				value="gmd:descriptiveKeywords/*/gmd:keyword/gco:CharacterString"/>
+				value="gmd:descriptiveKeywords/*/gmd:keyword/gco:CharacterString|gmd:descriptiveKeywords/*/gmd:keyword/gmx:Anchor"/>
 			<sch:let name="inspire-theme-found" 
 				value="count($inspire-thesaurus//skos:Concept[skos:prefLabel = $keyword])"/>
 			<sch:assert test="$inspire-theme-found > 0">

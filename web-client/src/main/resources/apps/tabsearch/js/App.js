@@ -776,7 +776,7 @@ GeoNetwork.app = function() {
 					displayField : 'id',
 		            listeners: {
 		                select: function(cb, record, idx){
-		                	Ext.getCmp('searchBt').fireEvent('click');
+		                	Ext.getCmp('searchBt').getEl().dom.click();
 		                }
 		            }
 				})
@@ -1001,7 +1001,7 @@ GeoNetwork.app = function() {
             });
             this.editorPanel.setContainer(this.editorWindow);
 			this.editorPanel.on('editorClosed', function() {
-				Ext.getCmp('searchBt').fireEvent('click');
+				Ext.getCmp('searchBt').getEl().dom.click();
 			});
 		}
 		if (metadataId) {
@@ -1277,7 +1277,7 @@ GeoNetwork.app = function() {
 
 			/* Trigger search if search is in URL parameters */
 			if (urlParameters.search !== undefined) {
-				Ext.getCmp('searchBt').fireEvent('click');
+				Ext.getCmp('searchBt').getEl().dom.click();
 			}
 			if (urlParameters.edit !== undefined && urlParameters.edit !== '') {
 				catalogue.metadataEdit(urlParameters.edit);
@@ -1313,7 +1313,7 @@ GeoNetwork.app = function() {
 			Ext.each(events, function(e) {
 				catalogue.on(e, function() {
 					if (searching === true) {
-						Ext.getCmp('searchBt').fireEvent('click');
+						Ext.getCmp('searchBt').getEl().dom.click();
 					}
 
 				});
@@ -1325,7 +1325,7 @@ GeoNetwork.app = function() {
 			// FIXME
 			if (urlParameters.s_search !== undefined) {
 				setTimeout(function() {
-					Ext.getCmp('searchBt').fireEvent('click');
+					Ext.getCmp('searchBt').getEl().dom.click();
 				}, 500);
 			}
 
@@ -1462,7 +1462,7 @@ Ext.onReady(function() {
 	if (openSearchSuggestionTextField) {
 		new Ext.KeyNav(openSearchSuggestionTextField.el, {
 			"enter" : function(e){
-				Ext.getCmp('searchBt').fireEvent('click');
+				Ext.getCmp('searchBt').getEl().dom.click();
 			}/*,
 			scope: openSearchSuggestionTextField*/
 		});

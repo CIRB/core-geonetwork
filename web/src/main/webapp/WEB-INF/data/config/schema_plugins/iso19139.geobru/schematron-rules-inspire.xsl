@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<xsl:stylesheet xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:saxon="http://saxon.sf.net/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:schold="http://www.ascc.net/xml/schematron" xmlns:iso="http://purl.oclc.org/dsdl/schematron" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:gml="http://www.opengis.net/gml" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:srv="http://www.isotc211.org/2005/srv" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:geonet="http://www.fao.org/geonetwork" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:geobru="http://geobru.irisnet.be" version="2.0">
+<xsl:stylesheet xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:saxon="http://saxon.sf.net/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:schold="http://www.ascc.net/xml/schematron" xmlns:iso="http://purl.oclc.org/dsdl/schematron" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:gml="http://www.opengis.net/gml" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:srv="http://www.isotc211.org/2005/srv" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:geonet="http://www.fao.org/geonetwork" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:geobru="http://geobru.irisnet.be" version="2.0">
 	<!--Implementers: please note that overriding process-prolog or process-root is 
     the preferred method for meta-stylesheets to use where possible. -->
 	<xsl:param name="archiveDirParameter"/>
@@ -597,7 +597,8 @@
 		<xsl:variable name="thesaurus_name" select="gmd:descriptiveKeywords/*/gmd:thesaurusName/*/gmd:title/*/text()"/>
 		<xsl:variable name="thesaurus_date" select="gmd:descriptiveKeywords/*/gmd:thesaurusName/*/gmd:date/*/gmd:date/*/text()"/>
 		<xsl:variable name="thesaurus_dateType" select="gmd:descriptiveKeywords/*/gmd:thesaurusName/*/gmd:date/*/gmd:dateType/*/@codeListValue/text()"/>
-		<xsl:variable name="keyword" select="gmd:descriptiveKeywords/*/gmd:keyword/gco:CharacterString"/>
+<!--		<xsl:variable name="keyword" select="gmd:descriptiveKeywords/*/gmd:keyword/gco:CharacterString"/>-->
+        <xsl:variable name="keyword" select="gmd:descriptiveKeywords/*/gmd:keyword/gco:CharacterString|gmd:descriptiveKeywords/*/gmd:keyword/gmx:Anchor"/>
 		<xsl:variable name="inspire-theme-found" select="count($inspire-thesaurus//skos:Concept[skos:prefLabel = $keyword])"/>
 		<!--ASSERT -->
 		<xsl:choose>
@@ -607,7 +608,7 @@
 					<xsl:attribute name="location"><xsl:apply-templates select="." mode="schematron-select-full-path"/></xsl:attribute>
 					<svrl:text>
 						<xsl:text/>
-						<xsl:copy-of select="$loc/strings/alert.M40/div"/>
+						<xsl:copy-of select="$loc/strings/alert.M40/div"/><xsl:value-of select="concat(' (', $keyword,')')" />
 						<xsl:text/>
 					</svrl:text>
 				</svrl:failed-assert>
