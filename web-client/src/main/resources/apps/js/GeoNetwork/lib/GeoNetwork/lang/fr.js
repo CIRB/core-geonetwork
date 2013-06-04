@@ -538,7 +538,7 @@ GeoNetwork.Lang.fr = {
 	'delTplElTT' : 'Supprimer la sélection.',
 	'language' : 'Langue',
 	// tabbed search
-	'Home' : "Accueil",
+	'Home' : "Recherche",
 	'Map' : "Carte",
 	'Poweredby' : "généré par",
 	'About' : "Sur",
@@ -570,6 +570,6 @@ GeoNetwork.Lang.fr = {
 	'Advanced' : "Avancée",
 	'newWindow' : "nouvelle fenêtre",
 	'mdEditor' : "Editeur de métadonnées",
-	'List' : "Liste"
+	'List' : "Résultats"
 };
 OpenLayers.Util.extend(OpenLayers.Lang.fr, GeoNetwork.Lang.fr);

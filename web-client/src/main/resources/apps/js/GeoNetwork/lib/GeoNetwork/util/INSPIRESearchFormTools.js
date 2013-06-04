@@ -195,7 +195,8 @@ GeoNetwork.util.INSPIRESearchFormTools = {
                 emptyText : OpenLayers.i18n('inspirethemeEmptyText'),
                 store : themesStore,
                 valueField : 'value',
-                displayField : 'value'
+                displayField : 'value',
+                editable: false
             };
         if (multi) {
             Ext.apply(config, {

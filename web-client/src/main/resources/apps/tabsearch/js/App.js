@@ -213,6 +213,7 @@ GeoNetwork.app = function() {
              * Added by GVB
              */
             emptyText: OpenLayers.i18n('orgEmptyText'),
+            editable: false
 		});
 
 		// Multi select keyword
@@ -239,7 +240,8 @@ GeoNetwork.app = function() {
 			/*
 			* Added by GVB
 			*/
-			, emptyText : OpenLayers.i18n('keywordEmptyText')
+			, emptyText : OpenLayers.i18n('keywordEmptyText'),
+            editable: false
 		});
 
 		var catalogueField = GeoNetwork.util.SearchFormTools.getCatalogueField(
@@ -551,6 +553,7 @@ GeoNetwork.app = function() {
 //								collapsed:true,
 			                    id:'advSearchTabs',
 			                    plain:true,
+			                    collapsed: true,
 			                    layout: 'column',
 			                    layoutConfig: { pack: 'center', align: 'center' },
 			                    autoHeight: true,
@@ -670,7 +673,7 @@ GeoNetwork.app = function() {
 										}),
 										new Ext.form.Label(
 											{
-												text : OpenLayers.i18n('Simple'),
+												text : OpenLayers.i18n('Advanced'),
 												cls : 'geonode_button gray',
 //												tooltip : OpenLayers.i18n('simpleTooltip'),
 												id : 'toggleSearchTypeBt',
@@ -1143,7 +1146,7 @@ GeoNetwork.app = function() {
 						items : [ // todo: should add header here?
 								{
 									id : 'header',
-									height : 80,
+									height : Ext.get('header') ? 80 : 0,
 									region : 'north',
 									border : false
 								},

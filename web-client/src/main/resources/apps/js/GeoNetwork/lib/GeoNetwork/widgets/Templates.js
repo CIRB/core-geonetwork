@@ -134,8 +134,8 @@ GeoNetwork.Templates.SIMPLE = new Ext.XTemplate(
     '<ul>',
         '<tpl for=".">',
             '<li class="md md-simple" title="{abstract}" style="{featurecolorCSS}">',
-                '<table><tr><td style="width:30px;">',  // FIXME
-                GeoNetwork.Templates.LOGO,
+                '<table><tr><td style="width:5px;">',  // FIXME
+//                GeoNetwork.Templates.LOGO,
                 '</td><td id="{uuid}">',
                 GeoNetwork.Templates.TITLE,
                 '<tpl if="subject">',
@@ -191,8 +191,8 @@ GeoNetwork.Templates.FULL = new Ext.XTemplate(
           '<tpl for=".">',
             '<li class="md md-full" style="{featurecolorCSS}">',
                 '<table><tr>',
-                '<td class="left">',
-                    GeoNetwork.Templates.LOGO,
+                '<td class="left" style="width:5px">',
+//                    GeoNetwork.Templates.LOGO,
                 '</td>',
                 '<td id="{uuid}">',
                     GeoNetwork.Templates.TITLE,
@@ -242,7 +242,9 @@ GeoNetwork.Templates.FULL = new Ext.XTemplate(
                             '</tpl>',
                             '<tpl if="thumbnail==\'\'"></tpl>',
                         '</div>',
-                '</td><td class="icon">',
+                '</td>',
+/*
+                '<td class="icon">',
                 // Validity and category information
                 '<div class="md-mn valid-{valid}" title="' + OpenLayers.i18n('validityInfo'),
                     '<tpl for="valid_details">',
@@ -253,7 +255,9 @@ GeoNetwork.Templates.FULL = new Ext.XTemplate(
                         '<tpl if="values.ratio != \'\'"> ({values.ratio}) </tpl> - ',
                     '</tpl>',
                 '">&nbsp;</div>',
-                '</td><td class="icon" title="' + OpenLayers.i18n('metadataCategories') + '">',
+                '</td>',
+*/
+                '<td class="icon" title="' + OpenLayers.i18n('metadataCategories') + '">',
                 '<tpl for="category">',
                   '<div class="md-mn cat-{value}" title="{value}">&nbsp;</div>',
                 '</tpl>',
