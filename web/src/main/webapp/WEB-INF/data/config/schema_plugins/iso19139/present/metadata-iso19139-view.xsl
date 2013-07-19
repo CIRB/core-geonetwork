@@ -32,11 +32,13 @@
       <xsl:with-param name="logo">
         <img src="../../images/logos/{//geonet:info/source}.gif" alt="logo"/>
       </xsl:with-param>
+<!--      
       <xsl:with-param name="relatedResources">
         <xsl:apply-templates mode="relatedResources"
           select="gmd:distributionInfo"
         />
       </xsl:with-param>
+-->
       <xsl:with-param name="tabs" select="$tabs"/>
       
     </xsl:call-template>

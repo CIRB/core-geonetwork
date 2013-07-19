@@ -31,12 +31,14 @@
           <xsl:copy-of select="$logo"/>
         </td>
       </tr>
-      <tr>
-        <td colspan="2">
-          <xsl:copy-of select="$relatedResources"/>
-          <xsl:copy-of select="$tabs"/>
-        </td>
-      </tr>
+      <xsl:if test="$relatedResources or $tabs">
+	      <tr>
+	        <td colspan="2">
+	          <xsl:copy-of select="$relatedResources"/>
+	          <xsl:copy-of select="$tabs"/>
+	        </td>
+	      </tr>
+      </xsl:if>
     </table>
 
   </xsl:template>

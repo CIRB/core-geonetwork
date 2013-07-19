@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:fn="http://www.w3.org/2005/02/xpath-functions" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:gml="http://www.opengis.net/gml#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:xdt="http://www.w3.org/2005/02/xpath-datatypes" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <!-- Scheme -->
+  <skos:ConceptScheme rdf:about="http://geobru.irisnet.be/adminregions">
+    <dc:title>GeoBru Administrative Regions</dc:title>
+    <dc:description>GeoBru Administrative Regions.</dc:description>
+    <dc:creator>
+      <foaf:Organization>
+        <foaf:name>CIRB-CIBG</foaf:name>
+      </foaf:Organization>
+    </dc:creator>
+    <dc:rights>Free to all for non commercial use.</dc:rights>
+    <dcterms:issued>Wed June 12 20:57:15 CET 2013</dcterms:issued>
+    <dcterms:modified>2013-06-12 20:57:15</dcterms:modified>
+  </skos:ConceptScheme>
+      <!-- Concept list -->
+  <skos:Concept rdf:about="http://geobru.irisnet.be/adminregions#1">
+    <skos:prefLabel xml:lang="en">Belgium</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Belgique</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">België</skos:prefLabel>
+    <gml:BoundedBy>
+      <gml:Envelope gml:srsName="http://www.opengis.net/gml/srs/epsg.xml#epsg:4326">
+        <gml:lowerCorner>2.54167 49.50888</gml:lowerCorner>
+        <gml:upperCorner>6.3982 51.50125</gml:upperCorner>
+      </gml:Envelope>
+    </gml:BoundedBy>
+  </skos:Concept>
+  
+  <skos:Concept rdf:about="http://geobru.irisnet.be/adminregions#2">
+    <skos:prefLabel xml:lang="en">Région de Bruxelles-Capitale</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Région de Bruxelles-Capitale</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Brussels Hoofdstedelijk Gewest</skos:prefLabel>
+    <gml:BoundedBy>
+      <gml:Envelope gml:srsName="http://www.opengis.net/gml/srs/epsg.xml#epsg:4326">
+        <gml:lowerCorner>4.24124261076065 50.7631624449334</gml:lowerCorner>
+        <gml:upperCorner>4.47975783301549 50.9133209049075</gml:upperCorner>
+      </gml:Envelope>
+    </gml:BoundedBy>
+   </skos:Concept>
+ 
+  <skos:Concept rdf:about="http://geobru.irisnet.be/adminregions#3">
+    <skos:prefLabel xml:lang="en">Evere</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Evere</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Evere</skos:prefLabel>
+    <gml:BoundedBy>
+      <gml:Envelope gml:srsName="http://www.opengis.net/gml/srs/epsg.xml#epsg:4326">
+        <gml:lowerCorner>4.3847786365368 50.8515886202237</gml:lowerCorner>
+        <gml:upperCorner>4.42411084502619 50.8854156899039</gml:upperCorner>
+      </gml:Envelope>
+    </gml:BoundedBy>
+   </skos:Concept>
+ 
+  <skos:Concept rdf:about="http://geobru.irisnet.be/adminregions#4">
+    <skos:prefLabel xml:lang="en">Jette</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Jette</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Jette</skos:prefLabel>
+    <gml:BoundedBy>
+      <gml:Envelope gml:srsName="http://www.opengis.net/gml/srs/epsg.xml#epsg:4326">
+        <gml:lowerCorner>4.29130495085115 50.8639726116305</gml:lowerCorner>
+        <gml:upperCorner>4.33810554417425 50.8935958076947</gml:upperCorner>
+      </gml:Envelope>
+    </gml:BoundedBy>
+   </skos:Concept>
+
+  <skos:Concept rdf:about="http://geobru.irisnet.be/adminregions#5">
+    <skos:prefLabel xml:lang="en">Koekelberg</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Koekelberg</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Koekelberg</skos:prefLabel>
+    <gml:BoundedBy>
+      <gml:Envelope gml:srsName="http://www.opengis.net/gml/srs/epsg.xml#epsg:4326">
+        <gml:lowerCorner>4.30440107148808 50.8562547286585</gml:lowerCorner>
+        <gml:upperCorner>4.33520827588101 50.8670651357313</gml:upperCorner>
+      </gml:Envelope>
+    </gml:BoundedBy>
+   </skos:Concept>
+
+  <skos:Concept rdf:about="http://geobru.irisnet.be/adminregions#6">
+    <skos:prefLabel xml:lang="en">Anderlecht</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Anderlecht</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Anderlecht</skos:prefLabel>
+    <gml:BoundedBy>
+      <gml:Envelope gml:srsName="http://www.opengis.net/gml/srs/epsg.xml#epsg:4326">
+        <gml:lowerCorner>4.24124261076065 50.8065349458992</gml:lowerCorner>
+        <gml:upperCorner>4.33758211008008 50.8497975056524</gml:upperCorner>
+      </gml:Envelope>
+    </gml:BoundedBy>
+   </skos:Concept>
+
+  <skos:Concept rdf:about="http://geobru.irisnet.be/adminregions#7">
+    <skos:prefLabel xml:lang="en">Forest</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Forest</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Vorst</skos:prefLabel>
+    <gml:BoundedBy>
+      <gml:Envelope gml:srsName="http://www.opengis.net/gml/srs/epsg.xml#epsg:4326">
+        <gml:lowerCorner>4.29946850054512 50.7970733358846</gml:lowerCorner>
+        <gml:upperCorner>4.35106690695551 50.8302826227709</gml:upperCorner>
+      </gml:Envelope>
+    </gml:BoundedBy>
+   </skos:Concept>
+
+  <skos:Concept rdf:about="http://geobru.irisnet.be/adminregions#8">
+    <skos:prefLabel xml:lang="en">Ganshoren</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Ganshoren</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Ganshoren</skos:prefLabel>
+    <gml:BoundedBy>
+      <gml:Envelope gml:srsName="http://www.opengis.net/gml/srs/epsg.xml#epsg:4326">
+        <gml:lowerCorner>4.28926723115048 50.8647031101619</gml:lowerCorner>
+        <gml:upperCorner>4.3235669467563 50.8815714402812</gml:upperCorner>
+      </gml:Envelope>
+    </gml:BoundedBy>
+   </skos:Concept>
+
+  <skos:Concept rdf:about="http://geobru.irisnet.be/adminregions#9">
+    <skos:prefLabel xml:lang="en">Uccle</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Uccle</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Ukkel</skos:prefLabel>
+    <gml:BoundedBy>
+      <gml:Envelope gml:srsName="http://www.opengis.net/gml/srs/epsg.xml#epsg:4326">
+        <gml:lowerCorner>4.30931399924575 50.7631624449334</gml:lowerCorner>
+        <gml:upperCorner>4.41008714645943 50.8164169369042</gml:upperCorner>
+      </gml:Envelope>
+    </gml:BoundedBy>
+   </skos:Concept>
+
+  <skos:Concept rdf:about="http://geobru.irisnet.be/adminregions#10">
+    <skos:prefLabel xml:lang="en">Woluwe-Saint-Pierre</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Woluwe-Saint-Pierre</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Sint-Pieters-Woluwe</skos:prefLabel>
+    <gml:BoundedBy>
+      <gml:Envelope gml:srsName="http://www.opengis.net/gml/srs/epsg.xml#epsg:4326">
+        <gml:lowerCorner>4.40179001328976 50.8179144430847</gml:lowerCorner>
+        <gml:upperCorner>4.4741902564323 50.8484074822064</gml:upperCorner>
+      </gml:Envelope>
+    </gml:BoundedBy>
+   </skos:Concept>
+
+  <skos:Concept rdf:about="http://geobru.irisnet.be/adminregions#11">
+    <skos:prefLabel xml:lang="en">Saint-Josse-ten-Noode</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Saint-Josse-ten-Noode</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Sint-Joost-ten-Node</skos:prefLabel>
+    <gml:BoundedBy>
+      <gml:Envelope gml:srsName="http://www.opengis.net/gml/srs/epsg.xml#epsg:4326">
+        <gml:lowerCorner>4.35273807231911 50.8465913966794</gml:lowerCorner>
+        <gml:upperCorner>4.38155088019059 50.8598052059081</gml:upperCorner>
+      </gml:Envelope>
+    </gml:BoundedBy>
+   </skos:Concept>
+
+  <skos:Concept rdf:about="http://geobru.irisnet.be/adminregions#12">
+    <skos:prefLabel xml:lang="en">Ixelles</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Ixelles</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Elsene</skos:prefLabel>
+    <gml:BoundedBy>
+      <gml:Envelope gml:srsName="http://www.opengis.net/gml/srs/epsg.xml#epsg:4326">
+        <gml:lowerCorner>4.34475399559465 50.8002185134946</gml:lowerCorner>
+        <gml:upperCorner>4.40086059599915 50.8401091657055</gml:upperCorner>
+      </gml:Envelope>
+    </gml:BoundedBy>
+   </skos:Concept>   
+
+  <skos:Concept rdf:about="http://geobru.irisnet.be/adminregions#13">
+    <skos:prefLabel xml:lang="en">Molenbeek-Saint-Jean</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Molenbeek-Saint-Jean</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Sint-Jans-Molenbeek</skos:prefLabel>
+    <gml:BoundedBy>
+      <gml:Envelope gml:srsName="http://www.opengis.net/gml/srs/epsg.xml#epsg:4326">
+        <gml:lowerCorner>4.28058556917309 50.843350107782</gml:lowerCorner>
+        <gml:upperCorner>4.34593679887296 50.8709334947337</gml:upperCorner>
+      </gml:Envelope>
+    </gml:BoundedBy>
+   </skos:Concept>   
+
+     <skos:Concept rdf:about="http://geobru.irisnet.be/adminregions#14">
+    <skos:prefLabel xml:lang="en">Auderghem</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Auderghem</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Oudergem</skos:prefLabel>
+    <gml:BoundedBy>
+      <gml:Envelope gml:srsName="http://www.opengis.net/gml/srs/epsg.xml#epsg:4326">
+        <gml:lowerCorner>4.39341366481655 50.7892567062697</gml:lowerCorner>
+        <gml:upperCorner>4.47975783301549 50.8265075628669</gml:upperCorner>
+      </gml:Envelope>
+    </gml:BoundedBy>
+   </skos:Concept>   
+   
+  <skos:Concept rdf:about="http://geobru.irisnet.be/adminregions#15">
+    <skos:prefLabel xml:lang="en">Saint-Gilles</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Saint-Gilles</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Sint-Gillis</skos:prefLabel>
+    <gml:BoundedBy>
+      <gml:Envelope gml:srsName="http://www.opengis.net/gml/srs/epsg.xml#epsg:4326">
+        <gml:lowerCorner>4.323775029977 50.8200237280945</gml:lowerCorner>
+        <gml:upperCorner>4.35602862336185 50.8397098880908</gml:upperCorner>
+      </gml:Envelope>
+    </gml:BoundedBy>
+   </skos:Concept>   
+
+     <skos:Concept rdf:about="http://geobru.irisnet.be/adminregions#16">
+    <skos:prefLabel xml:lang="en">Watermael-Boitsfort</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Watermael-Boitsfort</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Watermaal-Bosvoorde</skos:prefLabel>
+    <gml:BoundedBy>
+      <gml:Envelope gml:srsName="http://www.opengis.net/gml/srs/epsg.xml#epsg:4326">
+        <gml:lowerCorner>4.38970561436588 50.7717994977196</gml:lowerCorner>
+        <gml:upperCorner>4.46780243639706 50.8146169177303</gml:upperCorner>
+      </gml:Envelope>
+    </gml:BoundedBy>
+   </skos:Concept>   
+   
+  <skos:Concept rdf:about="http://geobru.irisnet.be/adminregions#17">
+    <skos:prefLabel xml:lang="en">Schaerbeek</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Schaerbeek</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Schaarbeek</skos:prefLabel>
+    <gml:BoundedBy>
+      <gml:Envelope gml:srsName="http://www.opengis.net/gml/srs/epsg.xml#epsg:4326">
+        <gml:lowerCorner>4.35464265824758 50.8428878465393</gml:lowerCorner>
+        <gml:upperCorner>4.4105469094105 50.8805436670837</gml:upperCorner>
+      </gml:Envelope>
+    </gml:BoundedBy>
+   </skos:Concept>    
+
+  <skos:Concept rdf:about="http://geobru.irisnet.be/adminregions#18">
+    <skos:prefLabel xml:lang="en">Woluwe-Saint-Lambert</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Woluwe-Saint-Lambert</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Sint-Lambrechts-Woluwe</skos:prefLabel>
+    <gml:BoundedBy>
+      <gml:Envelope gml:srsName="http://www.opengis.net/gml/srs/epsg.xml#epsg:4326">
+        <gml:lowerCorner>4.39745395255593 50.833260184155</gml:lowerCorner>
+        <gml:upperCorner>4.45923723343808 50.8625159552484</gml:upperCorner>
+      </gml:Envelope>
+    </gml:BoundedBy>
+   </skos:Concept>  
+
+  <skos:Concept rdf:about="http://geobru.irisnet.be/adminregions#19">
+    <skos:prefLabel xml:lang="en">Bruxelles</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Bruxelles</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Brussel</skos:prefLabel>
+    <gml:BoundedBy>
+      <gml:Envelope gml:srsName="http://www.opengis.net/gml/srs/epsg.xml#epsg:4326">
+        <gml:lowerCorner>4.31116236251656 50.7958256744456</gml:lowerCorner>
+        <gml:upperCorner>4.43471894104666 50.9133209049075</gml:upperCorner>
+      </gml:Envelope>
+    </gml:BoundedBy>
+   </skos:Concept>  
+
+  <skos:Concept rdf:about="http://geobru.irisnet.be/adminregions#20">
+    <skos:prefLabel xml:lang="en">Berchem-Sainte-Agathe</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Berchem-Sainte-Agathe</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Sint-Agatha-Berchem</skos:prefLabel>
+    <gml:BoundedBy>
+      <gml:Envelope gml:srsName="http://www.opengis.net/gml/srs/epsg.xml#epsg:4326">
+        <gml:lowerCorner>4.27659858771028 50.8548298743017</gml:lowerCorner>
+        <gml:upperCorner>4.31155565110247 50.8747913313403</gml:upperCorner>
+      </gml:Envelope>
+    </gml:BoundedBy>
+   </skos:Concept>  
+
+  <skos:Concept rdf:about="http://geobru.irisnet.be/adminregions#21">
+    <skos:prefLabel xml:lang="en">Etterbeek</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Etterbeek</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Etterbeek</skos:prefLabel>
+    <gml:BoundedBy>
+      <gml:Envelope gml:srsName="http://www.opengis.net/gml/srs/epsg.xml#epsg:4326">
+        <gml:lowerCorner>4.37651521451214 50.8219924023506</gml:lowerCorner>
+        <gml:upperCorner>4.40967998455257 50.8441498223151</gml:upperCorner>
+      </gml:Envelope>
+    </gml:BoundedBy>
+   </skos:Concept>  
+</rdf:RDF>
+

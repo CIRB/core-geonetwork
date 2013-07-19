@@ -1572,6 +1572,15 @@
         <label>Organisation name</label>
         <description>Name of the responsible organization</description>
         <condition>conditional</condition>
+        <helper>
+            <option value="AATL / BROH">AATL / BROH</option>    
+            <option value="ADT / ATO">ADT / ATO</option>    
+            <option value="Bruxelles Mobilité / Mobiel Brussel">Bruxelles Mobilité / Mobiel Brussel</option>    
+            <option value="Bruxelles Environnement / Leefmilieu Brussel">Bruxelles Environnement / Leefmilieu Brussel</option>    
+            <option value="CIRB / CIBG">CIRB / CIBG</option>    
+            <option value="IBSA / BISA">IBSA / BISA</option>    
+            <option value="STIB / MIVB">STIB / MIVB</option>    
+        </helper>
     </element>
     <element name="gmd:orientationParameterAvailability" id="172.0">
         <label>Orientation parameter availability</label>

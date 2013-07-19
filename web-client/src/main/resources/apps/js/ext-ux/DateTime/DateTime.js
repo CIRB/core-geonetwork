@@ -4,8 +4,8 @@
  *
  * DateTime field, combination of DateField and TimeField
  *
- * @author      Ing. Jozef Sakáloš
- * @copyright (c) 2008, Ing. Jozef Sakáloš
+ * @author      Ing. Jozef Sakï¿½loï¿½
+ * @copyright (c) 2008, Ing. Jozef Sakï¿½loï¿½
  * @version   2.0
  * @revision  $Id: Ext.ux.form.DateTime.js 813 2010-01-29 23:32:36Z jozo $
  *
@@ -527,8 +527,6 @@ Ext.ux.form.DateTime = Ext.extend(Ext.form.Field, {
      * Sets the value of this field
      */
     ,setValue:function(val) {
-        var newDateVal=val;
-
         if(!val && true === this.emptyToNow) {
             this.setValue(new Date());
             return;
@@ -540,65 +538,28 @@ Ext.ux.form.DateTime = Ext.extend(Ext.form.Field, {
             return;
         }
         if ('number' === typeof val) {
-          newDateVal = new Date(newDateVal);
+          val = new Date(val);
         }
         else if('string' === typeof val && this.hiddenFormat) {
-            newDateVal = Date.parseDate(newDateVal, this.hiddenFormat);
+            val = Date.parseDate(val, this.hiddenFormat)
         }
         val = val ? val : new Date(1970, 0 ,1, 0, 0, 0);
-        var da;
-        if(newDateVal && newDateVal instanceof Date) {
-            this.setDate(newDateVal);
-            this.setTime(newDateVal);
-            this.dateValue = new Date(Ext.isIE ? val.getTime() : val);
+        var da, time;
+        if(val instanceof Date) {
+            this.setDate(val);
+            this.setTime(val);
+            this.dateValue = new Date(val);
         }
         else {
-            //Try to split the date into date/time if they can be parsed based on the supplied format then we will use it.
             da = val.split(this.dtSeparator);
-            // Attempt to parse the date.
-            var d = Date.parseDate(da[0], this.df.format),
-                af = this.df.altFormats,
-                afa = this.df.altFormatsArray;
-
-            if (!d && af) {
-               afa = afa || af.split("|");
-
-               for (var i = 0, len = afa.length; i < len && !d; i++) {
-                   d = Date.parseDate(da[0], afa[i]);
-               }
-            }
-            // Attempt to parse the time
-            var t;
-            if (d && da[1]) {
+            this.setDate(da[0]);
+            if(da[1]) {
                 if(da[2]) {
                     // add am/pm part back to time
                     da[1] += da[2];
                 }
-
-               da[1]=da[1];
-
-               t = Date.parseDate(da[1], this.tf.format);
-               var  af = this.tf.altFormats,
-                    afa = this.tf.altFormatsArray;
- 
-               if (!t && af) {
-                  afa = afa || af.split("|");
-
-                  for (var i = 0, len = afa.length; i < len && !t; i++) {
-                      t = Date.parseDate(da[1], afa[i]);
-                  }
-               }
+                this.setTime(da[1]);
             }
-            // If we successfully parsed the date and time then lets set it.
-            if(d && t) {
-                this.setDate(da[0]);
-                this.setTime(da[1]);            }
-            else {
-                // This is a freeform date so lets null the value.
-                this.setDate('');
-                // Set the value in the superclass so the user can see it...
-                Ext.form.DateField.superclass.setValue.call(this.df, val);
-                }
         }
         this.updateValue();
     } // eo function setValue

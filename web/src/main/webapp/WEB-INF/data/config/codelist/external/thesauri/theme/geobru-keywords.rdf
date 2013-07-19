@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:fn="http://www.w3.org/2005/02/xpath-functions" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:gml="http://www.opengis.net/gml#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:xdt="http://www.w3.org/2005/02/xpath-datatypes" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <!-- Scheme -->
+  <skos:ConceptScheme rdf:about="http://geobru.irisnet.be/adminregions">
+    <dc:title>GeoBru brussels keywords</dc:title>
+    <dc:description>GeoBru brussels keywords.</dc:description>
+    <dc:creator>
+      <foaf:Organization>
+        <foaf:name>CIRB-CIBG</foaf:name>
+      </foaf:Organization>
+    </dc:creator>
+    <dc:rights>Free to all for non commercial use.</dc:rights>
+    <dcterms:issued>Wed June 12 20:57:15 CET 2013</dcterms:issued>
+    <dcterms:modified>2013-06-12 20:57:15</dcterms:modified>
+  </skos:ConceptScheme>
+      <!-- Concept list -->
+  <skos:Concept rdf:about="http://geobru.irisnet.be/keywords#1">
+    <skos:prefLabel xml:lang="en">Brussels</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Bruxelles</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Brussel</skos:prefLabel>
+  </skos:Concept>
+   <skos:Concept rdf:about="http://geobru.irisnet.be/keywords#2">
+    <skos:prefLabel xml:lang="en">Layers</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Fond de plan</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Kaartondergrond</skos:prefLabel>
+  </skos:Concept> 
+
+   <skos:Concept rdf:about="http://geobru.irisnet.be/keywords#3">
+    <skos:prefLabel xml:lang="en">Point of Interest</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Points d’intérêt</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Bezienswaardigheden</skos:prefLabel>
+  </skos:Concept> 
+  
+
+   <skos:Concept rdf:about="http://geobru.irisnet.be/keywords#4">
+    <skos:prefLabel xml:lang="en">Administrative Units</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Unités administratives</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Administratieve eenheden</skos:prefLabel>
+   </skos:Concept> 
+
+
+   <skos:Concept rdf:about="http://geobru.irisnet.be/keywords#5">
+    <skos:prefLabel xml:lang="en">Topography</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Topographie</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Topografie</skos:prefLabel>
+   </skos:Concept> 
+
+
+   <skos:Concept rdf:about="http://geobru.irisnet.be/keywords#6">
+    <skos:prefLabel xml:lang="en">Mobility</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Mobilité</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Mobiliteit</skos:prefLabel>
+   </skos:Concept> 
+
+
+   <skos:Concept rdf:about="http://geobru.irisnet.be/keywords#7">
+    <skos:prefLabel xml:lang="en">Pedestrians</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Piétons</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Voetgangers</skos:prefLabel>
+   </skos:Concept> 
+
+
+   <skos:Concept rdf:about="http://geobru.irisnet.be/keywords#8">
+    <skos:prefLabel xml:lang="en">Parking</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Stationnement</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Parkeerbeleid</skos:prefLabel>
+   </skos:Concept> 
+
+
+   <skos:Concept rdf:about="http://geobru.irisnet.be/keywords#9">
+    <skos:prefLabel xml:lang="en">Cycle</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Vélo</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Fiets</skos:prefLabel>
+   </skos:Concept> 
+
+
+   <skos:Concept rdf:about="http://geobru.irisnet.be/keywords#10">
+    <skos:prefLabel xml:lang="en">Heritage</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Patrimoine</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Erfgoed</skos:prefLabel>
+   </skos:Concept>   
+ 
+   <skos:Concept rdf:about="http://geobru.irisnet.be/keywords#11">
+    <skos:prefLabel xml:lang="en">Public Space</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Espace public</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Openbare ruimte</skos:prefLabel>
+   </skos:Concept>   
+   
+   
+   <skos:Concept rdf:about="http://geobru.irisnet.be/keywords#12">
+    <skos:prefLabel xml:lang="en">Railway Noise</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Bruit ferroviaire </skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Spoorweggeluid</skos:prefLabel>
+   </skos:Concept>
+  
+   <skos:Concept rdf:about="http://geobru.irisnet.be/keywords#13">
+    <skos:prefLabel xml:lang="en">Areas of sensitive use</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Zones d’utilisation sensible </skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Gevoelige gebruikszones</skos:prefLabel>
+   </skos:Concept>
+  
+   <skos:Concept rdf:about="http://geobru.irisnet.be/keywords#14">
+    <skos:prefLabel xml:lang="en">Sonian Forest</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Forêt de Soignes</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Zoniënwoud</skos:prefLabel>
+   </skos:Concept>
+
+
+   <skos:Concept rdf:about="http://geobru.irisnet.be/keywords#15">
+    <skos:prefLabel xml:lang="en">Green Trail</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Promenade verte</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Groene wandeling</skos:prefLabel>
+   </skos:Concept>
+
+   <skos:Concept rdf:about="http://geobru.irisnet.be/keywords#16">
+    <skos:prefLabel xml:lang="en">Blue Network</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Maillage bleu </skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Blauw netwerk</skos:prefLabel>
+   </skos:Concept>
+
+   <skos:Concept rdf:about="http://geobru.irisnet.be/keywords#17">
+    <skos:prefLabel xml:lang="en">Green Network</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Maillage vert</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Groen netwerk</skos:prefLabel>
+   </skos:Concept>
+
+   <skos:Concept rdf:about="http://geobru.irisnet.be/keywords#18">
+    <skos:prefLabel xml:lang="en">Ecological Network</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Maillage écologique</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Ecologisch netwerk</skos:prefLabel>
+   </skos:Concept>  
+  
+   <skos:Concept rdf:about="http://geobru.irisnet.be/keywords#19">
+    <skos:prefLabel xml:lang="en">Network of playgrounds</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Maillage Jeux</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Speelnetwerk</skos:prefLabel>
+   </skos:Concept>  
+  
+   <skos:Concept rdf:about="http://geobru.irisnet.be/keywords#20">
+    <skos:prefLabel xml:lang="en">Taxi</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Taxi</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Taxi</skos:prefLabel>
+   </skos:Concept> 
+  
+   <skos:Concept rdf:about="http://geobru.irisnet.be/keywords#21">
+    <skos:prefLabel xml:lang="en">CCTV camera</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Caméra</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Camera</skos:prefLabel>
+   </skos:Concept> 
+
+  
+</rdf:RDF>
+

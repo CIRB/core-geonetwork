@@ -40,7 +40,7 @@ GeoNetwork.Settings.editor = {
 GeoNetwork.printDefaultForTabs = false;
 
 // Define if label needs to be displayed for login form next to username/password fields
-GeoNetwork.hideLoginLabels = true;
+GeoNetwork.hideLoginLabels = false;
 
 
 // Define which type of search to use

@@ -63,7 +63,7 @@ GeoNetwork.LoginForm = Ext.extend(Ext.FormPanel, {
          * In hbox layout, labels are not displayed, set to true to display field labels.
          */
         hideLoginLabels: true,
-        width: 340
+        width: 450
     },
     defaultType: 'textfield',
     /** private: property[userInfo]
@@ -96,6 +96,7 @@ GeoNetwork.LoginForm = Ext.extend(Ext.FormPanel, {
 
         var form = this;
         var loginBt = new Ext.Button({
+        		style: {marginLeft:'5px'},
                 width: 50,
                 text: OpenLayers.i18n('login'),
                 iconCls: 'md-mn mn-login',
@@ -108,6 +109,7 @@ GeoNetwork.LoginForm = Ext.extend(Ext.FormPanel, {
                 }
             }),
             adminBt = new Ext.Button({
+//        		style: {marginLeft:'5px'},
                 width: 80,
                 text: OpenLayers.i18n('administration'),
                 //iconCls : 'md-mn md-mn-advanced',
@@ -119,6 +121,7 @@ GeoNetwork.LoginForm = Ext.extend(Ext.FormPanel, {
                 }
             }),
             logoutBt = new Ext.Button({
+        		style: {marginLeft:'5px'},
                 width: 80,
                 text: OpenLayers.i18n('logout'),
                 iconCls: 'md-mn mn-logout',
@@ -136,8 +139,8 @@ GeoNetwork.LoginForm = Ext.extend(Ext.FormPanel, {
             autoCreate: {tag: 'input'},
             hideLabel: false,
             allowBlank: false,
-            fieldLabel: OpenLayers.i18n('username'),
-            emptyText: OpenLayers.i18n('username')
+            fieldLabel: OpenLayers.i18n('username')/*,
+            emptyText: OpenLayers.i18n('username')*/
         });
         this.password = new Ext.form.TextField({
             name: 'password',
@@ -145,11 +148,12 @@ GeoNetwork.LoginForm = Ext.extend(Ext.FormPanel, {
             hideLabel: false,
             allowBlank: false,
             fieldLabel: OpenLayers.i18n('password'),
-            emptyText: OpenLayers.i18n('password'),
+//            emptyText: OpenLayers.i18n('password'),
             inputType: 'password'
         });
         this.userInfo = new Ext.form.Label({
-            width: 170,
+        	style: 'padding:5px',
+            width: 190,
             text: '',
             cls: 'loginInfo'
         });
@@ -163,8 +167,8 @@ GeoNetwork.LoginForm = Ext.extend(Ext.FormPanel, {
                     loginBt);
         } else {
             // hbox layout does not display TextField labels, create a label then
-            var usernameLb = new Ext.form.Label({html: OpenLayers.i18n('username')}),
-                passwordLb = new Ext.form.Label({html: OpenLayers.i18n('password')});
+            var usernameLb = new Ext.form.Label({text: OpenLayers.i18n('username'),style:'padding:5px'}),
+                passwordLb = new Ext.form.Label({text: OpenLayers.i18n('password'),style:'padding:5px'});
         
             this.toggledFields.push(usernameLb, 
                     this.username,
@@ -203,7 +207,8 @@ GeoNetwork.LoginForm = Ext.extend(Ext.FormPanel, {
             this.userInfo.setText(cat.identifiedUser.name +
             ' ' +
             cat.identifiedUser.surname +
-            ' <br/>(' +
+//            ' <br/>(' +
+            ' (' +
             cat.identifiedUser.role +
             ')', false);
         } else {
