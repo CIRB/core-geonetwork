@@ -110,11 +110,12 @@ GeoNetwork.editor.KeywordSelectionPanel = Ext.extend(Ext.FormPanel, {
         
         this.items = [{
             xtype: 'panel',
-            layout: 'fit',
-            bodyStyle: 'padding: 5px;',
+            height: 330,
+//            layout: 'fit',
+//            bodyStyle: 'padding: 5px;',
             border: false,
             tbar: [this.getThesaurusCombo(), ' ', this.getKeyword(), '->', OpenLayers.i18n('maxResults') + ' ' + OpenLayers.i18n('perThesaurus'), this.getLimitInput()],
-            items: [this.getKeywordsItemSelector()]
+            items: this.getKeywordsItemSelector()
         }];
         
         
@@ -205,7 +206,7 @@ GeoNetwork.editor.KeywordSelectionPanel = Ext.extend(Ext.FormPanel, {
             xtype: 'textfield',
             name: 'maxResults',
             id: 'maxResults',
-            value: 50,
+            value: 1000,
             width: 40
         };
     },
@@ -267,8 +268,8 @@ GeoNetwork.editor.KeywordSelectionPanel = Ext.extend(Ext.FormPanel, {
             fieldLabel: "ItemSelector",
             dataFields: ["value", "thesaurus"],
             toData: [],
-            msWidth: 320,
-            msHeight: 230,
+            msWidth: 280,
+            msHeight: 180,
             valueField: "value",
             toSortField: undefined,
             fromTpl: tpl,

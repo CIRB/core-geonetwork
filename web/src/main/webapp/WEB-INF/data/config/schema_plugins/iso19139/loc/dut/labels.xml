@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <labels xmlns:gmd="http://www.isotc211.org/2005/gmd" 
-		  xmlns:gts="http://www.isotc211.org/2005/gts" 
-		  xmlns:gco="http://www.isotc211.org/2005/gco"
-		  xmlns:gml="http://www.opengis.net/gml"
-          xmlns:srv="http://www.isotc211.org/2005/srv"
-          xmlns:gmx="http://www.isotc211.org/2005/gmx">			          
+		xmlns:gts="http://www.isotc211.org/2005/gts" 
+		xmlns:gco="http://www.isotc211.org/2005/gco"
+		xmlns:gml="http://www.opengis.net/gml"
+		xmlns:srv="http://www.isotc211.org/2005/srv"
+		xmlns:gmx="http://www.isotc211.org/2005/gmx">
 	
 	<!-- ==================================================== -->
 	<element name="gmd:CI_OnlineResource">
@@ -242,7 +242,7 @@
 	<element name="gmd:abstract">
 		<label>Samenvatting</label>
 		<description>Korte beschrijving van de inhoud van de dataset.</description>
-	    <condition>mandatory</condition>
+		<condition>mandatory</condition>
 	</element>
 	<!-- ==================================================== -->
 	<element name="gmd:accessConstraints">
@@ -412,6 +412,9 @@
 	<element name="gmd:city">
 		<label>Plaats</label>
 		<description>Plaatsnaam behorende bij het contactadres van de organisatie.</description>
+		<helper>
+			<option value="Brussel">Brussel</option>
+		</helper>
 	</element>
 	<!-- ==================================================== -->
 	<element name="gmd:classification">
@@ -567,6 +570,15 @@
 	<element name="gmd:deliveryPoint">
 		<label>Adres</label>
 		<description>Contactadres van de organisatie.</description>
+		<helper rel="gmd:postalCode">
+			<option value="Vooruitgangstraat 80 bus 1" title="1035">Vooruitgangstraat 80 bus 1 (AATL / BROH)</option>
+			<option value="Koningsstraat 2-4" title="1000">Koningsstraat 2-4 (ADT / ATO)</option>
+			<option value="Gulledelle 100" title="1200">Gulledelle 100 (Bruxelles Environnement / Leefmilieu Brussel)</option>
+			<option value="Vooruitgangstraat 80 bus 1" title="1035">Vooruitgangstraat 80 bus 1 (Bruxelles Mobilité / Mobiel Brussel)</option>
+			<option value="Kunstlaan 21" title="1000">Kunstlaan 21 (CIRB / CIBG)</option>
+			<option value="Kruidtuinlaan 20" title="1035">Kruidtuinlaan 20 (IBSA / BISA)</option>
+			<option value="Koningsstraat 76" title="1000">Koningsstraat 76 (STIB / MIVB)</option>
+		</helper>
 	</element>
 	<!-- ==================================================== -->
 	<element name="gmd:denominator">
@@ -1562,6 +1574,24 @@
 	<condition>mandatory</condition>
 	</element>
 	<!-- ==================================================== -->
+	<element name="gmd:name" id="285.0" context="gmd:MD_Format">
+		<label>Formaatnaam</label>
+		<description>Formaatnaam van de gegevensoverdracht</description>
+		<help>Formaatnaam van de gegevensoverdracht, bijvoorbeeld TIFF, ZIP, enz.</help>
+		<condition>mandatory</condition>
+		<helper rel="gmd:version">
+			<option value="Texte">Tekst</option>
+			<option value="ESRI Shapefile" title="1.0">ESRI Shapefile</option>
+			<option value="Mapinfo MIF/MID" title="4.5">Mapinfo MIF/MID</option>
+			<option value="Mapinfo TAB">Mapinfo TAB</option>
+			<option value="KML">KML</option>
+			<option value="GeoTIFF" title="1.0">GeoTIFF</option>
+			<option value="TIFF">TIFF</option>
+			<option value="ECW">ECW</option>
+			<option value="ZIP">ZIP</option>
+		</helper>
+	</element>
+	<!-- ==================================================== -->
 	<element name="gmd:nameOfMeasure">
 		<label>Name of measure</label>
 		<description>name of the test applied to the data</description>
@@ -1608,15 +1638,15 @@
 	<element name="gmd:organisationName">
 		<label>Organisatie</label>
 		<description>Naam van de verantwoordelijke organisatie</description>
-        <helper>
-            <option value="AATL / BROH">AATL / BROH</option>    
-            <option value="ADT / ATO">ADT / ATO</option>    
-            <option value="Bruxelles Mobilité / Mobiel Brussel">Bruxelles Mobilité / Mobiel Brussel</option>    
-            <option value="Bruxelles Environnement / Leefmilieu Brussel">Bruxelles Environnement / Leefmilieu Brussel</option>    
-            <option value="CIRB / CIBG">CIRB / CIBG</option>    
-            <option value="IBSA / BISA">IBSA / BISA</option>    
-            <option value="STIB / MIVB">STIB / MIVB</option>    
-        </helper>
+		<helper>
+			<option value="AATL / BROH">AATL / BROH</option>
+			<option value="ADT / ATO">ADT / ATO</option>
+			<option value="Bruxelles Environnement / Leefmilieu Brussel">Bruxelles Environnement / Leefmilieu Brussel</option>
+			<option value="Bruxelles Mobilité / Mobiel Brussel">Bruxelles Mobilité / Mobiel Brussel</option>
+			<option value="CIRB / CIBG">CIRB / CIBG</option>
+			<option value="IBSA / BISA">IBSA / BISA</option>
+			<option value="STIB / MIVB">STIB / MIVB</option>
+		</helper>
 	<condition>conditional</condition>
 	</element>
 	<!-- ==================================================== -->
@@ -1732,7 +1762,14 @@
 	<element name="gmd:postalCode">
 		<label>Postcode</label>
 		<description>Postcode</description>
-	</element>
+<!-- 
+		<helper>
+			<option value="1000">1000</option>
+			<option value="1035">1035</option>
+			<option value="1200">1200</option>
+		</helper>
+ -->
+ 	</element>
 	<!-- ==================================================== -->
 	<element name="gmd:presentationForm">
 		<label>Wijze van presentatie</label>
@@ -1967,6 +2004,77 @@
 		<description>Naam van de subset, profiel of productspecificatie van het formaat.</description>
 	<condition>mandatory</condition>
 	</element>
+
+  <element name="gmd:title" id="360.0" context="gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title">
+    <label>Titel van de specificatie</label>
+    <description>Nom avec lequel la ressource en question est connue</description>
+    <help>
+      <!-- [2] -->
+      Nom caractéristique et souvent unique sous lequel la ressource est connue.
+      
+      Titre/nom. Ces informations sont du type PT_FreeText et sont gérées dans la classe du même nom.</help>
+    <helper>
+      <option value="VERORDENING (EU) Nr. 1089/2010 VAN DE COMMISSIE van 23 november 2010 ter uitvoering van Richtlijn 2007/2/EG van het Europees Parlement en de Raad betreffende de interoperabiliteit van verzamelingen ruimtelijke gegevens en van diensten met betrekking tot ruimtelijke gegevens">VERORDENING (EU) Nr. 1089/2010 VAN DE COMMISSIE van 23 november 2010 ter uitvoering van Richtlijn 2007/2/EG van het Europees Parlement en de Raad betreffende de interoperabiliteit van verzamelingen ruimtelijke gegevens en van diensten met betrekking tot ruimtelijke gegevens</option>
+      <option value="INSPIRE Data Specification on Administrative Units - Guidelines v3.0.1">Guide INSPIRE sur les unités administratives</option>
+      <option value="INSPIRE Data Specification on Cadastral Parcels - Guidelines v 3.0.1">Guide INSPIRE sur les parcelles cadastrales</option>
+      <option value="INSPIRE Data Specification on Geographical Names - Guidelines v 3.0.1">Guide INSPIRE sur les dénominations géographiques</option>
+      <option value="INSPIRE Data Specification on Hydrography - Guidelines v 3.0.1">Guide INSPIRE sur l’hydrographie</option>
+      <option value="INSPIRE Data Specification on Protected Sites - Guidelines v 3.1.0">Guide INSPIRE sur les sites protégés</option>
+      <option value="INSPIRE Data Specification on Transport Networks - Guidelines v 3.1.0">Guide INSPIRE sur les réseaux de transport</option>
+      <option value="INSPIRE Data Specification on Addresses - Guidelines v 3.0.1">Guide INSPIRE sur les adresses</option>
+      <option value="INSPIRE Specification on Coordinate Reference Systems - Guidelines v 3.1">Guide INSPIRE sur les référentiels de coordonnées</option>
+      <option value="INSPIRE Specification on Geographical Grid Systems - Guidelines v 3.0.1">Guide INSPIRE sur les systèmes de maillage géographique</option>
+    </helper>
+      
+    <help for="inspire"><![CDATA[<b>Exigence INSPIRE sur la conformité:</b>
+    Les exigences de conformité seront remplies au moyen des éléments 
+    de métadonnées « spécification » et « degré ».
+    ]]>
+    </help>
+    <help for="france">
+    <![CDATA[
+    <b>Recommandations :</b>
+    <ul>
+    <li>Les règlements Interopérabilité INSPIRE (voir en annexe A) doivent obligatoirement faire partie des spécifications visées.</li>
+    <li>Il est recommandé d’exprimer la conformité vis-à-vis du guide technique du thème considéré (voir Annexe B). La spécification référencée ici doit correspondre au thème INSPIRE indiqué dans les mots-clés.</li>
+    <li>En règle générale, il est conseillé de découper sa ressource en thèmes, afin de ne devoir se conformer qu’à un modèle de données INSPIRE à la fois (Par exemple, la BD Carto de l’IGN a été découpé en plusieurs ensembles de séries : BD Carto – Hydrographie, BD Carto – Réseau routier, BD Carto – Parcelles cadastrales, etc.).</li>
+    </ul>
+    <b>Commentaire :</b>
+    La conformité est une déclaration de la seule responsabilité du producteur et il n’est pas prévu de contrôler, en France, cette déclaration.
+    Une série de données conforme remplit toutes les conditions posées par la spécification visée (voir 1 Spécification).
+    Ces deux éléments de métadonnées (spécification et degré) expriment la conformité des données (et non des métadonnées !) à une spécification.
+    La première exigence de conformité vise la mise en œuvre des règlements européens dits d’interopérabilité. La référence à des spécifications différentes comme celles du CNIG (PLU...) ou de la COVADIS est possible en complément. Concrètement, cela revient à créer une série de données à partir du gabarit de série de données fourni, par exemple, par la COVADIS, ou à comparer une série de données particulière au dit gabarit.
+    Le degré et la spécification de référence forment un couple.
+    ]]></help>
+    
+    
+    <help for="inspire"><![CDATA[<b>Exigence INSPIRE sur les spécifications :</b>
+    Cet élément donne la référence des règles de mise en œuvre adoptées en vertu de l’article 7, paragraphe 1, de la directive 2007/2/CE ou des autres spécifications auxquelles la ressource est conforme.
+    <ul>
+    <li>Il est possible de renseigner la conformité à plusieurs spécifications de données. </li>
+    <li>Cette indication inclut au moins le titre et une date de référence (date de publication, date de dernière révision ou de création) des spécifications auxquelles la ressource est conforme. </li>
+    </ul>
+    ]]>
+    </help>
+    <help for="france">
+    <![CDATA[
+    <b>Commentaire :</b>
+    L’article 7, paragraphe 1, de la directive 2007/2/CE correspond aux modalités techniques de l’interopérabilité : il s’agit des règlements relatifs à l’interopérabilité dont un seul a été publié à ce jour : règlement n°1089/2010 du 23 novembre 2010, modifié et complété par le règlement n 102/2011 du 4 février 2011.
+    ]]></help>
+    <help><![CDATA[Exemple :
+    <ul>
+    <li>Titre : Règlement n°1089/2010
+    <li>date : 2010-11-23</li>
+    <li>type de date : publication</li>
+    <li>Titre : “ INSPIRE Data Specification on Cadastral Parcels - Guidelines v3.0.1”</li>
+    <li>date : 2010-04-26</li>
+    <li>type de date : publication.</li>
+    </ul>
+    ]]></help>
+    <condition>Obligatoire</condition>
+  </element>
+
+
 	<!-- ==================================================== -->
 	<element name="gmd:specificUsage">
 		<label>Potentieel gebruik</label>
@@ -2210,7 +2318,7 @@
 			* T indicates the start of a time section (required if you are going to specify hours, minutes, or seconds)
 			* nH indicates the number of hours
 			* nM indicates the number of minutes
-			* nS indicates the number of seconds            
+			* nS indicates the number of seconds
 		</description>
 	</element>
 	
@@ -2313,16 +2421,16 @@
 		<label>Restrictions</label>
 		<description>Legal and security constraints on accessing the service and distributing data generated by the service</description>
 	</element>
-    <element name="srv:containsOperations">
+	<element name="srv:containsOperations">
 		<label>Bevat operaties</label>
 		<description>De operaties die door een service worden aangeboden.</description>
-	</element>    
-    <element name="srv:operatesOn">
+	</element>
+	<element name="srv:operatesOn">
 		<label>Operates on</label>
 		<description>Dit element is conditioneel in INSPIRE. Het is verplicht als er links naar de datasets waarop de service opereert
 beschikbaar zijn. Voor dataservices is het dus verplicht. Dit element geeft informatie (metadata) over de data die in de service beschikbaar wordt gesteld.</description>
 	</element>   
-    <element name="srv:operationName">
+	<element name="srv:operationName">
 		<label>Operatie naam</label>
 		<description>De naam van de operatie.</description>
 	</element>
@@ -2330,10 +2438,10 @@ beschikbaar zijn. Voor dataservices is het dus verplicht. Dit element geeft info
 		<label>Operation</label>
 		<description>Operation Metadata</description>
 	</element>
-    <element name="srv:DCP">
+	<element name="srv:DCP">
 		<label>DCP</label>
 		<description>Distributed Computing Platform waarop de operatie is geimplementeerd.</description>
-	</element>        
+	</element>
 	<element name="srv:DCPList">
 		<label>Distributed Computing Platforms List</label>
 		<description>List of distributed computing platforms on which the operation has been implemented</description>
@@ -2350,11 +2458,11 @@ beschikbaar zijn. Voor dataservices is het dus verplicht. Dit element geeft info
 		<label>Parameters</label>
 		<description>The parameters that are required for this interface</description>
 	</element>
-    <element name="srv:connectPoint">
+	<element name="srv:connectPoint">
 		<label>Connect point linkage</label>
 		<description>Dit is een verplicht element uit ISO 19119. Dit element beschrijft het netwerkadres van de service instance via
 het verplichte element linkage, uit de klasse CI_OnlineResource. Dit element heeft hetzelfde doel als Resource Locator uit 5.2.4.</description>
-	</element>     
+	</element>
 	<element name="srv:dependsOn">
 		<label>Depends On</label>
 		<description>List of operations that must be completed immediately before current operation is invoked, structured as a list for capturing alternate predecessor paths and sets for capturing parallel predecessor paths</description>
@@ -2383,7 +2491,7 @@ het verplichte element linkage, uit de klasse CI_OnlineResource. Dit element hee
 		<label>Repeatability</label>
 		<description>Indication if more than one value of the parameter may be provided</description>
 	</element>
-    <element name="srv:coupledResource">
+	<element name="srv:coupledResource">
 		<label>Gekoppelde bron</label>
 		<description>Een bron of dataset die gekoppeld is aan deze service.</description>
 	</element>  
@@ -2471,109 +2579,109 @@ het verplichte element linkage, uit de klasse CI_OnlineResource. Dit element hee
 		<label>Type name</label>
 	</element>
 
-    <element name="uuidref">
+	<element name="uuidref">
 		<label>UUID voor operatesOn</label>
 		<description></description>
-	</element>      
+	</element>
 
 	<!-- ==================================================== -->
 	<!-- Thijs: TODO: how to make distinction between begin- and enddate in defaultview? -->	
-    <element name="gml:timePosition">
+	<element name="gml:timePosition">
 		<label>Datum</label>
 		<description></description>
-	</element>    
+	</element>
 
 	<element name="gml:identifier">
 		<label>Identificatie</label>
 		<description></description>
 	</element>
 	<!-- ==================================================== -->
-    <element name="gml:TimePeriod">
+	<element name="gml:TimePeriod">
 		<label>Periode</label>
 		<description></description>
 	</element>  
 	<!-- ==================================================== -->
-    <element name="gml:metaDataProperty">
+	<element name="gml:metaDataProperty">
 		<label>Metadata eigenschap</label>
 		<description></description>
 	</element> 
 	<!-- ==================================================== -->
-    <element name="gml:description">
+	<element name="gml:description">
 		<label>Omschrijving</label>
 		<description></description>
 	</element>
 	<!-- ==================================================== -->
-    <element name="gml:descriptionReference">
+	<element name="gml:descriptionReference">
 		<label>Referentie naar omschrijving</label>
 		<description></description>
-	</element>     
+	</element>
 	<!-- ==================================================== -->
-    <element name="gml:name">
+	<element name="gml:name">
 		<label>Naam</label>
 		<description></description>
-	</element>    
+	</element>
 	<!-- ==================================================== -->
-    <element name="gml:begin">
+	<element name="gml:begin">
 		<label>Begin</label>
 		<description></description>
-	</element>      
+	</element>
 	<!-- ==================================================== -->
-    <element name="gml:end">
+	<element name="gml:end">
 		<label>Eind</label>
 		<description></description>
 	</element>
 	<!-- ==================================================== -->
-    <element name="gml:unitsSystem">
+	<element name="gml:unitsSystem">
 		<label>Eenheid</label>
 		<description></description>
 	</element>
 	<!-- ==================================================== -->
-    <element name="gco:Record">
+	<element name="gco:Record">
 		<label>Record</label>
 		<description></description>
-	</element>      
+	</element>
 	<!-- ==================================================== -->
-    <element name="gml:BaseUnit">
+	<element name="gml:BaseUnit">
 		<label>Basis eenheid</label>
 		<description></description>
 	</element>
 	<!-- ==================================================== -->
-    <element name="gml:remarks">
+	<element name="gml:remarks">
 		<label>Opmerkingen</label>
 		<description></description>
-	</element>      
+	</element>
 	<!-- ==================================================== -->
-    <element name="gml:quantityType">
+	<element name="gml:quantityType">
 		<label>Type waarde</label>
 		<description></description>
-	</element>      
+	</element>
 	<!-- ==================================================== -->
-    <element name="gml:quantityTypeReference">
+	<element name="gml:quantityTypeReference">
 		<label>Referentie naar type waarde</label>
 		<description></description>
 	</element>
 	<!-- ==================================================== -->
-    <element name="gml:catalogSymbol">
+	<element name="gml:catalogSymbol">
 		<label>Catalogue symbool</label>
 		<description></description>
 	</element>
 	<!-- ==================================================== -->
-    <element name="gml:uom">
+	<element name="gml:uom">
 		<label>Eenheid</label>
 		<description>De eenheid van het coordinaatsysteem, bijvoorbeeld "m"</description>
 	</element>
 	<!-- ==================================================== -->
-    <element name="gml:axisAbbrev">
+	<element name="gml:axisAbbrev">
 		<label>Afkorting as</label>
 		<description>De afkorting van de as van het coordinaatsysteem</description>
-	</element>    
+	</element>
 	<!-- ==================================================== -->
-    <element name="gml:scope">
+	<element name="gml:scope">
 		<label>Scope</label>
 		<description></description>
 	</element>
 	<!-- ==================================================== -->
-    <element name="gml:axisDirection">
+	<element name="gml:axisDirection">
 		<label>Richting as</label>
 		<description>De richting van de as, bijvoorbeeld "up", "North"</description>
 	</element>
@@ -2584,7 +2692,7 @@ het verplichte element linkage, uit de klasse CI_OnlineResource. Dit element hee
 		<description>Choose the begin time element</description>
 	</element>
 	<!-- ==================================================== -->
-    <!-- Thijs: renamed CHOICE_ELEMENT2 to CHOICE_ELEMENT3 -->
+	<!-- Thijs: renamed CHOICE_ELEMENT2 to CHOICE_ELEMENT3 -->
 	<element name="gml:TimePeriodTypeCHOICE_ELEMENT3">
 		<label>Einde van tijdelement</label>
 		<description>Choose the end time element</description>
@@ -2599,7 +2707,7 @@ het verplichte element linkage, uit de klasse CI_OnlineResource. Dit element hee
 		<label>Drie of meer punt elementen</label>
 		<description></description>
 	</element>
-    <!-- ==================================================== -->
+	<!-- ==================================================== -->
 	<element name="gco:aName" context="gco:TypeName">
 		<label>Type name</label>
 		<description/>
@@ -2619,14 +2727,14 @@ het verplichte element linkage, uit de klasse CI_OnlineResource. Dit element hee
 			<option value="TEXT">TEXT</option>
 		</helper>
 	</element>
-    <element name="gmx:FileName">
-        <label>File name</label>
-        <description>File name and source URL.</description>
-    </element>
-    <element name="src">
-        <label>Source URL</label>
-        <description>URL of the document.</description>
-    </element>
+	<element name="gmx:FileName">
+		<label>File name</label>
+		<description>File name and source URL.</description>
+	</element>
+	<element name="src">
+		<label>Source URL</label>
+		<description>URL of the document.</description>
+	</element>
 		<element name="gmx:Anchor">
 				<label>Anchor</label>
 				<description>Supports hyper-linking capabilities and ensures a web-like implementation of CharacterStrings</description>

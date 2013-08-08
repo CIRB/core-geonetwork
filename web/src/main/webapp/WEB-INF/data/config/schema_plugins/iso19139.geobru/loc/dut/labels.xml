@@ -229,16 +229,18 @@
 		<description>Organisatie(s) die verantwoordelijk is (zijn): Naam van de verantwoordelijke organisatie (Annex 9.1)</description>
 		<help>Naam van de verantwoordelijke organisatie, indien het gaat over een individuele persoon of over de organisatie waarbij deze persoon werkt. Deze informatie is van het type PT_FreeText en is behandeld in de klasse met dezelfde naam.</help>
 		<condition>Verplicht</condition>
+<!-- 		
         <helper>
             <option value="AATL / BROH">AATL / BROH</option>    
             <option value="ADT / ATO">ADT / ATO</option>    
-            <option value="Bruxelles Mobilité / Mobiel Brussel">Bruxelles Mobilité / Mobiel Brussel</option>    
             <option value="Bruxelles Environnement / Leefmilieu Brussel">Bruxelles Environnement / Leefmilieu Brussel</option>    
+            <option value="Bruxelles Mobilité / Mobiel Brussel">Bruxelles Mobilité / Mobiel Brussel</option>    
             <option value="CIRB / CIBG">CIRB / CIBG</option>    
             <option value="IBSA / BISA">IBSA / BISA</option>    
             <option value="STIB / MIVB">STIB / MIVB</option>    
         </helper>
-	</element>
+ -->
+ 	</element>
 	<element name="gmd:electronicMailAddress" context="gmd:pointOfContact" id="386.0">
 		<label>Email</label>
 		<description>Organisatie(s) die verantwoordelijk is (zijn): E-mailadres van de contactpersoon (Annex 9.2)</description>
@@ -307,6 +309,7 @@
 		<description>Métadonnées concernant les métadonnées: Naam van de verantwoordelijke organisatie (Annexe 10.2)</description>
 		<help>Naam van de verantwoordelijke organisatie, indien het gaat over een individuele persoon of over de organisatie waarbij deze persoon werkt. Deze informatie is van het type PT_FreeText en is behandeld in de klasse met dezelfde naam.</help>
 		<condition>Verplicht</condition>
+<!-- 
         <helper>
             <option value="AATL / BROH">AATL / BROH</option>    
             <option value="ADT / ATO">ADT / ATO</option>    
@@ -316,7 +319,8 @@
             <option value="IBSA / BISA">IBSA / BISA</option>    
             <option value="STIB / MIVB">STIB / MIVB</option>    
         </helper>
-	</element>
+-->
+ 	</element>
 	<element name="gmd:electronicMailAddress" context="gmd:contact" id="386.0">
 		<label>Email</label>
 		<description>Métadonnées concernant les métadonnées: E-mailadres van de contactpersoon (Annexe 10.3)</description>
@@ -2370,6 +2374,7 @@
 	<element name="gmd:organisationName">
 		<label>Organisatie</label>
 		<description>Naam van de verantwoordelijke organisatie</description>
+<!--
         <helper>
             <option value="AATL / BROH">AATL / BROH</option>    
             <option value="ADT / ATO">ADT / ATO</option>    
@@ -2379,7 +2384,8 @@
             <option value="IBSA / BISA">IBSA / BISA</option>    
             <option value="STIB / MIVB">STIB / MIVB</option>    
         </helper>
-	<condition>conditional</condition>
+ -->
+ 		<condition>conditional</condition>
 	</element>
 	<!-- ==================================================== -->
 	<element name="gmd:orientationParameterAvailability">
@@ -2459,22 +2465,24 @@
 
 
 <!-- FR 32 -->
+<!-- 
 	<element name="gmd:phone" id="407.0">
 		<label>Telefoon</label>
 		<description>Telefoonnummer van de persoon of organisatie.</description>
 		<help> Telefoonnummer. Die informatie is van het type CI_Telephone en wordt beheerd in de klasse met dezelfde naam.</help>
 		<condition/>
 	</element>
-
+ -->
 
 <!-- FR 33-->
+<!-- 
 	<element name="gmd:phone" id="526.0">
 		<label>Telefoon</label>
 		<description>Telefoonnummer van de persoon of organisatie.</description>
 		<help> Telefoonnummer. Die informatie is van het type CI_Telephone en wordt beheerd in de klasse met dezelfde naam.</help>
 		<condition/>
 	</element>
-
+ -->
 	<!-- ==================================================== -->
 	<element name="gmd:plannedAvailableDateTime">
 		<label>Geplande beschikbaarheid (datum tijdstip)</label>
@@ -3019,7 +3027,7 @@
 	<condition>conditional</condition>
 	</element>
 	<!-- ==================================================== -->
-	<element name="gmd:voice">
+	<element name="gmd:voice" id="488">
 		<label>Telefoon</label>
 		<description>Telefoonnummer van de verantwoordelijke persoon of organisatie.</description>
 	</element>

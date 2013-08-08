@@ -1039,7 +1039,9 @@
     <description>Ville de l'emplacement</description>
     <help>Ville, localité</help>
     <condition/>
-    
+		<helper>
+			<option value="Bruxelles">Bruxelles</option>
+		</helper>
   </element>
   <element name="gmd:classification" id="74.0">
     <label>Restrictions de manipulation</label>
@@ -1410,7 +1412,15 @@
     <description>Adresse de l'emplacement (comme décrit dans ISO 11180, Annexe A)</description>
     <help>Nom de la rue</help>
     <condition/>
-    
+		<helper rel="gmd:postalCode">
+			<option value="80 boîte 1 rue du Progrès" title="1035">80 boîte 1 rue du Progrès (AATL / BROH)</option>
+			<option value="2-4 rue Royale" title="1000">2-4 rue Royale (ADT / ATO)</option>
+			<option value="100 Gulledelle" title="1200">100 Gulledelle (Bruxelles Environnement / Leefmilieu Brussel)</option>
+			<option value="80 boîte 1 rue du Progrès" title="1035">80 boîte 1 rue du Progrès (Bruxelles Mobilité / Mobiel Brussel)</option>
+			<option value="21 avenue des Arts" title="1000">21 avenue des Arts (CIRB / CIBG)</option>
+			<option value="20 boulevard du Jardin Botanique" title="1035">20 boulevard du Jardin Botanique (IBSA / BISA)</option>
+			<option value="76 rue Royale" title="1000">76 rue Royale (STIB / MIVB)</option>
+		</helper>
   </element>
   <element name="gmd:denominator" id="57.0">
     <label>Dénominateur de l'échelle</label>
@@ -3234,7 +3244,7 @@
       
       Titre/nom. Ces informations sont du type PT_FreeText et sont gérées dans la classe du même nom.</help>
     <helper>
-      <option value="COMMISSION REGULATION (EU) No 1089/2010 of 23 November 2010 implementing Directive 2007/2/EC of the European Parliament and of the Council as regards interoperability of spatial data sets and services">COMMISSION REGULATION (EU) No 1089/2010 of 23 November 2010 implementing Directive 2007/2/EC of the European Parliament and of the Council as regards interoperability of spatial data sets and services</option>
+      <option value="RÈGLEMENT (UE) N o 1089/2010 DE LA COMMISSION du 23 novembre 2010 portant modalités d'application de la directive 2007/2/CE du Parlement européen et du Conseil en ce qui concerne l'interopérabilité des séries et des services de données géographiques">RÈGLEMENT (UE) N o 1089/2010 DE LA COMMISSION du 23 novembre 2010 portant modalités d'application de la directive 2007/2/CE du Parlement européen et du Conseil en ce qui concerne l'interopérabilité des séries et des services de données géographiques</option>
       <option value="INSPIRE Data Specification on Administrative Units - Guidelines v3.0.1">Guide INSPIRE sur les unités administratives</option>
       <option value="INSPIRE Data Specification on Cadastral Parcels - Guidelines v 3.0.1">Guide INSPIRE sur les parcelles cadastrales</option>
       <option value="INSPIRE Data Specification on Geographical Names - Guidelines v 3.0.1">Guide INSPIRE sur les dénominations géographiques</option>

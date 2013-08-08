@@ -435,9 +435,10 @@ div.button {
   background-image : url(../../images/default/flag_green.png) !important;
 }
 .valid-0 {
-  background-image : url(../../images/default/flag_red.png) !important;
+  background-image : url(../../images/default/flag_red_new.png) !important;
 }
 .valid--1 {
+  background-image : url(../../images/default/flag_orange.png) !important;
 }
 .cat-children, .cat-parent {
   background-image : url(../../images/default/chart_organisation.png) !important;

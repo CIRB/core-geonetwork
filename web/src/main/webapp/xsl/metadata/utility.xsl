@@ -123,13 +123,14 @@
         <xsl:call-template name="getXPath"/>
     </xsl:variable>
 
+	<xsl:variable name="possibleConditions" select="'mandatory|obligatoire|verplicht'"/>
     <xsl:variable name="context" select="name(parent::node())"/>
     <xsl:variable name="contextIsoType" select="parent::node()/@gco:isoType"/>
     
-    <xsl:variable name="title">
-      <xsl:choose>
-        <xsl:when test="starts-with($schema,'iso19139')">
-
+		<xsl:variable name="condition" />
+		<xsl:variable name="title">
+	      <xsl:choose>
+	        <xsl:when test="starts-with($schema,'iso19139')">
           <!-- Name with context in current schema -->
           <xsl:variable name="schematitleWithContext"
             select="string(/root/gui/schemas/*[name(.)=$schema]/labels/element[@name=$name and (@context=$fullContext or @context=$context or @context=$contextIsoType)]/label)"/>
@@ -143,22 +144,40 @@
             select="/root/gui/schemas/*[name(.)=$schema]/labels/element[@name=$name and not(@context)]/label/text()"/>
           
           <xsl:choose>
-            <xsl:when
-              test="normalize-space($schematitleWithContext)!=''"><xsl:value-of select="$schematitleWithContext"/>
+            <xsl:when test="normalize-space($schematitleWithContext)!=''">
+				  <xsl:variable name="condition" select="string(/root/gui/schemas/*[name(.)=$schema]/labels/element[@name=$name and (@context=$fullContext or @context=$context or @context=$contextIsoType)]/condition)"/>
+			      <xsl:if test="$condition and contains($possibleConditions,lower-case($condition))">
+			      	<xsl:value-of select="concat($schematitleWithContext,' (*)')"/>
+			      </xsl:if>
+			      <xsl:if test="not($condition and contains($possibleConditions,lower-case($condition)))">
+			      	<xsl:value-of select="$schematitleWithContext"/>
+			      </xsl:if>
             </xsl:when>
-            <xsl:when
-              test="normalize-space($schematitleWithContextIso)!=''"><xsl:value-of select="$schematitleWithContextIso"/>
+            <xsl:when test="normalize-space($schematitleWithContextIso)!=''">
+				  <xsl:variable name="condition" select="string(/root/gui/schemas/iso19139/labels/element[@name=$name and (@context=$fullContext or @context=$context or @context=$contextIsoType)]/condition)"/>
+			      <xsl:if test="$condition and contains($possibleConditions,lower-case($condition))">
+			      	<xsl:value-of select="concat($schematitleWithContextIso,' (*)')"/>
+			      </xsl:if>
+			      <xsl:if test="not($condition and contains($possibleConditions,lower-case($condition)))">
+			      	<xsl:value-of select="$schematitleWithContextIso"/>
+			      </xsl:if>
             </xsl:when>
-            <xsl:when
-              test="normalize-space($schematitle)!=''"><xsl:value-of select="$schematitle"/>
+            <xsl:when test="normalize-space($schematitle)!=''">
+				  <xsl:variable name="condition" select="/root/gui/schemas/*[name(.)=$schema]/labels/element[@name=$name and not(@context)]/condition/text()"/>
+			      <xsl:if test="$condition and contains($possibleConditions,lower-case($condition))">
+			      	<xsl:value-of select="concat($schematitle,' (*)')"/>
+			      </xsl:if>
+			      <xsl:if test="not($condition and contains($possibleConditions,lower-case($condition)))">
+			      	<xsl:value-of select="$schematitle"/>
+			      </xsl:if>
             </xsl:when>
             <xsl:otherwise>
               <xsl:value-of
                 select="/root/gui/schemas/iso19139/labels/element[@name=$name and not(@context)]/label/string()"/>
             </xsl:otherwise>
           </xsl:choose>
-        </xsl:when>
-
+	        </xsl:when>
+	
         <!-- otherwise just get the title out of the approriate schema help file -->
 
         <xsl:otherwise>

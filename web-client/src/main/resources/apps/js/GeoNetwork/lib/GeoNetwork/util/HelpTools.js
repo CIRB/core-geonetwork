@@ -37,7 +37,21 @@ GeoNetwork.util.HelpTools = {
             name: 'id',
             mapping: '@id'
         },{
-            name: 'label'
+            name: 'label'/*,
+            convert: function (v, record) {
+            	var conditions = record.getElementsByTagName('condition');
+            	if (conditions!=null && conditions[0].firstChild) {
+            		var condition = conditions[0].firstChild.nodeValue;
+                	if (!Ext.isEmpty(condition)) {
+                		condition = condition.toLowerCase();
+                		if (condition=='mandatory'|| condition=='obligatoire' || condition=='verplicht') {
+                        	return v + " (*)"; 
+                		}
+                	}
+            	}
+                return v;
+            }
+*/
         },{
             name: 'description'
         },{
@@ -62,6 +76,8 @@ GeoNetwork.util.HelpTools = {
             }
         },{
             name: 'example'
+        },{
+            name: 'condition'
         },{
             name: 'helper',
             convert: function (v, record){
@@ -96,7 +112,15 @@ GeoNetwork.util.HelpTools = {
         /** api: property[Templates.COMPLETE] 
          *  Display all field information (label, description, help, example, tag name and helper).
          */
-        COMPLETE: ['<div class="help"><span class="title">{label}</span>',
+        COMPLETE: ['<div class="help"><span class="title"',
+                   '<tpl if="condition.toLowerCase()==\'obligatoire\' || condition.toLowerCase()==\'mandatory\' || condition.toLowerCase()==\'verplicht\'">',
+                     ' style="color:red"',
+                   '</tpl>',
+                   '>{label}',
+                   '<tpl if="condition.toLowerCase()==\'obligatoire\' || condition.toLowerCase()==\'mandatory\' || condition.toLowerCase()==\'verplicht\'">',
+                     ' ({condition})',
+                   '</tpl>',
+                   '</span>',
                      '<div>{description}</div>',
                      '<tpl for="help">',
                        '<div>{.}</div>',
@@ -125,14 +149,13 @@ GeoNetwork.util.HelpTools = {
      * 
      */
     get: function (helpId, schema, url, cb) {
-        var info = helpId.split('|'), 
-             requestBody = '<request><element schema="' + schema + 
+        var info = helpId.split('|'); 
+        schema = !Ext.isEmpty(schema) ? schema : (info[0].split('.')[1] || 'iso19139'); // Fallback to iso19139 if schema undefined
+        var requestBody = '<request><element schema="' + schema + 
                                 '" name="' + info[1] + 
                                 '" context="' + info[2] + 
                                 '" fullContext="' + info[3] + 
                                 '" isoType="' + info[4] + '" /></request>';
-        schema = schema || info[0].split('.')[1] || 'iso19139'; // Fallback to iso19139 if schema undefined
-
         OpenLayers.Request.POST({
             url: url,
             data: requestBody,

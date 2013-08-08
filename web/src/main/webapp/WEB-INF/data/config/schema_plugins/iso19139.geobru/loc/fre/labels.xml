@@ -251,6 +251,7 @@
 		<description>Organisation(s) responsable(s): Nom de l'organisme responsable (Annexe 9.1)</description>
 		<help>Nom de l'organisation responsable, s'il s'agit d'une personne isolée ou nom de l'organisation au sein de laquelle cette personne est employée. Ces informations sont du type PT_FreeText et sont gérées dans la classe du même nom.</help>
 		<condition>Obligatoire</condition>
+<!--
         <helper>
             <option value="AATL / BROH">AATL / BROH</option>    
             <option value="ADT / ATO">ADT / ATO</option>    
@@ -260,6 +261,7 @@
             <option value="IBSA / BISA">IBSA / BISA</option>    
             <option value="STIB / MIVB">STIB / MIVB</option>    
         </helper>
+-->
 	</element>
 	<element name="gmd:electronicMailAddress" context="gmd:pointOfContact" id="386.0">
 		<label>E-mail</label>
@@ -329,6 +331,7 @@
 		<description>Métadonnées concernant les métadonnées: Nom de l'organisme responsable (Annexe 10.2)</description>
 		<help>Nom de l'organisation responsable, s'il s'agit d'une personne isolée ou nom de l'organisation au sein de laquelle cette personne est employée. Ces informations sont du type PT_FreeText et sont gérées dans la classe du même nom.</help>
 		<condition>Obligatoire</condition>
+<!--
         <helper>
             <option value="AATL / BROH">AATL / BROH</option>    
             <option value="ADT / ATO">ADT / ATO</option>    
@@ -338,6 +341,7 @@
             <option value="IBSA / BISA">IBSA / BISA</option>    
             <option value="STIB / MIVB">STIB / MIVB</option>    
         </helper>
+-->
 	</element>
 	<element name="gmd:electronicMailAddress" context="gmd:contact" id="386.0">
 		<label>E-mail</label>
@@ -2396,6 +2400,7 @@
 		<description>Nom de l'organisation responsable</description>
 		<help>Nom de l'organisation responsable, s'il s'agit d'une personne isolée ou nom de l'organisation au sein de laquelle cette personne est employée. Ces informations sont du type PT_FreeText et sont gérées dans la classe du même nom.</help>
 		<condition>Condition</condition>
+<!--
         <helper>
             <option value="AATL / BROH">AATL / BROH</option>    
             <option value="ADT / ATO">ADT / ATO</option>    
@@ -2405,6 +2410,7 @@
             <option value="IBSA / BISA">IBSA / BISA</option>    
             <option value="STIB / MIVB">STIB / MIVB</option>    
         </helper>
+-->
 	</element>
 	<element name="gmd:orientationParameterAvailability" id="172.0">
 		<label>Disponibilité des paramètres d'orientation</label>
