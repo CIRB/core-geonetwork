@@ -8,6 +8,7 @@ import java.util.Map;
 import jeeves.resources.dbms.Dbms;
 
 import org.fao.geonet.kernel.setting.SettingManager;
+import org.fao.geonet.DatabaseMigrationTask;
 import org.jdom.Element;
 
 public class UpdateHarvesterIdsTask implements DatabaseMigrationTask {

@@ -166,6 +166,7 @@
 			<xsl:attribute name="codeList">
 				<xsl:value-of select="concat('http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#',local-name(.))"/>
 			</xsl:attribute>
+			<xsl:value-of select="@codeListValue"/>
 		</xsl:copy>
 	</xsl:template>
 
@@ -177,6 +178,7 @@
 			<xsl:attribute name="codeList">
 				<xsl:value-of select="concat('http://www.isotc211.org/2005/iso19119/resources/Codelist/gmxCodelists.xml#',local-name(.))"/>
 			</xsl:attribute>
+			<xsl:value-of select="@codeListValue"/>
 		</xsl:copy>
 	</xsl:template>
 

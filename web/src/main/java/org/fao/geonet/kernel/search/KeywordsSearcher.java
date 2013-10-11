@@ -127,6 +127,76 @@ public class KeywordsSearcher {
     /**
      * TODO javadoc.
      *
+     * @param id id
+     * @param sThesaurusName thesaurus name
+     * @param lang language
+     * @return keywordbean List
+     * @throws Exception hmm
+     */
+//SELECT prefLab, note, id, lowc, uppc, lang(note)  FROM {id} rdf:type {skos:Concept};  skos:prefLabel {prefLab};  [skos:scopeNote {note} WHERE lang(note) LIKE \"nl\" OR lang(note) LIKE \"fr\" OR lang(note) LIKE \"en\"];  [gml:BoundedBy {} gml:lowerCorner {lowc}];  [gml:BoundedBy {} gml:upperCorner {uppc}]  WHERE lang(prefLab) IN (\"nl\",\"fr\",\"en\") AND id LIKE \""+id+"\" IGNORE CASE USING NAMESPACE skos=<http://www.w3.org/2004/02/skos/core#>, gml=<http://www.opengis.net/gml#> 
+	public List<KeywordBean> searchMultiLingualById(String id, String sThesaurusName, String lang) throws Exception {
+        //System.out.println("KeywordsSearcher searchById");
+/*
+		_query = "SELECT prefLab, note, id, lowc, uppc, lang(note) "
+			+ " FROM {id} rdf:type {skos:Concept}; "
+			+ " skos:prefLabel {prefLab};"
+			+ " [skos:scopeNote {note} WHERE lang(note) LIKE \"nl\" OR lang(note) LIKE \"fr\" OR lang(note) LIKE \"en\"]; "
+			+ " [gml:BoundedBy {} gml:lowerCorner {lowc}]; "
+			+ " [gml:BoundedBy {} gml:upperCorner {uppc}] "
+			+ " WHERE (lang(prefLab) LIKE \"nl\" OR lang(prefLab) LIKE \"fr\" OR lang(prefLab) LIKE \"en\")"
+			+ " AND id LIKE \""+id+"\" IGNORE CASE"
+			+ " USING NAMESPACE skos=<http://www.w3.org/2004/02/skos/core#>, gml=<http://www.opengis.net/gml#> ";
+*/
+		_query = "SELECT prefLab, id, lang(prefLab) "
+				+ " FROM {id} rdf:type {skos:Concept}; "
+				+ " [skos:prefLabel {prefLab} WHERE lang(prefLab) LIKE \"nl\" OR lang(prefLab) LIKE \"fr\" OR lang(prefLab) LIKE \"en\"]"
+//				+ " [skos:scopeNote {note} WHERE lang(note) LIKE \"nl\" OR lang(note) LIKE \"fr\" OR lang(note) LIKE \"en\"]; "
+//				+ " [gml:BoundedBy {} gml:lowerCorner {lowc}]; "
+//				+ " [gml:BoundedBy {} gml:upperCorner {uppc}] "
+				+ " WHERE (lang(prefLab) LIKE \"nl\" OR lang(prefLab) LIKE \"fr\" OR lang(prefLab) LIKE \"en\")"
+				+ " AND id LIKE \""+id+"\" IGNORE CASE"
+				+ " USING NAMESPACE skos=<http://www.w3.org/2004/02/skos/core#>, gml=<http://www.opengis.net/gml#> ";
+			Thesaurus thesaurus = _thesaurusManager.getThesaurusByName(sThesaurusName);
+
+			// Perform request
+			QueryResultsTable resultsTable = thesaurus.performRequest(_query);
+			int rowCount = resultsTable.getRowCount();
+			int idKeyword = 0;
+
+        	List<KeywordBean> keywordBeanList = new ArrayList<KeywordBean>();
+			if (rowCount == 0){
+				return keywordBeanList;
+			}
+            else{
+            	for (idKeyword=0;idKeyword<rowCount;idKeyword++) {
+    				Value value = resultsTable.getValue(idKeyword, 0);
+    				String sValue = "";
+    				if (value != null) {
+    					sValue = value.toString();
+    				}
+
+//    				 uri (= id in RDF file != id in list)
+    				Value uri = resultsTable.getValue(idKeyword, 1);
+    				String sUri = "";
+    				if (uri != null) {
+    					sUri = uri.toString();
+    				}
+
+	   				Value language = resultsTable.getValue(idKeyword, 2);
+	   				String sLanguage = "";
+	   				if (language != null) {
+	   					sLanguage = language.toString().toLowerCase();
+	   				}
+    				keywordBeanList.add(new KeywordBean(idKeyword, sValue, "", sUri, "", "", "", "", sThesaurusName, false, sLanguage, thesaurus.getTitle(), thesaurus.getDate(), thesaurus.getVersion(), thesaurus.getDownloadUrl(), thesaurus.getKeywordUrl()));
+            	}
+				return keywordBeanList;
+			}
+
+	}
+
+	/**
+     * TODO javadoc.
+     *
      * @param srvContext servicecontext
      * @param params params
      * @throws Exception hmm

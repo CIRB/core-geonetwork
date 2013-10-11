@@ -75,38 +75,53 @@ public class GetKeywordById implements Service {
 		ThesaurusManager thesaurusMan = gc.getThesaurusManager();
 		
 		searcher = new KeywordsSearcher(thesaurusMan);
+		List<KeywordBean> multiLingualkbList = null;
+		List<KeywordBean> kbList = null;
 		KeywordBean kb = null;
 		if (!multiple) {
-			kb = searcher.searchById(uri, sThesaurusName, langForThesaurus);
-			if (kb == null) {
-                switch (format) {
-        		    case iso: new Element ("null");
-        		    case raw: new Element("descKeys");
-    		    }
-			} else {
-                switch (format) {
-        		    case iso: return kb.getIso19139();
-        		    case raw: return KeywordsSearcher.toRawElement(new Element("descKeys"), kb);
-    		    }
-	        }
+            switch (format) {
+            	case iso: 
+            		multiLingualkbList = searcher.searchMultiLingualById(uri, sThesaurusName, langForThesaurus);
+            		if (multiLingualkbList.size()==0) {
+            			return new Element ("null");
+            		} else {
+            			return KeywordBean.getMultiLingualIso19139Elt(multiLingualkbList, langForThesaurus);
+            		}
+    		    case raw:
+    				kb = searcher.searchById(uri, sThesaurusName, langForThesaurus);
+    				if (kb == null) {
+    		    		return new Element("descKeys");
+    		    	} else {
+    		    		return KeywordsSearcher.toRawElement(new Element("descKeys"), kb);
+    		    	}
+			}
 		} else {
 			String[] url = uri.split(",");
-			List<KeywordBean> kbList = new ArrayList<KeywordBean>();
-			for (int i = 0; i < url.length; i++) {
-				String currentUri = url[i];
-				kb = searcher.searchById(currentUri, sThesaurusName, langForThesaurus);
-				if (kb == null) {
-					return new Element ("null");
-				} else {
-					kbList.add(kb);
-					kb = null;
-				}
-			}
+			kbList = new ArrayList<KeywordBean>();
 			switch (format) {
 			case iso:
-			    Element complexeKeywordElt = KeywordBean.getComplexIso19139Elt(kbList);
+				for (int i = 0; i < url.length; i++) {
+					String currentUri = url[i];
+					multiLingualkbList = searcher.searchMultiLingualById(currentUri, sThesaurusName, langForThesaurus);
+					if (multiLingualkbList.size() == 0) {
+						return new Element ("null");
+					} else {
+						kbList.addAll(multiLingualkbList);
+					}
+				}
+			    Element complexeKeywordElt = KeywordBean.getComplexIso19139Elt(kbList, langForThesaurus);
 			    return (Element) complexeKeywordElt.detach();
 			case raw:
+				for (int i = 0; i < url.length; i++) {
+					String currentUri = url[i];
+					kb = searcher.searchById(currentUri, sThesaurusName, langForThesaurus);
+					if (kb == null) {
+						return new Element ("null");
+					} else {
+						kbList.add(kb);
+						kb = null;
+					}
+				}
 			    Element root = new Element("descKeys");
 			    for (KeywordBean keywordBean : kbList) {
                     KeywordsSearcher.toRawElement(root, keywordBean);

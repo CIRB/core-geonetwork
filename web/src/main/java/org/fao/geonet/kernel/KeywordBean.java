@@ -22,6 +22,8 @@
 
 package org.fao.geonet.kernel;
 
+import org.fao.geonet.constants.Geonet;
+import org.fao.geonet.languages.IsoLanguagesMapper;
 import org.jdom.Content;
 import org.jdom.Element;
 import org.jdom.Namespace;
@@ -30,9 +32,10 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import jeeves.utils.Log;
+
 import org.apache.commons.httpclient.util.URIUtil;
 import org.apache.commons.httpclient.URIException;
-
 /**
  * TODO javadoc.
  *
@@ -49,7 +52,7 @@ public class KeywordBean {
 	private String coordNorth;	
 	private String thesaurus;	
 	private boolean selected;
-  private String thesaurusTitle;
+	private String thesaurusTitle;
 	private String thesaurusDate;
 	private String thesaurusVersion;
 	private String downloadUrl;
@@ -59,6 +62,7 @@ public class KeywordBean {
 	private static final Namespace NS_GCO = Namespace.getNamespace("gco", "http://www.isotc211.org/2005/gco");
 	private static final Namespace NS_GMX = Namespace.getNamespace("gmx", "http://www.isotc211.org/2005/gmx");
 	private static final Namespace NS_XLINK = Namespace.getNamespace("xlink", "http://www.w3.org/1999/xlink");
+	private static final Namespace NS_XSI = Namespace.getNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
 	
 	/**
      * TODO javadoc.
@@ -340,15 +344,151 @@ public class KeywordBean {
 	}
 
 	/**
+	 * Transforms a translated KeywordBean object into its iso19139 representation.
+	 *  
+	 *  <pre>
+	 *  <gmd:MD_Keywords>
+	 *  	<gmd:keyword xsi:type="gmd:PT_FreeText_PropertyType">
+				<gco:CharacterString>Keyword 1</gco:CharacterString>
+				<gmd:PT_FreeText>
+					<gmd:textGroup>
+						<gmd:LocalisedCharacterString locale="#ENG">Keyword 1 ENG</gmd:LocalisedCharacterString>
+					</gmd:textGroup>
+					<gmd:textGroup>
+						<gmd:LocalisedCharacterString locale="#DUT">Keyword 1 NL</gmd:LocalisedCharacterString>
+					</gmd:textGroup>
+				</gmd:PT_FreeText>
+	 *  	</gmd:keyword>
+	 * 		<gmd:keyword xsi:type="gmd:PT_FreeText_PropertyType">
+				<gco:CharacterString>Keyword 2</gco:CharacterString>
+				<gmd:PT_FreeText>
+					<gmd:textGroup>
+						<gmd:LocalisedCharacterString locale="#ENG">Keyword 2 ENG</gmd:LocalisedCharacterString>
+					</gmd:textGroup>
+					<gmd:textGroup>
+						<gmd:LocalisedCharacterString locale="#DUT">Keyword 2 NL</gmd:LocalisedCharacterString>
+					</gmd:textGroup>
+				</gmd:PT_FreeText>
+	 *  	</gmd:keyword>
+	 *  	<gmd:type>
+	 *  		<gmd:MD_KeywordTypeCode codeList="http://www.isotc211.org/2005/resources/codeList.xml#MD_KeywordTypeCode" codeListValue="TYPE"/>
+	 *  	</gmd:type>
+	 *  	<gmd:thesaurusName>
+	 *  		<gmd:CI_Citation id="geonetwork.thesaurus.register.theme.bc44a748-f1a1-4775-9395-a4a6d8bb8df6">
+	 *  			<gmd:title>
+	 *  				<gco:CharacterString>THESAURUS NAME</gco:CharacterString>
+	 *  			</gmd:title>
+	 *				<gmd:date gco:nilReason="missing"/>
+	 *        <gmd:edition>
+	 *          <gco:CharacterString>skos:ConceptScheme@rdf:about</gco:CharacterString>
+	 *        </gmd:edition>
+	 *        <gmd:editionDate>
+	 *          <gco:Date>skos:ConceptScheme/dct:issued|skos:ConceptScheme/dct:modified</gco:CharacterString>
+	 *        </gmd:edition>
+	 *				<gmd:identifier>
+	 *          <gmd:MD_Identifier>
+	 *						<gmd:code>
+	 *							<gmx:Anchor xlink:href="http://localhost:8080/geonetwork/srv/eng/metadata.show?uuid=bc44a748-f1a1-4775-9395-a4a6d8bb8df6">register.theme.bc44a748-f1a1-4775-9395-a4a6d8bb8df6</gmx:Anchor>
+	 *						</gmd:code>
+	 *          </gmd:MD_Identifier>
+	 *				</gmd:identifier>
+	 *  		</gmd:CI_Citation>
+	 *  	</gmd:thesaurusName>
+	 *  </gmd:MD_Keywords>
+	 *  </pre>
+	 *  
+	 * @param kbList
+	 * @return a complex iso19139 representation of the keyword
+	 */
+	public static Element getMultiLingualIso19139Elt(List<KeywordBean> kbList, String lang) {
+		Element root = new Element("MD_Keywords", NS_GMD);
+		
+		Element cs = new Element("CharacterString", NS_GCO);
+		List<Element> keywords = new ArrayList<Element>();
+		
+		Element type = null;
+		Element thesaurusName = null;
+		List<Element> tgList = new ArrayList<Element>();
+		Element keyword = new Element("keyword", NS_GMD);
+		keyword.setAttribute("type","gmd:PT_FreeText_PropertyType",NS_XSI);
+		for (KeywordBean kb : kbList) {
+/*
+			if (kb.getCode() != null && kb.getCode().length() != 0) {
+				try {
+					an.setText(kb.getValue());
+					an.setAttribute("href", URIUtil.encodeQuery(kb.keywordUrl+kb.getCode()), NS_XLINK);
+					keyword.addContent((Content) an.clone());
+				} catch (URIException e) {
+					cs.setText(kb.getValue());
+					keyword.addContent((Content) cs.clone());
+				}
+			} else {
+				cs.setText(kb.getValue());
+				keyword.addContent((Content) cs.clone());
+			}
+*/
+			String pound3LangId = "";
+	        try {
+	        	pound3LangId = IsoLanguagesMapper.getInstance().iso639_1_to_iso639_2(kb.getLang());
+	        } catch (Exception ex) {
+	            Log.error(Geonet.GEONETWORK, "Failed to get iso 2 language code for " + kb.getLang() + " caused by " + ex.getMessage());
+	        }
+			if (kb.getLang().equals(lang)) {
+				cs.setText(kb.getValue());
+				if (type == null)
+					type = KeywordBean.createKeywordTypeElt(kb);
+				if (thesaurusName == null)
+					thesaurusName = KeywordBean.createThesaurusNameElt(kb);
+			}
+			Element tg = new Element("textGroup", NS_GMD);
+			Element lc = new Element("LocalisedCharacterString", NS_GMD);
+			lc.setAttribute("locale","#" + pound3LangId.toUpperCase());
+			lc.setText(kb.getValue());
+			tg.addContent(lc);
+			tgList.add(tg);
+		}
+		keyword.addContent((Content) cs.clone());
+		Element pt = new Element("PT_FreeText", NS_GMD);
+		pt.addContent(tgList);
+		keyword.addContent(pt);
+		keywords.add((Element) keyword.detach());
+		// Add elements to the root MD_Keywords element.
+		root.addContent(keywords);
+		if (type!=null) {
+			root.addContent(type);
+		}
+		if (thesaurusName!=null) {
+			root.addContent(thesaurusName);
+		}
+		return root;
+	}
+
+	/**
 	 * Transforms a list of KeywordBean object into its iso19139 representation.
 	 *  
 	 *  <pre>
 	 *  <gmd:MD_Keywords>
-	 *  	<gmd:keyword>
-	 *  		<gmx:Anchor xlink:href="link_to_keyword_generator">Keyword 1</gmx:Anchor>
+	 *  	<gmd:keyword xsi:type="gmd:PT_FreeText_PropertyType">
+				<gco:CharacterString>Keyword 1</gco:CharacterString>
+				<gmd:PT_FreeText>
+					<gmd:textGroup>
+						<gmd:LocalisedCharacterString locale="#ENG">Keyword 1 ENG</gmd:LocalisedCharacterString>
+					</gmd:textGroup>
+					<gmd:textGroup>
+						<gmd:LocalisedCharacterString locale="#DUT">Keyword 1 NL</gmd:LocalisedCharacterString>
+					</gmd:textGroup>
+				</gmd:PT_FreeText>
 	 *  	</gmd:keyword>
-	 * 		<gmd:keyword>
-	 *  		<gmx:Anchor xlink:href="link_to_keyword_generator">Keyword 2</gmx:Anchor>
+	 * 		<gmd:keyword xsi:type="gmd:PT_FreeText_PropertyType">
+				<gco:CharacterString>Keyword 2</gco:CharacterString>
+				<gmd:PT_FreeText>
+					<gmd:textGroup>
+						<gmd:LocalisedCharacterString locale="#ENG">Keyword 2 ENG</gmd:LocalisedCharacterString>
+					</gmd:textGroup>
+					<gmd:textGroup>
+						<gmd:LocalisedCharacterString locale="#DUT">Keyword 2 NL</gmd:LocalisedCharacterString>
+					</gmd:textGroup>
+				</gmd:PT_FreeText>
 	 *  	</gmd:keyword>
 	 *  	<gmd:type>
 	 *  		<gmd:MD_KeywordTypeCode codeList="http://www.isotc211.org/2005/resources/codeList.xml#MD_KeywordTypeCode" codeListValue="TYPE"/>
@@ -379,22 +519,61 @@ public class KeywordBean {
 	 *       
 	 *  
 	 * @param kbList
+	 * @param lang
 	 * @return a complex iso19139 representation of the keyword
 	 */
-	public static Element getComplexIso19139Elt(List<KeywordBean> kbList) {
+	public static Element getComplexIso19139Elt(List<KeywordBean> kbList, String lang) {
 		Element root = new Element("MD_Keywords", NS_GMD);
 		
 		Element cs = new Element("CharacterString", NS_GCO);
-		Element an = new Element("Anchor", NS_GMX);
+//		Element an = new Element("Anchor", NS_GMX);
 		
 		List<Element> keywords = new ArrayList<Element>();
 		
-		String thName = "";
+//		String thName = "";
 		Element type = null;
 		Element thesaurusName = null;
-		
+		List<Element> tgList = new ArrayList<Element>();
+		String currentCode = "";
+		int addedKeywords = 0;
 		for (KeywordBean kb : kbList) {
-			Element keyword = new Element("keyword", NS_GMD);
+			if (kb.getCode() != null && kb.getCode().length() != 0) {
+				if (!currentCode.equals(kb.getCode())) {
+					if (addedKeywords>0) {
+						Element keyword = new Element("keyword", NS_GMD);
+						keyword.setAttribute("type","gmd:PT_FreeText_PropertyType",NS_XSI);
+						keyword.addContent((Content) cs.clone());
+						Element pt = new Element("PT_FreeText", NS_GMD);
+						pt.addContent(tgList);
+						keyword.addContent(pt);
+						keywords.add((Element) keyword.detach());
+						addedKeywords = 0;
+						tgList = new ArrayList<Element>();
+					}
+				}
+				String pound3LangId = "";
+		        try {
+		        	pound3LangId = IsoLanguagesMapper.getInstance().iso639_1_to_iso639_2(kb.getLang());
+		        } catch (Exception ex) {
+		            Log.error(Geonet.GEONETWORK, "Failed to get iso 2 language code for " + kb.getLang() + " caused by " + ex.getMessage());
+		        }
+				if (kb.getLang().equals(lang)) {
+					cs.setText(kb.getValue());
+					if (type == null)
+						type = KeywordBean.createKeywordTypeElt(kb);
+					if (thesaurusName == null)
+						thesaurusName = KeywordBean.createThesaurusNameElt(kb);
+				}
+				Element tg = new Element("textGroup", NS_GMD);
+				Element lc = new Element("LocalisedCharacterString", NS_GMD);
+				lc.setAttribute("locale","#" + pound3LangId.toUpperCase());
+				lc.setText(kb.getValue());
+				tg.addContent(lc);
+				tgList.add(tg);
+				currentCode = kb.getCode();
+				addedKeywords++;
+			}
+/*
 			if (kb.getCode() != null && kb.getCode().length() != 0) {
 				try {
 					an.setText(kb.getValue());
@@ -409,17 +588,31 @@ public class KeywordBean {
 				keyword.addContent((Content) cs.clone());
 			}
 			keywords.add((Element) keyword.detach());
-			thName = kb.getThesaurus();
+//			thName = kb.getThesaurus();
 			if (type == null)
 				type = KeywordBean.createKeywordTypeElt(kb);
 			if (thesaurusName == null)
 				thesaurusName = KeywordBean.createThesaurusNameElt(kb);
+*/
 		}
 		
+		if (addedKeywords>0) {
+			Element keyword = new Element("keyword", NS_GMD);
+			keyword.setAttribute("type","gmd:PT_FreeText_PropertyType",NS_XSI);
+			keyword.addContent((Content) cs.clone());
+			Element pt = new Element("PT_FreeText", NS_GMD);
+			pt.addContent(tgList);
+			keyword.addContent(pt);
+			keywords.add((Element) keyword.detach());
+		}
 		// Add elements to the root MD_Keywords element.
 		root.addContent(keywords);
-		root.addContent(type);
-		root.addContent(thesaurusName);
+		if (type!=null) {
+			root.addContent(type);
+		}
+		if (thesaurusName!=null) {
+			root.addContent(thesaurusName);
+		}
 		
 		return root;
 	}

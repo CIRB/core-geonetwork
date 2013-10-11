@@ -761,11 +761,11 @@ public class SearchManager {
 
             // add more fields
             for( Element moreField : moreFields ) {
-            	if (isTemplate.equals("n") || !moreField.getName().equals("orgName")) {
+            	if (isTemplate.equals("n")/* || !moreField.getName().equals("orgName")*/) {
                     Log.debug(Geonet.INDEX_ENGINE, "Indexing field with name " + moreField.getName());
             		doc.addContent((Content) moreField.clone());
             	} else {
-                    Log.debug(Geonet.INDEX_ENGINE, "Field orgName not indexed for template with id " + id);
+                    Log.debug(Geonet.INDEX_ENGINE, "Field not indexed for template with id " + id);
             	}
             }
 
@@ -1076,6 +1076,7 @@ public class SearchManager {
     Element getIndexFields(String schemaDir, Element xml) throws Exception {
         Element documents = new Element("Documents");
         try {
+//        	System.out.println("===>Indexing started");
             String defaultStyleSheet = new File(schemaDir, "index-fields.xsl").getAbsolutePath();
             String otherLocalesStyleSheet = new File(schemaDir, "language-index-fields.xsl").getAbsolutePath();
             Map<String, String> params = new HashMap<String, String>();
@@ -1083,6 +1084,7 @@ public class SearchManager {
             params.put("thesauriDir", _thesauriDir);
             Element defaultLang = Xml.transform(xml, defaultStyleSheet, params);
             if (new File(otherLocalesStyleSheet).exists()) {
+//            	System.out.println("===>Indexing other language fields started");
                 @SuppressWarnings(value = "unchecked")
                 List<Element> otherLanguages = Xml.transform(xml, otherLocalesStyleSheet, params).removeContent();
                 mergeDefaultLang(defaultLang, otherLanguages);
@@ -1124,7 +1126,9 @@ public class SearchManager {
 
         Element toMerge = null;
 
+//    	System.out.println("===>Other languages count:" + otherLanguages.size());
         for( Element element : otherLanguages ) {
+//        	System.out.println("===>" + Xml.getString(element));
             String clangCode;
             if (element.getAttribute("locale") == null) {
                 clangCode = "";

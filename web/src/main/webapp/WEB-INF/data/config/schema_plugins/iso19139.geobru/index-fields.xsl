@@ -7,6 +7,7 @@
 										xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 										xmlns:gmx="http://www.isotc211.org/2005/gmx"
 										xmlns:java="java:org.fao.geonet.util.XslUtil"
+										xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
                                         xmlns:skos="http://www.w3.org/2004/02/skos/core#">
 
 	<xsl:include href="convert/functions.xsl"/>
@@ -236,7 +237,7 @@
 	
 			<xsl:for-each select="gmd:topicCategory/gmd:MD_TopicCategoryCode">
 				<Field name="topicCat" string="{string(.)}" store="true" index="true"/>
-				<Field name="keyword" string="{string(.)}" store="true" index="true"/>
+<!-- 				<Field name="keyword" string="{string(.)}" store="true" index="true"/> -->
 			</xsl:for-each>
 
 			<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->		
@@ -587,12 +588,10 @@
 	<xsl:template name="translateInspireThemeToEnglish">
 		<xsl:param name="keyword"/>
 		<xsl:param name="inspireThemes"/>
-		<xsl:for-each select="$inspireThemes/skos:prefLabel">
-			<!-- if this skos:Concept contains a kos:prefLabel with text value equal to keyword -->
-			<xsl:if test="text() = $keyword">
-				<xsl:value-of select="../skos:prefLabel[@xml:lang='en']/text()"/>
-			</xsl:if>
-		</xsl:for-each>
+		<xsl:variable name="prefLabel" select="$inspireThemes[skos:prefLabel/text()=$keyword]/skos:prefLabel[@xml:lang='en']/text()"/>
+		<xsl:if test="$prefLabel">
+			<xsl:value-of select="$prefLabel"/>
+		</xsl:if>
 	</xsl:template>	
 
 	<xsl:template name="determineInspireAnnex">

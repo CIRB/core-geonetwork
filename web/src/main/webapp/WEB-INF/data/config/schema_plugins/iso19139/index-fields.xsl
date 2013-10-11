@@ -236,7 +236,7 @@
 	
 			<xsl:for-each select="gmd:topicCategory/gmd:MD_TopicCategoryCode">
 				<Field name="topicCat" string="{string(.)}" store="true" index="true"/>
-				<Field name="keyword" string="{string(.)}" store="true" index="true"/>
+<!-- 				<Field name="keyword" string="{string(.)}" store="true" index="true"/>-->
 			</xsl:for-each>
 
 			<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->		
@@ -562,12 +562,17 @@
 	<xsl:template name="translateInspireThemeToEnglish">
 		<xsl:param name="keyword"/>
 		<xsl:param name="inspireThemes"/>
+		<xsl:variable name="prefLabel" select="$inspireThemes[skos:prefLabel/text()=$keyword]/skos:prefLabel[@xml:lang='en']/text()"/>
+		<xsl:if test="$prefLabel">
+			<xsl:value-of select="$prefLabel"/>
+		</xsl:if>
+<!-- 
 		<xsl:for-each select="$inspireThemes/skos:prefLabel">
-			<!-- if this skos:Concept contains a kos:prefLabel with text value equal to keyword -->
 			<xsl:if test="text() = $keyword">
 				<xsl:value-of select="../skos:prefLabel[@xml:lang='en']/text()"/>
 			</xsl:if>
 		</xsl:for-each>
+-->		
 	</xsl:template>	
 
 	<xsl:template name="determineInspireAnnex">

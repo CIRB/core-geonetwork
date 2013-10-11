@@ -48,8 +48,13 @@ GeoNetwork.data.OpenSearchSuggestionStore = function(c){
                 method: "GET"
             }) : undefined),
         reader: new GeoNetwork.data.OpenSearchSuggestionReader(c, c.fields ||
-        ["value"] // TODO : add extra field according to OpenSearch suggestion (not supported by GeoNetwork yet)
-)
+        		["value"] // TODO : add extra field according to OpenSearch suggestion (not supported by GeoNetwork yet)
+        ),
+		sortInfo: {
+		    field: 'value',
+		    direction: 'ASC' // or 'DESC' (case sensitive for local sorting)
+		}
+
     }));
 };
 Ext.extend(GeoNetwork.data.OpenSearchSuggestionStore, Ext.data.Store);
