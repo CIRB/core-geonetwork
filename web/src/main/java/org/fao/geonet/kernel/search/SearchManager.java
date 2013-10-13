@@ -761,11 +761,11 @@ public class SearchManager {
 
             // add more fields
             for( Element moreField : moreFields ) {
-            	if (isTemplate.equals("n")/* || !moreField.getName().equals("orgName")*/) {
+            	if (isTemplate.equals("n") || !moreField.getName().equals("orgName")) {
                     Log.debug(Geonet.INDEX_ENGINE, "Indexing field with name " + moreField.getName());
             		doc.addContent((Content) moreField.clone());
             	} else {
-                    Log.debug(Geonet.INDEX_ENGINE, "Field not indexed for template with id " + id);
+                    Log.debug(Geonet.INDEX_ENGINE, "Field orgName not indexed for template with id " + id);
             	}
             }
 
