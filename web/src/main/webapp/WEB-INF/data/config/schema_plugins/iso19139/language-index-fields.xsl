@@ -280,10 +280,31 @@
 		</xsl:for-each>
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 		<!-- === Free text search === -->
-		<Field name="any" store="false" index="true">
-			<xsl:attribute name="string"><xsl:value-of select="normalize-space(//node()[@locale=$pound2LangId or @locale=$pound3LangId])"/><xsl:text> </xsl:text><xsl:for-each select="//@codeListValue"><xsl:value-of select="concat(., ' ')"/></xsl:for-each></xsl:attribute>
+		<Field name="any" store="false" index="true" token="true">
+			<xsl:attribute name="string">
+				<xsl:apply-templates select="gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Sitation/gmd:title" mode="allTextByLanguage">
+					<xsl:with-param name="isoLangId" select="$isoLangId"/>
+				</xsl:apply-templates>
+				<xsl:apply-templates select="gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract" mode="allTextByLanguage">
+					<xsl:with-param name="isoLangId" select="$isoLangId"/>
+				</xsl:apply-templates>
+				<xsl:apply-templates select="gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords/gmd:keyword" mode="allTextByLanguage">
+					<xsl:with-param name="isoLangId" select="$isoLangId"/>
+				</xsl:apply-templates>
+			</xsl:attribute>
 		</Field>
-		<xsl:apply-templates select="." mode="codeList"/>
+<!--
+		<Field name="any" store="false" index="true">
+			<xsl:attribute name="string">
+				<xsl:value-of select="normalize-space(//node()[@locale=$pound2LangId or @locale=$pound3LangId])"/>
+				<xsl:text> </xsl:text>
+				<xsl:for-each select="//@codeListValue">
+					<xsl:value-of select="concat(., ' ')"/>
+				</xsl:for-each>
+			</xsl:attribute>
+		</Field>
+ -->
+ 		<xsl:apply-templates select="." mode="codeList"/>
 	</xsl:template>
 	<!-- ========================================================================================= -->
 	<!-- codelist element, indexed, not stored nor tokenized -->
@@ -294,5 +315,32 @@
 	<!-- ========================================================================================= -->
 	<xsl:template match="*" mode="codeList">
 		<xsl:apply-templates select="*" mode="codeList"/>
+	</xsl:template>
+	<!-- ========================================================================================= -->
+	<!--allTextByLanguage -->
+	<xsl:template match="*" mode="allTextByLanguage">
+		<xsl:param name="isoLangId"/>
+        <xsl:variable name="pound2LangId" select="concat('#',upper-case(java:twoCharLangCode($isoLangId)))" />
+        <xsl:variable name="pound3LangId" select="concat('#',upper-case($isoLangId))" />
+<!-- 
+		<xsl:for-each select="@*">
+			<xsl:if test="name(.) != 'codeList' ">
+				<xsl:value-of select="concat(string(.),' ')"/>
+			</xsl:if>
+		</xsl:for-each>
+ -->
+ 		<xsl:variable name="stringValue"><xsl:value-of select="normalize-space(gmd:PT_FreeText/gmd:textGroup/gmd:LocalisedCharacterString[@locale=$pound2LangId or @locale=$pound3LangId])"/></xsl:variable>
+ 		<xsl:choose>
+			<xsl:when test="$stringValue">
+				<xsl:value-of select="concat(string($stringValue),' ')"/>
+			</xsl:when>
+			<xsl:otherwise>
+<!--
+				<xsl:apply-templates select="*" mode="allTextByLanguage">
+					<xsl:with-param name="isoLangId" select="$isoLangId"/>
+				</xsl:apply-templates>
+-->					
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 </xsl:stylesheet>

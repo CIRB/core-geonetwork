@@ -525,6 +525,14 @@
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->		
 		<!-- === Free text search === -->		
 
+		<Field name="any" store="false" index="true" token="true">
+			<xsl:attribute name="string">
+				<xsl:apply-templates select="gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Sitation/gmd:title" mode="allText"/>
+				<xsl:apply-templates select="gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract" mode="allText"/>
+				<xsl:apply-templates select="gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords/gmd:keyword" mode="allText"/>
+			</xsl:attribute>
+		</Field>
+<!--
 		<Field name="any" store="false" index="true">
 			<xsl:attribute name="string">
 				<xsl:value-of select="normalize-space(string(.))"/>
@@ -534,7 +542,7 @@
 				</xsl:for-each>
 			</xsl:attribute>
 		</Field>
-				
+-->
 		<!--<xsl:apply-templates select="." mode="codeList"/>-->
 		
 	</xsl:template>
@@ -636,5 +644,20 @@
 			</xsl:when>
 			<!-- inspire annex cannot be established: leave empty -->
 		</xsl:choose>
+	</xsl:template>
+	<!-- ========================================================================================= -->
+	<!--allText -->
+	<xsl:template match="*" mode="allText">
+<!-- 
+		<xsl:for-each select="@*">
+			<xsl:if test="name(.) != 'codeList' ">
+				<xsl:value-of select="concat(string(.),' ')"/>
+			</xsl:if>
+		</xsl:for-each>
+ -->
+ 		<xsl:variable name="stringValue" select="normalize-space(gco:CharacterString)"/>
+		<xsl:if test="$stringValue">
+			<xsl:value-of select="concat(string($stringValue),' ')"/>
+		</xsl:if>
 	</xsl:template>
 </xsl:stylesheet>

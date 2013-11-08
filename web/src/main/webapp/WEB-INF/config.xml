@@ -295,7 +295,7 @@
 			<name>main-db</name>
 			<provider>jeeves.resources.dbms.ApacheDBCPool</provider>
 			<config>
-				<user>geonetwork</user>
+				<user>geonetworkcirb</user>
 				<password>geonetwork28</password>
 				<!-- we use org.postgis.DriverWrapper in place of
 				org.postgresql.Driver to support both postgresql and postgis -->
@@ -311,7 +311,7 @@
 					jdbc:postgresql_postGIS://host:port/database
 					
 				-->
-				<url>jdbc:postgresql://localhost:5432/geonetwork</url>
+				<url>jdbc:postgresql://localhost:5432/geonetworkcirb</url>
 				<poolSize>10</poolSize>
 				<validationQuery>SELECT 1</validationQuery>
 			</config>

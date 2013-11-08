@@ -4,6 +4,8 @@
 	<def>
 		<hits>
 			<item name="keyword" plural="keywords" indexKey="keyword" order="freq" type="string" max="100"/>            			
+			<item name="title" plural="titles" indexKey="title" order="freq" type="string" max="100"/>			
+			<item name="abstract" plural="abstracts" indexKey="abstract" order="freq" type="string" max="100"/>			
 		</hits>
     <titles>
       <item name="title" plural="titles" indexKey="title" order="freq" type="string" max="100"/>

@@ -493,7 +493,7 @@ public class LuceneSearcher extends MetaSearcher {
 
 			// if 'restrict to' is set then don't add any other user/group info
 			if ((request.getChild(SearchParameter.GROUP) == null) ||
-                (!StringUtils.isEmpty(request.getChild(SearchParameter.GROUP).getText().trim()))) {
+                (StringUtils.isEmpty(request.getChild(SearchParameter.GROUP).getText().trim()))) {
 				for (String group : userGroups) {
 					request.addContent(new Element(SearchParameter.GROUP).addContent(group));
                 }
@@ -641,16 +641,15 @@ public class LuceneSearcher extends MetaSearcher {
 
         _sort = LuceneSearcher.makeSort(Collections.singletonList(Pair.read(sortBy, sortOrder)), _language, sortRequestedLanguageOnTop);
 		
-		_resultType = config.getValue(Geonet.SearchResult.RESULT_TYPE, Geonet.SearchResult.ResultType.HITS);
-		/* resultType is not specified in search params - it's in config?
-		Content child = request.getChild(Geonet.SearchResult.RESULT_TYPE);
-        if (child == null) {
-            _resultType = Geonet.SearchResult.ResultType.HITS;
+		Element resultTypeElement = request.getChild(Geonet.SearchResult.RESULT_TYPE);
+		String resultType = null;
+        if (resultTypeElement == null) {
+            resultType = Geonet.SearchResult.ResultType.HITS;
         }
         else {
-            _resultType = child.getValue();
+            resultType = resultTypeElement.getValue();
         }
-			*/
+		_resultType = config.getValue(Geonet.SearchResult.RESULT_TYPE, resultType);
 	}
 
     /**
@@ -1723,5 +1722,50 @@ public class LuceneSearcher extends MetaSearcher {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+	 * <p>
+	 * Gets suggestions for a search field.
+	 * </p>
+	 * 
+	 * @param maxHits max hits
+	 * @return current searcher result in "fast" mode
+	 * 
+	 * @throws Exception hmm
+	 */
+    public List<String> getSuggestions(String field, int maxHits) throws Exception {
+
+        FieldSelector uuidselector = new FieldSelector() {
+            public final FieldSelectorResult accept(String name) {
+                if (name.equals("_uuid")) return FieldSelectorResult.LOAD;
+                else return FieldSelectorResult.NO_LOAD;
+            }
+        };
+
+        List<String> response = new ArrayList<String>();
+		int numHits;
+		
+		boolean computeSummary = false;
+
+		Pair<TopDocs,Element> results = LuceneSearcher.doSearchAndMakeSummary(maxHits, 0, maxHits,
+                _maxSummaryKeys, _language, _resultType, _summaryConfig,
+                _reader, _query, _filter, _sort, false,
+                false, false, false
+        );
+		
+		TopDocs tdocs = results.one();
+		_elSummary = results.two();
+		_numHits = Integer.parseInt(_elSummary.getAttributeValue("count"));
+
+        if(Log.isDebugEnabled(Geonet.SEARCH_ENGINE))
+            Log.debug(Geonet.SEARCH_ENGINE, "Hits found : "+_numHits+"");
+		
+        for ( ScoreDoc sdoc : tdocs.scoreDocs ) {
+            Document doc = _reader.document(sdoc.doc, uuidselector);
+            String uuid = doc.get("_uuid");
+            if (uuid != null) response.add(uuid);
+        }
+        return response;
     }
 }

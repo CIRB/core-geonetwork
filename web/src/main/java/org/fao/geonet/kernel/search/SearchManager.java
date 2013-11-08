@@ -55,7 +55,6 @@ import jeeves.utils.Log;
 import jeeves.utils.Util;
 import jeeves.utils.Xml;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.builder.CompareToBuilder;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.KeywordAnalyzer;
@@ -68,7 +67,6 @@ import org.apache.lucene.document.FieldSelector;
 import org.apache.lucene.document.FieldSelectorResult;
 import org.apache.lucene.document.NumericField;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.index.TermEnum;
 import org.apache.lucene.search.Filter;
@@ -677,13 +675,15 @@ public class SearchManager {
 	public void index(String schemaDir, Element metadata, String id, List<Element> moreFields, String isTemplate,
  String title)
             throws Exception {
-        List<Pair<String, Document>> docs = buildIndexDocument(schemaDir, metadata, id, moreFields, isTemplate, title);
-        for (Pair<String, Document> document : docs) {
-            _indexWriter.addDocument(document.one(), document.two());
-            if (Log.isDebugEnabled(Geonet.INDEX_ENGINE))
-                Log.debug(Geonet.INDEX_ENGINE, "adding document in locale " + document.one());
-        }
-        _spatial.writer().index(schemaDir, id, metadata);
+		if (isTemplate.equals("n") || isTemplate.equals("y")) {
+	        List<Pair<String, Document>> docs = buildIndexDocument(schemaDir, metadata, id, moreFields, isTemplate, title);
+	        for (Pair<String, Document> document : docs) {
+	            _indexWriter.addDocument(document.one(), document.two());
+	            if (Log.isDebugEnabled(Geonet.INDEX_ENGINE))
+	                Log.debug(Geonet.INDEX_ENGINE, "adding document in locale " + document.one());
+	        }
+	        _spatial.writer().index(schemaDir, id, metadata);
+		}
     }
 
     /**
@@ -750,6 +750,7 @@ public class SearchManager {
                 Log.debug(Geonet.INDEX_ENGINE, "Indexing fields:\n" + Xml.getString(xmlDoc));
 		}
 
+		System.out.println("Metadata (isTemplate:" + isTemplate + ") with id " + id + " is indexed");
         @SuppressWarnings(value = "unchecked")
         List<Element> documentElements = xmlDoc.getContent();
         Collection<Field> multilingualSortFields = findMultilingualSortElements(documentElements);
@@ -876,8 +877,9 @@ public class SearchManager {
 	private void allText(Element metadata, StringBuilder sb) {
 		String text = metadata.getText().trim();
 		if (text.length() > 0) {
-			if (sb.length() > 0)
+			if (sb.length() > 0) {
 				sb.append(" ");
+			}
 			sb.append(text);
 		}
 		List children = metadata.getChildren();
@@ -1004,25 +1006,36 @@ public class SearchManager {
 	 * @throws Exception
 	 */
 	public List<TermFrequency> getTermsFequency(String fieldName, String searchValue, int maxNumberOfTerms,
-                                                int threshold) throws Exception {
+                                                int threshold/*, String language*/) throws Exception {
 		List<TermFrequency> termList = new ArrayList<TermFrequency>();
+//		IndexReader readerToUse = null;
 		GeonetworkMultiReader reader = getNewIndexReader().two();
-		TermEnum term = reader.terms(new Term(fieldName, ""));
-		int i = 0;
-		try {
-			if (term.term()!=null) {
-				// Extract terms containing search value.
-				do {
-					if (!term.term().field().equals(fieldName) || (++i > maxNumberOfTerms)) {
-						break;
-                    }
-					if (term.docFreq() >= threshold && term.term().text().contains(searchValue)) {
-						TermFrequency freq = new TermFrequency(term.term().text(), term.docFreq());
-						termList.add(freq);
-					} 
-				}
-                while (term.next());
+/*
+		IndexReader[] indexReaders = getNewIndexReader().two().getSequentialSubReaders();
+		for (IndexReader indexReader : indexReaders) {
+			if (reader.directory().toString().endsWith(language)) {
+				readerToUse = indexReader;
+				break;
 			}
+		}
+*/		try {
+//			if (readerToUse!=null) {
+				TermEnum term = reader/*ToUse*/.terms(new Term(fieldName, ""));
+				int i = 0;
+					if (term.term()!=null) {
+						// Extract terms containing search value.
+						do {
+							if (!term.term().field().equals(fieldName) || (++i > maxNumberOfTerms)) {
+								break;
+		                    }
+							if (term.docFreq() >= threshold && term.term().text().contains(searchValue)) {
+								TermFrequency freq = new TermFrequency(term.term().text(), term.docFreq());
+								termList.add(freq);
+							} 
+						}
+		                while (term.next());
+					}
+//			}
 		}
         finally {
 			releaseIndexReader(reader);
@@ -1054,7 +1067,7 @@ public class SearchManager {
 		public int compareTo(Object o) {
 			if (o instanceof TermFrequency) {
 				TermFrequency oFreq = (TermFrequency) o;
-				return new CompareToBuilder().append(frequency, oFreq.frequency).append(term, oFreq.term).toComparison();
+				return new CompareToBuilder().append(term, oFreq.term).append(frequency, oFreq.frequency).toComparison();
 			}
             else {
 				return 0;

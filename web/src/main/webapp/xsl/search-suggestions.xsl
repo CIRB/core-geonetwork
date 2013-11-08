@@ -13,6 +13,7 @@
     , 
     [<xsl:for-each
       select="/root/items/item">
+      <xsl:sort select="@term"/>
       <xsl:variable name="value">
         <xsl:call-template name="replaceString">
           <xsl:with-param name="expr"        select="@term"/>
