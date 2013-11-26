@@ -570,6 +570,7 @@ GeoNetwork.Lang.fr = {
 	'Advanced' : "Avancée",
 	'newWindow' : "nouvelle fenêtre",
 	'mdEditor' : "Editeur de métadonnées",
-	'List' : "Résultats"
+	'List' : "Résultats",
+	'noSearchResults': "Votre recherche n'a donné aucun résultat. Pour effectuer une nouvelle recherche, veuillez retourner sur l'onglet Recherche."
 };
 OpenLayers.Util.extend(OpenLayers.Lang.fr, GeoNetwork.Lang.fr);

@@ -147,6 +147,11 @@
     <skos:prefLabel xml:lang="fr">Caméra</skos:prefLabel>
     <skos:prefLabel xml:lang="nl">Camera</skos:prefLabel>
    </skos:Concept> 
+  <skos:Concept rdf:about="http://geobru.irisnet.be/keywords#22">
+    <skos:prefLabel xml:lang="en">Public transport</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Transport public</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Openbaar vervoer</skos:prefLabel>
+  </skos:Concept>
 
   
 </rdf:RDF>

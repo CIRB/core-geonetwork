@@ -42,7 +42,7 @@ GeoNetwork.SearchFormPanel = Ext.extend(Ext.FormPanel, {
         /** api: config[searchCb] 
          *  The search function
          */
-        searchCb: undefined,
+//        searchCb: undefined,
         searchBt: new Ext.Button({
             text: OpenLayers.i18n('search'),
             iconCls : 'md-mn-find',
@@ -109,7 +109,7 @@ GeoNetwork.SearchFormPanel = Ext.extend(Ext.FormPanel, {
     },
     search: function () {
         this.searchTriggered = true;
-        this.searchCb();
+//        this.searchCb();
         this.fireEvent('onsearch');
     },
     reset: function () {

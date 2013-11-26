@@ -3,9 +3,13 @@
 
 	<def>
 		<hits>
-			<item name="keyword" plural="keywords" indexKey="keyword" order="freq" type="string" max="100"/>            			
-			<item name="title" plural="titles" indexKey="title" order="freq" type="string" max="100"/>			
-			<item name="abstract" plural="abstracts" indexKey="abstract" order="freq" type="string" max="100"/>			
+			<item name="keyword" plural="keywords" indexKey="keyword" order="freq" type="string" max="1000"/>            			
+			<item name="title" plural="titles" indexKey="title" order="freq" type="string" max="1000"/>			
+			<item name="abstract" plural="abstracts" indexKey="abstract" order="freq" type="string" max="1000"/>			
+			<item name="organisationName" plural="organisationNames"
+				indexKey="orgName" order="freq" type="string" max="1000" />
+			<item name="inspiretheme" plural="inspirethemes"
+				indexKey="inspiretheme" order="freq" type="string" max="1000" />
 		</hits>
     <titles>
       <item name="title" plural="titles" indexKey="title" order="freq" type="string" max="100"/>

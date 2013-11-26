@@ -420,7 +420,7 @@ GeoNetwork.app = function() {
 										loadingText : '...',
 										hideTrigger : true,
 										url : catalogue.services.opensearchSuggest
-									}),
+									})
 									/*
 									* Moved by GVB
 									*/

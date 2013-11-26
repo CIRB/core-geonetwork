@@ -35,7 +35,11 @@ public class LuceneIndexReaderFactory {
      * @return an index reader for reading from all indices
      */
     public Pair<Long, GeonetworkMultiReader> aquire(long versionToken) throws IOException {
-        return tracker.aquire(versionToken);
+        return tracker.aquire(versionToken, null);
+    }
+
+    public Pair<Long, GeonetworkMultiReader> aquire(long versionToken, String searchLanguage) throws IOException {
+        return tracker.aquire(versionToken, searchLanguage);
     }
 
     public void release (GeonetworkMultiReader reader) throws InterruptedException, IOException {

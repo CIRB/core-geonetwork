@@ -32,6 +32,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
 import org.apache.lucene.store.NRTCachingDirectory;
+import org.apache.lucene.store.NativeFSLockFactory;
 import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.kernel.search.LuceneConfig;
 import org.fao.geonet.kernel.search.SearchManager;
@@ -108,11 +109,11 @@ public class LuceneIndexLanguageTracker {
         return locale;
     }
     
-    synchronized Pair<Long, GeonetworkMultiReader> aquire(long versionToken) throws IOException {
+    synchronized Pair<Long, GeonetworkMultiReader> aquire(long versionToken, String searchLanguage) throws IOException {
         long finalVersion = versionToken;
         Map<AcquireResult, GeonetworkNRTManager> searchers = new HashMap<AcquireResult, GeonetworkNRTManager>(
                 (int) (searchManagers.size() * 1.5));
-        IndexReader[] readers = new IndexReader[searchManagers.size()];
+        IndexReader[] readers = new IndexReader[searchLanguage!=null ? 1 : searchManagers.size()];
         int i = 0;
         boolean tokenExpired = false;
         boolean lastVersionUpToDate = true;
@@ -124,7 +125,11 @@ public class LuceneIndexLanguageTracker {
             AcquireResult result = manager.acquire(versionToken, versionTracker);
             lastVersionUpToDate = lastVersionUpToDate && result.lastVersionUpToDate;
             tokenExpired = tokenExpired || result.newSearcher;
-
+            if (searchLanguage!=null) {
+                if (!((NativeFSLockFactory)((NRTCachingDirectory) result.searcher.getIndexReader().directory()).getLockFactory()).getLockDir().getName().equals(searchLanguage)) {
+                	continue;
+                }
+            }
             readers[i] = result.searcher.getIndexReader();
             i++;
             searchers.put(result, manager);

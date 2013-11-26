@@ -77,14 +77,20 @@ public abstract class MetaSearcher
 	
 	protected void updateSearchRange(Element request)
 	{
+		updateSearchRange(request, true);
+	}
+
+	protected void updateSearchRange(Element request, boolean bUseMaxCount)
+	{
 		// get request parameters
 		_from = readFrom(request);
 		_to = readTo(request);
 
-
-		int count = getSize();
-		_from      = _from > count ? count : _from;
-		_to        = _to   > count ? count : _to;
+		if (bUseMaxCount) {
+			int count = getSize();
+			_from      = Math.min(count, _from);
+			_to        = Math.min(count, _to);
+		}
 	}
 
 	protected int readFrom(Element request) {
@@ -96,11 +102,11 @@ public abstract class MetaSearcher
     }
 
     private int loadParam(Element request, String name, int defaultVal) {
-        String sFrom = request.getChildText(name);
-		if (sFrom != null)
+        String paramValue = request.getChildText(name);
+		if (paramValue != null)
 		{
-			try { return Integer.parseInt(sFrom); }
-			catch (NumberFormatException nfe) { throw new IllegalArgumentException("Bad '"+name+"' parameter: " + sFrom); }
+			try { return Integer.parseInt(paramValue); }
+			catch (NumberFormatException nfe) { throw new IllegalArgumentException("Bad '"+name+"' parameter: " + paramValue); }
 		}
 		return defaultVal;
     }
@@ -119,8 +125,8 @@ public abstract class MetaSearcher
 		
 		// perform search
 		Element req = new Element("request");
-		addElement(req, "from", id);
-		addElement(req, "to",   id);
+		addElement(req, "from", "" + _from);
+		addElement(req, "to",  "" + _to);
 		Element result = present(srvContext, req, config);
 
 		// restore _from and _to

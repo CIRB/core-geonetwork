@@ -54,7 +54,7 @@
 								<gco:CharacterString>Adresse courrier - Code Postale</gco:CharacterString>
 							</gmd:postalCode>
 							<gmd:country>
-								<gco:CharacterString>Adresse courrier - Pays</gco:CharacterString>
+								<gco:CharacterString>Belgique</gco:CharacterString>
 							</gmd:country>
 							<gmd:electronicMailAddress>
 								<!-- A10.3.	Adresse mail de contact  du responsable pur les metadonnées-->
@@ -120,6 +120,9 @@
 					<gmd:codeSpace>
 						<gco:CharacterString>EPSG</gco:CharacterString>
 					</gmd:codeSpace>
+					<gmd:version>
+						<gco:CharacterString>7.9</gco:CharacterString>
+					</gmd:version>
 				</gmd:RS_Identifier>
 			</gmd:referenceSystemIdentifier>
 		</gmd:MD_ReferenceSystem>
@@ -130,7 +133,7 @@
 				<gmd:CI_Citation>
 					<!-- A1.1 Intitulé de ressource -->
 					<gmd:title xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="gmd:PT_FreeText_PropertyType">
-						<gco:CharacterString>GeoBRU Dataset Profile (FR) - 06-08-2013</gco:CharacterString>
+						<gco:CharacterString>GeoBRU Dataset Profile (FR) - 16-09-2013</gco:CharacterString>
 					</gmd:title>
 					<gmd:date>
 						<gmd:CI_Date>
@@ -169,7 +172,7 @@
 						<gmd:RS_Identifier>
 							<!--A.1.6.	Identificateur de ressource unique -->
 							<gmd:code>
-								<gco:CharacterString>code</gco:CharacterString>
+								<gco:CharacterString>BRU_code</gco:CharacterString>
 							</gmd:code>
 							<gmd:codeSpace>
 								<gco:CharacterString>http://geobru.irisnet.be</gco:CharacterString>
@@ -180,7 +183,7 @@
 			</gmd:citation>
 			<!--A.1.3.	Résumé de la ressource -->
 			<gmd:abstract>
-				<gco:CharacterString>Résumé de la ressource</gco:CharacterString>
+				<gco:CharacterString>Région de Bruxelles-Capitale: Résumé de la ressource</gco:CharacterString>
 			</gmd:abstract>
 			<gmd:pointOfContact>
 				<gmd:CI_ResponsibleParty>
@@ -223,7 +226,7 @@
 										<gco:CharacterString>Adresse courrier - Code Postale</gco:CharacterString>
 									</gmd:postalCode>
 									<gmd:country>
-										<gco:CharacterString>Adresse courrier - Pays</gco:CharacterString>
+										<gco:CharacterString>Belgique</gco:CharacterString>
 									</gmd:country>
 									<gmd:electronicMailAddress>
 										<!--A.9.2. Adresse mail de contact -->
@@ -246,7 +249,7 @@
 				<gmd:MD_MaintenanceInformation>
 					<gmd:maintenanceAndUpdateFrequency>
 						<!-- A6.6 Fréquence de mise à jour -->
-						<gmd:MD_MaintenanceFrequencyCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/gmxCodelists.xml#MD_MaintenanceFrequencyCode" codeListValue="monthly">monthly</gmd:MD_MaintenanceFrequencyCode>
+						<gmd:MD_MaintenanceFrequencyCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/gmxCodelists.xml#MD_MaintenanceFrequencyCode" codeListValue="continual">continual</gmd:MD_MaintenanceFrequencyCode>
 					</gmd:maintenanceAndUpdateFrequency>
 				</gmd:MD_MaintenanceInformation>
 			</gmd:resourceMaintenance>
@@ -273,7 +276,7 @@
 					</gmd:accessConstraints>
 					<gmd:otherConstraints>
 						<!-- A8.2 Restrictions concernant l'accès public-->
-						<gco:CharacterString>Pas de restrictions d’accès selon INSPIRE</gco:CharacterString>
+						<gco:CharacterString>Pas de restrictions d’accès public selon INSPIRE</gco:CharacterString>
 					</gmd:otherConstraints>
 				</gmd:MD_LegalConstraints>
 			</gmd:resourceConstraints>
@@ -315,19 +318,19 @@
 						<gmd:EX_GeographicBoundingBox>
 							<!--A5.1 Longitude de la limite la plus à l'ouest de l'étendue du jeu de données, exprimée avec des degrés décimaux -->
 							<gmd:westBoundLongitude>
-								<gco:Decimal>3.984</gco:Decimal>
+								<gco:Decimal>4.241242610760647</gco:Decimal>
 							</gmd:westBoundLongitude>
 							<!--A5.2 Longitude de la limite la plus à l'est de l'étendue du jeu de données, exprimée avec des degrés décimaux -->
 							<gmd:eastBoundLongitude>
-								<gco:Decimal>4.765</gco:Decimal>
+								<gco:Decimal>4.479757833015491</gco:Decimal>
 							</gmd:eastBoundLongitude>
 							<!-- A5.3 Latitude de la limite la plus au sud de l'étendue du jeu de données, exprimée avec des degrés décimaux -->
 							<gmd:southBoundLatitude>
-								<gco:Decimal>50.650</gco:Decimal>
+								<gco:Decimal>50.76316244493342</gco:Decimal>
 							</gmd:southBoundLatitude>
 							<!-- A5.4 Latitude de la limite la plus au nord de l'étendue du jeu de données, exprimée avec des degrés décimaux -->
 							<gmd:northBoundLatitude>
-								<gco:Decimal>51.069</gco:Decimal>
+								<gco:Decimal>50.913320904907515</gco:Decimal>
 							</gmd:northBoundLatitude>
 						</gmd:EX_GeographicBoundingBox>
 					</gmd:geographicElement>
@@ -385,7 +388,7 @@
 			</gmd:transferOptions>
 			<!-- A.2.1	Version de référence UrbIS utilisée -->
 			<geobru:version>
-				<gco:CharacterString>urbIS version</gco:CharacterString>
+				<gco:CharacterString>UrbIS version</gco:CharacterString>
 			</geobru:version>
 		</geobru:BXL_Distribution>
 	</gmd:distributionInfo>

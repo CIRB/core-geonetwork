@@ -515,7 +515,7 @@ GeoNetwork.Lang.nl = {
     'delTplElTT': 'Verwijder geselecteerd element uit de folder.',
 	
 	//tabbed search
-	'Home': "Home",
+	'Home': "Zoek",
 	'Map': "Kaart",
 	'Poweredby': "Door",
 	'About': "Over",
@@ -544,7 +544,8 @@ Added by GVB
 	'Advanced': "Geavanceerd",
 	'newWindow': "nieuw venster",
 	'mdEditor': "Metadata editor",
-	'List': "Lijst"
+	'List': "Resultaten",
+	'noSearchResults': "Uw zoekactie leverde geen resultaten op. Om een nieuwe zoekactie te starten, kunt u terugkeren naar het zoekscherm."
 };
 
 OpenLayers.Util.extend(OpenLayers.Lang.nl, GeoNetwork.Lang.nl);

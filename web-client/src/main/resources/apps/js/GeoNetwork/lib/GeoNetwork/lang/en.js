@@ -524,7 +524,7 @@ GeoNetwork.lang.en = {
     'language': 'Language',
 	
 	//tabbed search
-	'Home': "Home",
+	'Home': "Search",
 	'Map': "Map",
 	'Poweredby': "Powered by",
 	'About': "About",
@@ -553,7 +553,8 @@ Added by GVB
 	'Advanced': "Advanced",
 	'newWindow': "New Window",
 	'mdEditor': "Metadata editor",
-	'List': "List"
+	'List': "Results",
+	'noSearchResults': "Your search request has no results. To start a new search request, return to the search window."
 };
 
 OpenLayers.Util.extend(OpenLayers.Lang.en, GeoNetwork.lang.en);

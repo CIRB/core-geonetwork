@@ -1232,13 +1232,23 @@ public class SearchManager {
      * @throws InterruptedException
      */
     public Pair<Long, GeonetworkMultiReader> getIndexReader(long versionToken) throws IOException {
-        return _indexReader.aquire(versionToken);
+        return _indexReader.aquire(versionToken, null);
     }
+
+    public Pair<Long, GeonetworkMultiReader> getIndexReader(long versionToken, String searchLanguage) throws IOException {
+        return _indexReader.aquire(versionToken, searchLanguage);
+    }
+
+    public Pair<Long,GeonetworkMultiReader> getNewIndexReader(String searchLanguage) throws IOException, InterruptedException {
+        Log.debug(Geonet.INDEX_ENGINE,"Ask for new reader");
+        return getIndexReader(-1L, searchLanguage);
+    }
+  
     public Pair<Long,GeonetworkMultiReader> getNewIndexReader() throws IOException, InterruptedException {
-       Log.debug(Geonet.INDEX_ENGINE,"Ask for new reader");
-       return getIndexReader(-1L);
-     }
-    /**
+        Log.debug(Geonet.INDEX_ENGINE,"Ask for new reader");
+        return getIndexReader(-1L, null);
+      }
+     /**
      * TODO javadoc.
      *
      * @param reader

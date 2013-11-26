@@ -11,7 +11,8 @@
                                         xmlns:skos="http://www.w3.org/2004/02/skos/core#">
 
 	<xsl:include href="convert/functions.xsl"/>
-	<xsl:include href="../../../xsl/utils-fn.xsl"/>
+	<xsl:include href="../../../../../xsl/utils-fn.xsl"/>
+	<xsl:include href="../../../../../xsl/utils-index-fields.xsl"/>
 	
 	<!-- This file defines what parts of the metadata are indexed by Lucene
 	     Searches can be conducted on indexes defined here. 
@@ -29,9 +30,6 @@
 
   <xsl:param name="thesauriDir"/>
   <xsl:param name="inspire">false</xsl:param>
-  
-  <xsl:variable name="inspire-thesaurus" select="if ($inspire!='false') then document(concat('file:///', $thesauriDir, '/external/thesauri/theme/inspire-theme.rdf')) else ''"/>
-  <xsl:variable name="inspire-theme" select="if ($inspire!='false') then $inspire-thesaurus//skos:Concept else ''"/>
   
   <!-- If identification creation, publication and revision date
     should be indexed as a temporal extent information (eg. in INSPIRE 
@@ -178,9 +176,8 @@
 
 			<xsl:for-each select="//gmd:MD_Keywords">
 			  
-				<xsl:for-each select="gmd:keyword/gco:CharacterString|gmd:keyword/gmd:PT_FreeText/gmd:textGroup/gmd:LocalisedCharacterString">
-                    <xsl:variable name="keywordLower" select="lower-case(.)"/>
-                    <Field name="keyword" string="{string(.)}" store="true" index="true"/>
+				<xsl:for-each select="gmd:keyword/gco:CharacterString">
+                   	<Field name="keyword" string="{string(.)}" store="true" index="true"/>
 					
                     <xsl:if test="$inspire='true'">
                         <xsl:if test="string-length(.) &gt; 0">
@@ -188,7 +185,7 @@
                           <xsl:variable name="inspireannex">
                             <xsl:call-template name="determineInspireAnnex">
                               <xsl:with-param name="keyword" select="string(.)"/>
-                              <xsl:with-param name="inspireThemes" select="$inspire-theme"/>
+                              <xsl:with-param name="thesauriDir" select="$thesauriDir"/>
                             </xsl:call-template>
                           </xsl:variable>
                           
@@ -196,6 +193,7 @@
                           <xsl:if test="normalize-space($inspireannex)!=''">
                             <!-- Maybe we should add the english version to the index to not take the language into account 
                             or create one field in the metadata language and one in english ? -->
+                            <Field name="any" string="{string(.)}" store="false" index="true"/>
                             <Field name="inspiretheme" string="{string(.)}" store="false" index="true"/>
                           	<Field name="inspireannex" string="{$inspireannex}" store="false" index="true"/>
                             <!-- FIXME : inspirecat field will be set multiple time if one record has many themes -->
@@ -213,7 +211,7 @@
 			<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->		
 	
 			<xsl:for-each select="gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:organisationName/gco:CharacterString">
-				<Field name="orgName" string="{string(.)}" store="false" index="true"/>
+				<Field name="orgName" string="{string(.)}" store="true" index="true"/>
 				
 				<xsl:variable name="role" select="../../gmd:role/*/@codeListValue"/>
 				<xsl:variable name="logo" select="../..//gmx:FileName/@src"/>
@@ -528,8 +526,14 @@
 		<Field name="any" store="false" index="true" token="true">
 			<xsl:attribute name="string">
 				<xsl:apply-templates select="gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Sitation/gmd:title" mode="allText"/>
+				<xsl:text> </xsl:text>
 				<xsl:apply-templates select="gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract" mode="allText"/>
-				<xsl:apply-templates select="gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords/gmd:keyword" mode="allText"/>
+				<xsl:text> </xsl:text>
+				<xsl:apply-templates select="gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords/gmd:MD_Keywords/gmd:keyword" mode="allText"/>
+				<xsl:text> </xsl:text>
+				<xsl:value-of select="gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:organisationName/gco:CharacterString"/>
+				<xsl:text> </xsl:text>
+				<xsl:value-of select="gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:organisationName/gco:CharacterString"/>
 			</xsl:attribute>
 		</Field>
 <!--
@@ -588,76 +592,4 @@
 		
 	</xsl:template>
 
-	<!-- ========================================================================================= -->
-
-	<!-- inspireThemes is a nodeset consisting of skos:Concept elements -->
-	<!-- each containing a skos:definition and skos:prefLabel for each language -->
-	<!-- This template finds the provided keyword in the skos:prefLabel elements and returns the English one from the same skos:Concept -->
-	<xsl:template name="translateInspireThemeToEnglish">
-		<xsl:param name="keyword"/>
-		<xsl:param name="inspireThemes"/>
-		<xsl:variable name="prefLabel" select="$inspireThemes[skos:prefLabel/text()=$keyword]/skos:prefLabel[@xml:lang='en']/text()"/>
-		<xsl:if test="$prefLabel">
-			<xsl:value-of select="$prefLabel"/>
-		</xsl:if>
-	</xsl:template>	
-
-	<xsl:template name="determineInspireAnnex">
-		<xsl:param name="keyword"/>
-		<xsl:param name="inspireThemes"/>
-		<xsl:variable name="englishKeywordMixedCase">
-			<xsl:call-template name="translateInspireThemeToEnglish">
-				<xsl:with-param name="keyword" select="$keyword"/>
-				<xsl:with-param name="inspireThemes" select="$inspireThemes"/>
-			</xsl:call-template>
-		</xsl:variable>
-	  <xsl:variable name="englishKeyword" select="lower-case($englishKeywordMixedCase)"/>			
-	  <!-- Another option could be to add the annex info in the SKOS thesaurus using something
-		like a related concept. -->
-		<xsl:choose>
-			<!-- annex i -->
-			<xsl:when test="$englishKeyword='coordinate reference systems' or $englishKeyword='geographical grid systems' 
-			            or $englishKeyword='geographical names' or $englishKeyword='administrative units' 
-			            or $englishKeyword='addresses' or $englishKeyword='cadastral parcels' 
-			            or $englishKeyword='transport networks' or $englishKeyword='hydrography' 
-			            or $englishKeyword='protected sites'">
-			    <xsl:text>i</xsl:text>
-			</xsl:when>
-			<!-- annex ii -->
-			<xsl:when test="$englishKeyword='elevation' or $englishKeyword='land cover' 
-			            or $englishKeyword='orthoimagery' or $englishKeyword='geology'">
-				 <xsl:text>ii</xsl:text>
-			</xsl:when>
-			<!-- annex iii -->
-			<xsl:when test="$englishKeyword='statistical units' or $englishKeyword='buildings' 
-			            or $englishKeyword='soil' or $englishKeyword='land use' 
-			            or $englishKeyword='human health and safety' or $englishKeyword='utility and government services' 
-			            or $englishKeyword='environmental monitoring facilities' or $englishKeyword='production and industrial facilities' 
-			            or $englishKeyword='agricultural and aquaculture facilities' or $englishKeyword='population distribution - demography' 
-			            or $englishKeyword='area management/restriction/regulation zones and reporting units' 
-			            or $englishKeyword='natural risk zones' or $englishKeyword='atmospheric conditions' 
-			            or $englishKeyword='meteorological geographical features' or $englishKeyword='oceanographic geographical features' 
-			            or $englishKeyword='sea regions' or $englishKeyword='bio-geographical regions' 
-			            or $englishKeyword='habitats and biotopes' or $englishKeyword='species distribution' 
-			            or $englishKeyword='energy resources' or $englishKeyword='mineral resources'">
-				 <xsl:text>iii</xsl:text>
-			</xsl:when>
-			<!-- inspire annex cannot be established: leave empty -->
-		</xsl:choose>
-	</xsl:template>
-	<!-- ========================================================================================= -->
-	<!--allText -->
-	<xsl:template match="*" mode="allText">
-<!-- 
-		<xsl:for-each select="@*">
-			<xsl:if test="name(.) != 'codeList' ">
-				<xsl:value-of select="concat(string(.),' ')"/>
-			</xsl:if>
-		</xsl:for-each>
- -->
- 		<xsl:variable name="stringValue" select="normalize-space(gco:CharacterString)"/>
-		<xsl:if test="$stringValue">
-			<xsl:value-of select="concat(string($stringValue),' ')"/>
-		</xsl:if>
-	</xsl:template>
 </xsl:stylesheet>

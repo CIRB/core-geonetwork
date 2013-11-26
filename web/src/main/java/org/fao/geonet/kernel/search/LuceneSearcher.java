@@ -23,8 +23,21 @@
 
 package org.fao.geonet.kernel.search;
 
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.io.WKTReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.lang.reflect.Constructor;
+import java.text.CharacterIterator;
+import java.text.StringCharacterIterator;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
 import jeeves.constants.Jeeves;
 import jeeves.resources.dbms.Dbms;
 import jeeves.server.ServiceConfig;
@@ -33,6 +46,7 @@ import jeeves.server.context.ServiceContext;
 import jeeves.utils.Log;
 import jeeves.utils.Util;
 import jeeves.utils.Xml;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.PerFieldAnalyzerWrapper;
@@ -52,7 +66,6 @@ import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.CachingWrapperFilter;
 import org.apache.lucene.search.ChainedFilter;
 import org.apache.lucene.search.Filter;
-import org.apache.lucene.search.FuzzyQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.MatchAllDocsQuery;
 import org.apache.lucene.search.PhraseQuery;
@@ -65,8 +78,6 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TermRangeQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.TopFieldCollector;
-import org.apache.lucene.search.WildcardQuery;
-import org.apache.lucene.search.BooleanClause.Occur;
 import org.fao.geonet.GeonetContext;
 import org.fao.geonet.constants.Edit;
 import org.fao.geonet.constants.Geonet;
@@ -76,7 +87,6 @@ import org.fao.geonet.kernel.search.LuceneConfig.LuceneConfigNumericField;
 import org.fao.geonet.kernel.search.SummaryComparator.SortOption;
 import org.fao.geonet.kernel.search.SummaryComparator.Type;
 import org.fao.geonet.kernel.search.index.GeonetworkMultiReader;
-import org.fao.geonet.kernel.search.index.LuceneIndexReaderFactory;
 import org.fao.geonet.kernel.search.log.SearcherLogger;
 import org.fao.geonet.kernel.search.lucenequeries.DateRangeQuery;
 import org.fao.geonet.kernel.search.spatial.Pair;
@@ -86,21 +96,8 @@ import org.fao.geonet.languages.LanguageDetector;
 import org.fao.geonet.util.JODAISODate;
 import org.jdom.Element;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.StringReader;
-import java.lang.reflect.Constructor;
-import java.text.CharacterIterator;
-import java.text.StringCharacterIterator;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.io.WKTReader;
 
 /**
  * search metadata locally using lucene.
@@ -178,7 +175,7 @@ public class LuceneSearcher extends MetaSearcher {
         String sBuildSummary = request.getChildText(Geonet.SearchResult.BUILD_SUMMARY);
 		boolean buildSummary = sBuildSummary == null || sBuildSummary.equals("true");
 		_language = determineLanguage(srvContext, request, _sm.get_settingInfo());
-		_reader = _sm.getNewIndexReader().two();
+		_reader = _sm.getNewIndexReader(_language).two();
         if(Log.isDebugEnabled(Geonet.LUCENE))
             Log.debug(Geonet.LUCENE, "LuceneSearcher initializing search range");
 		initSearchRange(srvContext);
@@ -187,8 +184,9 @@ public class LuceneSearcher extends MetaSearcher {
         computeQuery(srvContext, getTo() - 1, request, config);
         if(Log.isDebugEnabled(Geonet.LUCENE))
             Log.debug(Geonet.LUCENE, "LuceneSearcher performing query");
+		updateSearchRange(request,false);
 		performQuery(getFrom()-1, getTo(), buildSummary);
-		updateSearchRange(request);
+		updateSearchRange(request,true);
 		
 		SettingInfo si = new SettingInfo(srvContext);
 		if (si.isSearchStatsEnabled()) {
@@ -454,7 +452,7 @@ public class LuceneSearcher extends MetaSearcher {
      */
 	private void computeQuery(ServiceContext srvContext, int endHits, Element request, ServiceConfig config) throws Exception {
 
-        _language = determineLanguage(srvContext, request, _sm.get_settingInfo());
+//        _language = determineLanguage(srvContext, request, _sm.get_settingInfo());
 
 		String sMaxRecordsInKeywordSummary = request.getChildText("maxHitsInSummary");
 		if (sMaxRecordsInKeywordSummary == null) sMaxRecordsInKeywordSummary = config.getValue("maxHitsInSummary", "1000");
@@ -484,6 +482,10 @@ public class LuceneSearcher extends MetaSearcher {
                         }
                     }
                 }
+            } else {
+            	if (userSession.getProfile().equals(Geonet.Profile.ADMINISTRATOR)) {
+                    userGroups = new HashSet<String>();
+            	}
             }
 
             // remove elements from user input that compromise this request
@@ -509,10 +511,10 @@ public class LuceneSearcher extends MetaSearcher {
                     if (userSession.isAuthenticated()) {
                         if (userSession.getProfile().equals(Geonet.Profile.ADMINISTRATOR)) {
                             request.addContent(new Element(SearchParameter.ISADMIN).addContent("true"));
-}
+                        }
                         else if (userSession.getProfile().equals(Geonet.Profile.REVIEWER)) {
                             request.addContent(new Element(SearchParameter.ISREVIEWER).addContent("true"));
-}
+                        }
                     }
                 }
             }
@@ -1724,48 +1726,4 @@ public class LuceneSearcher extends MetaSearcher {
         }
     }
 
-    /**
-	 * <p>
-	 * Gets suggestions for a search field.
-	 * </p>
-	 * 
-	 * @param maxHits max hits
-	 * @return current searcher result in "fast" mode
-	 * 
-	 * @throws Exception hmm
-	 */
-    public List<String> getSuggestions(String field, int maxHits) throws Exception {
-
-        FieldSelector uuidselector = new FieldSelector() {
-            public final FieldSelectorResult accept(String name) {
-                if (name.equals("_uuid")) return FieldSelectorResult.LOAD;
-                else return FieldSelectorResult.NO_LOAD;
-            }
-        };
-
-        List<String> response = new ArrayList<String>();
-		int numHits;
-		
-		boolean computeSummary = false;
-
-		Pair<TopDocs,Element> results = LuceneSearcher.doSearchAndMakeSummary(maxHits, 0, maxHits,
-                _maxSummaryKeys, _language, _resultType, _summaryConfig,
-                _reader, _query, _filter, _sort, false,
-                false, false, false
-        );
-		
-		TopDocs tdocs = results.one();
-		_elSummary = results.two();
-		_numHits = Integer.parseInt(_elSummary.getAttributeValue("count"));
-
-        if(Log.isDebugEnabled(Geonet.SEARCH_ENGINE))
-            Log.debug(Geonet.SEARCH_ENGINE, "Hits found : "+_numHits+"");
-		
-        for ( ScoreDoc sdoc : tdocs.scoreDocs ) {
-            Document doc = _reader.document(sdoc.doc, uuidselector);
-            String uuid = doc.get("_uuid");
-            if (uuid != null) response.add(uuid);
-        }
-        return response;
-    }
 }

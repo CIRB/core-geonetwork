@@ -491,6 +491,8 @@
 				<param name="max_number_of_terms" value="100000" />
 				<!-- Default field to search in. any is full-text search field. -->
 				<param name="default_search_field" value="any" />
+				<param name="maxSummaryKeys" value="1000" />
+				<param name="maxHitsInSummary" value="1000" />
 			</class>
 
 			<output sheet="search-suggestions.xsl" contentType="application/json; charset=UTF-8" />

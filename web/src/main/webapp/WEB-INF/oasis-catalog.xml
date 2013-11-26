@@ -34,4 +34,7 @@
 	<uri    name="../../../xsl/utils-fn.xsl"
 					uri="../xsl/utils-fn.xsl"/>
 
+	<uri    name="../../../xsl/utils-index-fields.xsl"
+					uri="../xsl/utils-index-fields.xsl"/>
+
 </catalog>

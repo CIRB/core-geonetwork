@@ -100,7 +100,9 @@ GeoNetwork.util.SearchTools = {
 
                     if (values.length > 0) {
                         metadataStore.loadData(currentRecords);
-                    }
+                    } else {
+        	            Ext.Msg.alert(OpenLayers.i18n('search'), OpenLayers.i18n('noSearchResults'));
+                    }                    
                     
                     if (isCatalogueSStore) {
 	                    var summary = currentRecords.summary;

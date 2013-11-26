@@ -395,7 +395,6 @@
       <xsl:param name="edit" select="false()"/>
       <xsl:param name="validator" />
           <xsl:choose>
-<!--
               <xsl:when test="not(gco:*)">
                   <xsl:for-each select="gmd:PT_FreeText">
                       <xsl:call-template name="getElementText">
@@ -406,9 +405,8 @@
                         </xsl:call-template>
                     </xsl:for-each>
               </xsl:when>
--->              
               <xsl:when test="count(gmd:PT_FreeText/gmd:textGroup/gmd:LocalisedCharacterString[@locale=$langId])>0">
-                  <xsl:for-each select="gmd:PT_FreeText[gmd:textGroup/gmd:LocalisedCharacterString/@locale=$langId]">
+                  <xsl:for-each select="gmd:PT_FreeText[gmd:textGroup/gmd:LocalisedCharacterString/@locale=$langId]/gmd:textGroup/gmd:LocalisedCharacterString[@locale=$langId]">
                       <xsl:call-template name="getElementText">
                           <xsl:with-param name="edit" select="$edit" />
                           <xsl:with-param name="schema" select="$schema" />

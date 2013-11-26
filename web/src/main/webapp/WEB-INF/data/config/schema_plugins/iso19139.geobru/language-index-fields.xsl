@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gml="http://www.opengis.net/gml" xmlns:srv="http://www.isotc211.org/2005/srv" xmlns:java="java:org.fao.geonet.util.XslUtil" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gml="http://www.opengis.net/gml" xmlns:srv="http://www.isotc211.org/2005/srv" xmlns:java="java:org.fao.geonet.util.XslUtil" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:gmx="http://www.isotc211.org/2005/gmx">
 	<!-- This file defines what parts of the metadata are indexed by Lucene
 	     Searches can be conducted on indexes defined here.
 	     The Field@name attribute defines the name of the search variable.
@@ -10,7 +10,11 @@
 	<!-- ========================================================================================= -->
 	<xsl:output method="xml" version="1.0" encoding="UTF-8" indent="no"/>
 	<xsl:include href="convert/functions.xsl"/>
+	<xsl:include href="../../../../../xsl/utils-index-fields.xsl"/>
 	<!-- ========================================================================================= -->
+	<xsl:param name="thesauriDir"/>
+	<xsl:param name="inspire">false</xsl:param>
+
 	<xsl:variable name="isoDocLangId">
 		<xsl:call-template name="langId19139"/>
 	</xsl:variable>
@@ -128,15 +132,49 @@
 				</xsl:for-each>
 			</xsl:for-each>
 			<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-			<xsl:for-each select="*/gmd:MD_Keywords">
+			<xsl:for-each select="//gmd:MD_Keywords">
+			  
 				<xsl:for-each select="gmd:keyword//gmd:LocalisedCharacterString[@locale=$pound2LangId or @locale=$pound3LangId]">
 					<Field name="keyword" string="{string(.)}" store="true" index="true" token="false"/>
-				</xsl:for-each>
+                    <xsl:if test="$inspire='true'">
+                        <xsl:if test="string-length(.) &gt; 0">
+                         
+                          <xsl:variable name="inspireannex">
+                            <xsl:call-template name="determineInspireAnnex">
+                              <xsl:with-param name="keyword" select="string(.)"/>
+                              <xsl:with-param name="thesauriDir" select="$thesauriDir"/>
+                            </xsl:call-template>
+                          </xsl:variable>
+                          
+                          <!-- Add the inspire field if it's one of the 34 themes -->
+                          <xsl:if test="normalize-space($inspireannex)!=''">
+                            <!-- Maybe we should add the english version to the index to not take the language into account 
+                            or create one field in the metadata language and one in english ? -->
+                            <Field name="any" string="{string(.)}" store="false" index="true"/>
+                            <Field name="inspiretheme" string="{string(.)}" store="false" index="true"/>
+                          	<Field name="inspireannex" string="{$inspireannex}" store="false" index="true"/>
+                            <!-- FIXME : inspirecat field will be set multiple time if one record has many themes -->
+                          	<Field name="inspirecat" string="true" store="false" index="true"/>
+                          </xsl:if>
+                        </xsl:if>
+                    </xsl:if>
+                </xsl:for-each>
+
 				<xsl:for-each select="gmd:type/gmd:MD_KeywordTypeCode/@codeListValue">
-					<Field name="keywordType" string="{string(.)}" store="true" index="true" token="true"/>
+					<Field name="keywordType" string="{string(.)}" store="false" index="true"/>
 				</xsl:for-each>
 			</xsl:for-each>
+
 			<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+			<xsl:for-each select="gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:organisationName/gco:CharacterString">
+				<Field name="orgName" string="{string(.)}" store="true" index="true"/>
+				
+				<xsl:variable name="role" select="../../gmd:role/*/@codeListValue"/>
+				<xsl:variable name="logo" select="../..//gmx:FileName/@src"/>
+			
+				<Field name="responsibleParty" string="{concat($role, '|resource|', ., '|', $logo)}" store="true" index="false"/>
+				
+			</xsl:for-each>
 <!--
 			<xsl:for-each select="gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:organisationName//gmd:LocalisedCharacterString[@locale=$pound2LangId or @locale=$pound3LangId]">
 				<Field name="orgName" string="{string(.)}" store="true" index="true" token="true"/>
@@ -284,12 +322,16 @@
 				<xsl:apply-templates select="gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Sitation/gmd:title" mode="allTextByLanguage">
 					<xsl:with-param name="isoLangId" select="$isoLangId"/>
 				</xsl:apply-templates>
+				<xsl:text> </xsl:text>
 				<xsl:apply-templates select="gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract" mode="allTextByLanguage">
 					<xsl:with-param name="isoLangId" select="$isoLangId"/>
 				</xsl:apply-templates>
-				<xsl:apply-templates select="gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords/gmd:keyword" mode="allTextByLanguage">
+				<xsl:text> </xsl:text>
+				<xsl:apply-templates select="gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords/gmd:MD_Keywords/gmd:keyword" mode="allTextByLanguage">
 					<xsl:with-param name="isoLangId" select="$isoLangId"/>
 				</xsl:apply-templates>
+				<xsl:text> </xsl:text>
+				<xsl:value-of select="gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:organisationName/gco:CharacterString"/>
 			</xsl:attribute>
 		</Field>
 		<xsl:apply-templates select="." mode="codeList"/>

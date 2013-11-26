@@ -28,3 +28,9 @@ docs/*/users/build
 /geonetwork-2.8.1/
 /.props/
 /classes
+/docs
+/geoserver
+/installer
+/maven_repo
+/release
+/web-itest
