@@ -172,9 +172,9 @@ public class SearchSuggestion implements Service {
 			addSuggestions(suggestionValueCountMap, (List<Element>) Xml.selectNodes(result, "summary/keywords/keyword"), searchValue);
 		} else if (fieldName.equals("orgName")) {
 			addSuggestions(suggestionValueCountMap, (List<Element>) Xml.selectNodes(result, "summary/organisationNames/organisationName"), searchValue);
-		} else if (fieldName.equals("inspiretheme")) {
+		}/* else if (fieldName.equals("inspiretheme")) {
 			addSuggestions(suggestionValueCountMap, (List<Element>) Xml.selectNodes(result, "summary/inspirethemes/inspiretheme"), searchValue);
-		}
+		}*/
 //		List<SearchManager.TermFrequency> termList = sm.getTermsFequency(fieldName, searchValue, _maxNumberOfTerms, _threshold/*, context.getLanguage()*/);
 /*
 		Collections.sort(termList);

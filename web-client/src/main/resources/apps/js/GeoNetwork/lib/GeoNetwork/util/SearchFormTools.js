@@ -1093,7 +1093,11 @@ GeoNetwork.util.SearchFormTools = {
                     store: new Ext.data.ArrayStore({
                         id: 0,
                         fields: ['id', 'name'],
-                        data: codeList || defaultCodeList
+                        data: codeList || defaultCodeList,
+                        sortInfo: {
+                            field: 'name',
+                            direction: 'ASC' // or 'DESC' (case sensitive for local sorting)
+                        }
                     }),
                     valueField: 'id',
                     displayField: 'name',
@@ -1138,7 +1142,11 @@ GeoNetwork.util.SearchFormTools = {
                     store: new Ext.data.ArrayStore({
                         id: 0,
                         fields: ['id', 'name'],
-                        data: codeList || defaultCodeList
+                        data: codeList || defaultCodeList,
+                        sortInfo: {
+                            field: 'name',
+                            direction: 'ASC' // or 'DESC' (case sensitive for local sorting)
+                        }
                     }),
                     valueField: 'id',
                     displayField: 'name',

@@ -548,6 +548,7 @@ public class LuceneSearcher extends MetaSearcher {
                 LuceneQueryInput luceneQueryInput = new LuceneQueryInput(request);
                 luceneQueryInput.setRequestedLanguageOnly(requestedLanguageOnly);
                 _query = new LuceneQueryBuilder(_tokenizedFieldSet, _luceneConfig.getNumericFields(), SearchManager.getAnalyzer(_language, true), _language).build(luceneQueryInput);
+                System.out.println(_query);
                 if(Log.isDebugEnabled(Geonet.SEARCH_ENGINE))
                     Log.debug(Geonet.SEARCH_ENGINE,"Lucene query: " + _query);
 

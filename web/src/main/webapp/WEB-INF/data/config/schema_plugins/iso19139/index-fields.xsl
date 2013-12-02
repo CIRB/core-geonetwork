@@ -55,7 +55,7 @@
 			</xsl:variable>
 			<Field name="_defaultTitle" string="{string($_defaultTitle)}" store="true" index="true"/>
 			<!-- not tokenized title for sorting, needed for multilingual sorting -->
--           <Field name="_title" string="{string($_defaultTitle)}" store="true" index="true" token="false" />
+-           <Field name="_title" string="{string($_defaultTitle)}" store="true" index="true" />
             <xsl:variable name="_defaultAbstract">
                 <xsl:call-template name="defaultAbstract">
                     <xsl:with-param name="isoDocLangId" select="$isoLangId"/>
@@ -90,6 +90,7 @@
 	
 				<xsl:for-each select="gmd:title/gco:CharacterString">
 					<Field name="title" string="{string(.)}" store="true" index="true"/>
+					<Field name="any" string="{string(.)}" store="true" index="true"/>
                     <!-- not tokenized title for sorting -->
                     <Field name="_title" string="{string(.)}" store="false" index="true"/>
 				</xsl:for-each>
@@ -144,6 +145,7 @@
 	
 			<xsl:for-each select="gmd:abstract/gco:CharacterString">
 				<Field name="abstract" string="{string(.)}" store="true" index="true"/>
+				<Field name="any" string="{string(.)}" store="true" index="true"/>
 			</xsl:for-each>
 
 			<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->		
@@ -177,6 +179,7 @@
 			  
 				<xsl:for-each select="gmd:keyword/gco:CharacterString">
                     <Field name="keyword" string="{string(.)}" store="true" index="true"/>
+					<Field name="any" string="{string(.)}" store="true" index="true"/>
 					
                     <xsl:if test="$inspire='true'">
                         <xsl:if test="string-length(.) &gt; 0">
@@ -192,7 +195,6 @@
                           <xsl:if test="normalize-space($inspireannex)!=''">
                             <!-- Maybe we should add the english version to the index to not take the language into account 
                             or create one field in the metadata language and one in english ? -->
-                            <Field name="any" string="{string(.)}" store="false" index="true"/>
                             <Field name="inspiretheme" string="{string(.)}" store="false" index="true"/>
                           	<Field name="inspireannex" string="{$inspireannex}" store="false" index="true"/>
                             <!-- FIXME : inspirecat field will be set multiple time if one record has many themes -->
@@ -211,6 +213,7 @@
 	
 			<xsl:for-each select="gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:organisationName/gco:CharacterString">
 				<Field name="orgName" string="{string(.)}" store="true" index="true"/>
+				<Field name="any" string="{string(.)}" store="true" index="true"/>
 				
 				<xsl:variable name="role" select="../../gmd:role/*/@codeListValue"/>
 				<xsl:variable name="logo" select="../..//gmx:FileName/@src"/>
@@ -521,9 +524,10 @@
 
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->		
 		<!-- === Free text search === -->		
-		<Field name="any" store="false" index="true" token="true">
+<!-- 
+		<Field name="any" store="false" index="true">
 			<xsl:attribute name="string">
-				<xsl:apply-templates select="gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Sitation/gmd:title" mode="allText"/>
+				<xsl:value-of select="gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Sitation/gmd:title/gco:CharacterString"/>
 				<xsl:text> </xsl:text>
 				<xsl:apply-templates select="gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract" mode="allText"/>
 				<xsl:text> </xsl:text>
@@ -532,37 +536,7 @@
 				<xsl:value-of select="gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:organisationName/gco:CharacterString"/>
 			</xsl:attribute>
 		</Field>
-<!--
-		<Field name="any" store="false" index="true">
-			<xsl:attribute name="string">
-				<xsl:value-of select="normalize-space(string(.))"/>
-				<xsl:text> </xsl:text>
-				<xsl:for-each select="//@codeListValue">
-					<xsl:value-of select="concat(., ' ')"/>
-				</xsl:for-each>
- 			</xsl:attribute>
-		</Field>
--->				
-		<!--<xsl:apply-templates select="." mode="codeList"/>-->
-		
+-->
 	</xsl:template>
-
-	<!-- ========================================================================================= -->
-	<!-- codelist element, indexed, not stored nor tokenized -->
-	
-	<xsl:template match="*[./*/@codeListValue]" mode="codeList">
-		<xsl:param name="name" select="name(.)"/>
-		
-		<Field name="{$name}" string="{*/@codeListValue}" store="false" index="true"/>		
-	</xsl:template>
-	
-	<!-- ========================================================================================= -->
-	
-	<xsl:template match="*" mode="codeList">
-		<xsl:apply-templates select="*" mode="codeList"/>
-	</xsl:template>
-	
-	
-	<!-- ========================================================================================= -->
 
 </xsl:stylesheet>

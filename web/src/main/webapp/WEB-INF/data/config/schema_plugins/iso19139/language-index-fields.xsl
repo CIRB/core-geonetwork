@@ -32,7 +32,7 @@
 						<xsl:variable name="pound3LangId" select="concat('#',upper-case($isoLangId))"/>
 						<xsl:variable name="_defaultTitle">
 							<xsl:call-template name="defaultTitle">
-								<xsl:with-param name="isoDocLangId" select="$isoLangId"/>
+								<xsl:with-param name="isoDocLangId" select="$isoLangId" />
 							</xsl:call-template>
 						</xsl:variable>
 						<!-- not tokenized title for sorting -->
@@ -76,6 +76,7 @@
 				<Field name="_title" string="{string(gmd:title//gmd:LocalisedCharacterString[@locale=$pound2LangId or @locale=$pound3LangId])}" store="true" index="true"/>
 				<xsl:for-each select="gmd:title//gmd:LocalisedCharacterString[@locale=$pound2LangId or @locale=$pound3LangId]">
 					<Field name="title" string="{string(.)}" store="true" index="true"/>
+					<Field name="any" string="{string(.)}" store="true" index="true"/>
 				</xsl:for-each>
 				<xsl:for-each select="gmd:alternateTitle//gmd:LocalisedCharacterString[@locale=$pound2LangId or @locale=$pound3LangId]">
 					<Field name="altTitle" string="{string(.)}" store="true" index="true"/>
@@ -102,6 +103,7 @@
 			<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 			<xsl:for-each select="gmd:abstract//gmd:LocalisedCharacterString[@locale=$pound2LangId or @locale=$pound3LangId]">
 				<Field name="abstract" string="{string(.)}" store="true" index="true"/>
+				<Field name="any" string="{string(.)}" store="true" index="true"/>
 			</xsl:for-each>
 			<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 			<xsl:for-each select="*/gmd:EX_Extent">
@@ -135,7 +137,8 @@
 			<xsl:for-each select="//gmd:MD_Keywords">
 			  
 				<xsl:for-each select="gmd:keyword//gmd:LocalisedCharacterString[@locale=$pound2LangId or @locale=$pound3LangId]">
-					<Field name="keyword" string="{string(.)}" store="true" index="true" token="false"/>
+					<Field name="keyword" string="{string(.)}" store="true" index="true"/>
+					<Field name="any" string="{string(.)}" store="true" index="true"/>
                     <xsl:if test="$inspire='true'">
                         <xsl:if test="string-length(.) &gt; 0">
                          
@@ -150,7 +153,6 @@
                           <xsl:if test="normalize-space($inspireannex)!=''">
                             <!-- Maybe we should add the english version to the index to not take the language into account 
                             or create one field in the metadata language and one in english ? -->
-                            <Field name="any" string="{string(.)}" store="false" index="true"/>
                             <Field name="inspiretheme" string="{string(.)}" store="false" index="true"/>
                           	<Field name="inspireannex" string="{$inspireannex}" store="false" index="true"/>
                             <!-- FIXME : inspirecat field will be set multiple time if one record has many themes -->
@@ -164,8 +166,11 @@
 					<Field name="keywordType" string="{string(.)}" store="false" index="true"/>
 				</xsl:for-each>
 			</xsl:for-each>
+
+			<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 			<xsl:for-each select="gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:organisationName/gco:CharacterString">
 				<Field name="orgName" string="{string(.)}" store="true" index="true"/>
+				<Field name="any" string="{string(.)}" store="true" index="true"/>
 				
 				<xsl:variable name="role" select="../../gmd:role/*/@codeListValue"/>
 				<xsl:variable name="logo" select="../..//gmx:FileName/@src"/>
@@ -202,8 +207,8 @@
 				<Field name="datasetLang" string="{string(.)}" store="true" index="true"/>
 			</xsl:for-each>
 			<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-			<xsl:for-each select="gmd:spatialRepresentationType/gmd:MD_SpatialRepresentationTypeCode/@codeListValue">
-				<Field name="spatialRepresentation" string="{string(.)}" store="true" index="true"/>
+			<xsl:for-each select="gmd:spatialRepresentationType">
+			  <Field name="spatialRepresentationType" string="{gmd:MD_SpatialRepresentationTypeCode/@codeListValue}" store="true" index="true"/>
 			</xsl:for-each>
 			<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 			<xsl:for-each select="gmd:spatialResolution/gmd:MD_Resolution">
@@ -306,6 +311,9 @@
 			<Field name="parentUuid" string="{string(.)}" store="true" index="true"/>
 		</xsl:for-each>
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+		<xsl:for-each select="gmd:dateStamp/gco:DateTime">
+			<Field name="changeDate" string="{string(.)}" store="true" index="true"/>
+		</xsl:for-each>
 		<!-- === Reference system info === -->
 		<xsl:for-each select="gmd:referenceSystemInfo/gmd:MD_ReferenceSystem">
 			<xsl:for-each select="gmd:referenceSystemIdentifier/gmd:RS_Identifier">
@@ -317,7 +325,8 @@
 		</xsl:for-each>
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 		<!-- === Free text search === -->
-		<Field name="any" store="false" index="true" token="true">
+<!--
+		<Field name="any" store="false" index="true">
 			<xsl:attribute name="string">
 				<xsl:apply-templates select="gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Sitation/gmd:title" mode="allTextByLanguage">
 					<xsl:with-param name="isoLangId" select="$isoLangId"/>
@@ -334,54 +343,7 @@
 				<xsl:value-of select="gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:organisationName/gco:CharacterString"/>
 			</xsl:attribute>
 		</Field>
-<!--
-		<Field name="any" store="false" index="true">
-			<xsl:attribute name="string">
-				<xsl:value-of select="normalize-space(//node()[@locale=$pound2LangId or @locale=$pound3LangId])"/>
-				<xsl:text> </xsl:text>
-				<xsl:for-each select="//@codeListValue">
-					<xsl:value-of select="concat(., ' ')"/>
-				</xsl:for-each>
-			</xsl:attribute>
-		</Field>
- -->
+-->
  		<xsl:apply-templates select="." mode="codeList"/>
-	</xsl:template>
-	<!-- ========================================================================================= -->
-	<!-- codelist element, indexed, not stored nor tokenized -->
-	<xsl:template match="*[./*/@codeListValue]" mode="codeList">
-		<xsl:param name="name" select="name(.)"/>
-		<Field name="{$name}" string="{*/@codeListValue}" store="false" index="true"/>
-	</xsl:template>
-	<!-- ========================================================================================= -->
-	<xsl:template match="*" mode="codeList">
-		<xsl:apply-templates select="*" mode="codeList"/>
-	</xsl:template>
-	<!-- ========================================================================================= -->
-	<!--allTextByLanguage -->
-	<xsl:template match="*" mode="allTextByLanguage">
-		<xsl:param name="isoLangId"/>
-        <xsl:variable name="pound2LangId" select="concat('#',upper-case(java:twoCharLangCode($isoLangId)))" />
-        <xsl:variable name="pound3LangId" select="concat('#',upper-case($isoLangId))" />
-<!-- 
-		<xsl:for-each select="@*">
-			<xsl:if test="name(.) != 'codeList' ">
-				<xsl:value-of select="concat(string(.),' ')"/>
-			</xsl:if>
-		</xsl:for-each>
- -->
- 		<xsl:variable name="stringValue"><xsl:value-of select="normalize-space(gmd:PT_FreeText/gmd:textGroup/gmd:LocalisedCharacterString[@locale=$pound2LangId or @locale=$pound3LangId])"/></xsl:variable>
- 		<xsl:choose>
-			<xsl:when test="$stringValue">
-				<xsl:value-of select="concat(string($stringValue),' ')"/>
-			</xsl:when>
-			<xsl:otherwise>
-<!--
-				<xsl:apply-templates select="*" mode="allTextByLanguage">
-					<xsl:with-param name="isoLangId" select="$isoLangId"/>
-				</xsl:apply-templates>
--->					
-			</xsl:otherwise>
-		</xsl:choose>
 	</xsl:template>
 </xsl:stylesheet>

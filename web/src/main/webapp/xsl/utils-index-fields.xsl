@@ -6,6 +6,7 @@
 										xmlns:geonet="http://www.fao.org/geonetwork"
 										xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 										xmlns:gmx="http://www.isotc211.org/2005/gmx"
+										xmlns:java="java:org.fao.geonet.util.XslUtil"
                                         xmlns:skos="http://www.w3.org/2004/02/skos/core#">
 
 	<!-- inspireThemes is a nodeset consisting of skos:Concept elements -->
@@ -89,5 +90,43 @@
 		<xsl:if test="$stringValue">
 			<xsl:value-of select="string($stringValue)"/>
 		</xsl:if>
+	</xsl:template>
+
+	<!-- ========================================================================================= -->
+	<!--allTextByLanguage -->
+	<xsl:template match="*" mode="allTextByLanguage">
+		<xsl:param name="isoLangId"/>
+        <xsl:variable name="pound2LangId" select="concat('#',upper-case(java:twoCharLangCode($isoLangId)))" />
+        <xsl:variable name="pound3LangId" select="concat('#',upper-case($isoLangId))" />
+<!-- 
+		<xsl:for-each select="@*">
+			<xsl:if test="name(.) != 'codeList' ">
+				<xsl:value-of select="concat(string(.),' ')"/>
+			</xsl:if>
+		</xsl:for-each>
+ -->
+ 		<xsl:variable name="stringValue"><xsl:value-of select="normalize-space(gmd:PT_FreeText/gmd:textGroup/gmd:LocalisedCharacterString[@locale=$pound2LangId or @locale=$pound3LangId])"/></xsl:variable>
+ 		<xsl:choose>
+			<xsl:when test="$stringValue">
+				<xsl:value-of select="string($stringValue)"/>
+			</xsl:when>
+			<xsl:otherwise>
+<!--
+				<xsl:apply-templates select="*" mode="allTextByLanguage">
+					<xsl:with-param name="isoLangId" select="$isoLangId"/>
+				</xsl:apply-templates>
+-->					
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	<!-- ========================================================================================= -->
+	<!-- codelist element, indexed, not stored nor tokenized -->
+	<xsl:template match="*[./*/@codeListValue]" mode="codeList">
+		<xsl:param name="name" select="name(.)"/>
+		<Field name="{$name}" string="{*/@codeListValue}" store="false" index="true"/>
+	</xsl:template>
+	<!-- ========================================================================================= -->
+	<xsl:template match="*" mode="codeList">
+		<xsl:apply-templates select="*" mode="codeList"/>
 	</xsl:template>
 </xsl:stylesheet>

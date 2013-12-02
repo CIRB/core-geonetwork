@@ -180,10 +180,10 @@
     <Field name="operatesOnIdentifier" analyzer="org.fao.geonet.kernel.search.GeoNetworkAnalyzer"/>
     <Field name="hassource" analyzer="org.fao.geonet.kernel.search.GeoNetworkAnalyzer"/>
     <Field name="hasfeaturecat" analyzer="org.fao.geonet.kernel.search.GeoNetworkAnalyzer"/>
-    
-    <!-- 
+<!--
     <Field name="any" analyzer="org.fao.geonet.kernel.search.GeoNetworkAnalyzer"/>
-    
+-->
+	<!-- 
     <Field name="any" analyzer="org.apache.lucene.analysis.standard.StandardAnalyzer">
       <Param name="version" type="org.apache.lucene.util.Version"/>
       <Param name="stopWords" type="java.io.File" value="/path/to/resources/stopwords/en.txt"/>
@@ -193,7 +193,7 @@
     <Field name="_cat" analyzer="org.apache.lucene.analysis.KeywordAnalyzer"/>
     
 
-    <Field name="keyword" analyzer="org.apache.lucene.analysis.KeywordAnalyzer"/>
+<!--    <Field name="keyword" analyzer="org.apache.lucene.analysis.KeywordAnalyzer"/>-->
     <Field name="inspirerelated" analyzer="org.apache.lucene.analysis.KeywordAnalyzer"/>
     <Field name="_groupPublished" analyzer="org.apache.lucene.analysis.KeywordAnalyzer"/>
   </fieldSpecificAnalyzer>
@@ -272,6 +272,7 @@
     <Field name="abstract"/>
     <Field name="title"/>
     <Field name="altTitle"/>
+    <Field name="keyword"/>
     <Field name="keywordType"/>
     <!--<Field name="orgName"/>-->
     <Field name="specificationTitle"/>

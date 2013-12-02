@@ -533,7 +533,7 @@ GeoNetwork.Lang.nl = {
 	'where': "Waar",
 	'what': "Wat",
 	'advancedSearchOptions': "Geavanceerde zoek opties",
-	'hitsPerPage': "REsultaten per pagina",
+	'hitsPerPage': "Resultaten per pagina",
 	'Searchforspatialdataon': "Zoek ruimtelijke data over",
 	'search': "zoeken",
 	'fullTextSearch': "Gehele tekst doorzoeken",
