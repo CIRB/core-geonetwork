@@ -35,6 +35,7 @@ import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.util.ReaderUtil;
 import org.fao.geonet.GeonetContext;
 import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.csw.common.Csw;
@@ -228,9 +229,8 @@ public class GetDomain extends AbstractOperation implements CatalogService
 						property = indexField;
 	
 					// check if params asked is in the index using getFieldNames ?
-					if (reader.getFieldInfos().fieldInfo(property) != null)
-						continue;
-					
+//					if (ReaderUtil.getMergedFieldInfos(reader).fieldInfo(property) != null)
+//						continue;
 					boolean isRange = false;
 					if (CatalogConfiguration.getGetRecordsRangeFields().contains(
 							property))

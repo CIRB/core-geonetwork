@@ -201,7 +201,7 @@
 			</inspire_com:ResourceLocator>
 
 			<inspire_com:ResourceLocator>
-				<inspire_com:URL>$PROTOCOL://$HOST$PORT$SERVLET</inspire_com:URL>
+				<inspire_com:URL>$PROTOCOL://$HOST$PORT$SERVLET/srv/$LOCALE/$END-POINT</inspire_com:URL>
 				<inspire_com:MediaType>text/html</inspire_com:MediaType>
 			</inspire_com:ResourceLocator>
 
@@ -213,20 +213,17 @@
             </inspire_com:TemporalReference>
 
             <inspire_com:Conformity>
-				<inspire_com:Specification xsi:type="inspire_com:citationInspireInteroperabilityRegulation_eng">
-                    <inspire_com:Title>COMMISSION REGULATION (EU) No 1089/2010 of 23 November 2010 implementing Directive 2007/2/EC of the European Parliament and of the Council as regards interoperability of spatial data sets and services</inspire_com:Title>
-					<inspire_com:DateOfPublication>2010-12-08</inspire_com:DateOfPublication>
-					<inspire_com:URI>OJ:L:2010:323:0011:0102:EN:PDF</inspire_com:URI>
-					<inspire_com:ResourceLocator>
-						<inspire_com:URL>http://eur-lex.europa.eu/LexUriServ/LexUriServ.do?uri=OJ:L:2010:323:0011:0102:EN:PDF</inspire_com:URL>
-						<inspire_com:MediaType>application/pdf</inspire_com:MediaType>
-					</inspire_com:ResourceLocator>
-				</inspire_com:Specification>
-
-				<inspire_com:Degree>notEvaluated</inspire_com:Degree>
+		        <inspire_com:Specification xsi:type="inspire_com:citationInspireInteroperabilityRegulation_fre">
+		          <inspire_com:Title>RÈGLEMENT (UE) N o 1089/2010 DE LA COMMISSION du 23 novembre 2010 portant modalités d'application de la directive 2007/2/CE du Parlement européen et du Conseil en ce qui concerne l'interopérabilité des séries et des services de données géographiques</inspire_com:Title>
+		          <inspire_com:DateOfPublication>2010-12-08</inspire_com:DateOfPublication>
+		          <inspire_com:URI>OJ:L:2010:323:0011:0102:FR:PDF</inspire_com:URI>
+		          <inspire_com:ResourceLocator>
+		            <inspire_com:URL>http://eur-lex.europa.eu/LexUriServ/LexUriServ.do?uri=OJ:L:2010:323:0011:0102:FR:PDF</inspire_com:URL>
+		            <inspire_com:MediaType>application/pdf</inspire_com:MediaType>
+		          </inspire_com:ResourceLocator>
+		        </inspire_com:Specification>
+		        <inspire_com:Degree>notEvaluated</inspire_com:Degree>
 			</inspire_com:Conformity>
-
-
             <inspire_com:MetadataPointOfContact>
                 <inspire_com:OrganisationName>$ORG_NAME</inspire_com:OrganisationName>
                 <inspire_com:EmailAddress>$EMAIL</inspire_com:EmailAddress>
@@ -238,11 +235,11 @@
             <inspire_com:MandatoryKeyword xsi:type="inspire_com:classificationOfSpatialDataService">
                 <inspire_com:KeywordValue>infoCatalogueService</inspire_com:KeywordValue>
             </inspire_com:MandatoryKeyword>
-
+<!-- 
             <inspire_com:Keyword>
                 <inspire_com:KeywordValue xsi:type="inspire_com:discoverySpatialDataServiceType">discovery</inspire_com:KeywordValue>
             </inspire_com:Keyword>
-
+-->
 			<inspire_com:SupportedLanguages>
             <!--
             List of supported languages

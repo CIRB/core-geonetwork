@@ -29,21 +29,24 @@
 	<!-- heikki: added conversion for geobru extension elements -->
 	<xsl:template match="geobru:BXL_Address">
 		<gmd:CI_Address>
-				<xsl:apply-templates select="@*|node()"/>
+			<xsl:copy-of select="@*[not(name()='gco:isoType')]"/>
+			<xsl:apply-templates select="*"/>
 		</gmd:CI_Address>
 	</xsl:template>
 
 	<!-- heikki: added conversion for geobru extension elements -->
 	<xsl:template match="geobru:BXL_Lineage">
 		<gmd:LI_Lineage>
-				<xsl:apply-templates select="@*|node()"/>
+			<xsl:copy-of select="@*[not(name()='gco:isoType')]"/>
+			<xsl:apply-templates select="*"/>
 		</gmd:LI_Lineage>
 	</xsl:template>	
 	
 	<!-- heikki: added conversion for geobru extension elements -->
 	<xsl:template match="geobru:BXL_Distribution">
 		<gmd:MD_Distribution>
-				<xsl:apply-templates select="@*|node()"/>
+			<xsl:copy-of select="@*[not(name()='gco:isoType')]"/>
+			<xsl:apply-templates select="*"/>
 		</gmd:MD_Distribution>
 	</xsl:template>		
 	
