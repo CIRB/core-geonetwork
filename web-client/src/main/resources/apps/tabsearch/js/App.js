@@ -395,7 +395,7 @@ GeoNetwork.app = function() {
 		                        pack: 'center',
 		                        align: 'center'
 		                    },
-		                    bodyStyle:'padding-top:5px;border-width:0px',
+		                    bodyStyle:'padding-top:65px;border-width:0px',
 		                    border:true,
 		                    items:[
 		                   		new Ext.form.Label({
