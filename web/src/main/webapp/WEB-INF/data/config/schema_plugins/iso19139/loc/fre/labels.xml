@@ -2415,6 +2415,7 @@
       <option value="TIFF">TIFF</option>
       <option value="ECW">ECW</option>
       <option value="ZIP">ZIP</option>
+      <option value="GML">GML</option>
     </helper>
   </element>
   <element name="gmd:name" id="307.0" context="gmd:MD_ExtendedElementInformation">

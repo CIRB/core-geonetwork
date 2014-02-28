@@ -223,6 +223,18 @@
 		<label>Overige beperkingen</label>
 		<description>Beperking met betrekking tot toegang en gebruik: Beperkingen op openbare toegang (Annex 8.2)</description>
 		<condition>Verplicht</condition>
+		  <helper>
+      <option value="Geen publieke toegangsrestricties volgens INSPIRE">Geen publieke toegangsrestricties volgens INSPIRE</option>
+      <option value="L124-4-I-1 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.a)">L124-4-I-1 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.a)</option>
+      <option value="L124-5-II-1 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.b)">L124-5-II-1 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.b)</option>
+      <option value="L124-5-II-2 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.c)">L124-5-II-2 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.c)</option>
+      <option value="L124-4-I-1 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.d)">L124-4-I-1 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.d)</option>
+      <option value="L124-5-II-3 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.e)">L124-5-II-3 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.e)</option>
+      <option value="L124-4-I-1 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.f)">L124-4-I-1 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.f)</option>
+      <option value="L124-4-I-3 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.g)">L124-4-I-3 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.g)</option>
+      <option value="L124-4-I-2 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.h)">L124-4-I-2 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.h)</option>
+      <option value="L127-8-IV du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 17.7)">L127-8-IV du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 17.7)</option>
+    </helper>
 	</element>
 	<element name="gmd:organisationName" context="gmd:pointOfContact" id="376.0">
 		<label>Organisatie</label>
