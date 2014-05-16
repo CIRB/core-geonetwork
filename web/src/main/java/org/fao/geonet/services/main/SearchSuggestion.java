@@ -171,10 +171,10 @@ public class SearchSuggestion implements Service {
 		}
 //		System.out.println(Xml.getString(result));
         if(searchValue.startsWith("*")) {
-        	searchValue = searchValue.substring(0, searchValue.length());
+        	searchValue = searchValue.substring(1, searchValue.length());
         }
         if(searchValue.endsWith("*")) {
-        	searchValue = searchValue.substring(1, searchValue.length());
+        	searchValue = searchValue.substring(0, searchValue.length()-1);
         }
 		Map<String, String> suggestionValueCountMap = new HashMap<String, String>();
 		if (fieldName.equals("any")) {
