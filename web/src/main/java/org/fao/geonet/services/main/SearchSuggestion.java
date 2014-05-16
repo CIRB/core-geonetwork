@@ -105,7 +105,15 @@ public class SearchSuggestion implements Service {
 		SearchManager sm = gc.getSearchmanager();
 		MetaSearcher searcher = sm.newSearcher(SearchManager.LUCENE, Geonet.File.SEARCH_LUCENE);
         String searchValue = StringUtils.replaceEach(Util.getParam(params, "q", ""), specialChars, normalChars).toLowerCase();
-		String fieldName = Util.getParam(params, "field", _defaultSearchField);
+        
+        // Check if the user uses Wild card '*' and add it if it's not the case
+
+        if(StringUtils.isNotEmpty(searchValue) && !searchValue.contains("*")) {
+        	searchValue = "*" + searchValue + "*";
+        }
+        
+        
+        String fieldName = Util.getParam(params, "field", _defaultSearchField);
 		Element result = null;
 		try {
 			
@@ -162,6 +170,12 @@ public class SearchSuggestion implements Service {
 			searcher.close();
 		}
 //		System.out.println(Xml.getString(result));
+        if(searchValue.startsWith("*")) {
+        	searchValue = searchValue.substring(0, searchValue.length());
+        }
+        if(searchValue.endsWith("*")) {
+        	searchValue = searchValue.substring(1, searchValue.length());
+        }
 		Map<String, String> suggestionValueCountMap = new HashMap<String, String>();
 		if (fieldName.equals("any")) {
 			addSuggestions(suggestionValueCountMap, (List<Element>) Xml.selectNodes(result, "summary/keywords/keyword"), searchValue);
@@ -244,4 +258,5 @@ public class SearchSuggestion implements Service {
             .append(str.substring(1))
             .toString();
     }
+    
 }

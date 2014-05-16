@@ -29,6 +29,7 @@ import jeeves.server.UserSession;
 import jeeves.server.context.ServiceContext;
 import jeeves.utils.Util;
 
+import org.apache.commons.lang.StringUtils;
 import org.fao.geonet.GeonetContext;
 import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.kernel.SelectionManager;
@@ -72,6 +73,10 @@ public class XmlSearch implements Service
 		SearchManager searchMan = gc.getSearchmanager();
 
 		Element elData  = SearchDefaults.getDefaultSearch(context, params);
+        String any = elData.getChildText("any");
+        if(StringUtils.isNotEmpty(any) && !any.contains("*")) {
+        	elData.getChild("any").setText("*" + any + "*");
+        }
 		String  sRemote = elData.getChildText(Geonet.SearchResult.REMOTE);
 		boolean remote  = sRemote != null && sRemote.equals(Geonet.Text.ON);
 
