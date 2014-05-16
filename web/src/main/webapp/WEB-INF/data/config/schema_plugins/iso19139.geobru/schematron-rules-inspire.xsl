@@ -608,7 +608,7 @@
 					<xsl:attribute name="location"><xsl:apply-templates select="." mode="schematron-select-full-path"/></xsl:attribute>
 					<svrl:text>
 						<xsl:text/>
-						<xsl:copy-of select="$loc/strings/alert.M40/div"/><xsl:value-of select="concat(' (', $keyword,')')" />
+						<xsl:copy-of select="$loc/strings/alert.M40/div"/><!--<xsl:value-of select="concat(' (', $keyword,')')" />-->
 						<xsl:text/>
 					</svrl:text>
 				</svrl:failed-assert>
