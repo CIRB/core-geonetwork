@@ -179,6 +179,9 @@
 			  
 				<xsl:for-each select="gmd:keyword/gco:CharacterString">
                     <Field name="keyword" string="{string(.)}" store="true" index="true"/>
+                    <xsl:if test="string-length(.) &gt; 0 and normalize-space(lower-case(.))='reporting inspire'">
+                   		<Field name="reportinginspire" string="on" store="false" index="true"/>
+               		</xsl:if>
 					<Field name="any" string="{string(.)}" store="true" index="true"/>
 					
                     <xsl:if test="$inspire='true'">

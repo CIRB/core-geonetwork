@@ -278,9 +278,13 @@ GeoNetwork.app = function() {
 				GeoNetwork.util.INSPIRESearchFormTools
 						.getThemesField(
 								catalogue.services,
-								true),
-				orgNameField,
-/*
+								true));
+								
+        if (GeoNetwork.Settings.nodeType.toLowerCase() == "cirb") {
+        	advancedCriteria.push(orgNameField);
+        }
+		
+		advancedCriteria.push(/*
 * Removed by GVB
 */
 				//categoryField,
@@ -304,7 +308,9 @@ GeoNetwork.app = function() {
 */
 //				, validField, ownerField, isHarvestedField
 				);
-
+        if (GeoNetwork.Settings.nodeType.toLowerCase() != "cirb") {
+			advancedCriteria.push(GeoNetwork.util.INSPIRESearchFormTools.getReportingField());			
+		}
 		// Hide or show extra fields after login event
 		var adminFields = [
 /*

@@ -159,6 +159,8 @@ GeoNetwork.Lang.fr = {
 	/*
 	 * Added by GVB
 	 */
+    'reportinginspire': "Reporting INSPIRE",
+    'reportinginspirett': "Données qui contiennent le mot clé Reporting Inspire",
 	'inspirethemeEmptyText' : "Sélectionner un thème",
 	'inspireClassificationDataServices' : 'INSPIRE classification data services',
 	'serviceType' : 'Service type',

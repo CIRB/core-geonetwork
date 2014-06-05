@@ -60,3 +60,4 @@ GeoNetwork.WMSList = [['Geoserver', 'http://localhost/geoserver/wms?']];
 GeoNetwork.defaultViewMode = 'simple';
 
 Ext.BLANK_IMAGE_URL = '../js/ext/resources/images/default/s.gif';
+GeoNetwork.Settings.nodeType = "CIRB";

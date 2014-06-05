@@ -116,6 +116,20 @@ GeoNetwork.util.INSPIRESearchFormTools = {
         });
         return inspirerelated;
     },
+    /** api:method[getReportingField] 
+     *  :return: Checkbox for dataset related to
+     *    Reporting Inspire keyword
+     * 
+     */
+    getReportingField : function () {
+        var reportinginspire = new Ext.form.Checkbox({
+            hideLabel : true,
+            boxLabel : OpenLayers.i18n('reportinginspire'),
+            tabTip : OpenLayers.i18n('reportinginspirett'),
+            name : 'O_reportinginspire'
+        });
+        return reportinginspire;
+    },
     /** api:method[getThemesFieldWithSuggestion] 
      * 
      *  :param services: Catalogue service URLs (eg. catalogue.services).

@@ -153,6 +153,8 @@ GeoNetwork.lang.en = {
     /*
     * Added by GVB
     */
+    'reportinginspire': "Reporting INSPIRE",
+    'reportinginspirett': "Dataset which contains the Reporting Inspire keyword",
     'inspirethemeEmptyText': "Select a theme",
     'inspireClassificationDataServices': 'INSPIRE classification data services',
     'serviceType': 'Service type',

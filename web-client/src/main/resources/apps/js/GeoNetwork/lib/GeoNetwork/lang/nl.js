@@ -152,6 +152,8 @@ GeoNetwork.Lang.nl = {
     /*
     * Added by GVB
     */
+    'reportinginspire': "Reporting INSPIRE",
+    'reportinginspirett': "Dataset die Reporting Inspire trefwoord bevat",
     'inspirethemeEmptyText': "Selecteer een thema",
     'inspireClassificationDataServices': "INSPIRE classificatie data services",
     'serviceType': "Service type",

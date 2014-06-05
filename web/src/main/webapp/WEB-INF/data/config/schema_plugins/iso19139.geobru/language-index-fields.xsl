@@ -139,6 +139,9 @@
 				<xsl:for-each select="gmd:keyword//gmd:LocalisedCharacterString[@locale=$pound2LangId or @locale=$pound3LangId]">
 					<Field name="keyword" string="{string(.)}" store="true" index="true"/>
 					<Field name="any" string="{string(.)}" store="true" index="true"/>
+                    <xsl:if test="string-length(.) &gt; 0 and normalize-space(lower-case(.))='reporting inspire'">
+                   		<Field name="reportinginspire" string="on" store="false" index="true"/>
+               		</xsl:if>
                     <xsl:if test="$inspire='true'">
                         <xsl:if test="string-length(.) &gt; 0">
                          
