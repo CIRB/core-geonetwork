@@ -26,6 +26,16 @@
 			<output forward="metadata.edit" />
 		</service>
 
+		<service name="metadata.xmlupdate">
+			<class name=".services.metadata.XmlUpdate"/>
+			<output sheet="metadata-update-results.xsl"/>
+
+			<error sheet="error.xsl">
+				<xml name="error" file="xml/validation-error.xml" />
+				<xml name="validation" file="xml/metadata-validate.xml" />
+			</error>
+
+		</service>
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 		<service name="metadata.show">
@@ -545,6 +555,14 @@
 				<call name="groups"  class=".guiservices.groups.GetMine"/>
 				<call name="categories"        class=".services.category.List"/>
 				<call name="importStyleSheets" class=".guiservices.util.GetImportXSLs"/>
+			</output>
+		</service>
+
+		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+		<service name="metadata.xmlupdate.form">
+			<output sheet="metadata-update-form.xsl">
+				<call name="updateStyleSheets" class=".guiservices.util.GetUpdateXSLs"/>
 			</output>
 		</service>
 

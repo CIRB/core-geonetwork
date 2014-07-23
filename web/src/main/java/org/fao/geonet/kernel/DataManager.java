@@ -3253,7 +3253,12 @@ public class DataManager {
 	//---
 	//--------------------------------------------------------------------------
 
-	private String baseURL;
+    
+    public XmlSerializer getXmlSerializer() {
+        return xmlSerializer;
+    }
+
+    private String baseURL;
 
 	private EditLib editLib;
 
