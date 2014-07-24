@@ -823,13 +823,16 @@
     <module>cachingxslt</module>
     <module>jeeves</module> 
     <module>oaipmh</module>
+<!--
     <module>sde</module>
+-->
     <module>web-client</module>
     <module>web</module>
 <!--     <module>geoserver</module> -->
   </modules>
   
   <profiles>
+ <!-- 
     <profile>
       <id>itests</id>
       <modules>
@@ -847,6 +850,8 @@
         <module>gast</module>
       </modules>
     </profile>
+-->
+
   </profiles>
 
   <distributionManagement>

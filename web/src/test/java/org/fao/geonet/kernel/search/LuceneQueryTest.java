@@ -12,6 +12,7 @@ import org.fao.geonet.kernel.search.LuceneConfig.LuceneConfigNumericField;
 import org.jdom.DefaultJDOMFactory;
 import org.jdom.Element;
 import org.jdom.JDOMFactory;
+import org.junit.Ignore;
 
 /**
  *
@@ -20,6 +21,7 @@ import org.jdom.JDOMFactory;
  * @author heikki doeleman
  *
  */
+@Ignore
 public class LuceneQueryTest extends TestCase {
 
 	private Set<String> _tokenizedFieldSet;
