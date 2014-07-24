@@ -1,15 +1,18 @@
 package org.fao.geonet;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import jeeves.server.ServiceConfig;
 import jeeves.server.sources.http.JeevesServlet;
 import jeeves.utils.BinaryFile;
 import jeeves.utils.Log;
 
+import org.apache.commons.lang.StringUtils;
 import org.fao.geonet.constants.Geonet;
 
 /**
@@ -26,6 +29,7 @@ public class GeonetworkDataDirectory {
 	 */
 	private static final String GEONETWORK_DEFAULT_DATA_DIR = "WEB-INF" + File.separator + "data"  + File.separator;
 	public static final String KEY_SUFFIX = ".dir";
+	public static final String DRIVE_MAPPING = ".drivemapping";
 	public static final String GEONETWORK_DIR_KEY = "geonetwork.dir";
 
 	private String systemDataDir;
@@ -132,6 +136,26 @@ public class GeonetworkDataDirectory {
 			ServiceConfig handlerConfig) {
 
 		// System property defined according to webapp name
+		String driveMapping = GeonetworkDataDirectory.lookupProperty(jeevesServlet,
+				handlerConfig, webappName + DRIVE_MAPPING);
+		if (StringUtils.isNotBlank(driveMapping)) {
+			Process process;
+			try {
+				process = Runtime.getRuntime().exec(driveMapping, null, null);
+				BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+				try {
+					process.waitFor();
+				} catch (InterruptedException e) {
+					Log.error("Error creating drive mapping:",e.getMessage());
+				}
+				while (errorReader.ready()) {
+					Log.error("Error creating drive mapping:", errorReader.readLine());
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				Log.error("Error creating drive mapping:", e.getMessage());
+			}
+		}
 		systemDataDir = GeonetworkDataDirectory.lookupProperty(jeevesServlet,
 				handlerConfig, webappName + KEY_SUFFIX);
 
@@ -168,6 +192,8 @@ public class GeonetworkDataDirectory {
 				useDefaultDataDir = true;
 			}
 	
+/*
+			// commented otherwise mapped drives can not be used
 			if (!systemDataFolder.isAbsolute()) {
 				Log.warning(
 						Geonet.DATA_DIRECTORY,
@@ -177,6 +203,7 @@ public class GeonetworkDataDirectory {
 								+ KEY_SUFFIX + " or geonetwork.dir environment variable.");
 				useDefaultDataDir = true;
 			}
+*/
 		}
 		
 		if (useDefaultDataDir) {
@@ -198,11 +225,16 @@ public class GeonetworkDataDirectory {
 		// Set subfolder data directory
 		setResourceDir(webappName, handlerConfig, systemDataDir, ".lucene" + KEY_SUFFIX,
 				"index", Geonet.Config.LUCENE_DIR);
+/*		setResourceDir(webappName, handlerConfig, path + GEONETWORK_DEFAULT_DATA_DIR, ".config" + KEY_SUFFIX,
+				"config", Geonet.Config.CONFIG_DIR);*/
 		setResourceDir(webappName, handlerConfig, systemDataDir, ".config" + KEY_SUFFIX,
 				"config", Geonet.Config.CONFIG_DIR);
 		setResourceDir(webappName, handlerConfig, systemDataDir,
 				".codeList" + KEY_SUFFIX, "config" + File.separator + "codelist",
 				Geonet.Config.CODELIST_DIR);
+/*		setResourceDir(webappName, handlerConfig, path + GEONETWORK_DEFAULT_DATA_DIR, ".schema" + KEY_SUFFIX,
+				"config" + File.separator + "schema_plugins",
+				Geonet.Config.SCHEMAPLUGINS_DIR);*/
 		setResourceDir(webappName, handlerConfig, systemDataDir, ".schema" + KEY_SUFFIX,
 				"config" + File.separator + "schema_plugins",
 				Geonet.Config.SCHEMAPLUGINS_DIR);
@@ -215,7 +247,6 @@ public class GeonetworkDataDirectory {
 		setResourceDir(webappName, handlerConfig, systemDataDir,
 				".resources" + KEY_SUFFIX, "data" + File.separator + "resources",
 				Geonet.Config.RESOURCES_DIR);
-
 		handlerConfig.setValue(Geonet.Config.HTMLCACHE_DIR,
 				handlerConfig.getValue(Geonet.Config.RESOURCES_DIR)
 						+ File.separator + "htmlcache");
@@ -298,6 +329,9 @@ public class GeonetworkDataDirectory {
 			dir = systemDataDir + folder;
 			System.setProperty(envKey, dir);
 		} else {
+			if (envKey.endsWith(".resources.dir")) {
+				System.setProperty(envKey, dir);
+			}
 			if (!new File(dir).isAbsolute()) {
 				Log.info(Geonet.DATA_DIRECTORY, "    - " + envKey
 						+ " for directory " + dir

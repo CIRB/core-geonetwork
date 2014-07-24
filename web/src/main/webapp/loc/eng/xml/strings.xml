@@ -540,6 +540,7 @@
 	<imZoomToLayer>Zoom to selected layer extent</imZoomToLayer>
 	<infoTitle>Info</infoTitle>
 	<insert>Insert</insert>
+	<existingUpdate>Update</existingUpdate>
 	<insertFileMode js="true">File Upload</insertFileMode>
 	<insertMode>Insert mode:</insertMode>
 	<insertPasteMode>Copy/Paste</insertPasteMode>
@@ -634,6 +635,7 @@
 	<metadataAdded>Metadata added with ID:</metadataAdded>
 	<metadataDeleted>Metadata deleted with ID:</metadataDeleted>
 	<metadataInsertResults>Results of Metadata Import</metadataInsertResults>
+	<metadataUpdateResults>Results of Metadata Update</metadataUpdateResults>
 	<metadataJSForm>Metadata from JS Form</metadataJSForm>
   <failOnError>Fail on error</failOnError>
 	<metadataRecordsProcessed>Total number of metadata records processed:</metadataRecordsProcessed>
@@ -649,6 +651,7 @@
 	<newGroup>Add a new group</newGroup>
 	<newMdDes>Adds a new metadata into geonetwork copying it from a template</newMdDes>
 	<newMdInsert>New metadata inserted:</newMdInsert>
+	<existingMdUpdate>Existing metadata updated</existingMdUpdate>
 	<newMetadata>New metadata</newMetadata>
 	<newOwner>New Owner</newOwner>
 	<newPassword>New Password</newPassword>
@@ -906,6 +909,7 @@
 	<winInfo2>Throughout the Help (?) icon give you access to explanations. When you activate this icon, it's output will be displayed in this Resource Window.</winInfo2>
 	<wwwlink>Web link</wwwlink>
 	<xmlInsert>Import metadata record in XML or MEF format</xmlInsert>
+	<xmlUpdate>Update XML metadata</xmlUpdate>
 	<xmlInsertTitle>Metadata insert</xmlInsertTitle>
 	<xmlTab>XML view</xmlTab>
 	<inspireTab>INSPIRE view</inspireTab>
