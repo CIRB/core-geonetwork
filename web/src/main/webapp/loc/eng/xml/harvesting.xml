@@ -220,6 +220,7 @@
 	<categories>Categories</categories>
 	<url>URL</url>
 	<capabUrl>Service URL</capabUrl>
+	<outputSchema>Outputschema</outputSchema>
 	<icon>Icon</icon>
 	<group>Group</group>
 	<groups>Groups</groups>

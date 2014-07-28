@@ -219,6 +219,7 @@
 	<categories>Categories</categories>
 	<url>URL</url>
 	<capabUrl>Capabilities URL</capabUrl>
+	<outputSchema>Outputschema</outputSchema>
 	<icon>Icon</icon>
 	<group>Groupe</group>
 	<groups>Groupes</groups>

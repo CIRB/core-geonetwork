@@ -35,7 +35,12 @@
 
 			<tr>
 				<td class="padded"><xsl:value-of select="/root/gui/harvesting/capabUrl"/></td>
-				<td class="padded"><input id="csw.capabUrl" class="content" type="text" value="" size="30"/></td>
+				<td class="padded"><input id="csw.capabUrl" class="content" type="text" value="" size="100"/></td>
+			</tr>
+
+			<tr>
+				<td class="padded"><xsl:value-of select="/root/gui/harvesting/outputSchema"/></td>
+				<td class="padded"><input id="csw.outputSchema" class="content" type="text" value="" size="30"/></td>
 			</tr>
 
 			<tr>

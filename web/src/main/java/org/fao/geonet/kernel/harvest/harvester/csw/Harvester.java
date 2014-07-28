@@ -37,6 +37,7 @@ import jeeves.server.context.ServiceContext;
 import jeeves.utils.Xml;
 import jeeves.utils.XmlRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.fao.geonet.GeonetContext;
 import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.csw.common.ConstraintLanguage;
@@ -180,7 +181,6 @@ class Harvester
 		GetRecordsRequest request = new GetRecordsRequest(context);
 
 		request.setResultType(ResultType.RESULTS);
-		//request.setOutputSchema(OutputSchema.OGC_CORE);	// Use default value
 		request.setElementSetName(ElementSetName.SUMMARY);
 		request.setMaxRecords(GETRECORDS_NUMBER_OF_RESULTS_PER_PAGE +"");
 
@@ -265,6 +265,27 @@ class Harvester
     //---------------------------------------------------------------------------
 
     /**
+     * Gets the outputSchema for the harvester request
+     *
+     * @param oper
+     * @param outputSchema
+     * @return outputSchema
+     */
+    public static String getOutputSchema(CswOperation oper, String outputSchema) {
+		if (StringUtils.isNotBlank(outputSchema)) {
+			if (oper.outputSchemaList.contains(outputSchema)) {
+				return outputSchema;
+			} else {
+				System.out.println("Outputschema " + outputSchema + " not supported by this service, clear or change the configured outputschemause in one of next supported outputschemas :");
+				for (String supportedOutputSchema : oper.outputFormatList) {
+					System.out.println(supportedOutputSchema);					
+				}
+				System.out.println("Prefered outputschema " + oper.preferredOutputSchema + " is used");
+			}
+		}
+		return oper.preferredOutputSchema;
+    }
+    /**
      * Configs the harvester request
      *
      * @param request
@@ -284,7 +305,7 @@ class Harvester
 		if (oper.getUrl != null && preferredMethod.equals("GET") && oper.constraintLanguage.contains("cql_text")) {
 			request.setUrl(oper.getUrl);
             request.setServerVersion(server.getPreferredServerVersion());
-            request.setOutputSchema(oper.preferredOutputSchema);
+			request.setOutputSchema(getOutputSchema(oper, params.outputSchema));
 			request.setConstraintLanguage(ConstraintLanguage.CQL);
 			request.setConstraintLangVersion(CONSTRAINT_LANGUAGE_VERSION);
 			request.setConstraint(getCqlConstraint(s));
@@ -297,7 +318,7 @@ class Harvester
 		} else if (oper.postUrl != null && preferredMethod.equals("POST") && oper.constraintLanguage.contains("filter")) {
 			request.setUrl(oper.postUrl);
             request.setServerVersion(server.getPreferredServerVersion());
-            request.setOutputSchema(oper.preferredOutputSchema);
+			request.setOutputSchema(getOutputSchema(oper, params.outputSchema));
 			request.setConstraintLanguage(ConstraintLanguage.FILTER);
 			request.setConstraintLangVersion(CONSTRAINT_LANGUAGE_VERSION);
 			request.setConstraint(getFilterConstraint(s));
@@ -311,7 +332,7 @@ class Harvester
 		    if (oper.getUrl != null && oper.constraintLanguage.contains("cql_text")) {
                 request.setUrl(oper.getUrl);
                 request.setServerVersion(server.getPreferredServerVersion());
-                request.setOutputSchema(oper.preferredOutputSchema);
+    			request.setOutputSchema(getOutputSchema(oper, params.outputSchema));
                 request.setConstraintLanguage(ConstraintLanguage.CQL);
                 request.setConstraintLangVersion(CONSTRAINT_LANGUAGE_VERSION);
                 request.setConstraint(getCqlConstraint(s));
@@ -324,7 +345,7 @@ class Harvester
             } else if (oper.postUrl != null && oper.constraintLanguage.contains("filter")) {
 				request.setUrl(oper.postUrl);
                 request.setServerVersion(server.getPreferredServerVersion());
-                request.setOutputSchema(oper.preferredOutputSchema);
+    			request.setOutputSchema(getOutputSchema(oper, params.outputSchema));
 				request.setConstraintLanguage(ConstraintLanguage.FILTER);
 				request.setConstraintLangVersion(CONSTRAINT_LANGUAGE_VERSION);
 				request.setConstraint(getFilterConstraint(s));
@@ -341,7 +362,7 @@ class Harvester
 			    
 			    request.setUrl(oper.getUrl);
                 request.setServerVersion(server.getPreferredServerVersion());
-                request.setOutputSchema(oper.preferredOutputSchema);
+    			request.setOutputSchema(getOutputSchema(oper, params.outputSchema));
                 request.setConstraintLanguage(ConstraintLanguage.CQL);
                 request.setConstraintLangVersion(CONSTRAINT_LANGUAGE_VERSION);
                 request.setConstraint(getCqlConstraint(s));

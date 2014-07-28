@@ -23,17 +23,17 @@
 
 package org.fao.geonet.kernel.harvest.harvester.csw;
 
-import jeeves.exceptions.BadInputEx;
-import jeeves.utils.Util;
-import org.fao.geonet.kernel.DataManager;
-import org.fao.geonet.kernel.harvest.harvester.AbstractParams;
-import org.jdom.Element;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+
+import jeeves.exceptions.BadInputEx;
+import jeeves.utils.Util;
+
+import org.fao.geonet.kernel.DataManager;
+import org.fao.geonet.kernel.harvest.harvester.AbstractParams;
+import org.jdom.Element;
 
 //=============================================================================
 
@@ -65,6 +65,7 @@ public class CswParams extends AbstractParams
 		Element searches = node.getChild("searches");
 
 		capabUrl = Util.getParam(site, "capabilitiesUrl", "");
+		outputSchema = Util.getParam(site, "outputSchema", "");
 
         try {
             capabUrl = URLDecoder.decode(capabUrl, "UTF-8");
@@ -93,6 +94,7 @@ public class CswParams extends AbstractParams
 		Element searches = node.getChild("searches");
 
 		capabUrl = Util.getParam(site, "capabilitiesUrl", capabUrl);
+		outputSchema = Util.getParam(site, "outputSchema", outputSchema);
 
         try {
             capabUrl = URLDecoder.decode(capabUrl, "UTF-8");
@@ -132,6 +134,7 @@ public class CswParams extends AbstractParams
 		copyTo(copy);
 
 		copy.capabUrl = capabUrl;
+		copy.outputSchema = outputSchema;
 		copy.icon     = icon;
 
 		for (Search s : alSearches)
@@ -167,6 +170,7 @@ public class CswParams extends AbstractParams
 	//---------------------------------------------------------------------------
 
 	public String capabUrl;
+	public String outputSchema;
 	public String icon;
 
 	private List<Search> alSearches = new ArrayList<Search>();

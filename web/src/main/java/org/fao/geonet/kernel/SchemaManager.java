@@ -1481,7 +1481,7 @@ public class SchemaManager {
 				Attribute type = elem.getAttribute("type");
  					
 				// --- try and find the attribute and value in md 
-				if (mode==MODE_ATTRIBUTEWITHVALUE && elem.getName() == "attributes") {
+				if (mode==MODE_ATTRIBUTEWITHVALUE && "attributes".equals(elem.getName())) {
 					List<Attribute> atts = elem.getAttributes();
 					for (Attribute searchAtt : atts) {
                         if(Log.isDebugEnabled(Geonet.SCHEMA_MANAGER))
@@ -1496,7 +1496,7 @@ public class SchemaManager {
 					}
 
 				// --- try and find the namespace in md 
-				} else if (mode==MODE_NAMESPACE && elem.getName() == "namespaces") {
+				} else if (mode==MODE_NAMESPACE && "namespaces".equals(elem.getName())) {
 					List<Namespace> nss = elem.getAdditionalNamespaces();
 					for (Namespace ns : nss) {
                         if(Log.isDebugEnabled(Geonet.SCHEMA_MANAGER))

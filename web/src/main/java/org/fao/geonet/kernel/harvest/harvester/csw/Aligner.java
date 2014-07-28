@@ -23,13 +23,18 @@
 
 package org.fao.geonet.kernel.harvest.harvester.csw;
 
+import java.util.List;
+import java.util.Set;
+
 import jeeves.exceptions.OperationAbortedEx;
 import jeeves.interfaces.Logger;
 import jeeves.resources.dbms.Dbms;
 import jeeves.server.context.ServiceContext;
 import jeeves.utils.Xml;
+
 import org.fao.geonet.GeonetContext;
 import org.fao.geonet.constants.Geonet;
+import org.fao.geonet.constants.Params;
 import org.fao.geonet.csw.common.CswOperation;
 import org.fao.geonet.csw.common.CswServer;
 import org.fao.geonet.csw.common.ElementSetName;
@@ -41,10 +46,8 @@ import org.fao.geonet.kernel.harvest.harvester.GroupMapper;
 import org.fao.geonet.kernel.harvest.harvester.Privileges;
 import org.fao.geonet.kernel.harvest.harvester.RecordInfo;
 import org.fao.geonet.kernel.harvest.harvester.UUIDMapper;
+import org.fao.geonet.util.ISODate;
 import org.jdom.Element;
-
-import java.util.List;
-import java.util.Set;
 
 //=============================================================================
 
@@ -94,9 +97,7 @@ public class Aligner
 			}
 		}
 
-		if(oper.preferredOutputSchema != null) {
-			request.setOutputSchema(oper.preferredOutputSchema);
-		}
+		request.setOutputSchema(Harvester.getOutputSchema(oper, params.outputSchema));
 
         if(oper.preferredServerVersion != null) {
 			request.setServerVersion(oper.preferredServerVersion);
@@ -151,8 +152,19 @@ public class Aligner
 
 			String id = dataMan.getMetadataId(dbms, ri.uuid);
 
-			if (id == null)	addMetadata(ri);
-			else				updateMetadata(ri, id);
+			if (id == null) {
+				try {
+					addMetadata(ri);
+	            } catch (Exception ex) {
+	                log.error("Can not insert metadata with uuid " + ri.uuid + ":" + ex);
+				}
+			} else {
+				try {
+					updateMetadata(ri, id);
+	            } catch (Exception ex) {
+	                log.error("Can not update metadata with uuid " + ri.uuid + ":" + ex);
+				}
+			}
 		}
 
 		log.info("End of alignment for : "+ params.name);
@@ -203,6 +215,8 @@ public class Aligner
 
 		addPrivileges(id);
 		addCategories(id);
+		dataMan.setStatusExt(context, dbms, iId, new Integer(Params.Status.APPROVED),
+				new ISODate().toString(), "Status veranderd na harvesting");
 
 		dbms.commit();
 		dataMan.indexMetadata(dbms, id);
@@ -282,9 +296,7 @@ public class Aligner
 		String date = localUuids.getChangeDate(ri.uuid);
 
 		if (date == null) {
-            if(log.isDebugEnabled()) {
-                log.debug("  - Skipped metadata managed by another harvesting node. uuid:"+ ri.uuid +", name:"+ params.name);
-            }
+            log.error("  - Skipped metadata managed by another harvesting node. uuid:"+ ri.uuid +", name:"+ params.name);
 		} else {
 			if (!ri.isMoreRecentThan(date)) {
                 if(log.isDebugEnabled()) {
@@ -315,6 +327,8 @@ public class Aligner
 
 				dbms.execute("DELETE FROM MetadataCateg WHERE metadataId=?", Integer.parseInt(id));
 				addCategories(id);
+				dataMan.setStatusExt(context, dbms, Integer.parseInt(id), new Integer(Params.Status.APPROVED),
+						new ISODate().toString(), "Status veranderd na harvesting");
 
 				dbms.commit();
 				dataMan.indexMetadata(dbms, id);

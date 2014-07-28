@@ -148,6 +148,7 @@ public class CswHarvester extends AbstractHarvester
 		CswParams params = (CswParams) p;
 
 		settingMan.add(dbms, "id:"+siteId, "capabUrl", params.capabUrl);
+		settingMan.add(dbms, "id:"+siteId, "outputSchema", params.outputSchema);
 		settingMan.add(dbms, "id:"+siteId, "icon",     params.icon);
 
 		//--- store search nodes
