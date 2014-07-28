@@ -2457,7 +2457,7 @@ public class DataManager {
      * @throws Exception
      */
 	public void setStatusExt(ServiceContext context, Dbms dbms, int id, int status, String changeDate, String changeMessage) throws Exception {
-		dbms.execute("INSERT into MetadataStatus(metadataId, statusId, userId, changeDate, changeMessage) VALUES (?,?,?,?,?)", id, status, context.getUserSession().getUserIdAsInt(), changeDate, changeMessage);
+		dbms.execute("INSERT into MetadataStatus(metadataId, statusId, userId, changeDate, changeMessage) VALUES (?,?,?,?,?)", id, status, (context.getUserSession()!=null && context.getUserSession().getUserId()!=null)?context.getUserSession().getUserId():1, changeDate, changeMessage);
 		if (svnManager != null) {
 		    svnManager.setHistory(dbms, id+"", context);
 		}

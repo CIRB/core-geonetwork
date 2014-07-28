@@ -23,6 +23,20 @@
 
 package org.fao.geonet.kernel.harvest.harvester.ogcwxs;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import jeeves.interfaces.Logger;
 import jeeves.resources.dbms.Dbms;
 import jeeves.server.context.ServiceContext;
@@ -30,6 +44,7 @@ import jeeves.utils.BinaryFile;
 import jeeves.utils.Util;
 import jeeves.utils.Xml;
 import jeeves.utils.XmlRequest;
+
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -46,25 +61,12 @@ import org.fao.geonet.kernel.setting.SettingInfo;
 import org.fao.geonet.lib.Lib;
 import org.fao.geonet.services.thumbnail.Set;
 import org.fao.geonet.util.FileCopyMgr;
+import org.fao.geonet.util.ISODate;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.filter.ElementFilter;
 import org.jdom.xpath.XPath;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.URL;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 
 //=============================================================================
@@ -344,6 +346,8 @@ class Harvester
 		addCategories(id);
 		
 		dataMan.setHarvestedExt(dbms, iId, params.uuid, params.url);
+		dataMan.setStatusExt(context, dbms, Integer.parseInt(id), new Integer(Params.Status.APPROVED),
+				new ISODate().toString(), "Status veranderd na harvesting");
 		dataMan.setTemplate(dbms, iId, "n", null);
 		
 		dbms.commit();

@@ -505,7 +505,7 @@ public abstract class CatalogRequest
 			httpMethod = new GetMethod();
 			httpMethod.setPath(path);
 			httpMethod.setQueryString(alGetParams.toArray(new NameValuePair[1]));
-			System.out.println("GET params:"+httpMethod.getQueryString());
+//			System.out.println("GET params:"+httpMethod.getQueryString());
 			if (useSOAP)
 				httpMethod.addRequestHeader("Accept", "application/soap+xml");
 		}
@@ -523,7 +523,7 @@ public abstract class CatalogRequest
 				postData = Xml.getString(new Document(soapEmbed(params)));
 				post.setRequestEntity(new StringRequestEntity(postData, "application/soap+xml", "UTF8"));
 			}
-			System.out.println("POST params:"+Xml.getString(params));
+//			System.out.println("POST params:"+Xml.getString(params));
 			httpMethod = post;
 			httpMethod.setPath(address);
 		}

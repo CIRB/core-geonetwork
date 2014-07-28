@@ -277,7 +277,7 @@ class Harvester
 				return outputSchema;
 			} else {
 				System.out.println("Outputschema " + outputSchema + " not supported by this service, clear or change the configured outputschemause in one of next supported outputschemas :");
-				for (String supportedOutputSchema : oper.outputFormatList) {
+				for (String supportedOutputSchema : oper.outputSchemaList) {
 					System.out.println(supportedOutputSchema);					
 				}
 				System.out.println("Prefered outputschema " + oper.preferredOutputSchema + " is used");
@@ -310,10 +310,10 @@ class Harvester
 			request.setConstraintLangVersion(CONSTRAINT_LANGUAGE_VERSION);
 			request.setConstraint(getCqlConstraint(s));
 			request.setMethod(CatalogRequest.Method.GET);
-            for(String typeName: oper.typeNamesList) {
+			for(String typeName: oper.typeNamesList) {
                 request.addTypeName(TypeName.getTypeName(typeName));
             }
-            request.setOutputFormat(oper.preferredOutputFormat) ;
+			request.setOutputFormat(oper.preferredOutputFormat) ;
 
 		} else if (oper.postUrl != null && preferredMethod.equals("POST") && oper.constraintLanguage.contains("filter")) {
 			request.setUrl(oper.postUrl);
@@ -395,7 +395,12 @@ class Harvester
 		buildFilterQueryable(queriables, "csw:AnyText", freeText);
 		buildFilterQueryable(queriables, "dc:title", s.title);
 		buildFilterQueryable(queriables, "dct:abstract", s.abstrac);
-		buildFilterQueryable(queriables, "dc:subject", s.subject);
+		if (StringUtils.isNotBlank(s.subject)) {
+			String[] andSubjects = s.subject.split(" AND ");
+			for (String andSubject : andSubjects) {
+				buildFilterQueryable(queriables, "dc:subject", andSubject);
+			}
+		}
 		buildFilterQueryable(queriables, "dc:denominator", s.minscale, "PropertyIsGreaterThanOrEqualTo");
 		buildFilterQueryable(queriables, "dc:denominator", s.maxscale, "PropertyIsLessThanOrEqualTo");
 
@@ -469,7 +474,12 @@ class Harvester
 		buildCqlQueryable(queryables, "csw:AnyText", s.freeText);
 		buildCqlQueryable(queryables, "dc:title", s.title);
 		buildCqlQueryable(queryables, "dct:abstract", s.abstrac);
-		buildCqlQueryable(queryables, "dc:subject", s.subject);
+		if (StringUtils.isNotBlank(s.subject)) {
+			String[] andSubjects = s.subject.split(" AND ");
+			for (String andSubject : andSubjects) {
+				buildCqlQueryable(queryables, "dc:subject", andSubject);
+			}
+		}
 		buildCqlQueryable(queryables, "dct:denominator", s.minscale, ">=");
 		buildCqlQueryable(queryables, "dct:denominator", s.maxscale, "<=");
 		
