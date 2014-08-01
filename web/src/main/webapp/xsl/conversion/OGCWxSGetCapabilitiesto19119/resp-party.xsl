@@ -11,6 +11,7 @@
                                         xmlns:wms="http://www.opengis.net/wms"
 										xmlns:wcs="http://www.opengis.net/wcs"
 										xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+										xmlns:geobru="http://geobru.irisnet.be"
 										extension-element-prefixes="wcs ows wfs owsg ows11">
 
 	<!-- ============================================================================= -->
@@ -86,9 +87,31 @@
 							ows:ServiceContact/ows:ContactInfo/ows:Address|
 							ows11:ServiceContact/ows11:ContactInfo/ows11:Address">
 			<address>
-				<CI_Address>
-					<xsl:apply-templates select="." mode="Address"/>
-				</CI_Address>
+				<xsl:choose>
+					<xsl:when test="$outputSchema='iso19139.geobru'">
+						<geobru:BXL_Address gco:isoType="CI_Address_Type">
+							<xsl:apply-templates select="." mode="Address"/>
+							<xsl:for-each select="../ContactElectronicMailAddress|../wms:ContactElectronicMailAddress|../wcs:address/wcs:electronicMailAddress|../ows:ElectronicMailAddress|../ows11:ElectronicMailAddress">
+								<electronicMailAddress>
+									<gco:CharacterString><xsl:value-of select="."/></gco:CharacterString>
+								</electronicMailAddress>
+								<geobru:individualElectronicMailAddress>
+									<gco:CharacterString><xsl:value-of select="."/></gco:CharacterString>
+								</geobru:individualElectronicMailAddress>
+							</xsl:for-each>
+						</geobru:BXL_Address>
+					</xsl:when>
+					<xsl:otherwise>
+						<CI_Address>
+							<xsl:apply-templates select="." mode="Address"/>
+							<xsl:for-each select="../ContactElectronicMailAddress|../wms:ContactElectronicMailAddress|../wcs:address/wcs:electronicMailAddress|../ows:ElectronicMailAddress|../ows11:ElectronicMailAddress">
+								<electronicMailAddress>
+									<gco:CharacterString><xsl:value-of select="."/></gco:CharacterString>
+								</electronicMailAddress>
+							</xsl:for-each>
+						</CI_Address>
+					</xsl:otherwise>
+				</xsl:choose>
 			</address>
 		</xsl:for-each>
 
@@ -149,14 +172,6 @@
 			<country>
 				<gco:CharacterString><xsl:value-of select="."/></gco:CharacterString>
 			</country>
-		</xsl:for-each>
-
-		<!-- TODO - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-
-		<xsl:for-each select="ContactElectronicMailAddress|wms:ContactElectronicMailAddress|wcs:address/wcs:electronicMailAddress|ows:ElectronicMailAddress|ows11:ElectronicMailAddress">
-			<electronicMailAddress>
-				<gco:CharacterString><xsl:value-of select="."/></gco:CharacterString>
-			</electronicMailAddress>
 		</xsl:for-each>
 
 	</xsl:template>

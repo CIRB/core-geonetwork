@@ -27,49 +27,6 @@
 
 package org.fao.geonet.kernel;
 
-import jeeves.constants.Jeeves;
-import jeeves.exceptions.JeevesException;
-import jeeves.exceptions.XSDValidationErrorEx;
-import jeeves.resources.dbms.Dbms;
-import jeeves.server.UserSession;
-import jeeves.server.context.ServiceContext;
-import jeeves.utils.Log;
-import jeeves.utils.SerialFactory;
-import jeeves.utils.Util;
-import jeeves.utils.Xml;
-import jeeves.utils.Xml.ErrorHandler;
-import jeeves.xlink.Processor;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.Field.Index;
-import org.apache.lucene.document.Field.Store;
-import org.fao.geonet.GeonetContext;
-import org.fao.geonet.constants.Edit;
-import org.fao.geonet.constants.Geonet;
-import org.fao.geonet.constants.Params;
-import org.fao.geonet.exceptions.NoSchemaMatchesException;
-import org.fao.geonet.exceptions.SchemaMatchConflictException;
-import org.fao.geonet.exceptions.MetadataNotFoundEx;
-import org.fao.geonet.exceptions.SchematronValidationErrorEx;
-import org.fao.geonet.kernel.csw.domain.CswCapabilitiesInfo;
-import org.fao.geonet.kernel.csw.domain.CustomElementSet;
-import org.fao.geonet.kernel.harvest.HarvestManager;
-import org.fao.geonet.kernel.schema.MetadataSchema;
-import org.fao.geonet.kernel.search.SearchManager;
-import org.fao.geonet.kernel.search.UpdateIndexFunction;
-import org.fao.geonet.kernel.search.spatial.Pair;
-import org.fao.geonet.kernel.setting.SettingManager;
-import org.fao.geonet.lib.Lib;
-import org.fao.geonet.util.ISODate;
-import org.fao.geonet.util.ThreadUtils;
-import org.jdom.Attribute;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.Namespace;
-import org.jdom.filter.ElementFilter;
-
 import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -85,6 +42,46 @@ import java.util.UUID;
 import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import jeeves.constants.Jeeves;
+import jeeves.exceptions.JeevesException;
+import jeeves.exceptions.XSDValidationErrorEx;
+import jeeves.resources.dbms.Dbms;
+import jeeves.server.UserSession;
+import jeeves.server.context.ServiceContext;
+import jeeves.utils.Log;
+import jeeves.utils.SerialFactory;
+import jeeves.utils.Util;
+import jeeves.utils.Xml;
+import jeeves.utils.Xml.ErrorHandler;
+import jeeves.xlink.Processor;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+import org.fao.geonet.GeonetContext;
+import org.fao.geonet.constants.Edit;
+import org.fao.geonet.constants.Geonet;
+import org.fao.geonet.constants.Params;
+import org.fao.geonet.exceptions.MetadataNotFoundEx;
+import org.fao.geonet.exceptions.NoSchemaMatchesException;
+import org.fao.geonet.exceptions.SchemaMatchConflictException;
+import org.fao.geonet.exceptions.SchematronValidationErrorEx;
+import org.fao.geonet.kernel.csw.domain.CswCapabilitiesInfo;
+import org.fao.geonet.kernel.csw.domain.CustomElementSet;
+import org.fao.geonet.kernel.harvest.HarvestManager;
+import org.fao.geonet.kernel.schema.MetadataSchema;
+import org.fao.geonet.kernel.search.SearchManager;
+import org.fao.geonet.kernel.search.spatial.Pair;
+import org.fao.geonet.kernel.setting.SettingManager;
+import org.fao.geonet.lib.Lib;
+import org.fao.geonet.util.ISODate;
+import org.fao.geonet.util.ThreadUtils;
+import org.jdom.Attribute;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.Namespace;
+import org.jdom.filter.ElementFilter;
 
 /**
  * Handles all operations on metadata (select,insert,update,delete etc...).
@@ -1002,6 +999,26 @@ public class DataManager {
 		return uuid;
 	}
 
+	/**
+    *
+    * @param schema
+    * @param md
+    * @return
+    * @throws Exception
+    */
+	public String extractMetadataUUID(String schema, Element md) throws Exception {
+		String styleSheet = getSchemaDir(schema) + Geonet.File.EXTRACT_MD_UUID;
+		String mduuid       = Xml.transform(md, styleSheet).getText().trim();
+
+       if(Log.isDebugEnabled(Geonet.DATA_MANAGER))
+		Log.debug(Geonet.DATA_MANAGER, "Extracted MD UUID '"+ mduuid +"' for schema '"+ schema +"'");
+
+		//--- needed to detach md from the document
+		md.detach();
+
+		return mduuid;
+	}
+
 
     /**
      *
@@ -1443,7 +1460,7 @@ public class DataManager {
 		// Update fixed info for metadata record only, not for subtemplates
 		Element xml = Xml.loadString(data, false);
 		if (!isTemplate.equals("s")) {
-		    xml = updateFixedInfo(schema, Integer.toString(serial), uuid, xml, parentUuid, DataManager.UpdateDatestamp.yes, dbms, context);
+		    xml = updateFixedInfo(schema, Integer.toString(serial), uuid, xml, parentUuid, DataManager.UpdateDatestamp.yes, dbms, true);
 		}
 		
 		//--- store metadata
@@ -1498,7 +1515,7 @@ public class DataManager {
 
         if (ufo && isTemplate.equals("n")) {
             String parentUuid = null;
-            metadata = updateFixedInfo(schema, id$, uuid, metadata, parentUuid, DataManager.UpdateDatestamp.no, dbms, context);
+            metadata = updateFixedInfo(schema, id$, uuid, metadata, parentUuid, DataManager.UpdateDatestamp.no, dbms, false);
         }
 
          if (source == null) {
@@ -1713,7 +1730,7 @@ public class DataManager {
 		String schema = getMetadataSchema(dbms, id);
         if(ufo) {
             String parentUuid = null;
-		    md = updateFixedInfo(schema, id, null, md, parentUuid, (updateDateStamp ? DataManager.UpdateDatestamp.yes : DataManager.UpdateDatestamp.no), dbms, context);
+		    md = updateFixedInfo(schema, id, null, md, parentUuid, (updateDateStamp ? DataManager.UpdateDatestamp.yes : DataManager.UpdateDatestamp.no), dbms, false);
         }
 		//--- write metadata to dbms
         xmlSerializer.update(dbms, id, md, changeDate, updateDateStamp, context);
@@ -2542,7 +2559,7 @@ public class DataManager {
      * @return
      * @throws Exception
      */
-	public Element updateFixedInfo(String schema, String id, String uuid, Element md, String parentUuid, UpdateDatestamp updateDatestamp, Dbms dbms, ServiceContext context) throws Exception {
+	public Element updateFixedInfo(String schema, String id, String uuid, Element md, String parentUuid, UpdateDatestamp updateDatestamp, Dbms dbms, boolean createdFromTemplate) throws Exception {
         boolean autoFixing = settingMan.getValueAsBool("system/autofixing/enable", true);
         if(autoFixing) {
             if(Log.isDebugEnabled(Geonet.DATA_MANAGER))
@@ -2565,9 +2582,10 @@ public class DataManager {
                 Element env = new Element("env");
                 env.addContent(new Element("id").setText(id));
                 env.addContent(new Element("uuid").setText(uuid));
-								Element schemaLoc = new Element("schemaLocation");
-                schemaLoc.setAttribute(schemaMan.getSchemaLocation(schema,context));
-								env.addContent(schemaLoc);
+                env.addContent(new Element("createdFromTemplate").setText(createdFromTemplate ? "y" : "n"));
+                if (createdFromTemplate/* && (servContext.getServlet().getNodeType().toLowerCase().equals("agiv") || servContext.getServlet().getNodeType().toLowerCase().equals("geopunt"))*/) {
+                    env.addContent(new Element("mduuid").setText(UUID.randomUUID().toString()));
+                }
                 
                 if (updateDatestamp == UpdateDatestamp.yes) {
                         env.addContent(new Element("changeDate").setText(new ISODate().toString()));

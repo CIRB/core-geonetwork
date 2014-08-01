@@ -48,9 +48,13 @@ import jeeves.utils.XmlRequest;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.lang.StringUtils;
 import org.fao.geonet.GeonetContext;
 import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.constants.Params;
+import org.fao.geonet.csw.common.ElementSetName;
+import org.fao.geonet.csw.common.requests.CatalogRequest;
+import org.fao.geonet.csw.common.requests.GetRecordByIdRequest;
 import org.fao.geonet.kernel.DataManager;
 import org.fao.geonet.kernel.SchemaManager;
 import org.fao.geonet.kernel.harvest.harvester.CategoryMapper;
@@ -268,7 +272,31 @@ class Harvester
 		// md5 the full capabilities URL
 		String uuid = Util.scramble (this.capabilitiesUrl); // is the service identifier
 		
-		//--- Loading stylesheet
+        if(StringUtils.isNotEmpty(uuid)) {
+            if(uuid.length() > 8) {
+                uuid = uuid.substring(0, 8) + '-' + uuid.substring(8);
+            }
+            if(uuid.length() > 13) {
+                uuid = uuid.substring(0, 13) + '-' + uuid.substring(13);
+            }
+            if(uuid.length() > 18) {
+                uuid = uuid.substring(0, 18) + '-' + uuid.substring(18);
+            }
+            if(uuid.length() > 23) {
+                uuid = uuid.substring(0, 23) + '-' + uuid.substring(23);
+            }
+            if(uuid.length() > 28) {
+                uuid = uuid.substring(0, 28) + '-' + uuid.substring(28);
+            }
+            if(uuid.length() > 33) {
+                uuid = uuid.substring(0, 33) + '-' + uuid.substring(33);
+            }
+            if(uuid.length() > 38) {
+                uuid = uuid.substring(0, 38) + '-' + uuid.substring(38);
+            }
+        }
+
+        //--- Loading stylesheet
 		String styleSheet = schemaMan.getSchemaDir(params.outputSchema) + 
 							Geonet.Path.CONVERT_STYLESHEETS
 							+ "/OGCWxSGetCapabilitiesto19119/" 
@@ -280,7 +308,9 @@ class Harvester
 		
 		Map<String, String> param = new HashMap<String, String>();
 		param.put("lang", params.lang);
-		param.put("topic", params.topic);
+//		param.put("topic", params.topic);
+		param.put("ogctype", params.ogctype);
+		param.put("outputSchema", params.outputSchema);
 		param.put("uuid", uuid);
 		
 		Element md = Xml.transform (capa, styleSheet, param);
@@ -294,7 +324,7 @@ class Harvester
 
 
 		//--- Create metadata for layers only if user ask for
-		if (params.useLayer || params.useLayerMd) {			
+//		if (params.useLayer || params.useLayerMd) {			
 			// Load CRS
 			// TODO
 			
@@ -315,7 +345,7 @@ class Harvester
 				log.info("  - Number of layers, featureTypes or Coverages found : " + layers.size());
 			
 				for (Element layer : layers) {
-					WxSLayerRegistry s = addLayerMetadata (layer, capa);
+					WxSLayerRegistry s = addLayerMetadata (layer, capa, params.useLayer || params.useLayerMd);
 					if (s != null)
 						layersRegistry.add(s);
 				}       
@@ -324,7 +354,7 @@ class Harvester
 				// The editor will support that but it will make quite heavy XML.
 				md = addOperatesOnUuid (md, layersRegistry);
 			}
-		}	
+//		}	
 
         // Save iso19119 metadata in DB
 		log.info("  - Adding metadata for services with " + uuid);
@@ -359,7 +389,9 @@ class Harvester
 		// and loaded thumbnails could eventually failed anyway.
 		if (params.ogctype.startsWith("WMS") && params.createThumbnails) {
         	for (WxSLayerRegistry layer : layersRegistry) {
-                loadThumbnail (layer);
+        		if (layer.id!=null) {
+                    loadThumbnail (layer);
+        		}
             }
         }
 	}
@@ -432,7 +464,9 @@ class Harvester
 				// Create identifier (which is the metadata identifier)
 				Element id = new Element ("identifier", srv);
 				Element idValue = new Element ("CharacterString", gco);
-				idValue.setText(layer.uuid);
+				if (StringUtils.isNotEmpty(layer.mduuid)) {
+					idValue.setText(layer.mduuid);
+				}
 				id.addContent(idValue);
 				
 				// Create scoped name element as defined in CSW 2.0.2 ISO profil
@@ -452,10 +486,13 @@ class Harvester
 		
 				// Add operatesOn element at the end of identification section.
 				Element op = new Element ("operatesOn", srv);
-				op.setAttribute("uuidref", layer.uuid);
+				op.setAttribute("uuidref", StringUtils.isNotEmpty(layer.mduuid) ? layer.mduuid : "");
 
-                String hRefLink =  dataMan.getSiteURL() + "/iso19139.xml?uuid=" + layer.uuid;
-                op.setAttribute("href", hRefLink, xlink);
+				if (StringUtils.isNotEmpty(layer.uuid)) {
+					String hRefLink =  dataMan.getSiteURL() + "/csw?Service=CSW&amp;version=2.0.2&amp;Request=GetRecordById&amp;outputschema=http://www.isotc211.org/2005/gmd&amp;elementSetName=full&amp;id=" + layer.uuid;
+//					String hRefLink =  dataMan.getSiteURL() + "/csw?Service=CSW&version=2.0.2&Request=GetRecordById&outputschema=http://www.isotc211.org/2005/gmd&elementSetName=full&id=" + layer.uuid;
+					op.setAttribute("href", hRefLink, xlink);
+				}
 
 				
 				root.addContent(op);
@@ -482,7 +519,7 @@ class Harvester
      * @return          uuid 
      *                   
      */
-	private WxSLayerRegistry addLayerMetadata (Element layer, Element capa) throws JDOMException
+	private WxSLayerRegistry addLayerMetadata (Element layer, Element capa, boolean insertMetadata) throws JDOMException
 	{
 		
 		DateFormat df 		= new SimpleDateFormat ("yyyy-MM-dd'T'HH:mm:ss");
@@ -500,23 +537,16 @@ class Harvester
 								"GetCapabilitiesLayer-to-19139.xsl";
 		Element xml 		= null;
 		
-		boolean exist;
+		String existingMdId;
 		boolean loaded 		= false;
 		
 		if (params.ogctype.substring(0,3).equals("WMS")) {
-			Element name;
 			if (params.ogctype.substring(3,8).equals("1.3.0")) {
 				Namespace wms = Namespace.getNamespace("http://www.opengis.net/wms");
-				name = layer.getChild ("Name", wms);
+				reg.name 	= layer.getChild ("Name", wms).getValue ();
 			} else {
-				name = layer.getChild ("Name");
+				reg.name 	= layer.getChild ("Name").getValue ();
 			}
-			//--- For the moment, skip non-requestable category layers
-			if (name == null || name.getValue().trim().equals("")) {
-				log.info("  - skipping layer with no name element");
-				return null;
-			}
-			reg.name = name.getValue();
 		} else if (params.ogctype.substring(0,3).equals("WFS")) {
 			Namespace wfs = Namespace.getNamespace("http://www.opengis.net/wfs");
 			reg.name 	= layer.getChild ("Name", wfs).getValue ();
@@ -538,7 +568,7 @@ class Harvester
 			log.info("  - MetadataUrl harvester only supported for WMS layers.");
 		}
 		
-		if (params.useLayerMd && params.ogctype.substring(0,3).equals("WMS")) {
+		if (/*params.useLayerMd && */params.ogctype.substring(0,3).equals("WMS")) {
 			
 			Namespace xlink 	= Namespace.getNamespace ("http://www.w3.org/1999/xlink");
 			
@@ -553,24 +583,61 @@ class Harvester
             boolean addNsPrefix = !layer.getNamespace().equals(Namespace.NO_NAMESPACE);
             if (addNsPrefix) dummyNsPrefix = "x:";
 
-            XPath mdUrl 		= XPath.newInstance ("./" + dummyNsPrefix + "MetadataURL[@type='TC211' and " + dummyNsPrefix + "Format='text/xml']/" + dummyNsPrefix + "OnlineResource");
+            XPath mdUrl 		= XPath.newInstance ("./" + dummyNsPrefix + "MetadataURL[(@type='TC211' or @type='ISO19115:2005' or @type='ISO19115:2003') and (" + dummyNsPrefix + "Format='text/plain' or " + dummyNsPrefix + "Format='text/xml' or " + dummyNsPrefix + "Format='text/html' or " + dummyNsPrefix + "Format='application/xml')]/" + dummyNsPrefix + "OnlineResource");
             if (addNsPrefix) mdUrl.addNamespace("x", layer.getNamespace().getURI());
             Element onLineSrc 	= (Element) mdUrl.selectSingleNode (layer);
 
             // Check if metadataUrl in WMS 1.3.0 format
+/*
             if (onLineSrc == null) {
-                mdUrl 		= XPath.newInstance ("./" + dummyNsPrefix + "MetadataURL[@type='ISO19115:2003' and " + dummyNsPrefix + "Format='text/xml']/" + dummyNsPrefix + "OnlineResource");
+                mdUrl 		= XPath.newInstance ("./" + dummyNsPrefix + "MetadataURL[(@type='ISO19115:2005' or @type='ISO19115:2003') and " + dummyNsPrefix + "Format='text/xml']/" + dummyNsPrefix + "OnlineResource");
                 if (addNsPrefix) mdUrl.addNamespace("x", layer.getNamespace().getURI());
                 onLineSrc 	= (Element) mdUrl.selectSingleNode (layer);
             }
 
+            if (onLineSrc == null) {
+            	mdUrl 		= XPath.newInstance ("./" + dummyNsPrefix + "MetadataURL[@type='TC211' and " + dummyNsPrefix + "Format='application/xml']/" + dummyNsPrefix + "OnlineResource");
+                if (addNsPrefix) mdUrl.addNamespace("x", layer.getNamespace().getURI());
+                onLineSrc 	= (Element) mdUrl.selectSingleNode (layer);
+            }
+
+            if (onLineSrc == null) {
+                mdUrl 		= XPath.newInstance ("./" + dummyNsPrefix + "MetadataURL[(@type='ISO19115:2005' or @type='ISO19115:2003') and " + dummyNsPrefix + "Format='application/xml']/" + dummyNsPrefix + "OnlineResource");
+                if (addNsPrefix) mdUrl.addNamespace("x", layer.getNamespace().getURI());
+                onLineSrc 	= (Element) mdUrl.selectSingleNode (layer);
+            }
+*/
 			if (onLineSrc != null) {
 				org.jdom.Attribute href = onLineSrc.getAttribute ("href", xlink);
 
 				if (href != null) {	// No metadataUrl attribute for that layer
+					log.error("Processing layer " + reg.name);
 					mdXml = href.getValue ();
+					if (mdXml.indexOf("irisnetlab.be")>-1) {
+						mdXml = mdXml.replaceAll("irisnetlab.be", "irisnet.be");
+						log.error("MetadataUrl for layer " + reg.name + " contains irisnetlab in url, must be irisnet.be and is replaced automaticly");
+					}
+					if (mdXml.indexOf("newgeonetwork")>-1) {
+						mdXml = mdXml.replaceAll("newgeonetwork", "geonetwork");
+						log.error("MetadataUrl for layer " + reg.name + " contains newgeonetwork in url, must be geonetwork and is replaced automaticly");
+					}
+					if (mdXml.indexOf("apps/search/index.html?uuid")>-1) {
+						mdXml = mdXml.replaceAll("apps/search/index.html.uuid", "srv/eng/csw?Request=GetRecordById&Service=CSW&Version=2.0.2&elementSetName=full&outputSchema=http://www.isotc211.org/2005/gmd&id");
+						log.error("MetadataUrl for layer " + reg.name + " contains apps/search/index.html?uuid in url, must be srv/eng/csw?Request=GetRecordById&Service=CSW&Version=2.0.2&elementSetName=full&outputSchema=http://www.isotc211.org/2005/gmd&id and is replaced automaticly");
+					}
 					try {
-						xml = Xml.loadFile (new URL(mdXml));
+
+						GetRecordByIdRequest request = new GetRecordByIdRequest(this.context);
+						request.setElementSetName(ElementSetName.FULL);
+						request.setUrl(new URL(mdXml));
+						request.setMethod(CatalogRequest.Method.GET);
+						if (params.useAccount) {
+							request.setCredentials(params.username, params.password);
+						}	
+//						xml = Xml.loadFile (new URL(mdXml));
+//						xml = new XmlRequest(new URL(mdXml)).execute();
+						log.error("Loading MetadataUrl " + mdXml);
+						xml = request.execute();
 
                         // If url is CSW GetRecordById remove envelope
                         if (xml.getName().equals("GetRecordByIdResponse")) {
@@ -581,13 +648,19 @@ class Harvester
 						// Extract uuid from loaded xml document
 						// FIXME : uuid could be duplicate if metadata already exist in catalog
 						reg.uuid = dataMan.extractUUID(schema, xml);
-						exist = dataMan.existsMetadataUuid(dbms, reg.uuid);
+						existingMdId = dataMan.getMetadataId(dbms, reg.uuid);
 						
-						if (exist) {
+						if (existingMdId!=null) {
+							Element md = dataMan.getMetadata(dbms,existingMdId);
+							reg.mduuid = dataMan.extractMetadataUUID(dataMan.autodetectSchema (md), md);
+/*
+							String query = "INSERT INTO Relations (id, relatedId) " + "VALUES (?, ?)";
+							dbms.execute(query, parentId, childId);
+*/
 							log.warning("    Metadata uuid already exist in the catalogue. Metadata will not be loaded.");
 							result.layerUuidExist ++;
 							// FIXME : return null, service and metadata will not be linked by default.
-							return null;
+//							return null;
 						}
 						
 						if (schema == null) {
@@ -602,15 +675,15 @@ class Harvester
 						}
 					// TODO : catch other exception
 					}catch (Exception e) {
-						log.warning("  - Failed to load layer using metadataUrl attribute : " + e.getMessage());
+						log.error("  - Failed to load layer using metadataUrl attribute : " + e.toString());
 						loaded = false;
 					}
 				} else {
-					log.info("  - No metadataUrl attribute with format text/xml found for that layer");
+					log.info("  - No href attribute found in MetadataUrl tag of layer " + reg.name);
 					loaded = false;
 				}
 			} else {
-				log.info("  - No OnlineResource found for that layer");
+				log.error("No MetadataUrl found with attribute type value of 'TC211' or 'ISO19115:2005' or 'ISO19115:2003' and Format child element with 'text/plain' or 'text/xml' or 'text/html' or 'application/xml' and child element OnlineResource in capabilities for layer " + reg.name);
 				loaded = false;
 			}
 		}
@@ -624,7 +697,7 @@ class Harvester
 				param.put("uuid", reg.uuid);
 				param.put("Name", reg.name);
 				param.put("lang", params.lang);
-				param.put("topic", params.topic);
+//				param.put("topic", params.topic);
 				
 				xml = Xml.transform (capa, styleSheet, param);
                 if(log.isDebugEnabled()) log.debug("  - Layer loaded using GetCapabilities document.");
@@ -635,68 +708,70 @@ class Harvester
 		}
 		
 		
-		// Insert in db
-		try {
-
-            //
-            //  insert metadata
-            //
-            int userid = 1;
-            String group = null, isTemplate = null, docType = null, title = null, category = null;
-            boolean ufo = false, indexImmediate = false;
-            
-			schema = dataMan.autodetectSchema (xml);
-			
-            reg.id = dataMan.insertMetadata(context, dbms, schema, xml, context.getSerialFactory().getSerial(dbms, "Metadata"), reg.uuid, userid, group, params.uuid,
-                         isTemplate, docType, title, category, date, date, ufo, indexImmediate);
-			
-			xml = dataMan.updateFixedInfo(schema, reg.id, params.uuid, xml, null, DataManager.UpdateDatestamp.no, dbms, context);
-			
-			int iId = Integer.parseInt(reg.id);
-            if(log.isDebugEnabled()) log.debug("    - Layer loaded in DB.");
-
-            if(log.isDebugEnabled()) log.debug("    - Set Privileges and category.");
-			addPrivileges(reg.id);
-			if (params.datasetCategory!=null && !params.datasetCategory.equals(""))
-				dataMan.setCategory (context, dbms, reg.id, params.datasetCategory);
-
-            if(log.isDebugEnabled()) log.debug("    - Set Harvested.");
-			dataMan.setHarvestedExt(dbms, iId, params.uuid, params.url); // FIXME : harvestUuid should be a MD5 string
-			
-			dbms.commit();
-			
-			dataMan.indexMetadata(dbms, reg.id);
-			
+        if (insertMetadata) {
+			// Insert in db
 			try {
-    			// Load bbox info for later use (eg. WMS thumbnails creation)
-    			Namespace gmd 	= Namespace.getNamespace("http://www.isotc211.org/2005/gmd");
-    			Namespace gco 	= Namespace.getNamespace("http://www.isotc211.org/2005/gco");
-    			
-    			Iterator<Element> bboxes = xml.getDescendants(
-    					new ElementFilter ("EX_GeographicBoundingBox", gmd)
-    					);
-    			
-    			while (bboxes.hasNext()) {
-    				Element box = bboxes.next();
-    				// FIXME : Could be null. Default bbox if from root layer
-    				reg.minx = Double.valueOf(box.getChild("westBoundLongitude", gmd).getChild("Decimal", gco).getText());
-    				reg.miny = Double.valueOf(box.getChild("southBoundLatitude", gmd).getChild("Decimal", gco).getText());
-    				reg.maxx = Double.valueOf(box.getChild("eastBoundLongitude", gmd).getChild("Decimal", gco).getText());
-    				reg.maxy = Double.valueOf(box.getChild("northBoundLatitude", gmd).getChild("Decimal", gco).getText());
-    				
-    			}
-			}  catch (Exception e) {
-	            log.warning("  - Failed to extract layer bbox from metadata : " + e.getMessage());
-	        }
-
-			result.layer ++;
-			log.info("  - metadata loaded with uuid: " + reg.uuid + "/internal id: " + reg.id);
+	
+	            //
+	            //  insert metadata
+	            //
+	            int userid = 1;
+	            String group = null, isTemplate = null, docType = null, title = null, category = null;
+	            boolean ufo = false, indexImmediate = false;
+	            
+				schema = dataMan.autodetectSchema (xml);
 				
-		} catch (Exception e) {
-			log.warning("  - Failed to load layer metadata : " + e.getMessage());
-			result.unretrievable ++;
-			return null;
+	            reg.id = dataMan.insertMetadata(context, dbms, schema, xml, context.getSerialFactory().getSerial(dbms, "Metadata"), reg.uuid, userid, group, params.uuid,
+	                         isTemplate, docType, title, category, date, date, ufo, indexImmediate);
+				
+				xml = dataMan.updateFixedInfo(schema, reg.id, params.uuid, xml, null, DataManager.UpdateDatestamp.no, dbms, false);
+				
+				int iId = Integer.parseInt(reg.id);
+	            if(log.isDebugEnabled()) log.debug("    - Layer loaded in DB.");
+	
+	            if(log.isDebugEnabled()) log.debug("    - Set Privileges and category.");
+				addPrivileges(reg.id);
+				if (params.datasetCategory!=null && !params.datasetCategory.equals(""))
+					dataMan.setCategory (context, dbms, reg.id, params.datasetCategory);
+	
+	            if(log.isDebugEnabled()) log.debug("    - Set Harvested.");
+				dataMan.setHarvestedExt(dbms, iId, params.uuid, params.url); // FIXME : harvestUuid should be a MD5 string
+				
+				dbms.commit();
+				
+				dataMan.indexMetadata(dbms, reg.id);
+				
+				result.layer ++;
+				log.info("  - metadata loaded with uuid: " + reg.uuid + "/internal id: " + reg.id);
+					
+			} catch (Exception e) {
+				log.warning("  - Failed to load layer metadata : " + e.getMessage());
+				result.unretrievable ++;
+				return null;
+			}
+        }
+		try {
+			// Load bbox info for later use (eg. WMS thumbnails creation)
+			Namespace gmd 	= Namespace.getNamespace("http://www.isotc211.org/2005/gmd");
+			Namespace gco 	= Namespace.getNamespace("http://www.isotc211.org/2005/gco");
+			
+			Iterator<Element> bboxes = xml.getDescendants(
+					new ElementFilter ("EX_GeographicBoundingBox", gmd)
+					);
+			
+			while (bboxes.hasNext()) {
+				Element box = bboxes.next();
+				// FIXME : Could be null. Default bbox if from root layer
+				reg.minx = Double.valueOf(box.getChild("westBoundLongitude", gmd).getChild("Decimal", gco).getText());
+				reg.miny = Double.valueOf(box.getChild("southBoundLatitude", gmd).getChild("Decimal", gco).getText());
+				reg.maxx = Double.valueOf(box.getChild("eastBoundLongitude", gmd).getChild("Decimal", gco).getText());
+				reg.maxy = Double.valueOf(box.getChild("northBoundLatitude", gmd).getChild("Decimal", gco).getText());
+				
+			}
+		}  catch (Exception e) {
+            log.warning("  - Failed to extract layer bbox from metadata : " + e.getMessage());
 		}
+
 		
 		return reg;
 	}
@@ -865,8 +940,7 @@ class Harvester
 
 			if (name == null) {
                 if(log.isDebugEnabled()) log.debug ("    - Skipping removed category with id:"+ catId);
-			}
-			else {
+			}else {
 				dataMan.setCategory (context, dbms, id, catId);
 			}
 		}
@@ -884,8 +958,7 @@ class Harvester
 		{
 			String name = localGroups.getName( priv.getGroupId ());
 
-			if (name == null)
-			{
+			if (name == null) {
                 if(log.isDebugEnabled()) log.debug ("    - Skipping removed group with id:"+ priv.getGroupId ());
 			}
 			else
@@ -956,6 +1029,7 @@ class Harvester
 	
 	private class WxSLayerRegistry {
 		public String uuid;
+		public String mduuid;
 		public String id;
 		public String name;
 		public String url; 		// FIXME : if params.url is not the same as the GetMap Online link

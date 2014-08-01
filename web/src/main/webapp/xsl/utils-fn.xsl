@@ -69,14 +69,14 @@
               Only GeoNetHarvester set smallThumbnail elements.
             -->
             <xsl:value-of
-              select="concat($baseUrl,'/resources.get?id=',$info/id,'&amp;fname=',$fileName,'&amp;access=public')"
+              select="concat($baseUrl,'/resources.get?uuid=',$info/uuid,'&amp;fname=',$fileName,'&amp;access=public')"
             />
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of
-          select="concat($baseUrl,'/resources.get?id=',$info/id,'&amp;fname=',$fileName,'&amp;access=public')"
+          select="concat($baseUrl,'/resources.get?uuid=',$info/uuid,'&amp;fname=',$fileName,'&amp;access=public')"
         />
       </xsl:otherwise>
     </xsl:choose>

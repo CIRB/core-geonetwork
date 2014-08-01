@@ -98,6 +98,8 @@ public abstract class CatalogRequest
         Cookie cookie = new Cookie();
         HttpState state = new HttpState();
         state.addCookie(cookie);
+		client.getHttpConnectionManager().getParams().setConnectionTimeout(60000);
+		client.getParams().setSoTimeout(60000);
 		client.setState(state);
 		client.getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
 
