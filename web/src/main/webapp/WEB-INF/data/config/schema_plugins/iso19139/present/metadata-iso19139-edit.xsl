@@ -200,17 +200,15 @@
     to current user. In such a situation, clicking the link will return
     a privileges exception.
     -->
+<!--
   <xsl:template mode="iso19139" match="srv:operatesOn|gmd:featureCatalogueCitation|gmd:source[name(parent::node())='gmd:LI_ProcessStep' or name(parent::node())='gmd:LI_Lineage']" priority="99">
     <xsl:param name="schema"/>
     <xsl:param name="edit"/>
     <xsl:variable name="text">
-      
-      
       <xsl:choose>
         <xsl:when test="$edit=true()">
           <xsl:variable name="ref" select="geonet:element/@ref"/>
           <xsl:variable name="typeOfLink" select="if (local-name(.)='featureCatalogueCitation') then 'iso19110' else 'uuidref'"/>
-          
           <input type="text" name="_{$ref}_uuidref" id="_{$ref}_uuidref" value="{./@uuidref}" size="20"
             onfocus="javascript:Ext.getCmp('editorPanel').showLinkedMetadataSelectionPanel('{$ref}', 'uuidref', '{$typeOfLink}');"/>
           <img src="../../images/find.png" alt="{/root/gui/strings/search}" title="{/root/gui/strings/search}"
@@ -232,12 +230,154 @@
       <xsl:with-param name="text"   select="$text"/>
       <xsl:with-param name="editAttributes" select="false()"/>
     </xsl:apply-templates>
-<!--<xsl:apply-templates mode="iso19139" select="*">
-      <xsl:with-param name="schema" select="$schema"/>
-      <xsl:with-param name="edit"   select="$edit"/>
-    </xsl:apply-templates>-->
   </xsl:template>
-
+-->
+	<xsl:template mode="iso19139" match="srv:operatesOn|gmd:featureCatalogueCitation" priority="99">
+        <xsl:param name="schema"/>
+        <xsl:param name="edit"/>
+		<xsl:variable name="mduuidValue" select="./@uuidref"/>
+		<xsl:variable name="idParamValue" select="substring-after(./@xlink:href,';id=')"/>
+		<xsl:variable name="uuid">
+			<xsl:if test="name(.)='gmd:featureCatalogueCitation'">
+				<xsl:value-of select="@uuidref" />
+			</xsl:if>
+			<xsl:if test="not(name(.)='gmd:featureCatalogueCitation')">
+				<xsl:call-template name="getUuidRelatedMetadata">
+					<xsl:with-param name="mduuidValue" select="$mduuidValue"/>
+					<xsl:with-param name="idParamValue" select="$idParamValue"/>
+				</xsl:call-template>
+			</xsl:if>
+		</xsl:variable>                    	
+        <xsl:variable name="text">
+            <xsl:choose>
+                <xsl:when test="$edit=true()">
+                    <xsl:variable name="ref" select="geonet:element/@ref"/>
+                    <xsl:variable name="typeOfLink" select="if (local-name(.)='featureCatalogueCitation') then 'iso19110' else 'uuidref'"/>
+                    <input type="text" name="_{$ref}_uuidref" id="_{$ref}_uuidref" value="{./@uuidref}" size="20"
+                           onfocus="/*javascript:Ext.getCmp('editorPanel').showLinkedMetadataSelectionPanel('{$ref}', 'uuidref', '{$typeOfLink}', false);*/"/>
+                    <img src="../../images/find.png" alt="{/root/gui/strings/search}" title="{/root/gui/strings/search}"
+                         onclick="javascript:Ext.getCmp('editorPanel').showLinkedMetadataSelectionPanel('{$ref}', 'uuidref', '{$typeOfLink}', false);"
+                         onmouseover="this.style.cursor='pointer';"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <a href="#" onclick="javascript:catalogue.metadataShow('{$uuid}');return false;">
+						<xsl:call-template name="getMetadataTitle">
+						    <xsl:with-param name="uuid" select="$uuid"/>
+						</xsl:call-template>
+                    </a>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="title">
+			<xsl:call-template name="getTitle">
+				<xsl:with-param name="name" select="name(.)"/>
+				<xsl:with-param name="schema" select="$schema"/>
+			</xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="label">
+			<xsl:if test="name(.)='srv:operatesOn'"><xsl:choose><xsl:when test="$langId='dut'">Datasetnaam waarop de service opereert</xsl:when><xsl:when test="$langId='eng'">Dataset on which the service operates</xsl:when><xsl:otherwise>Nom du jeu de données sur lequel le service opère</xsl:otherwise></xsl:choose></xsl:if>
+			<xsl:if test="name(.)='gmd:featureCatalogueCitation'"><xsl:choose><xsl:when test="$langId='dut'">Naam van de catalogus</xsl:when><xsl:when test="$langId='eng'">Name of the catalogue</xsl:when><xsl:otherwise>Nom du catalogue</xsl:otherwise></xsl:choose></xsl:if>
+        </xsl:variable>
+        <xsl:variable name="className">
+			<xsl:if test="name(.)='srv:operatesOn'">srvoperatesOn</xsl:if>
+			<xsl:if test="name(.)='gmd:featureCatalogueCitation'">featureCatalogueCitation</xsl:if>
+        </xsl:variable>
+		<xsl:if test="name(.)='srv:operatesOn' or name(.)='gmd:featureCatalogueCitation'">
+	        <xsl:if test="$edit=true()">
+				<xsl:call-template name="editComplexElement">
+					<xsl:with-param name="title" select="$title"/>
+					<xsl:with-param name="content">
+						<tr>
+							<th class="main {$className}"><label class="" for="_"><xsl:value-of select="$label"/></label></th>
+							<td>
+								<xsl:call-template name="getMetadataTitle">
+								    <xsl:with-param name="uuid" select="$uuid"/>
+								</xsl:call-template>
+							</td>
+					    </tr>
+			        	<xsl:apply-templates mode="simpleAttribute" select="@uuidref">
+				            <xsl:with-param name="schema" select="$schema"/>
+				            <xsl:with-param name="edit"   select="$edit"/>
+				            <xsl:with-param name="text"   select="$text"/>
+				            <xsl:with-param name="editAttributes" select="false()"/>
+<!-- 
+		                    <xsl:with-param name="title">
+		                        <xsl:call-template name="getTitle">
+		                            <xsl:with-param name="name" select="name(@uuidref)"/>
+		                            <xsl:with-param name="schema" select="$schema"/>
+		                        </xsl:call-template>
+		                    </xsl:with-param>
+ -->
+						</xsl:apply-templates>
+			            <xsl:apply-templates mode="simpleAttribute" select="@xlink:href">
+							<xsl:with-param name="schema" select="$schema"/>
+							<xsl:with-param name="edit" select="$edit"/>
+			            </xsl:apply-templates>
+					</xsl:with-param>
+					<xsl:with-param name="helpLink">
+						<xsl:call-template name="getHelpLink">
+							<xsl:with-param name="name" select="name(.)"/>
+							<xsl:with-param name="schema" select="$schema"/>
+						</xsl:call-template>
+					</xsl:with-param>
+				</xsl:call-template>
+			</xsl:if>
+			<xsl:if test="$edit=false()">
+				<xsl:if test="$uuid!='' or @uuidref!='' or @xlink:href!='' or (name(.)='gmd:featureCatalogueCitation' and ./gmd:CI_Citation/gmd:title)">
+					<xsl:call-template name="complexElementGuiWrapper">
+						<xsl:with-param name="title" select="$title"/>
+						<xsl:with-param name="content">
+							<xsl:if test="$uuid!='' or (name(.)='gmd:featureCatalogueCitation' and ./gmd:CI_Citation/gmd:title)">
+								<tr>
+									<th class="main {$className}"><label class="" for="_"><xsl:value-of select="$label"/></label></th>
+									<td>
+										<xsl:variable name="value">
+											<xsl:call-template name="getMetadataTitle">
+											    <xsl:with-param name="uuid" select="$uuid"/>
+											</xsl:call-template>
+										</xsl:variable>
+										<xsl:choose>
+											<xsl:when test="$value!=$uuid">
+						                        <a href="#" onclick="javascript:catalogue.metadataShow('{$uuid}');return false;"><xsl:value-of select="$value"/></a>
+											</xsl:when>
+											<xsl:when test="name(.)='gmd:featureCatalogueCitation' and ./gmd:CI_Citation/gmd:title">
+												<xsl:value-of select="./gmd:CI_Citation/gmd:title"/>
+											</xsl:when>
+											<xsl:otherwise>
+												<xsl:value-of select="$value"/>
+											</xsl:otherwise>
+										</xsl:choose>
+									</td>
+							    </tr>
+						    </xsl:if>
+			            	<xsl:apply-templates mode="simpleAttribute" select="@uuidref">
+								<xsl:with-param name="schema" select="$schema"/>
+								<xsl:with-param name="edit" select="$edit"/>
+							</xsl:apply-templates>
+				            <xsl:apply-templates mode="simpleAttribute" select="@xlink:href">
+								<xsl:with-param name="schema" select="$schema"/>
+								<xsl:with-param name="edit" select="$edit"/>
+				            </xsl:apply-templates>
+						</xsl:with-param>
+					</xsl:call-template>
+				</xsl:if>
+			</xsl:if>
+		</xsl:if>
+       	<xsl:if test="not(name(.)='srv:operatesOn' or name(.)='gmd:featureCatalogueCitation')">
+        	<xsl:apply-templates mode="simpleElement" select=".">
+	            <xsl:with-param name="schema" select="$schema"/>
+	            <xsl:with-param name="edit"   select="$edit"/>
+	            <xsl:with-param name="text"   select="$text"/>
+	            <xsl:with-param name="editAttributes" select="false()"/>
+                   <xsl:with-param name="title">
+                       <xsl:call-template name="getTitle">
+                           <xsl:with-param name="name" select="name(.)"/>
+                           <xsl:with-param name="schema" select="$schema"/>
+                       </xsl:call-template>
+                   </xsl:with-param>
+			</xsl:apply-templates>
+       	</xsl:if>
+    </xsl:template>
 
 
     <!-- ============================================================================= -->
@@ -259,22 +399,30 @@
             <xsl:when test="$edit=true()">
                 <xsl:variable name="text">
                     <xsl:variable name="ref" select="gco:CharacterString/geonet:element/@ref"/>
-                     <xsl:variable name="currentUuid" select="gco:CharacterString/text()"/>
-                    <input type="text" class="md" name="_{$ref}" id="_{$ref}" onchange="validateNonEmpty(this)" value="{$currentUuid}" size="30"/>
+                   	<xsl:variable name="currentMduuidValue" select="gco:CharacterString"/>
+                    <input type="text" class="md" name="_{$ref}" id="_{$ref}" onchange="validateNonEmpty(this)" value="{$currentMduuidValue}" size="30"/>
                     <xsl:choose>
-                        <xsl:when test="count(//srv:operatesOn[@uuidref!=''])=0">
+                        <xsl:when test="count(../../../srv:operatesOn[@uuidref!=''])=0">
                             <xsl:value-of select="/root/gui/strings/noOperatesOn"/>
                         </xsl:when>
                         <xsl:otherwise>
                             <select onchange="javascript:Ext.getDom('_{$ref}').value=this.options[this.selectedIndex].value;" class="md">
                                 <option></option>
-                                <xsl:for-each select="//srv:operatesOn[@uuidref!='']">
-                                    <option value="{@uuidref}">
-                                      <xsl:if test="@uuidref = $currentUuid">
-                                        <xsl:attribute name="selected">selected</xsl:attribute>
-                                      </xsl:if>
+                                <xsl:for-each select="../../../srv:operatesOn[@xlink:href!='' and @uuidref!='']">
+									<xsl:variable name="mduuidValue" select="@uuidref"/>
+									<xsl:variable name="idParamValue" select="substring-after(@xlink:href,';id=')"/>
+			                    	<xsl:variable name="uuid">
+			                    		<xsl:call-template name="getUuidRelatedMetadata">
+									       	<xsl:with-param name="mduuidValue" select="$mduuidValue"/>
+											<xsl:with-param name="idParamValue" select="$idParamValue"/>
+										</xsl:call-template>
+			                   		</xsl:variable>                    	
+                                    <option value="{$mduuidValue}">
+                                        <xsl:if test="$mduuidValue = $currentMduuidValue">
+                                            <xsl:attribute name="selected">selected</xsl:attribute>
+                                        </xsl:if>
                                         <xsl:call-template name="getMetadataTitle">
-                                            <xsl:with-param name="uuid" select="@uuidref"/>
+                                            <xsl:with-param name="uuid" select="$uuid"/>
                                         </xsl:call-template>
                                     </option>
                                 </xsl:for-each>
@@ -290,16 +438,25 @@
                 </xsl:apply-templates>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:apply-templates mode="simpleElement" select=".">
-                    <xsl:with-param name="schema"  select="$schema"/>
-                    <xsl:with-param name="text">
-                      <a href="#" onclick="javascript:catalogue.metadataShow('{gco:CharacterString}');return false;">
-                        <xsl:call-template name="getMetadataTitle">
-                          <xsl:with-param name="uuid" select="gco:CharacterString"/>
-                        </xsl:call-template>
-                      </a>
-                    </xsl:with-param>
-                </xsl:apply-templates>
+            	<xsl:if test="gco:CharacterString!=''">
+	                <xsl:apply-templates mode="simpleElement" select=".">
+	                    <xsl:with-param name="schema"  select="$schema"/>
+	                    <xsl:with-param name="edit"   select="$edit"/>
+	                    <xsl:with-param name="text">
+	                    	<xsl:variable name="uuid">
+		                    	<xsl:call-template name="getIdFromCorrespondingOperatesOn">
+							       	<xsl:with-param name="mduuidValue" select="gco:CharacterString"/>
+		                    	</xsl:call-template>
+	                   		</xsl:variable>                    	
+			            	<xsl:value-of select="gco:CharacterString"/>
+	                        <xsl:text> (</xsl:text><a href="#" onclick="javascript:catalogue.metadataShow('{$uuid}');return false;">
+	                            <xsl:call-template name="getMetadataTitle">
+	                                <xsl:with-param name="uuid" select="$uuid"/>
+	                            </xsl:call-template>
+	                        </a><xsl:text>)</xsl:text>
+	                    </xsl:with-param>
+	                </xsl:apply-templates>
+                </xsl:if>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -2915,14 +3072,14 @@
 
       <xsl:if test="not($info/server)">
         <xsl:for-each select="gmd:graphicOverview/gmd:MD_BrowseGraphic">
-          <xsl:variable name="fileName"  select="gmd:fileName/gco:CharacterString"/>
+          <xsl:variable name="fileName"  select="gmd:fileName/gco:CharacterString/text()"/>
           <xsl:if test="$fileName != ''">
             <xsl:variable name="fileDescr" select="gmd:fileDescription/gco:CharacterString"/>
             <xsl:choose>
 
               <!-- the thumbnail is an url -->
 
-              <xsl:when test="contains($fileName ,'://')">
+              <xsl:when test="starts-with($fileName ,'http')">
                 <image type="unknown"><xsl:value-of select="$fileName"/></image>                
               </xsl:when>
 
@@ -3228,54 +3385,64 @@
         </xsl:apply-templates>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates mode="simpleElement"
-          select=".">
-          <xsl:with-param name="schema" select="$schema" />
-          <xsl:with-param name="text">&#160;
-              
-              
-            <xsl:variable name="langId">
-              <xsl:call-template name="getLangId">
-                <xsl:with-param name="langGui" select="/root/gui/language" />
-                <xsl:with-param name="md"
-                  select="ancestor-or-self::*[name(.)='gmd:MD_Metadata' or @gco:isoType='gmd:MD_Metadata']" />
-              </xsl:call-template>
-            </xsl:variable>
-            
-            <xsl:variable name="imageTitle">
-                <xsl:choose>
-                    <xsl:when test="gmd:MD_BrowseGraphic/gmd:fileDescription/gco:CharacterString
-                      and not(gmd:MD_BrowseGraphic/gmd:fileDescription/@gco:nilReason)">
-                      <xsl:for-each select="gmd:MD_BrowseGraphic/gmd:fileDescription">
-                        <xsl:call-template name="localised">
-                          <xsl:with-param name="langId" select="$langId"/>
-                        </xsl:call-template>
-                      </xsl:for-each>
-                    </xsl:when>
-                  <xsl:otherwise>
-                    <!-- Filename is not multilingual -->
-                    <xsl:value-of select="gmd:MD_BrowseGraphic/gmd:fileName/gco:CharacterString"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-            </xsl:variable>
-              
-            <xsl:variable name="fileName" select="gmd:MD_BrowseGraphic/gmd:fileName/gco:CharacterString"/>
-            <xsl:variable name="url" select="if (contains($fileName, '://')) 
-                                                then $fileName 
-                                                else geonet:get-thumbnail-url($fileName, //geonet:info, /root/gui/locService)"/>
-
-            <div class="md-view">
-              <a rel="lightbox-viewset" href="{$url}">
-                <img class="logo" src="{$url}">
-                  <xsl:attribute name="alt"><xsl:value-of select="$imageTitle"/></xsl:attribute>
-                    <xsl:attribute name="title"><xsl:value-of select="$imageTitle"/></xsl:attribute>
-                </img>
-              </a>  
-              <br/>
-              <span class="thumbnail"><a href="{$url}" target="thumbnail-view"><xsl:value-of select="$imageTitle"/></a></span>
-            </div>
-          </xsl:with-param>
-        </xsl:apply-templates>
+        <xsl:if test="gmd:MD_BrowseGraphic/gmd:fileName/gco:CharacterString and not(gmd:MD_BrowseGraphic/gmd:fileName/@gco:nilReason)">
+	        <xsl:apply-templates mode="simpleElement"
+	          select=".">
+	          <xsl:with-param name="schema" select="$schema" />
+	          <xsl:with-param name="text">
+	            <xsl:variable name="langId">
+	              <xsl:call-template name="getLangId">
+	                <xsl:with-param name="langGui" select="/root/gui/language" />
+	                <xsl:with-param name="md"
+	                  select="ancestor-or-self::*[name(.)='gmd:MD_Metadata' or @gco:isoType='gmd:MD_Metadata']" />
+	              </xsl:call-template>
+	            </xsl:variable>
+	            
+	            <xsl:variable name="imageTitle">
+	                <xsl:choose>
+	                    <xsl:when test="gmd:MD_BrowseGraphic/gmd:fileDescription/gco:CharacterString
+	                      and not(gmd:MD_BrowseGraphic/gmd:fileDescription/@gco:nilReason)">
+	                      <xsl:for-each select="gmd:MD_BrowseGraphic/gmd:fileDescription">
+	                        <xsl:call-template name="localised">
+	                          <xsl:with-param name="langId" select="$langId"/>
+	                        </xsl:call-template>
+	                      </xsl:for-each>
+	                    </xsl:when>
+	                  <xsl:otherwise>
+	                    <!-- Filename is not multilingual -->
+	                    <xsl:value-of select="gmd:MD_BrowseGraphic/gmd:fileName/gco:CharacterString"/>
+	                  </xsl:otherwise>
+	                </xsl:choose>
+	            </xsl:variable>
+	              
+	            <xsl:variable name="fileName" select="gmd:MD_BrowseGraphic/gmd:fileName/gco:CharacterString"/>
+<!-- 
+				<xsl:variable name="url" select="$fileName"/>
+ -->
+				<xsl:variable name="url" select="if (contains($fileName, '://') or not(string(normalize-space($fileName))))
+                                        then $fileName
+                                        else geonet:get-thumbnail-url($fileName,  /root/*[name(.)='gmd:MD_Metadata' or @gco:isoType='gmd:MD_Metadata']/geonet:info, /root/gui/locService)"/>
+ 	
+				<xsl:if test="not($url='')">
+					<div class="md-view">
+					<xsl:if test="contains($url, '://')">
+						<a rel="lightbox-viewset" href="{$url}" target="thumbnail-view">
+							<img class="logo" src="{$url}">
+								<xsl:attribute name="alt"><xsl:value-of select="$imageTitle"/></xsl:attribute>
+								<xsl:attribute name="title"><xsl:value-of select="$imageTitle"/></xsl:attribute>
+							</img>
+						</a>
+						<br/>
+						<span class="thumbnail"><a href="{$url}" target="thumbnail-view"><xsl:value-of select="$imageTitle"/></a></span>
+					</xsl:if>
+					<xsl:if test="not (contains($url, '://'))">
+						<xsl:value-of select="$url"/>
+					</xsl:if>
+					</div>
+				</xsl:if>
+        	  </xsl:with-param>
+        	</xsl:apply-templates>
+		</xsl:if>
       </xsl:otherwise>
     </xsl:choose>    
   </xsl:template>
@@ -3291,12 +3458,15 @@
     <xsl:variable name="desc" select="gmd:MD_BrowseGraphic/gmd:fileDescription/gco:CharacterString"/>
     <xsl:variable name="info" select="ancestor::*[name(.) = 'gmd:MD_Metadata' or @gco:isoType='gmd:MD_Metadata']/geonet:info"></xsl:variable>
     
-    <thumbnail>
-      <href><xsl:value-of select="geonet:get-thumbnail-url($fileName, $info, /root/gui/locService)"/></href>
-      <desc><xsl:value-of select="$desc"/></desc>
-      <mimetype><xsl:value-of select="gmd:MD_BrowseGraphic/gmd:fileType/gco:CharacterString"/></mimetype>
-      <type><xsl:value-of select="if (geonet:contains-any-of($desc, ('thumbnail', 'large_thumbnail'))) then 'local' else ''"/></type>
-    </thumbnail>
+	<xsl:if test="contains(string($fileName),'://')">
+	    <thumbnail>
+	      <href><xsl:value-of select="geonet:get-thumbnail-url($fileName, $info, /root/gui/locService)"/></href>
+	      <desc><xsl:value-of select="$desc"/></desc>
+	      <mimetype><xsl:value-of select="gmd:MD_BrowseGraphic/gmd:fileType/gco:CharacterString"/></mimetype>
+	      <type><xsl:value-of select="if (geonet:contains-any-of($desc, ('thumbnail', 'large_thumbnail'))) then 'local' else ''"/></type>
+	      <target>_blank</target>
+	    </thumbnail>
+	</xsl:if>
   </xsl:template>
 
 

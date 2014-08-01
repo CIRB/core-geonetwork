@@ -1,10 +1,17 @@
 package org.fao.geonet.services.metadata;
 
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+
 import jeeves.resources.dbms.Dbms;
 import jeeves.server.UserSession;
 import jeeves.server.context.ServiceContext;
 import jeeves.utils.Log;
 import jeeves.utils.Xml;
+
 import org.fao.geonet.constants.Edit;
 import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.kernel.DataManager;
@@ -17,12 +24,6 @@ import org.jdom.Namespace;
 import org.jdom.Text;
 import org.jdom.filter.ElementFilter;
 import org.jdom.filter.Filter;
-
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
 
 /**
  * // --------------------------------------------------------------------------
@@ -570,7 +571,7 @@ public class AjaxEditUtils extends EditUtils {
 		editLib.removeEditingInfo(md);
 		editLib.contractElements(md);
         String parentUuid = null;
-        md = dataManager.updateFixedInfo(schema, id, null, md, parentUuid, DataManager.UpdateDatestamp.no, dbms, context);
+        md = dataManager.updateFixedInfo(schema, id, null, md, parentUuid, DataManager.UpdateDatestamp.no, dbms, false);
 
 		//--- do the validation on the metadata
 		return dataManager.doValidate(session, dbms, schema, id, md, lang, false).one();
@@ -621,7 +622,7 @@ public class AjaxEditUtils extends EditUtils {
 
         editLib.contractElements(md);
         String parentUuid = null;
-		md = dataManager.updateFixedInfo(schema, id, null, md, parentUuid, DataManager.UpdateDatestamp.no, dbms, context);
+		md = dataManager.updateFixedInfo(schema, id, null, md, parentUuid, DataManager.UpdateDatestamp.no, dbms, false);
         String changeDate = null;
 				xmlSerializer.update(dbms, id, md, changeDate, false, context);
 
@@ -675,7 +676,7 @@ public class AjaxEditUtils extends EditUtils {
 
 		editLib.contractElements(md);
         String parentUuid = null;
-        md = dataManager.updateFixedInfo(schema, id, null, md, parentUuid, DataManager.UpdateDatestamp.no, dbms, context);
+        md = dataManager.updateFixedInfo(schema, id, null, md, parentUuid, DataManager.UpdateDatestamp.no, dbms, false);
 
         String changeDate = null;
 				xmlSerializer.update(dbms, id, md, changeDate, false, context);

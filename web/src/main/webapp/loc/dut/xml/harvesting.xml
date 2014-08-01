@@ -219,6 +219,7 @@
 	<categories>Categorieën</categories>
 	<url>URL</url>
 	<capabUrl>Service URL</capabUrl>
+	<outputSchema>Outputschema</outputSchema>
 	<icon>Icoon</icon>
 	<group>Groep</group>
 	<groups>Groepen</groups>

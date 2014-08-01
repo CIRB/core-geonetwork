@@ -34,6 +34,7 @@
 		</complexContent>
 	</complexType>
 	<element name="BXL_Address" type="geobru:BXL_Address_Type" substitutionGroup="gmd:CI_Address"/>
+<!--
 	<annotation>
 		<documentation>
 			### extends the ISO 19139 {http://www.isotc211.org/2005/gmd}CI_ResponsibleParty_Type
@@ -51,4 +52,5 @@
 		</complexContent>
 	</complexType>
 	<element name="BXL_ResponsibleParty" type="geobru:BXL_ResponsibleParty_Type" substitutionGroup="gmd:CI_ResponsibleParty"/>
+-->
 </schema>

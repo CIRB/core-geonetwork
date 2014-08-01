@@ -34,6 +34,8 @@ Mapping between :
     <xsl:param name="uuid">uuid</xsl:param>
 	<xsl:param name="lang">eng</xsl:param>
 	<xsl:param name="topic"></xsl:param>
+	<xsl:param name="ogctype"></xsl:param>
+	<xsl:param name="outputSchema"></xsl:param>
 	
 	<!-- ============================================================================= -->
 	
@@ -78,27 +80,25 @@ Mapping between :
 			<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 			<language>
-				<gco:CharacterString><xsl:value-of select="$lang"/></gco:CharacterString>
-				<!-- English is default. Not available in GetCapabilities. 
-				Selected by user from GUI -->
+        		<LanguageCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#LanguageCode" codeListValue="{$lang}"><xsl:value-of select="$lang"/></LanguageCode>
 			</language>
 
 			<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 			<characterSet>
-				<MD_CharacterSetCode codeList="./resources/codeList.xml#MD_CharacterSetCode" codeListValue="utf8" />
+				<MD_CharacterSetCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8"/>
 			</characterSet>
 
 			<!-- parentIdentifier : service have no parent -->
 			<!-- mdHrLv -->
             <hierarchyLevel>
-                <MD_ScopeCode
-                    codeList="./resources/codeList.xml#MD_ScopeCode"
-                    codeListValue="service" />
+				<MD_ScopeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#MD_ScopeCode" codeListValue="service"/>
             </hierarchyLevel>
             
-			<!-- mdHrLvName -->
-
+		    <hierarchyLevelName>
+		        <gco:CharacterString>Service</gco:CharacterString>
+		    </hierarchyLevelName>
+		    
 			<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->			
 			<xsl:choose>
 				<xsl:when test="Service/ContactInformation|
@@ -124,8 +124,6 @@ Mapping between :
 					<contact gco:nilReason="missing"/>
 				</xsl:otherwise>
 			</xsl:choose>
-			
-
 			<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 			<xsl:variable name="df">[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01]</xsl:variable>
 			<dateStamp>
@@ -135,14 +133,56 @@ Mapping between :
 			<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 			<metadataStandardName>
-				<gco:CharacterString>ISO 19119/2005</gco:CharacterString>
+				<gco:CharacterString>?</gco:CharacterString>
 			</metadataStandardName>
 
 			<metadataStandardVersion>
-				<gco:CharacterString>1.0</gco:CharacterString>
+				<gco:CharacterString>?</gco:CharacterString>
 			</metadataStandardVersion>
-			
-
+			<xsl:if test="$lang!='dut'">			
+				<locale>
+					<PT_Locale id="DUT">
+						<languageCode>
+							<LanguageCode codeList="" codeListValue="dut"/>
+						</languageCode>
+						<characterEncoding/>
+					</PT_Locale>
+				</locale>
+			</xsl:if>
+			<xsl:if test="$lang!='fre'">			
+				<locale>
+					<PT_Locale id="FRE">
+						<languageCode>
+							<LanguageCode codeList="" codeListValue="fre"/>
+						</languageCode>
+						<characterEncoding/>
+					</PT_Locale>
+				</locale>
+			</xsl:if>
+			<xsl:if test="$lang!='eng'">			
+				<locale>
+					<PT_Locale id="ENG">
+						<languageCode>
+							<LanguageCode codeList="" codeListValue="eng"/>
+						</languageCode>
+						<characterEncoding/>
+					</PT_Locale>
+				</locale>
+			</xsl:if>
+			<referenceSystemInfo>
+				<MD_ReferenceSystem>
+					<referenceSystemIdentifier>
+						<RS_Identifier>
+							<code>
+								<gco:CharacterString>31370</gco:CharacterString>
+							</code>
+							<codeSpace>
+								<gco:CharacterString>EPSG</gco:CharacterString>
+							</codeSpace>
+						</RS_Identifier>
+					</referenceSystemIdentifier>
+				</MD_ReferenceSystem>
+			</referenceSystemInfo>
 			<!--mdExtInfo-->
 			<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
@@ -150,6 +190,7 @@ Mapping between :
 				<srv:SV_ServiceIdentification>
 					<xsl:apply-templates select="." mode="SrvDataIdentification">
 						<xsl:with-param name="topic"><xsl:value-of select="$topic"/></xsl:with-param>
+						<xsl:with-param name="ogctype"><xsl:value-of select="$ogctype"/></xsl:with-param>
 						<xsl:with-param name="ows"><xsl:value-of select="$ows"/></xsl:with-param>
 					</xsl:apply-templates>
 				</srv:SV_ServiceIdentification>
@@ -198,15 +239,35 @@ Mapping between :
                                     <protocol>
                                         <gco:CharacterString>
                                         	<xsl:choose>
-                                        		<xsl:when test="name(.)='WMT_MS_Capabilities' or name(.)='WMS_Capabilities'">application/vnd.ogc.wms_xml</xsl:when>
+                                        		<xsl:when test="name(.)='WMT_MS_Capabilities' or name(.)='WMS_Capabilities' or name(.)='Capabilities'">
+		                                        	<xsl:choose>
+		                                        		<xsl:when test="$ogctype='WMTS1.0.0'">OGC:WMTS-1.0.0-http-get-capabilities</xsl:when>
+		                                        		<xsl:when test="$ogctype='WMS1.1.1'">OGC:WMS-1.1.1-http-get-capabilities</xsl:when>
+		                                        		<xsl:when test="$ogctype='WMS1.3.0'">OGC:WMS-1.3.0-http-get-capabilities</xsl:when>
+		                                        		<xsl:otherwise>WWW:LINK-1.0-http--link</xsl:otherwise>
+		                                        	</xsl:choose>
+                                        		</xsl:when>
+                                        		<xsl:when test="name(.)='WFS_Capabilities'">
+		                                        	<xsl:choose>
+		                                        		<xsl:when test="$ogctype='WFS1.0.0'">OGC:WFS-1.0.0-http-get-capabilities</xsl:when>
+		                                        		<xsl:when test="$ogctype='WFS1.1.0'">OGC:WFS-1.1.0-http-get-capabilities</xsl:when>
+		                                        		<xsl:otherwise>WWW:LINK-1.0-http--link</xsl:otherwise>
+		                                        	</xsl:choose>
+	                                        	</xsl:when>
                                         		<xsl:otherwise>WWW:LINK-1.0-http--link</xsl:otherwise>
                                         	</xsl:choose>
                                         </gco:CharacterString>
                                     </protocol>
+                                    <name>
+                                    	<gco:CharacterString/>
+                                    </name>
                                     <description>
                                         <gco:CharacterString>
                                             <xsl:choose>
-                                                <xsl:when test="$ows='true'">
+                                            	<xsl:when test="name(.)='WMS_Capabilities' and not(./wms:Service/wms:Title='')">
+                                                    <xsl:value-of select="./wms:Service/wms:Title"/>
+                                            	</xsl:when>
+                                            	<xsl:when test="$ows='true'">
                                                     <xsl:value-of select="//ows:Operation[@name='GetCapabilities']/ows:DCP/ows:HTTP/ows:Get/@xlink:href"/>
                                                 </xsl:when>
                                                 <xsl:when test="name(.)='WMS_Capabilities'">
@@ -236,20 +297,84 @@ Mapping between :
 					<scope>
 						<DQ_Scope>
 							<level>
-								<MD_ScopeCode codeListValue="service"
-									codeList="./resources/codeList.xml#MD_ScopeCode" />
+								<MD_ScopeCode codeListValue="service" codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#MD_ScopeCode"/>
 							</level>
 							<levelDescription>
 								<MD_ScopeDescription>
-									<attributes/>
+									<other><gco:CharacterString>Service</gco:CharacterString></other>
 								</MD_ScopeDescription>
 							</levelDescription>
 						</DQ_Scope>
 					</scope>
+					<report>
+						<DQ_DomainConsistency>
+							<measureIdentification>
+								<RS_Identifier>
+									<code>
+										<gco:CharacterString/>
+									</code>
+									<codeSpace>
+										<gco:CharacterString/>
+									</codeSpace>
+								</RS_Identifier>
+							</measureIdentification>
+							<result>
+								<DQ_ConformanceResult>
+									<specification>
+										<CI_Citation>
+											<title>
+												<xsl:choose>
+													<xsl:when test="$lang='dut'">
+														<gco:CharacterString>Verordening (EG) nr. 976/2009 van de Commissie van 19 oktober 2009 tot uitvoering van Richtlijn 2007/2/EG van het Europees Parlement en de Raad wat betreft de netwerkdiensten</gco:CharacterString>
+													</xsl:when>
+													<xsl:otherwise>
+														<gco:CharacterString>Verordening (EG) nr. 976/2009 van de Commissie van 19 oktober 2009 tot uitvoering van Richtlijn 2007/2/EG van het Europees Parlement en de Raad wat betreft de netwerkdiensten</gco:CharacterString>
+													</xsl:otherwise>
+												</xsl:choose>
+											</title>
+											<alternateTitle>
+												<gco:CharacterString/>
+											</alternateTitle>
+											<date>
+												<CI_Date>
+													<date>
+														<gco:Date>2009-10-19</gco:Date>
+													</date>
+													<dateType>
+														<CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication">publication</CI_DateTypeCode>
+													</dateType>
+												</CI_Date>
+											</date>
+										</CI_Citation>
+									</specification>
+									<explanation>
+										<xsl:choose>
+											<xsl:when test="$lang='dut'">
+												<gco:CharacterString>Zie de gerefereerde specificatie.</gco:CharacterString>
+											</xsl:when>
+											<xsl:otherwise>
+								                <gco:CharacterString>see the referenced specification</gco:CharacterString>
+											</xsl:otherwise>
+										</xsl:choose>
+									</explanation>
+									<pass>
+										<gco:Boolean>true</gco:Boolean>
+									</pass>
+								</DQ_ConformanceResult>
+							</result>
+						</DQ_DomainConsistency>
+					</report>
 					<lineage>
 						<LI_Lineage>
-							<statement gco:nilReason="missing">
-								<gco:CharacterString/>
+							<statement>
+								<xsl:choose>
+									<xsl:when test="$lang='dut'">
+							            <gco:CharacterString>Herkomst</gco:CharacterString>
+									</xsl:when>
+									<xsl:otherwise>
+										<gco:CharacterString>Généalogie</gco:CharacterString>
+									</xsl:otherwise>
+								</xsl:choose>
 							</statement>
 						</LI_Lineage>
 					</lineage>

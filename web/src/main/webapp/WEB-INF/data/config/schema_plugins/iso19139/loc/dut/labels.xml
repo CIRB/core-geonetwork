@@ -2427,7 +2427,7 @@
 		<description>De operaties die door een service worden aangeboden.</description>
 	</element>
 	<element name="srv:operatesOn">
-		<label>Operates on</label>
+		<label>Informatie over de datasets waarop de service werkt</label>
 		<description>Dit element is conditioneel in INSPIRE. Het is verplicht als er links naar de datasets waarop de service opereert
 beschikbaar zijn. Voor dataservices is het dus verplicht. Dit element geeft informatie (metadata) over de data die in de service beschikbaar wordt gesteld.</description>
 	</element>   
@@ -2581,7 +2581,7 @@ het verplichte element linkage, uit de klasse CI_OnlineResource. Dit element hee
 	</element>
 
 	<element name="uuidref">
-		<label>UUID voor operatesOn</label>
+		<label>Identificator van de dataset waarop de service werkt</label>
 		<description></description>
 	</element>
 

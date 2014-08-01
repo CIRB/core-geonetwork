@@ -4,6 +4,7 @@
     xmlns:gmx="http://www.isotc211.org/2005/gmx" 
     xmlns:gmd="http://www.isotc211.org/2005/gmd"
     xmlns:srv="http://www.isotc211.org/2005/srv"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:geonet="http://www.fao.org/geonetwork"
     xmlns:java="java:org.fao.geonet.util.XslUtil"
     version="2.0"
@@ -449,4 +450,22 @@
 		</xsl:choose>
 	</xsl:template>
 
+    <xsl:template name="getUuidRelatedMetadata">
+       	<xsl:param name="mduuidValue" />
+		<xsl:param name="idParamValue" />
+		<xsl:choose>
+			<xsl:when test="contains($idParamValue,';')"><xsl:value-of select="substring(substring-before($idParamValue,';'),1,string-length(substring-before($idParamValue,';'))-4)"/></xsl:when>
+			<xsl:when test="contains($idParamValue,'&amp;')"><xsl:value-of select="substring-before($idParamValue,'&amp;')"/></xsl:when>
+			<xsl:otherwise><xsl:value-of select="$idParamValue"/></xsl:otherwise>
+		</xsl:choose>
+    </xsl:template>
+
+    <xsl:template name="getIdFromCorrespondingOperatesOn">
+       	<xsl:param name="mduuidValue" />
+		<xsl:variable name="idParamValue" select="substring-after(../../../srv:operatesOn[@xlink:href!='' and @uuidref=$mduuidValue][1]/@xlink:href,';id=')"/>
+		<xsl:call-template name="getUuidRelatedMetadata">
+			<xsl:with-param name="mduuidValue" select="$mduuidValue"/>
+			<xsl:with-param name="idParamValue" select="$idParamValue"/>
+		</xsl:call-template>
+    </xsl:template>
 </xsl:stylesheet>

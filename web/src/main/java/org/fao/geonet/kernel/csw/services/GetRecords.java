@@ -549,7 +549,9 @@ public class GetRecords extends AbstractOperation implements CatalogService {
         }
 
         Attribute typeNames = query.getAttribute("typeNames", query.getNamespace());
-        typeNames = query.getAttribute("typeNames");
+        if (typeNames==null) {
+            typeNames = query.getAttribute("typeNames");
+        }
         if(typeNames != null) {
             String typeNamesValue = typeNames.getValue();
             // empty typenames element
@@ -557,22 +559,26 @@ public class GetRecords extends AbstractOperation implements CatalogService {
                 return cswPrefix + ":Record";
             }
             // not empty: scan comma-separated string
+            /*
             Scanner commaSeparator = new Scanner(typeNamesValue);
             commaSeparator.useDelimiter(",");
+*/
+            String[] typeNamesList = typeNamesValue.split(" ");
             String result = cswPrefix + ":Record";
-            while(commaSeparator.hasNext()) {
-                String typeName = commaSeparator.next();
+//            while(commaSeparator.hasNext()) {
+            for (int i=0;i<typeNamesList.length;i++) {
+                String typeName = typeNamesList[i];//commaSeparator.next();
                 typeName = typeName.trim();
                 if(Log.isDebugEnabled(Geonet.CSW_SEARCH)) {
                     Log.debug(Geonet.CSW_SEARCH, "checking typename in query:" + typeName);
                 }
                 if(!(typeName.equals(cswPrefix + ":Record") || typeName.equals(gmdPrefix + ":MD_Metadata"))) {
-                throw new InvalidParameterValueEx("typeNames", "invalid value");
-            }
+                    throw new InvalidParameterValueEx("typeNames", "invalid value");
+                }
                 if(typeName.equals(gmdPrefix + ":MD_Metadata")) {
                     return typeName;
+                }
             }
-        }
             return result;
         }
         // missing typeNames element

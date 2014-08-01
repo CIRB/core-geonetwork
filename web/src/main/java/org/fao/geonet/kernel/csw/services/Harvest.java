@@ -388,6 +388,9 @@ public class Harvest extends AbstractOperation implements CatalogService {
         capabilitiesUrl.addContent(source);
 		site.addContent(capabilitiesUrl);
 
+		Element outputSchema = new Element("outputSchema");
+		site.addContent(outputSchema);
+
 		Element eleIcon = new Element("icon").addContent("csw.gif");
 		site.addContent(eleIcon);
 
