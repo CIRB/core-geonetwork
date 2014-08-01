@@ -233,7 +233,7 @@
 	<!-- codelists: set @codeList path -->
 	<!-- ================================================================= -->
 	<xsl:template match="gmd:LanguageCode[@codeListValue]" priority="10">
-		<gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/">
+		<gmd:LanguageCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#gmd:LanguageCode">
 			<xsl:apply-templates select="@*[name(.)!='codeList']"/>
 		</gmd:LanguageCode>
 	</xsl:template>

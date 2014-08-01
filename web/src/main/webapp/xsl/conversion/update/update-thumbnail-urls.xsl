@@ -25,6 +25,6 @@
 	</xsl:template>
 
 	<xsl:template match="gmd:graphicOverview/gmd:MD_BrowseGraphic/gmd:fileName/gco:CharacterString[not(starts-with(.,'http'))]" priority="10">
-		<gco:CharacterString><xsl:value-of select="concat('http://geonetwork.geobru.irisnet.be/geonetwork/srv/eng/resources.get?uuid=',/root/gmd:MD_Metadata/gmd:fileIdentifier/gco:CharacterString/text(),'&amp;fname=',.)"/></gco:CharacterString>
+		<gco:CharacterString><xsl:value-of select="concat('http://geonetwork.geobru.irisnet.be/geonetwork/srv/fre/resources.get?uuid=',/root/gmd:MD_Metadata/gmd:fileIdentifier/gco:CharacterString/text(),'&amp;fname=',.)"/></gco:CharacterString>
 	</xsl:template>
 </xsl:stylesheet>

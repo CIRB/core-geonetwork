@@ -25,6 +25,36 @@
 	</xsl:template>
 
 	<xsl:template match="gmd:graphicOverview/gmd:MD_BrowseGraphic/gmd:fileName/gco:CharacterString[not(starts-with(.,'http'))]" priority="10">
-		<gco:CharacterString><xsl:value-of select="concat('http://geonetwork.geobru.irisnet.be/geonetwork/srv/eng/resources.get?uuid=',/root/gmd:MD_Metadata/gmd:fileIdentifier/gco:CharacterString/text(),'&amp;fname=',.)"/></gco:CharacterString>
+			<xsl:variable name="lang" select="/root/gmd:MD_Metadata/gmd:language/LanguageCode/@codeListValue"/>
+			<xsl:if test="$lang!='fre'">
+				<gmd:locale>
+					<gmd:PT_Locale id="DUT">
+						<gmd:languageCode>
+							<gmd:LanguageCode codeList="" codeListValue="dut" />
+						</gmd:languageCode>
+						<gmd:characterEncoding />
+					</gmd:PT_Locale>
+				</gmd:locale>
+			</xsl:if>
+			<xsl:if test="$lang!='fre'">
+				<gmd:locale>
+					<gmd:PT_Locale id="FRE">
+						<gmd:languageCode>
+							<gmd:LanguageCode codeList="" codeListValue="fre" />
+						</gmd:languageCode>
+						<gmd:characterEncoding />
+					</gmd:PT_Locale>
+				</gmd:locale>
+			</xsl:if>
+			<xsl:if test="$lang!='eng'">
+				<gmd:locale>
+					<gmd:PT_Locale id="ENG">
+						<gmd:languageCode>
+							<gmd:LanguageCode codeList="" codeListValue="eng" />
+						</gmd:languageCode>
+						<gmd:characterEncoding />
+					</gmd:PT_Locale>
+				</gmd:locale>
+			</xsl:if>
 	</xsl:template>
 </xsl:stylesheet>

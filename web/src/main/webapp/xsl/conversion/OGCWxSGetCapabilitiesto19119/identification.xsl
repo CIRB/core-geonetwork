@@ -143,7 +143,7 @@
 -->
 		<descriptiveKeywords>
 			<MD_Keywords>
-				<keyword xsi:type="PT_FreeText_PropertyType">
+				<keyword xsi:type="gmd:PT_FreeText_PropertyType">
 					<gco:CharacterString>infoMapAccessService</gco:CharacterString>
 					<PT_FreeText>
 						<textGroup>

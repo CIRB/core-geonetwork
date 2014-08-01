@@ -345,98 +345,99 @@
 				</MD_Distribution>
 			</distributionInfo>
 			<!--dqInfo -->
-			<DQ_DataQuality>
-				<scope>
-					<DQ_Scope>
-						<level>
-							<MD_ScopeCode codeListValue="service"
-								codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#MD_ScopeCode" />
-						</level>
-						<levelDescription>
-							<MD_ScopeDescription>
-								<other>
-									<gco:CharacterString>Service</gco:CharacterString>
-								</other>
-							</MD_ScopeDescription>
-						</levelDescription>
-					</DQ_Scope>
-				</scope>
-				<report>
-					<DQ_DomainConsistency>
-						<measureIdentification>
-							<RS_Identifier>
-								<code gco:nilReason="missing">
-									<gco:CharacterString />
-								</code>
-								<codeSpace gco:nilReason="missing">
-									<gco:CharacterString />
-								</codeSpace>
-							</RS_Identifier>
-						</measureIdentification>
-						<result>
-							<DQ_ConformanceResult>
-								<specification>
-									<CI_Citation>
-										<title>
-											<xsl:choose>
-												<xsl:when test="$lang='dut'">
-													<gco:CharacterString>Verordening (EG) nr. 976/2009 van de
-														Commissie van 19 oktober 2009 tot uitvoering van Richtlijn
-														2007/2/EG van het Europees Parlement en de Raad wat
-														betreft
-														de netwerkdiensten
-													</gco:CharacterString>
-												</xsl:when>
-												<xsl:otherwise>
-													<gco:CharacterString>Règlement (CE) N o 976/2009 de la
-														commission du 19 octobre 2009 portant modalités
-														d’application de la directive 2007/2/CE du Parlement
-														européen et du Conseil en ce qui concerne les services en
-														réseau
-													</gco:CharacterString>
-												</xsl:otherwise>
-											</xsl:choose>
-
-										</title>
-										<alternateTitle gco:nilReason="missing">
-											<gco:CharacterString />
-										</alternateTitle>
-										<date>
-											<CI_Date>
-												<date>
-													<gco:Date>2009-10-19</gco:Date>
-												</date>
-												<dateType>
-													<CI_DateTypeCode
-														codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode"
-														codeListValue="publication" />
-												</dateType>
-											</CI_Date>
-										</date>
-									</CI_Citation>
-								</specification>
-								<explanation>
-									<xsl:choose>
-										<xsl:when test="$lang='dut'">
-											<gco:CharacterString>Zie de gerefereerde specificatie.
-											</gco:CharacterString>
-										</xsl:when>
-										<xsl:otherwise>
-											<gco:CharacterString>Voir la spécification référencée.
-											</gco:CharacterString>
-										</xsl:otherwise>
-									</xsl:choose>
-
-								</explanation>
-								<pass>
-									<gco:Boolean>true</gco:Boolean>
-								</pass>
-							</DQ_ConformanceResult>
-						</result>
-					</DQ_DomainConsistency>
-				</report>
-			</DQ_DataQuality>
-		</dataQualityInfo>
+			<dataQualityInfo>
+				<DQ_DataQuality>
+					<scope>
+						<DQ_Scope>
+							<level>
+								<MD_ScopeCode codeListValue="service"
+									codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#MD_ScopeCode" />
+							</level>
+							<levelDescription>
+								<MD_ScopeDescription>
+									<other>
+										<gco:CharacterString>Service</gco:CharacterString>
+									</other>
+								</MD_ScopeDescription>
+							</levelDescription>
+						</DQ_Scope>
+					</scope>
+					<report>
+						<DQ_DomainConsistency>
+							<measureIdentification>
+								<RS_Identifier>
+									<code gco:nilReason="missing">
+										<gco:CharacterString />
+									</code>
+									<codeSpace gco:nilReason="missing">
+										<gco:CharacterString />
+									</codeSpace>
+								</RS_Identifier>
+							</measureIdentification>
+							<result>
+								<DQ_ConformanceResult>
+									<specification>
+										<CI_Citation>
+											<title>
+												<xsl:choose>
+													<xsl:when test="$lang='dut'">
+														<gco:CharacterString>Verordening (EG) nr. 976/2009 van de
+															Commissie van 19 oktober 2009 tot uitvoering van Richtlijn
+															2007/2/EG van het Europees Parlement en de Raad wat
+															betreft
+															de netwerkdiensten
+														</gco:CharacterString>
+													</xsl:when>
+													<xsl:otherwise>
+														<gco:CharacterString>Règlement (CE) N o 976/2009 de la
+															commission du 19 octobre 2009 portant modalités
+															d’application de la directive 2007/2/CE du Parlement
+															européen et du Conseil en ce qui concerne les services en
+															réseau
+														</gco:CharacterString>
+													</xsl:otherwise>
+												</xsl:choose>
+	
+											</title>
+											<alternateTitle gco:nilReason="missing">
+												<gco:CharacterString />
+											</alternateTitle>
+											<date>
+												<CI_Date>
+													<date>
+														<gco:Date>2009-10-19</gco:Date>
+													</date>
+													<dateType>
+														<CI_DateTypeCode
+															codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode"
+															codeListValue="publication" />
+													</dateType>
+												</CI_Date>
+											</date>
+										</CI_Citation>
+									</specification>
+									<explanation>
+										<xsl:choose>
+											<xsl:when test="$lang='dut'">
+												<gco:CharacterString>Zie de gerefereerde specificatie.
+												</gco:CharacterString>
+											</xsl:when>
+											<xsl:otherwise>
+												<gco:CharacterString>Voir la spécification référencée.
+												</gco:CharacterString>
+											</xsl:otherwise>
+										</xsl:choose>
+	
+									</explanation>
+									<pass>
+										<gco:Boolean>true</gco:Boolean>
+									</pass>
+								</DQ_ConformanceResult>
+							</result>
+						</DQ_DomainConsistency>
+					</report>
+				</DQ_DataQuality>
+			</dataQualityInfo>
 			<!--mdConst -->
 			<!--mdMaint -->
 
