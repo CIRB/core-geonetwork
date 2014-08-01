@@ -166,7 +166,7 @@
 		</init-param>        
         <init-param>
             <param-name>geonetwork.drivemapping</param-name>
-            <param-value>net use x: \\PCPB359\geonetworkcirb_data_shared /PERSISTENT:NO</param-value>
+            <param-value>net use x: \\CI109835\geonetworkcirb_data_shared /PERSISTENT:NO</param-value>
         </init-param>
         <init-param>
             <param-name>geonetwork.dir</param-name>
