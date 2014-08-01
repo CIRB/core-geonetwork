@@ -2354,7 +2354,7 @@
             service</description>
     </element>
     <element name="srv:operatesOn">
-        <label>Operates On</label>
+        <label>Information about the metadata on which the service operates</label>
         <description>Provides information on the datasets that the service operates on</description>
     </element>
     <element name="srv:operationName">
@@ -2533,7 +2533,7 @@
         <description>CharacterEncoding</description>
     </element>
     <element name="uuidref">
-        <label>Metadata uuid</label>
+        <label>Identificator of the dataset on which the service operates</label>
         <description>Unique identifier</description>
     </element>
     <element name="uom">

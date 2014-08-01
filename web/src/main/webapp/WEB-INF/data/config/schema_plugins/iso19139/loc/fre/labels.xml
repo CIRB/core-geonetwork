@@ -3855,7 +3855,7 @@
     <description>Information sur les opérations</description>
   </element>
   <element name="srv:operatesOn">
-    <label>Identifiant de la donnée associée</label>
+    <label>Information concernant les jeux de données sur lesquels le service opère</label>
     <description>Information sur la ou les données associées au service</description>
   </element>
   <element name="srv:operationName">
@@ -4079,7 +4079,7 @@
     
   </element>
   <element name="uuidref">
-    <label>Identifiant unique</label>
+    <label>Identifiant unique du jeu de données sur lequel le service opère</label>
     <description/>
     <help/>
     <condition/>

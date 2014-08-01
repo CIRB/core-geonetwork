@@ -275,8 +275,8 @@
 			</xsl:call-template>
         </xsl:variable>
         <xsl:variable name="label">
-			<xsl:if test="name(.)='srv:operatesOn'">Datasetnaam waarop de service opereert</xsl:if>
-	        <xsl:if test="name(.)='gmd:featureCatalogueCitation'">Naam van de catalogus</xsl:if>
+			<xsl:if test="name(.)='srv:operatesOn'"><xsl:choose><xsl:when test="$langId='dut'">Datasetnaam waarop de service opereert</xsl:when><xsl:when test="$langId='eng'">Dataset on which the service operates</xsl:when><xsl:otherwise>Nom du jeu de données sur lequel le service opère</xsl:otherwise></xsl:choose></xsl:if>
+			<xsl:if test="name(.)='gmd:featureCatalogueCitation'"><xsl:choose><xsl:when test="$langId='dut'">Naam van de catalogus</xsl:when><xsl:when test="$langId='eng'">Name of the catalogue</xsl:when><xsl:otherwise>Nom du catalogue</xsl:otherwise></xsl:choose></xsl:if>
         </xsl:variable>
         <xsl:variable name="className">
 			<xsl:if test="name(.)='srv:operatesOn'">srvoperatesOn</xsl:if>
