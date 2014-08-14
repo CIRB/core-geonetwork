@@ -140,8 +140,14 @@
 	<!-- Only set metadataStandardName and metadataStandardVersion
 	if not set. -->
 	<xsl:template match="gmd:metadataStandardName[@gco:nilReason='missing' or gco:CharacterString='']" priority="10">
+        <xsl:variable name="service" select="../gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue='service'"/>
 		<xsl:copy>
-			<gco:CharacterString>?</gco:CharacterString>
+			<xsl:if test="$service">
+				<gco:CharacterString>ISO 19119</gco:CharacterString>
+			</xsl:if>
+			<xsl:if test="not($service)">
+				<gco:CharacterString>ISO 19115</gco:CharacterString>
+			</xsl:if>
 		</xsl:copy>
 	</xsl:template>
 	
@@ -149,10 +155,10 @@
         <xsl:variable name="service" select="../gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue='service'"/>
 		<xsl:copy>
 			<xsl:if test="$service">
-				<gco:CharacterString>?</gco:CharacterString>
+				<gco:CharacterString>2005/Amd 1:2008</gco:CharacterString>
 			</xsl:if>
 			<xsl:if test="not($service)">
-				<gco:CharacterString>?</gco:CharacterString>
+				<gco:CharacterString>2003/Cor.1:2006</gco:CharacterString>
 			</xsl:if>
 		</xsl:copy>
 	</xsl:template>
