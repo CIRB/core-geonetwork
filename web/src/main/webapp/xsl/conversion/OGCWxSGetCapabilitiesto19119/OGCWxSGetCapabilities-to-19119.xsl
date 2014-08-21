@@ -22,7 +22,6 @@
 	</xsl:param>
 	<xsl:param name="topic"></xsl:param>
 	<xsl:param name="ogctype"></xsl:param>
-	<xsl:param name="outputSchema"></xsl:param>
 
 	<!-- ============================================================================= -->
 

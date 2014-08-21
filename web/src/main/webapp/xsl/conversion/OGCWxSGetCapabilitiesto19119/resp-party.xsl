@@ -18,7 +18,6 @@
 
 	<xsl:param name="outputSchema"></xsl:param>
 	<xsl:template match="*" mode="RespParty">
-
 		<xsl:for-each select="ContactPersonPrimary/ContactPerson|wms:ContactPersonPrimary/wms:ContactPerson|wcs:individualName|ows:ServiceContact/ows:IndividualName|ows11:ServiceContact/ows11:IndividualName">
 			<individualName>
 				<gco:CharacterString><xsl:value-of select="."/></gco:CharacterString>
@@ -88,7 +87,6 @@
 							ows:ServiceContact/ows:ContactInfo/ows:Address|
 							ows11:ServiceContact/ows11:ContactInfo/ows11:Address">
 			<address>
-<!--
 				<xsl:choose>
 					<xsl:when test="$outputSchema='iso19139.geobru'">
 						<geobru:BXL_Address gco:isoType="CI_Address_Type">
@@ -114,15 +112,6 @@
 						</CI_Address>
 					</xsl:otherwise>
 				</xsl:choose>
--->
-						<CI_Address>
-							<xsl:apply-templates select="." mode="Address"/>
-							<xsl:for-each select="../ContactElectronicMailAddress|../wms:ContactElectronicMailAddress|../wcs:address/wcs:electronicMailAddress|../ows:ElectronicMailAddress|../ows11:ElectronicMailAddress">
-								<electronicMailAddress>
-									<gco:CharacterString><xsl:value-of select="."/></gco:CharacterString>
-								</electronicMailAddress>
-							</xsl:for-each>
-						</CI_Address>
 			</address>
 		</xsl:for-each>
 
