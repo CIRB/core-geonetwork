@@ -185,10 +185,10 @@ GeoNetwork.LoginForm = Ext.extend(Ext.FormPanel, {
         GeoNetwork.LoginForm.superclass.initComponent.call(this);
         
         // check user on startup with a kind of ping service
-        var loggedIn = this.catalogue.isLoggedIn();
-        this.login(this.catalogue, loggedIn); // FIXME : login expect a user not a boolean
+        // check user on startup with a kind of ping service
         this.catalogue.on('afterLogin', this.login, this);
         this.catalogue.on('afterLogout', this.login, this);
+        this.catalogue.isLoggedIn(true);
     },
     
     /** private: method[login]

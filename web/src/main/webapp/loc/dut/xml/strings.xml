@@ -864,6 +864,8 @@
 	<startsWith>Begint met</startsWith>
 	<state>Provincie/Staat</state>
 	<styleSheet>StyleSheet</styleSheet>
+	<uuids>Comma gescheiden UUID's om te updaten</uuids>
+	<changeDate>Datum update</changeDate>
 	<submit>Bewaren en sluiten</submit>
 	<subtemplate>Subtemplate</subtemplate>
 	<subtemplateTitle>subtemplate titel</subtemplateTitle>

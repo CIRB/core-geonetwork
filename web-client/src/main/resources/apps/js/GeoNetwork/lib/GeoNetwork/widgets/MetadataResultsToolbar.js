@@ -175,10 +175,8 @@ GeoNetwork.MetadataResultsToolbar = Ext.extend(Ext.Toolbar, {
                         Ext.getCmp('E_sortBy').setValue(tokens[0]);
                         Ext.getCmp('sortOrder').setValue(tokens[1]);
                     }
-                    if (this.searchFormCmp) {
-                        this.searchFormCmp.fireEvent('search');
-                    } else if (this.searchBtCmp) {
-                        this.searchBtCmp.fireEvent('click');
+                    if (this.searchBtCmp) {
+                    	this.searchBtCmp.getEl().dom.click();
                     }
                 },
                 scope: tb
@@ -392,22 +390,7 @@ GeoNetwork.MetadataResultsToolbar = Ext.extend(Ext.Toolbar, {
                 text: OpenLayers.i18n('printSel'),
                 iconCls: 'md-mn-pdf',
                 handler: function(){
-                    var sortField;
-                    var sortFieldOrder;
-
-                    var sortByEl = Ext.getCmp('E_sortBy');
-
-                    if (sortByEl) {
-                        sortField =  sortByEl.getValue();
-
-                        var sortByOrderEl = Ext.getCmp('sortOrder');
-                        if (sortByOrderEl) {
-                            sortFieldOrder = sortByOrderEl.getValue();
-                        }
-
-                    }
-
-                    this.catalogue.pdfExport(sortField, sortFieldOrder);
+                    this.catalogue.pdfExport();
                 },
                 scope: this
             });

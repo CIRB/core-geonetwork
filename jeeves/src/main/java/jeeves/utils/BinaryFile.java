@@ -509,7 +509,7 @@ public final class BinaryFile
 		else if (fName.endsWith(".jpg") || fName.endsWith(".jpeg"))
 			return "image/jpeg";
 		else if (fName.endsWith(".png"))
-			return "application/png";
+			return "image/png";
 		else if (fName.endsWith(".bmp"))
 			return "application/bmp";
 

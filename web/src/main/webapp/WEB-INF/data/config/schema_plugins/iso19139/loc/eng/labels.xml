@@ -822,7 +822,7 @@
         <label>Delivery point</label>
         <description>Address line for the location (as described in ISO 11180, annex A)</description>
 		<helper rel="gmd:postalCode">
-			<option value="80 boîte 1 rue du Progrès" title="1035">80 boîte 1 rue du Progrès (AATL / BROH)</option>
+			<option value="80 boîte 1 rue du Progrès" title="1035">80 boîte 1 rue du Progrès (Bruxelles Développement Urbain / Brussel Stedelijke Ontwikkeling)</option>
 			<option value="2-4 rue Royale" title="1000">2-4 rue Royale (ADT / ATO)</option>
 			<option value="100 Gulledelle" title="1200">100 Gulledelle (Bruxelles Environnement / Leefmilieu Brussel)</option>
 			<option value="80 boîte 1 rue du Progrès" title="1035">80 boîte 1 rue du Progrès (Bruxelles Mobilité / Mobiel Brussel)</option>
@@ -1591,7 +1591,7 @@
         <description>Name of the responsible organization</description>
         <condition>conditional</condition>
         <helper>
-            <option value="AATL / BROH">AATL / BROH</option>    
+            <option value="Bruxelles Développement Urbain / Brussel Stedelijke Ontwikkeling">Bruxelles Développement Urbain / Brussel Stedelijke Ontwikkeling</option>    
             <option value="ADT / ATO">ADT / ATO</option>    
             <option value="Bruxelles Mobilité / Mobiel Brussel">Bruxelles Mobilité / Mobiel Brussel</option>    
             <option value="Bruxelles Environnement / Leefmilieu Brussel">Bruxelles Environnement / Leefmilieu Brussel</option>    

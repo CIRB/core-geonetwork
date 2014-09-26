@@ -36,6 +36,7 @@
 			</error>
 
 		</service>
+
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 		<service name="metadata.show">
@@ -566,6 +567,9 @@
 			</output>
 		</service>
 
+		<service name="metadata.xmldateupdate.form">
+			<output sheet="metadata-date-update-form.xsl"/>
+		</service>
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 		<service name="metadata.batchimport.form">

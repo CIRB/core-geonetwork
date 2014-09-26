@@ -74,6 +74,8 @@ public class XmlUpdate implements Service
 		response.addContent(unchangedRecords);
 		String style      = Util.getParam(params, Params.STYLESHEET, "_none_");
 		String scope      = Util.getParam(params, "scope", "0");
+		String uuids      = Util.getParam(params, "uuids", "");
+//		String changeDate      = Util.getParam(params, "changeDate", "");
         if (!style.equals("_none_") && !StringUtils.isBlank(scope) && (scope.equals("0") || scope.equals("1"))) {
 
     		GeonetContext gc = (GeonetContext) context.getHandlerContext(Geonet.CONTEXT_NAME);
@@ -82,7 +84,11 @@ public class XmlUpdate implements Service
 
 			DataManager dm = gc.getDataManager();
 	        Dbms dbms = (Dbms) context.getResourceManager().open(Geonet.Res.MAIN_DB);
-            Element result = dbms.select("SELECT id, uuid FROM metadata where not (isharvested='y') and istemplate='n' and schemaid in ('iso19139','iso19139.geobru') ORDER BY id ASC");
+	        String whereClause = "where not (isharvested='y') and istemplate='n' and schemaid in ('iso19139','iso19139.geobru')";
+	        if (!StringUtils.isBlank(uuids)) {
+	        	whereClause += " and uuid in ('" + uuids.replaceAll("\\''","").replaceAll(",","\\'',\\''") + "')";
+	        }
+            Element result = dbms.select("SELECT id, uuid FROM metadata " + whereClause + " ORDER BY id ASC");
             for(int i = 0; i < result.getContentSize(); i++) {
                 Element record = (Element) result.getContent(i);
                 String id = record.getChildText("id");

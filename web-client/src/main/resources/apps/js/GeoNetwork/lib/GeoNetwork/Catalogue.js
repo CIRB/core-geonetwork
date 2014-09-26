@@ -302,6 +302,7 @@ GeoNetwork.Catalogue = Ext.extend(Ext.util.Observable, {
             fileDownload: serviceUrl + 'file.download',
             geopublisher: serviceUrl + 'geoserver.publisher',
             login: serviceUrl + 'xml.user.login',
+            userSession: serviceUrl + 'user.session',
             logout: serviceUrl + 'xml.user.logout',
             mef: serviceUrl + 'mef.export?format=full&version=2',
             csv: serviceUrl + 'csv.search',
@@ -798,17 +799,7 @@ GeoNetwork.Catalogue = Ext.extend(Ext.util.Observable, {
      *	Export current selection in PDF format.
      */
     pdfExport: function(sortField, sortOrder){
-        var pdfExportUrl = this.services.pdf;
-
-        if (sortField != undefined) {
-            pdfExportUrl = pdfExportUrl + "?sortBy=" + sortField;
-
-            if (sortOrder != undefined) {
-                pdfExportUrl = pdfExportUrl + "&sortOrder=" + sortOrder;
-            }
-        }
-
-        location.replace(pdfExportUrl);
+        location.replace(this.services.pdf + "?sortBy=" + Ext.getCmp('E_sortBy').getValue()  + "&sortOrder=" + Ext.getCmp('sortOrder').getValue());
     },
     /** api: method[metadataShow]
      *  :param uuid: ``String`` uuid of the metadata to dislay
@@ -1047,9 +1038,9 @@ GeoNetwork.Catalogue = Ext.extend(Ext.util.Observable, {
      *  In case of exception continue catalogue connection validation
      *  using the xml.main.error service (@see checkError).
      */
-    isLoggedIn: function(){
+    isLoggedIn: function(callAfterLogin){
         var response = OpenLayers.Request.GET({
-            url: this.services.admin, // FIXME : add a ping user info service in GeoNetwork
+            url: this.services.userSession,
             async: false
         }), exception;
        
@@ -1058,21 +1049,31 @@ GeoNetwork.Catalogue = Ext.extend(Ext.util.Observable, {
         exception = response.responseText.indexOf('Exception') !== -1;
         
         if (response.status === 200 && !exception) {
-            this.identifiedUser = {
-                firstName: '',
-                surName: '',
-                role: ''
-            };
-            this.onAfterLogin();
-            return true;
+            var user = response.responseXML.getElementsByTagName('session')[0];
+            var id = user ? (user.getElementsByTagName('userId')[0].firstChild ? user.getElementsByTagName('userId')[0].firstChild.nodeValue : '') : '';
+            if (!Ext.isEmpty(id)) {
+                this.identifiedUser = {
+                    id: id,
+                    username: user ? user.getElementsByTagName('username')[0].firstChild.nodeValue : '',
+                    name: user ? user.getElementsByTagName('name')[0].firstChild.nodeValue : '',
+                    surname: user ? user.getElementsByTagName('surname')[0].firstChild.nodeValue : '',
+                    role: user ? user.getElementsByTagName('profile')[0].firstChild.nodeValue : ''
+                };
+            } else {
+            	this.identifiedUser = undefined;
+            }
+            if (callAfterLogin) {
+            	this.onAfterLogin();
+        	}
         } else if (response.status === 404) {
             this.showError(OpenLayers.i18n('connectIssue'), 
-                OpenLayers.i18n('connectIssueMsg') + this.services.rootUrl + '.');
+                OpenLayers.i18n('connectIssueMsg') + this.services.userSession + '.');
         } else if (exception) {
             this.checkError();
             return false;
         } else {
             // Reset user cookie information
+            var cookie = Ext.state.Manager.getProvider();
             if (cookie) {
                 cookie.set('user', undefined);
             }

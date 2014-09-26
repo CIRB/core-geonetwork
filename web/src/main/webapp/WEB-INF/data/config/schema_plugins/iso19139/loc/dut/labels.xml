@@ -571,7 +571,7 @@
 		<label>Adres</label>
 		<description>Contactadres van de organisatie.</description>
 		<helper rel="gmd:postalCode">
-			<option value="Vooruitgangstraat 80 bus 1" title="1035">Vooruitgangstraat 80 bus 1 (AATL / BROH)</option>
+			<option value="Vooruitgangstraat 80 bus 1" title="1035">Vooruitgangstraat 80 bus 1 (Bruxelles Développement Urbain / Brussel Stedelijke Ontwikkeling)</option>
 			<option value="Koningsstraat 2-4" title="1000">Koningsstraat 2-4 (ADT / ATO)</option>
 			<option value="Gulledelle 100" title="1200">Gulledelle 100 (Bruxelles Environnement / Leefmilieu Brussel)</option>
 			<option value="Vooruitgangstraat 80 bus 1" title="1035">Vooruitgangstraat 80 bus 1 (Bruxelles Mobilité / Mobiel Brussel)</option>
@@ -1640,7 +1640,7 @@
 		<label>Organisatie</label>
 		<description>Naam van de verantwoordelijke organisatie</description>
 		<helper>
-			<option value="AATL / BROH">AATL / BROH</option>
+			<option value="Bruxelles Développement Urbain / Brussel Stedelijke Ontwikkeling">Bruxelles Développement Urbain / Brussel Stedelijke Ontwikkeling</option>
 			<option value="ADT / ATO">ADT / ATO</option>
 			<option value="Bruxelles Environnement / Leefmilieu Brussel">Bruxelles Environnement / Leefmilieu Brussel</option>
 			<option value="Bruxelles Mobilité / Mobiel Brussel">Bruxelles Mobilité / Mobiel Brussel</option>

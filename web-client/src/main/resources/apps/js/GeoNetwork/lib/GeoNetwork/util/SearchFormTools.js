@@ -363,22 +363,30 @@ GeoNetwork.util.SearchFormTools = {
      *  Return a combo box with sort options
      */
     getSortByCombo: function(defaultValue){
+        if (this.sortByField != null) return [this.sortByField, this.sortOrderField, this.sortByCombo];
+
+        var sortByField = new Ext.form.TextField({
+            name: 'E_sortBy',
+            id: 'E_sortBy',
+            inputType: 'hidden'
+        });
+        
+        //AGIV specific: default value for sorting
+        sortByField.setValue("changeDate");
+        
+        var sortOrderField = new Ext.form.TextField({
+            name: 'E_sortOrder',
+            id: 'sortOrder',
+            inputType: 'hidden'
+        });
         var store = GeoNetwork.util.SearchFormTools.getSortByStore();
         var combo = new Ext.form.ComboBox({
-			/*
-			 * Added by GVB
-			 */ 
-			hidden: true,
             mode: 'local',
             fieldLabel: OpenLayers.i18n('sortBy'),
             triggerAction: 'all',
             store: store,
             valueField: 'id',
             displayField: 'name',
-            /*
-             * Added by GVB
-             */
-            value: defaultValue,
             listeners: {
                 change: function(cb, newValue, oldValue){
                     /* Adapt sort order according to sort field */
@@ -388,34 +396,12 @@ GeoNetwork.util.SearchFormTools = {
                 }
             }
         });
-        /*
-         * Added by GVB
-         */
-        var tokens = defaultValue.split('#');
-        var sortByField = new Ext.form.TextField({
-            name: 'E_sortBy',
-            id: 'E_sortBy',
-            inputType: 'hidden',
-            linkedCombo: combo
-            /*
-             * Added by GVB
-             */
-            ,value: tokens[0]
-        });
-        var sortOrderField = new Ext.form.TextField({
-            name: 'E_sortOrder',
-            id: 'sortOrder',
-            inputType: 'hidden',
-            linkedCombo: combo
-            /*
-             * Added by GVB
-             */
-            ,value: tokens[1]
-        });
-/*
- * Modified and removed by GVB
- */
-//        combo.setValue(defaultValue);
+        combo.setValue(defaultValue || 'relevance#');
+
+        this.sortByCombo = combo;
+        this.sortByField = sortByField;
+        this.sortOrderField = sortOrderField;
+
         return [sortByField, sortOrderField, combo];
     },
     /** api:method[getSortByStore]

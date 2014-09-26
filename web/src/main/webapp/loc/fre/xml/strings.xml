@@ -852,6 +852,8 @@
 	<startsWith>Commence par</startsWith>
 	<state>Etat</state>
 	<styleSheet>Feuille de style</styleSheet>
+	<uuids>UUID's à modifiés séparés par virgules</uuids>
+	<changeDate>Date de mise à jour</changeDate>
 	<submit>Valider</submit>
 	<subtemplate>Sous modèle</subtemplate>
 	<subtemplateTitle>Titre du sous modèle</subtemplateTitle>

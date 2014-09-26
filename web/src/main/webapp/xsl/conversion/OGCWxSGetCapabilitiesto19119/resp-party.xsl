@@ -27,8 +27,8 @@
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 		<xsl:for-each select="ContactPersonPrimary/ContactOrganization|wms:ContactPersonPrimary/wms:ContactOrganization|wcs:organisationName|ows:ProviderName|ows11:ProviderName">
-			<organisationName>
-				<gco:CharacterString><xsl:value-of select="."/></gco:CharacterString>
+			<organisationName>				
+				<gco:CharacterString><xsl:call-template name="getOrganisationName"/></gco:CharacterString>
 			</organisationName>
 		</xsl:for-each>
 
@@ -178,4 +178,16 @@
 
 	<!-- ============================================================================= -->
 
+	<xsl:template name="getOrganisationName">
+		<xsl:variable name="organisationName" select="."/>
+		<xsl:choose>
+			<xsl:when test="$organisationName='Bruxelles Mobilite - Brussel Mobiliteit'">Bruxelles Mobilité / Mobiel Brussel</xsl:when>
+			<xsl:when test="$organisationName='CIRB'">CIRB / CIBG</xsl:when>
+			<xsl:when test="$organisationName='Bruxelles Environnement-IBGE' or $organisationName='Brussels Hoofdstedelijk Gewest-BIM'">Bruxelles Environnement / Leefmilieu Brussel</xsl:when>
+			<xsl:when test="$organisationName='STIB/MIVB' or $organisationName='STIB' or $organisationName='MIVB'">STIB / MIVB</xsl:when>
+			<xsl:when test="$organisationName='DGSEI - RN, Monitoring des quartiers - IBSA' or $organisationName='ADSEI - Rijksregister, Wijkmonitoring - BISA'">IBSA / BISA</xsl:when>
+			<xsl:when test="$organisationName='BruGIS team - DAF - BDU'">Bruxelles Développement Urbain / Brussel Stedelijke Ontwikkeling</xsl:when>
+			<xsl:otherwise><xsl:value-of select="$organisationName"/></xsl:otherwise>
+		</xsl:choose>	
+	</xsl:template>
 </xsl:stylesheet>

@@ -814,13 +814,13 @@ GeoNetwork.app = function() {
 
 		catalogue.resultsView = metadataResultsView;
 
-		tBar = new GeoNetwork.MetadataResultsToolbar({
+        tBar = new GeoNetwork.MetadataResultsToolbar({
 			catalogue : catalogue,
 			searchBtCmp : Ext.getCmp('searchBt'),
 /*
  * Modified by GVB
  */
-			sortByCmp : Ext.getCmp('E_sortBy').linkedCombo,
+			sortByCmp : Ext.getCmp('E_sortBy'),
 			metadataResultsView : metadataResultsView,
 			permalinkProvider : permalinkProvider
 		});
@@ -1385,43 +1385,43 @@ GeoNetwork.app = function() {
 		 * @param response
 		 * @return
 		 */
-		loadResults : function(response) {
-			// Show "List results" panel
-			var tabPanel = Ext.getCmp("GNtabs");
-			tabPanel.unhideTabStripItem(tabPanel.items.itemAt(1));
+        loadResults: function(response){
+            
+            // Show "List results" panel
+            var tabPanel = Ext.getCmp("GNtabs");            
+            tabPanel.unhideTabStripItem(tabPanel.items.itemAt(1));
 
-			initPanels();
+            initPanels();
 
-			// FIXME : result panel need to update layout in case of slider
-			// Ext.getCmp('resultsPanel').syncSize();
+            // FIXME : result panel need to update layout in case of slider
+            // Ext.getCmp('resultsPanel').syncSize();
 
-			Ext.getCmp('previousBt').setDisabled(catalogue.startRecord === 1);
-			Ext.getCmp('nextBt').setDisabled(
-					catalogue.startRecord
-							+ parseInt(Ext.getCmp('E_hitsperpage').getValue(),
-									10) > catalogue.metadataStore.totalLength);
-			/*
-			 * Modified by GVB
-			 */
-			if (Ext.getCmp('E_sortBy').linkedCombo.getValue()) {
-				Ext.getCmp('sortByToolBar').setValue(Ext.getCmp('E_sortBy').linkedCombo.getValue());
+            Ext.getCmp('previousBt').setDisabled(catalogue.startRecord === 1);
+            Ext.getCmp('nextBt').setDisabled(catalogue.startRecord +
+                parseInt(Ext.getCmp('E_hitsperpage').getValue(), 10) > catalogue.metadataStore.totalLength);
+            if (Ext.getCmp('E_sortBy').getValue()) {
+                Ext.getCmp('sortByToolBar').setValue(Ext.getCmp('E_sortBy').getValue()  + "#" + Ext.getCmp('sortOrder').getValue() );
 
-			}/* else {
-				Ext.getCmp('sortByToolBar').setValue(
-						Ext.getCmp('E_sortBy').getValue());
+            } else {
+                Ext.getCmp('sortByToolBar').setValue(Ext.getCmp('E_sortBy').getValue());
 
-			}*/
+            }
 
-			// Fix for width sortBy combo in toolbar
-			// See this:
-			// http://www.sencha.com/forum/showthread.php?122454-TabPanel-deferred-render-false-nested-toolbar-layout-problem
-			Ext.getCmp('sortByToolBar').syncSize();
-			Ext.getCmp('sortByToolBar').setWidth(130);
 
-			resultsPanel.syncSize();
+            // Fix for width sortBy combo in toolbar
+            // See this: http://www.sencha.com/forum/showthread.php?122454-TabPanel-deferred-render-false-nested-toolbar-layout-problem
+            Ext.getCmp('sortByToolBar').syncSize();
+            Ext.getCmp('sortByToolBar').setWidth(130);
+        
+            resultsPanel.syncSize();
+            
 
-			Ext.ux.Lightbox.register('a[rel^=lightbox]');
-		},
+            //resultsPanel.setHeight(Ext.getCmp('center').getHeight());
+
+            //Ext.getCmp('west').syncSize();
+            //Ext.getCmp('center').syncSize();
+            //Ext.ux.Lightbox.register('a[rel^=lightbox]');
+        },
 		/**
 		 * Activate map tab
 		 */

@@ -847,6 +847,8 @@
 	<startsWith>Start with</startsWith>
 	<state>State</state>
 	<styleSheet>StyleSheet</styleSheet>
+	<uuids>Comma separated UUID's to update</uuids>
+	<changeDate>Date of update</changeDate>
 	<submit>Submit</submit>
 	<subtemplate>Subtemplate</subtemplate>
 	<subtemplateTitle>subtemplate title</subtemplateTitle>
