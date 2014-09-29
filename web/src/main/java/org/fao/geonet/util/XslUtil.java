@@ -3,9 +3,8 @@ package org.fao.geonet.util;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,6 +13,7 @@ import jeeves.utils.Log;
 import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.kernel.search.LuceneSearcher;
 import org.fao.geonet.languages.IsoLanguagesMapper;
+//import java.util.Calendar;
 
 /**
  * These are all extension methods for calling from xsl docs.  Note:  All
@@ -254,6 +254,14 @@ public final class XslUtil
 			return false;
 		}
 		return src.toString().matches(pattern.toString());
+	}
+	
+	public static String getCurrentDate(String dateFormat) {
+		return new SimpleDateFormat(dateFormat).format(new Date());
+	}
+
+	public static String getCurrentDateTime(String dateFormat, String timeFormat) {
+		return new SimpleDateFormat(dateFormat + "'T'" + timeFormat).format(new Date());
 	}
 
 }

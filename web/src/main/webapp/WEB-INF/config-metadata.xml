@@ -37,6 +37,17 @@
 
 		</service>
 
+		<service name="metadata.xmlchildelementtextupdate">
+			<class name=".services.metadata.XmlChildElementTextUpdate"/>
+			<output sheet="metadata-update-results.xsl"/>
+
+			<error sheet="error.xsl">
+				<xml name="error" file="xml/validation-error.xml" />
+				<xml name="validation" file="xml/metadata-validate.xml" />
+			</error>
+
+		</service>
+
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 		<service name="metadata.show">
@@ -567,8 +578,8 @@
 			</output>
 		</service>
 
-		<service name="metadata.xmldateupdate.form">
-			<output sheet="metadata-date-update-form.xsl"/>
+		<service name="metadata.xmlchangedateupdate.form">
+			<output sheet="metadata-changedate-update-form.xsl"/>
 		</service>
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 

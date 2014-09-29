@@ -155,8 +155,9 @@
 
         <allow service="debug.openconnection.accessors"/>
 		<allow service="metadata.xmlupdate.form"/>
-		<allow service="metadata.xmldateupdate.form"/>
+		<allow service="metadata.xmlchangedateupdate.form"/>
 		<allow service="metadata.xmlupdate"/>
+		<allow service="metadata.xmlchildelementtextupdate"/>
 	</profile>
 
 	<!-- ====================================================================== -->

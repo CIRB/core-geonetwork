@@ -1524,7 +1524,7 @@ public class LuceneSearcher extends MetaSearcher {
         if (context != null) {
             GeonetContext gc = (GeonetContext) context.getHandlerContext(Geonet.CONTEXT_NAME);
             searchmanager = gc.getSearchmanager();
-            reader = searchmanager.getNewIndexReader().two();
+            reader = searchmanager.getNewIndexReader(priorityLang).two();
         } else {
             throw new IllegalStateException("There needs to be a ServiceContext in the thread local for this thread");
         }
