@@ -393,7 +393,7 @@ GeoNetwork.util.SearchFormTools = {
                    var tokens = newValue.split('#');
                    sortByField.setValue(tokens[0]);
                    sortOrderField.setValue(tokens[1]);
-                }
+                }	    	
             }
         });
         combo.setValue(defaultValue || 'relevance#');
@@ -425,8 +425,28 @@ GeoNetwork.util.SearchFormTools = {
                 ['denominator#', OpenLayers.i18n('scaleDesc')], 
                 ['denominator#reverse', OpenLayers.i18n('scaleAsc')]
 */
-			]
-        });
+			],
+    		sortInfo: { field:'name', direction:'ASC' }
+		});
+    },
+    /** api:method[getSortByStoreForLogged]
+    *
+    *  Return an ArrayStore of sort options for logged users
+    */
+    getSortByStoreForLogged: function(defaultValue){
+    	return new Ext.data.ArrayStore({
+    		id: 0,
+    		fields: ['id', 'name'],
+    		data: [['relevance#', OpenLayers.i18n('relevance')],
+    		       ['title#reverse', OpenLayers.i18n('title')],
+    		       ['changeDate#', OpenLayers.i18n('changeDate')],
+ //   		       ['rating#', OpenLayers.i18n('rating')],
+    		       ['_status', OpenLayers.i18n('status')]
+ //   		       ['denominator#', OpenLayers.i18n('scaleDesc')],
+ //   		       ['denominator#reverse', OpenLayers.i18n('scaleAsc')]
+    		],
+    		sortInfo: { field:'name', direction:'ASC' }
+    	});
     },
     /** api:method[getFullTextField]
      *  :return: A full text search text field
@@ -557,17 +577,35 @@ GeoNetwork.util.SearchFormTools = {
             return new Ext.form.ComboBox(config);
         }
     },
-    /**
-     * api:method[refreshGroupFieldValues]
-     *
-     *  Refreshes the group field values. Used after login/logout to refresh the groups for the user
-     */
-    refreshGroupFieldValues: function() {
-        if (this.groupField != null) {
-            this.groupField.store.removeAll();
-            this.groupField.store.reload();
-        }
+    /** api:method[reload]
+    *
+    *  Refreshes the group field values and the sortby field values. Used after login/logout to refresh the groups/sortby info for the user
+    */
+    reload: function(catalogue) {
+    	if (this.groupField != null) {
+    		this.groupField.store.removeAll();
+    		this.groupField.store.reload();
+    	}
+/*    	
+    	if (this.sortByCombo != null) {
+    		if (catalogue.isIdentified()) {
+    			this.sortByCombo.bindStore(GeoNetwork.util.SearchFormTools.getSortByStoreForLogged());
+    		} else {
+    			this.sortByCombo.bindStore(GeoNetwork.util.SearchFormTools.getSortByStore());
+    		}
+    	}
+
+    	var toolbarSortByConbo = Ext.getCmp('sortByToolBar');
+    	if (toolbarSortByConbo != null) {
+    		if (catalogue.isIdentified()) {
+    			toolbarSortByConbo.bindStore(GeoNetwork.util.SearchFormTools.getSortByStoreForLogged());
+    		} else {
+    			toolbarSortByConbo.bindStore(GeoNetwork.util.SearchFormTools.getSortByStore());
+    		}
+    	}
+*/
     },
+
     /** api:method[getMetadataTypeField]
      *  :return: A metadata type combo
      *

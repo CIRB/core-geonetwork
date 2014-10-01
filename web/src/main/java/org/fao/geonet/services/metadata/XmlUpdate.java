@@ -97,7 +97,7 @@ public class XmlUpdate implements Service
     	            md = Xml.transform(md, stylePath +"/"+ style);
     	            int newLength = Xml.getString(md).length();
     	            if (newLength != oldLength) {
-	            		System.out.println("Updating record with uuid" + uuid);
+	            		System.out.println("Updating record with uuid " + uuid);
     	                dm.getXmlSerializer().update(dbms, id, md, null, false, context);
     	                dbms.commit();
 	                    modifiedRecords.addContent(new Element(Params.UUID).setText(uuid + " (Aantal bytes gewijzigd van " + oldLength +  " naar " + newLength + ")"));

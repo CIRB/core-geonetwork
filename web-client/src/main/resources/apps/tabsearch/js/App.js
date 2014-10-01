@@ -225,7 +225,9 @@ GeoNetwork.app = function() {
 			}
 		});
 
-		var themekeyField = new Ext.ux.form.SuperBoxSelect({
+        var tpl = '<tpl for="."><div class="x-combo-list-item" ext:qtip="{values.value}">{values.value}</div></tpl>';
+        var displayFieldTpl = '<tpl for="."><span ext:qtip="{values.value}">{values.value}</span></tpl>';
+        var themekeyField = new Ext.ux.form.SuperBoxSelect({
 			hideLabel : false,
 			minChars : 0,
 			queryParam : 'q',
@@ -236,7 +238,9 @@ GeoNetwork.app = function() {
 			valueField : 'value',
 			displayField : 'value',
 			valueDelimiter : ' or ',
-			fieldLabel : OpenLayers.i18n('keyword')
+			fieldLabel : OpenLayers.i18n('keyword'),
+            displayFieldTpl: displayFieldTpl,
+            tpl: tpl
 			/*
 			* Added by GVB
 			*/
@@ -336,23 +340,22 @@ GeoNetwork.app = function() {
 				item.setVisible(true);
 			});
 			/*
-			* Modified by GVB
-			*/
-			refreshGroupFieldValues(groupField);
-			/*
 			* Added by GVB
 			*/
-			Ext.getCmp("advSearchTabs").doLayout();
+            GeoNetwork.util.SearchFormTools.reload(this);
+            Ext.getCmp('searchForm').doLayout();
+//			Ext.getCmp("advSearchTabs").doLayout();
 		});
 		catalogue.on('afterLogout', function() {
 			Ext.each(adminFields, function(item) {
 				item.setVisible(false);
 			});
-			refreshGroupFieldValues(groupField);
 			/*
 			* Added by GVB
 			*/
-			Ext.getCmp("advSearchTabs").doLayout();
+            GeoNetwork.util.SearchFormTools.reload(this);
+            Ext.getCmp('searchForm').doLayout();
+//			Ext.getCmp("advSearchTabs").doLayout();
 		});
 
 		var hideInspirePanel = catalogue.getInspireInfo().enable === "false";
@@ -697,16 +700,6 @@ GeoNetwork.app = function() {
 						]
 				});
 	}
-
-	/*
-	* Added by GVB
-	*/
-	function refreshGroupFieldValues(groupField) {
-        if (groupField != null) {
-            groupField.store.removeAll();
-            groupField.store.reload();
-        }
-    }
 
     function search() {
 		searching = true;

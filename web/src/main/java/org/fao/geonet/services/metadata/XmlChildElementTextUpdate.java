@@ -114,15 +114,22 @@ public class XmlChildElementTextUpdate implements Service
                         List<Namespace> nss = new ArrayList<Namespace>();
                         nss.addAll(md.getAdditionalNamespaces());
                         nss.add(md.getNamespace());
+                        Object extentObject = Xml.selectSingle(md, "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent", nss);
+	            		System.out.println("Processing record with uuid " + uuid);
+	            		if (extentObject!=null) {
+	                        System.out.println(Xml.getString((Element)extentObject));
+	            		}
                         Object o = Xml.selectSingle(md, childElementPath, nss);
                         if (o!=null && o instanceof Element) {
                         	String oldChildTextValue = ((Element)o).getText(); 
                         	((Element)o).setText(childTextValue);
-        	            	isModified = true;
-    	            		System.out.println("Updating record with uuid " + uuid);
-        	                dm.getXmlSerializer().update(dbms, id, md, null, false, context);
-        	                dbms.commit();
-    	                    modifiedRecords.addContent(new Element(Params.UUID).setText(uuid + " (" + oldChildTextValue + "->" + childTextValue + ")"));
+                        	if (!childTextValue.equals(oldChildTextValue)) {
+            	                dm.getXmlSerializer().update(dbms, id, md, null, false, context);
+            	                dbms.commit();
+            	            	isModified = true;
+        	            		System.out.println("Updated");
+        	                    modifiedRecords.addContent(new Element(Params.UUID).setText(uuid + " (" + oldChildTextValue + "->" + childTextValue + ")"));
+                        	}
         				}
             	        if (!isModified) {
     	            		unchangedRecords.addContent(new Element(Params.UUID).setText(uuid));
