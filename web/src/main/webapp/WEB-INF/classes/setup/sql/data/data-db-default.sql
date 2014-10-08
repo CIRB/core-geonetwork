@@ -1002,6 +1002,9 @@ INSERT INTO Settings VALUES (952,1,'requestedLanguage',NULL);
 INSERT INTO Settings VALUES (953,952,'only','prefer_locale');
 INSERT INTO Settings VALUES (954,952,'sorted','false');
 
+INSERT INTO Settings VALUES (956,1,'clustering',NULL);
+INSERT INTO Settings VALUES (957,956,'enable','false');
+INSERT INTO Settings VALUES (958,956,'jmsurl','failover://tcp://localhost:61616');
 
 -- ======================================================================
 -- === Table: Users

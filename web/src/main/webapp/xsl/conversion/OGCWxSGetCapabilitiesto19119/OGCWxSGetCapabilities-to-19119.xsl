@@ -14,14 +14,16 @@
 
 	<!-- ============================================================================= -->
 
-	<xsl:param name="uuid">
-		uuid
-	</xsl:param>
-	<xsl:param name="lang">
-		eng
-	</xsl:param>
-	<xsl:param name="topic"></xsl:param>
-	<xsl:param name="ogctype"></xsl:param>
+	<xsl:param name="uuid">uuid</xsl:param>
+	<xsl:param name="lang">eng</xsl:param>
+	<xsl:param name="topic"/>
+	<xsl:param name="ogctype"/>
+	<xsl:param name="titleDUT"/>
+	<xsl:param name="titleENG"/>
+	<xsl:param name="titleFRE"/>
+	<xsl:param name="abstractDUT"/>
+	<xsl:param name="abstractENG"/>
+	<xsl:param name="abstractFRE"/>
 
 	<!-- ============================================================================= -->
 
@@ -215,6 +217,27 @@
 						</xsl:with-param>
 						<xsl:with-param name="ows">
 							<xsl:value-of select="$ows" />
+						</xsl:with-param>
+						<xsl:with-param name="lang">
+							<xsl:value-of select="$lang" />
+						</xsl:with-param>
+						<xsl:with-param name="titleDUT">
+							<xsl:value-of select="$titleDUT" />
+						</xsl:with-param>
+						<xsl:with-param name="titleENG">
+							<xsl:value-of select="$titleENG" />
+						</xsl:with-param>
+						<xsl:with-param name="titleFRE">
+							<xsl:value-of select="$titleFRE" />
+						</xsl:with-param>
+						<xsl:with-param name="abstractDUT">
+							<xsl:value-of select="$abstractDUT" />
+						</xsl:with-param>
+						<xsl:with-param name="abstractENG">
+							<xsl:value-of select="$abstractENG" />
+						</xsl:with-param>
+						<xsl:with-param name="abstractFRE">
+							<xsl:value-of select="$abstractFRE" />
 						</xsl:with-param>
 					</xsl:apply-templates>
 				</srv:SV_ServiceIdentification>

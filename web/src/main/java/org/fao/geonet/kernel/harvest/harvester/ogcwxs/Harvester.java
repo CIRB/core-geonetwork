@@ -212,9 +212,22 @@ class Harvester
         if (params.useAccount) {
             req.setCredentials(params.username, params.password);
         }
-
+        
         xml = req.execute();
-
+/*
+        req.setUrl(new URL(this.capabilitiesUrl));
+        xml = req.execute();
+        req.setUrl(new URL(this.capabilitiesUrl));
+        xml = req.execute();
+*/
+        Map titles = new HashMap<String,String>();
+        titles.put("DUT", "Nederlandse titel");
+        titles.put("ENG", "English title");
+        titles.put("FRE", "Titre français");
+        Map abstracts = new HashMap<String,String>();
+        abstracts.put("DUT", "Nederlandse abstract");
+        abstracts.put("ENG", "English abstract");
+        abstracts.put("FRE", "Abstract français");
 		//-----------------------------------------------------------------------
 		//--- remove old metadata
 		for (String uuid : localUuids.getUUIDs())
@@ -234,9 +247,8 @@ class Harvester
 		
 		if (result.locallyRemoved > 0)
 			dbms.commit ();
-		
         // Convert from GetCapabilities to ISO19119
-        addMetadata (xml);
+        addMetadata (xml, titles, abstracts);
         
         dbms.commit ();
             
@@ -260,7 +272,7 @@ class Harvester
      * @param capa      GetCapabilities document
      *                   
      */
-	 private void addMetadata (Element capa) throws Exception
+	 private void addMetadata (Element capa, Map<String,String> titles, Map<String,String> abstracts) throws Exception
 	 {
 		if (capa == null)
 			return;
@@ -312,6 +324,12 @@ class Harvester
 		param.put("ogctype", params.ogctype);
 		param.put("outputSchema", params.outputSchema);
 		param.put("uuid", uuid);
+		param.put("titleDUT", titles.get("DUT"));
+		param.put("titleENG", titles.get("ENG"));
+		param.put("titleFRE", titles.get("FRE"));
+		param.put("abstractDUT", abstracts.get("DUT"));
+		param.put("abstractENG", abstracts.get("ENG"));
+		param.put("abstractFRE", abstracts.get("FRE"));
 		
 		Element md = Xml.transform (capa, styleSheet, param);
 		

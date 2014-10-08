@@ -578,8 +578,10 @@
 			</output>
 		</service>
 
-		<service name="metadata.xmlchangedateupdate.form">
-			<output sheet="metadata-changedate-update-form.xsl"/>
+		<service name="metadata.xmlchildelementtextupdate.form">
+			<output sheet="metadata-childelementtext-update-form.xsl">
+				<call name="groups" class=".guiservices.groups.GetMine" />
+			</output>
 		</service>
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 

@@ -35,13 +35,13 @@ import jeeves.utils.Util;
 import jeeves.utils.Xml;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.fao.geonet.GeonetContext;
 import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.constants.Params;
 import org.fao.geonet.kernel.DataManager;
 import org.jdom.Element;
 import org.jdom.Namespace;
-import org.tuckey.web.filters.urlrewrite.utils.StringUtils;
 
 //=============================================================================
 
@@ -77,70 +77,62 @@ public class XmlChildElementTextUpdate implements Service
 		Element unchangedRecords = new Element("unchanged");
 		Element unchangedByErrorRecords = new Element("unchangedbyerror");
 		response.addContent(unchangedRecords);
-		String style      = Util.getParam(params, Params.STYLESHEET, "_none_");
-		String scope      = Util.getParam(params, "scope", "0");
 		String childTextValue = Util.getParam(params, "childTextValue", "");
-		String childElementPath = Util.getParam(params, "childElementPath", "");
+		String xpathExpression = Util.getParam(params, "xpathExpression", "");
 		String uuids      = Util.getParam(params, "uuids", "");
-        if (!style.equals("_none_") && !StringUtils.isBlank(scope) && (scope.equals("0") || scope.equals("1"))) {
+		List<Element> userGroups = params.getChildren(Params.GROUPS);
 
+		String filterChoice = Util.getParam(params, "filterChoice", "");
+        if (!StringUtils.isBlank(xpathExpression) && !StringUtils.isBlank(filterChoice) &&
+        		((filterChoice.equals("1") && !StringUtils.isBlank(uuids)) ||
+				(filterChoice.equals("2") && userGroups!=null && userGroups.size()>0) ||
+				filterChoice.equals("3")) && !StringUtils.isBlank(childTextValue)) {
     		GeonetContext gc = (GeonetContext) context.getHandlerContext(Geonet.CONTEXT_NAME);
-
-    		DataManager dataMan = gc.getDataManager();
-
 			DataManager dm = gc.getDataManager();
 	        Dbms dbms = (Dbms) context.getResourceManager().open(Geonet.Res.MAIN_DB);
-	        String whereClause = "where not (isharvested='y') and istemplate='n' and schemaid in ('iso19139','iso19139.geobru')";
-	        List<String> uuidList = null;
-	        uuids = uuids.replaceAll("\\s+","");
-	        if (!StringUtils.isBlank(uuids)) {
-	        	whereClause += " and uuid in ('" + uuids.replaceAll("\'","").replaceAll(",","\',\'") + "')";
-	        	uuidList = new ArrayList<String>();
-	        	CollectionUtils.addAll(uuidList,uuids.split(","));
-	        }
-            if (!StringUtils.isBlank(childTextValue) && !StringUtils.isBlank(childElementPath)) {
-                Element result = dbms.select("SELECT id, schemaid, uuid FROM metadata " + whereClause + " ORDER BY id ASC");
-                for(int i = 0; i < result.getContentSize(); i++) {
-                    Element record = (Element) result.getContent(i);
-                    String id = record.getChildText("id");
-                    String uuid = record.getChildText("uuid");
-                	try {
-                        Element md = dm.getMetadataNoInfo(context, id);
-        	            if (md == null) {
-        	                continue;
-        	            }
-        	            md.detach();
-        	            boolean isModified = false;
-                        List<Namespace> nss = new ArrayList<Namespace>();
-                        nss.addAll(md.getAdditionalNamespaces());
-                        nss.add(md.getNamespace());
-                        Object extentObject = Xml.selectSingle(md, "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent", nss);
-	            		System.out.println("Processing record with uuid " + uuid);
-	            		if (extentObject!=null) {
-	                        System.out.println(Xml.getString((Element)extentObject));
-	            		}
-                        Object o = Xml.selectSingle(md, childElementPath, nss);
-                        if (o!=null && o instanceof Element) {
-                        	String oldChildTextValue = ((Element)o).getText(); 
-                        	((Element)o).setText(childTextValue);
-                        	if (!childTextValue.equals(oldChildTextValue)) {
-            	                dm.getXmlSerializer().update(dbms, id, md, null, false, context);
-            	                dbms.commit();
-            	            	isModified = true;
-        	            		System.out.println("Updated");
-        	                    modifiedRecords.addContent(new Element(Params.UUID).setText(uuid + " (" + oldChildTextValue + "->" + childTextValue + ")"));
-                        	}
-        				}
-            	        if (!isModified) {
-    	            		unchangedRecords.addContent(new Element(Params.UUID).setText(uuid));
-        	            }
-                	} catch (Exception e) {
-                		unchangedByErrorRecords.addContent(new Element(Params.UUID).setText(uuid));
-                	}
-                	if (uuidList!=null) {
-                		uuidList.remove(uuid);
-                	}
-                }
+	        List<String> uuidList = new ArrayList<String>();
+	        String whereClause = getWhereClause(uuidList, filterChoice, uuids, userGroups);
+            Element result = dbms.select("SELECT id, schemaid, uuid FROM metadata " + whereClause + " ORDER BY id ASC");
+            for(int i = 0; i < result.getContentSize(); i++) {
+                Element record = (Element) result.getContent(i);
+                String id = record.getChildText("id");
+                String uuid = record.getChildText("uuid");
+            	try {
+                    Element md = dm.getMetadataNoInfo(context, id);
+    	            if (md == null) {
+    	                continue;
+    	            }
+    	            md.detach();
+    	            boolean isModified = false;
+                    List<Namespace> nss = new ArrayList<Namespace>();
+                    nss.addAll(md.getAdditionalNamespaces());
+                    nss.add(md.getNamespace());
+                    Object extentObject = Xml.selectSingle(md, "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent", nss);
+            		System.out.println("Processing record with uuid " + uuid);
+            		if (extentObject!=null) {
+                        System.out.println(Xml.getString((Element)extentObject));
+            		}
+                    Object o = Xml.selectSingle(md, xpathExpression, nss);
+                    if (o!=null && o instanceof Element) {
+                    	String oldChildTextValue = ((Element)o).getText(); 
+                    	((Element)o).setText(childTextValue);
+                    	if (!childTextValue.equals(oldChildTextValue)) {
+        	                dm.getXmlSerializer().update(dbms, id, md, null, false, context);
+        	                dbms.commit();
+        	            	isModified = true;
+    	            		System.out.println("Updated");
+    	                    modifiedRecords.addContent(new Element(Params.UUID).setText(uuid + " (" + oldChildTextValue + "->" + childTextValue + ")"));
+                    	}
+    				}
+        	        if (!isModified) {
+	            		unchangedRecords.addContent(new Element(Params.UUID).setText(uuid));
+    	            }
+            	} catch (Exception e) {
+            		unchangedByErrorRecords.addContent(new Element(Params.UUID).setText(uuid));
+            	}
+            	if (uuidList!=null) {
+            		uuidList.remove(uuid);
+            	}
             }
         	if (uuidList!=null) {
 	            for (String uuid : uuidList) {
@@ -149,6 +141,30 @@ public class XmlChildElementTextUpdate implements Service
         	}
         }
 		return response;
+	}
+
+	private String getWhereClause(List<String> uuidList, String filterChoice, String uuids, List<Element> userGroups) {
+		String whereClause = "where not (isharvested='y') and istemplate='n' and schemaid in ('iso19139','iso19139.geobru')";
+		int filter = Integer.parseInt(filterChoice);
+		switch(filter) {
+			case 1:
+		        uuids = uuids.replaceAll("\\s+","");
+		        if (!StringUtils.isBlank(uuids)) {
+		        	whereClause += " and uuid in ('" + uuids.replaceAll("\'","").replaceAll(",","\',\'") + "')";
+		        	CollectionUtils.addAll(uuidList,uuids.split(","));
+		        }
+				break;
+			case 2:
+				List<String> groupIdList = new ArrayList<String>();
+				for(Element group : userGroups) {
+					groupIdList.add(group.getText());
+				}
+				whereClause += " and id in (select metadataid from operationallowed where groupid in (" + StringUtils.join(groupIdList, "','") + ") and operationid = '2')"; 
+				break;
+			case 3:
+				break;
+		}
+		return whereClause;
 	};
 
 }

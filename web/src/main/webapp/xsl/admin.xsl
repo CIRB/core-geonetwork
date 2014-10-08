@@ -118,6 +118,13 @@
 						</xsl:call-template>
 
 						<xsl:call-template name="addrow">
+							<xsl:with-param name="service" select="'metadata.xmlchildelementtextupdate.form'"/>
+							<xsl:with-param name="title"
+								select="/root/gui/strings/xmlUpdate"/>
+							<xsl:with-param name="desc" select="/root/gui/strings/xmlUpdate"/>
+						</xsl:call-template>
+
+						<xsl:call-template name="addrow">
 							<xsl:with-param name="service" select="'metadata.searchunused.form'"/>
 							<xsl:with-param name="title"
 								select="/root/gui/strings/searchUnusedTitle"/>

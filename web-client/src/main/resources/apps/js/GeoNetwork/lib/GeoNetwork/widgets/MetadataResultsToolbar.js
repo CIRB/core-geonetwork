@@ -133,11 +133,12 @@ GeoNetwork.MetadataResultsToolbar = Ext.extend(Ext.Toolbar, {
         cmp.push(this.createOtherActionMenu());
         
         // Permalink
+/*
         if(this.permalinkProvider) {
             var l = this.permalinkProvider.getLink;
             cmp.push(GeoNetwork.Util.buildPermalinkMenu(l, this.permalinkProvider));
         }
-        
+*/        
         GeoNetwork.MetadataResultsToolbar.superclass.initComponent.call(this);
         
         this.add(cmp);
@@ -198,8 +199,12 @@ GeoNetwork.MetadataResultsToolbar = Ext.extend(Ext.Toolbar, {
             iconCls: 'cancel',
             id: 'deleteAction',
             handler: function(){
-                this.catalogue.massiveOp('Delete', function() {
-                    this.catalogue.metadataSelectNone();
+            	Ext.Msg.confirm(OpenLayers.i18n('deleteRecords'), OpenLayers.i18n('deleteConfirms'), function (btn) {
+            		if (btn == 'yes') {
+		                this.catalogue.massiveOp('delete', function() {
+		                    this.catalogue.metadataSelectNone();
+		                });
+					}
                 });
             },
             scope: this,

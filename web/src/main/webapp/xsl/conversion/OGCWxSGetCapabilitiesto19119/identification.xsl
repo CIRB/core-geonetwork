@@ -26,6 +26,13 @@
 		<xsl:param name="topic"/>
 		<xsl:param name="ogctype"/>
 		<xsl:param name="ows"/>
+		<xsl:param name="lang"/>
+		<xsl:param name="titleDUT"/>
+		<xsl:param name="titleENG"/>
+		<xsl:param name="titleFRE"/>
+		<xsl:param name="abstractDUT"/>
+		<xsl:param name="abstractENG"/>
+		<xsl:param name="abstractFRE"/>
 		<xsl:variable name="s" select="Service|wfs:Service|wms:Service|ows:ServiceIdentification|ows11:ServiceIdentification|wcs:Service"/>
 		
 		<citation>

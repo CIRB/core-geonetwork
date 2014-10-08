@@ -359,6 +359,7 @@
 		<param name="preferredSchema" value="iso19139.geobru" />
 		<param name="jzkitConfig" value="JZkitApplicationContext.xml" />
 		<param name="metadataNotifierConfig" value="WEB-INF/config-notifier.xml" />
+        <param name="clusterConfigDir" value="cluster" />
 
 		<!-- search statistics stuff -->
 		<!-- true to log into DB WKT of spatial objects involved in a search operation

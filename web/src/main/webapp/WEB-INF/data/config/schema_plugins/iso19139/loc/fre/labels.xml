@@ -2416,6 +2416,7 @@
       <option value="ECW">ECW</option>
       <option value="ZIP">ZIP</option>
       <option value="GML">GML</option>
+      <option value="IBGE 'GML'">IBGE 'GML'</option>
     </helper>
   </element>
   <element name="gmd:name" id="307.0" context="gmd:MD_ExtendedElementInformation">

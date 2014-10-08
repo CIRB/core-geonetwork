@@ -30,15 +30,15 @@
 	    <xsl:variable name="extentName" select="name(.)" />
 	    <xsl:variable name="previousExtentSiblingsCount" select="count(preceding-sibling::*[name(.) = $extentName])" />
        	<xsl:if test="$previousExtentSiblingsCount=0">
-			<xsl:if test="count(../*:extent/gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent/gml:TimePeriod/gml:endPosition[normalize-space(.)!=''])=0">
+			<xsl:if test="count(../*:extent/gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent)=0">
 				<xsl:copy>
 					<gmd:EX_Extent>
 						<gmd:temporalElement>
 							<gmd:EX_TemporalExtent>
 								<gmd:extent>
 									<gml:TimePeriod gml:id="{generate-id(.)}">
-										<gml:beginPosition><xsl:value-of select="java:getCurrentDate('yyyy-MM-dd')" /></gml:beginPosition>
-										<gml:endPosition><xsl:value-of select="java:getCurrentDate('yyyy-MM-dd')" /></gml:endPosition>
+										<gml:beginPosition><xsl:value-of select="java:getCurrentDateTime('yyyy-MM-dd','HH:mm:ss')" /></gml:beginPosition>
+										<gml:endPosition><xsl:value-of select="java:getCurrentDateTime('yyyy-MM-dd','HH:mm:ss')" /></gml:endPosition>
 									</gml:TimePeriod>
 								</gmd:extent>
 							</gmd:EX_TemporalExtent>
@@ -47,21 +47,41 @@
 				</xsl:copy>
 			</xsl:if>
 		</xsl:if>
-		<xsl:choose>
-			<xsl:when test="(gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent and count(gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent/*)=0) or
-						(gmd:EX_Extent/gmd:temporalElement and normalize-space(gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent/gml:TimePeriod/gml:beginPosition)='' and normalize-space(gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent/gml:TimePeriod/gml:endPosition)='')">
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:copy>
-					<xsl:apply-templates select="@*"/>
-					<xsl:apply-templates select="node()"/>
-				</xsl:copy>
-			</xsl:otherwise>
-		</xsl:choose>
+		<xsl:copy>
+			<xsl:apply-templates select="@*"/>
+			<xsl:apply-templates select="node()"/>
+		</xsl:copy>
 	</xsl:template>
 
-	<xsl:template match="*:extent/gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent/gml:TimePeriod/gml:endPosition" priority="10">
-		<gml:endPosition><xsl:value-of select="java:getCurrentDate('yyyy-MM-dd')" /></gml:endPosition>
+	<xsl:template match="*:extent/gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent" priority="10">
+		<xsl:copy>
+			<xsl:choose>
+				<xsl:when test="count(./*)=0">
+					<gml:TimePeriod gml:id="{generate-id(.)}">
+						<gml:beginPosition><xsl:value-of select="java:getCurrentDateTime('yyyy-MM-dd','HH:mm:ss')" /></gml:beginPosition>
+						<gml:endPosition><xsl:value-of select="java:getCurrentDateTime('yyyy-MM-dd','HH:mm:ss')" /></gml:endPosition>
+					</gml:TimePeriod>
+				</xsl:when>
+				<xsl:when test="gml:TimePeriod">
+					<gml:TimePeriod gml:id="{if (@gml:id) then @gml:id else generate-id(gml:TimePeriod)}">
+						<xsl:variable name="beginPositionExists" select="normalize-space(gml:TimePeriod/gml:beginPosition)!=''"/>
+						<xsl:choose>
+							<xsl:when test="$beginPositionExists">
+								<xsl:apply-templates select="gml:TimePeriod/gml:beginPosition"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<gml:beginPosition><xsl:value-of select="java:getCurrentDateTime('yyyy-MM-dd','HH:mm:ss')" /></gml:beginPosition>
+							</xsl:otherwise>
+						</xsl:choose>
+						<gml:endPosition><xsl:value-of select="java:getCurrentDateTime('yyyy-MM-dd','HH:mm:ss')" /></gml:endPosition>
+					</gml:TimePeriod>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:apply-templates select="@*"/>
+					<xsl:apply-templates select="node()"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:copy>
 	</xsl:template>
 <!--
 	<xsl:template match="@gml:id">

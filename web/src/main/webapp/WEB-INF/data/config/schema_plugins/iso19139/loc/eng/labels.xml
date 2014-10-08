@@ -1413,6 +1413,7 @@
             <option value="TIFF">TIFF</option>
             <option value="ECW">ECW</option>
             <option value="ZIP">ZIP</option>
+			<option value="IBGE 'GML'">IBGE 'GML'</option>
         </helper>
     </element>
     <element name="gmd:name" context="gmd:MD_ExtendedElementInformation" id="307.0">

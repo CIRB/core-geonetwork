@@ -387,10 +387,19 @@
 	<categoryManagement>Categorie beheer</categoryManagement>
 	<categoryManDes>Toevoegen/wijzigen/verwijderen of bekijken van categorieen</categoryManDes>
 	<categoryNameMandatory>Een categorie moet worden ingevuld.</categoryNameMandatory>
-	<changeDate>Metadata change date</changeDate>
+	<xpathExpressionHelper>XPATH expressie voor element</xpathExpressionHelper>
+	<xpathExpression>XPATH expressie</xpathExpression>
+	<filterChoice value="1">Filteren op komma gescheiden UUID's</filterChoice>
+	<filterChoice value="2">Filteren op groep</filterChoice>
+	<filterChoice value="3">Geen filter (alle metadata records wijzigen)</filterChoice>
+	<uuids>Komma gescheiden UUID's</uuids>
+	<updateValue>Nieuwe waarde</updateValue>
+	<tooltipOr>of</tooltipOr>
+	<isMandatory>Onderstaande velden zijn verplicht</isMandatory>
+	<updateAllMetadata>Ben je zeker dat je alle metadata records wilt wijzigen?</updateAllMetadata>
 	<checkusername>Check</checkusername>
-  <choice>Choice</choice>
-  <sequence>Sequence</sequence>	
+	<choice>Choice</choice>
+	<sequence>Sequence</sequence>	
 	<choose>-Kies-</choose>
 	<chooseFile>Kies de lokatie van het bestand dat u wilt uploaden</chooseFile>
 	<chooseLargeThumbnail>Kies de lokatie van het grote voorbeeldweergave bestand</chooseLargeThumbnail>
@@ -654,7 +663,7 @@
   <metadataRecordsProcessed>Total number of metadata records processed:</metadataRecordsProcessed>
   <min>Minimaal</min>
     <minor>Minor edit</minor>
-	<missing>ONTBREEKT of LEEG</missing>
+	<missing>ONTBREEKT of is LEEG</missing>
 	<missingSeeTab>ONTBREEKT - Zie de volgende groep tab in de zijkolom: </missingSeeTab>
 	<more>meer</more>
 	<moreinfo>Voor meer informatie kunt u ons bereiken via e-mail op </moreinfo>
@@ -864,7 +873,6 @@
 	<startsWith>Begint met</startsWith>
 	<state>Provincie/Staat</state>
 	<styleSheet>StyleSheet</styleSheet>
-	<uuids>Comma gescheiden UUID's om te updaten</uuids>
 	<changeDate>Datum update</changeDate>
 	<submit>Bewaren en sluiten</submit>
 	<subtemplate>Subtemplate</subtemplate>

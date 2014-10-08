@@ -36,13 +36,11 @@ import java.util.UUID;
 
 import javax.servlet.ServletContext;
 
-import com.yammer.metrics.core.MetricsRegistry;
 import jeeves.JeevesJCS;
 import jeeves.JeevesProxyInfo;
 import jeeves.constants.Jeeves;
 import jeeves.interfaces.ApplicationHandler;
 import jeeves.interfaces.Logger;
-import jeeves.monitor.MonitorManager;
 import jeeves.resources.dbms.Dbms;
 import jeeves.server.ConfigurationOverrides;
 import jeeves.server.ServiceConfig;
@@ -56,6 +54,8 @@ import jeeves.xlink.Processor;
 
 import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.csw.common.Csw;
+import org.fao.geonet.jms.ClusterConfig;
+import org.fao.geonet.jms.ClusterConfigurationException;
 import org.fao.geonet.kernel.AccessManager;
 import org.fao.geonet.kernel.DataManager;
 import org.fao.geonet.kernel.SchemaManager;
@@ -392,7 +392,17 @@ public class Geonetwork implements ApplicationHandler {
         MetadataNotifierManager metadataNotifierMan = new MetadataNotifierManager(dataMan);
 
         logger.info("  - Metadata notifier ...");
-
+/*
+        //--- initialize cluster configuration
+        try {
+            ClusterConfig.initialize(handlerConfig, settingMan, context);
+        }
+        catch(ClusterConfigurationException x) {
+            System.err.println("Cluster configuration failed: " + x.getMessage());
+            x.printStackTrace();
+            ClusterConfig.setEnabled(false);
+        }
+*/
 		//------------------------------------------------------------------------
 		//--- return application context
 

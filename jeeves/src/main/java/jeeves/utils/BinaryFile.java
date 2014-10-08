@@ -511,7 +511,7 @@ public final class BinaryFile
 		else if (fName.endsWith(".png"))
 			return "image/png";
 		else if (fName.endsWith(".bmp"))
-			return "application/bmp";
+			return "image/bmp";
 
 		// compressed formats
 		else if (fName.endsWith(".zip"))
