@@ -83,7 +83,7 @@ public class Z3950Harvester extends AbstractHarvester {
 		// --- force the creation of a new uuid
 		params.uuid = UUID.randomUUID().toString();
 
-		String id = settingMan.add(dbms, "harvesting", "node", getType());
+		String id = settingMan.add(dbms, "harvesting", "node", getType(), false);
 
 		storeNode(dbms, params, "id:" + id);
 		Lib.sources.update(dbms, params.uuid, params.name, true);
@@ -120,16 +120,16 @@ public class Z3950Harvester extends AbstractHarvester {
 			String siteId, String optionsId) throws SQLException {
 		Z3950Params params = (Z3950Params) p;
 
-		settingMan.add(dbms, "id:" + siteId, "icon", params.icon);
-		settingMan.add(dbms, "id:" + siteId, "query", params.query);
+		settingMan.add(dbms, "id:" + siteId, "icon", params.icon, false);
+		settingMan.add(dbms, "id:" + siteId, "query", params.query, false);
 
 		storeRepositories(dbms, "id:" + siteId, params);
 	}
 
 	private void storeRepositories(Dbms dbms, String path, Z3950Params params) throws SQLException {
-		String repoId = settingMan.add(dbms, path, "repositories", "");
+		String repoId = settingMan.add(dbms, path, "repositories", "", false);
 		for (String id : params.getRepositories()) {
-			settingMan.add(dbms, "id:"+ repoId, "repository", id);
+			settingMan.add(dbms, "id:"+ repoId, "repository", id, false);
 		}
 	}
 

@@ -66,7 +66,7 @@ import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.FieldSelector;
 import org.apache.lucene.document.FieldSelectorResult;
 import org.apache.lucene.document.NumericField;
-import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.index.TermEnum;
 import org.apache.lucene.search.Filter;
@@ -74,6 +74,9 @@ import org.fao.geonet.GeonetContext;
 import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.csw.common.Csw;
 import org.fao.geonet.csw.common.exceptions.NoApplicableCodeEx;
+import org.fao.geonet.jms.ClusterConfig;
+import org.fao.geonet.jms.Producer;
+import org.fao.geonet.jms.message.reindex.OptimizeIndexMessage;
 import org.fao.geonet.kernel.DataManager;
 import org.fao.geonet.kernel.SchemaManager;
 import org.fao.geonet.kernel.search.LuceneConfig.LuceneConfigNumericField;
@@ -676,29 +679,96 @@ public class SearchManager {
  String title)
             throws Exception {
 		if (isTemplate.equals("n") || isTemplate.equals("y")) {
-	        List<Pair<String, Document>> docs = buildIndexDocument(schemaDir, metadata, id, moreFields, isTemplate, title);
-	        for (Pair<String, Document> document : docs) {
-	            _indexWriter.addDocument(document.one(), document.two());
-	            if (Log.isDebugEnabled(Geonet.INDEX_ENGINE))
-	                Log.debug(Geonet.INDEX_ENGINE, "adding document in locale " + document.one());
+
+	        synchronized(_tracker.MUTEX) {
+//	            System.out.println("** START SYNCHRONIZED index. Workspace? " + workspace + ", title: " + title);
+		        if(Log.isDebugEnabled(Geonet.INDEX_ENGINE)) {
+		            Log.debug(Geonet.INDEX_ENGINE, "indexing metadata, opening Writer from index");
+		        }
+		        List<Pair<String, Document>> docs = buildIndexDocument(schemaDir, metadata, id, moreFields, isTemplate, title, false);
+//				_tracker.openWriter();
+				try {
+		            for( Pair<String, Document> document : docs ) {
+		                _indexWriter.addDocument(document.one(), document.two());
+		                if(Log.isDebugEnabled(Geonet.INDEX_ENGINE)) {
+		                    Log.debug(Geonet.INDEX_ENGINE, "adding document in locale " + document.one());
+		                }
+		            }
+				}
+		        finally {
+		            if(Log.isDebugEnabled(Geonet.INDEX_ENGINE)) {
+		                Log.debug(Geonet.INDEX_ENGINE, "Closing Writer from index");
+		            }
+//					_tracker.closeWriter();
+//		            System.out.println("** END SYNCHRONIZED index. Workspace? " + workspace);
+				}
 	        }
-	        _spatial.writer().index(schemaDir, id, metadata);
+			_spatial.writer().index(schemaDir, id, metadata);
 		}
     }
 
     /**
      * TODO javadoc.
      *
+     * @throws Exception hmm
+     */
+	public void startIndexGroup() throws Exception {
+        if(Log.isDebugEnabled(Geonet.INDEX_ENGINE))
+        	Log.debug(Geonet.INDEX_ENGINE, "Opening Writer from startIndexGroup");
+//        System.out.println("===>VOOR OPENWRITER IN START INDEXGROUP");
+//    	_tracker.openWriter();
+	}
+
+    /**
+     * TODO javadoc.
+     *
+     * @param schemaDir
+     * @param metadata
+     * @param id
+     * @param moreFields
+     * @param isTemplate
+     * @param title
+     * @param workspace
+     * @throws Exception hmm
+     */
+	public void indexGroup(String schemaDir, Element metadata, String id, List<Element> moreFields, String isTemplate,
+                           String title) throws Exception {
+        synchronized(_tracker.MUTEX) {
+        	List<Pair<String, Document>> docs = buildIndexDocument(schemaDir, metadata, id, moreFields, isTemplate, title, true);
+//			System.out.println("** indexGroup. Workspace? " + workspace);
+        	for( Pair<String, Document> document : docs ) {
+        		_indexWriter.addDocument(document.one(), document.two());
+        	}
+        	_spatial.writer().index(schemaDir, id, metadata);
+        }
+	}
+
+    /**
+     * TODO javadoc.
+     *
+     * @throws Exception hmm
+     */
+	public void endIndexGroup() throws Exception {
+        if(Log.isDebugEnabled(Geonet.INDEX_ENGINE))
+        	Log.debug(Geonet.INDEX_ENGINE, "Closing Writer from endIndexGroup");
+//        _tracker.closeWriter();
+//        System.out.println("===>NA CLOSEWRITER IN END INDEXGROUP");
+	}
+
+    /**
+     * TODO javadoc.
+     *
      * @param fld
      * @param txt
-     * @throws Exception
+     * @param workspace
+     * @throws Exception hmm
      */
-	public void delete(String fld, String txt) throws Exception {
+	public void deleteGroup(String fld, String txt) throws Exception {
 		// possibly remove old document
-        if(Log.isDebugEnabled(Geonet.INDEX_ENGINE))
-            Log.debug(Geonet.INDEX_ENGINE,"Deleting document ");
+        if(Log.isDebugEnabled(Geonet.INDEX_ENGINE)) {
+		    Log.debug(Geonet.INDEX_ENGINE,"Deleting document ");
+        }
 		_indexWriter.deleteDocuments(new Term(fld, txt));
-
 		_spatial.writer().delete(txt);
 	}
 
@@ -715,11 +785,16 @@ public class SearchManager {
      * @return
      * @throws Exception
      */
-	private List<Pair<String,Document>> buildIndexDocument(String schemaDir, Element metadata, String id, List<Element> moreFields, String isTemplate, String title) throws Exception {
+	private List<Pair<String,Document>> buildIndexDocument(String schemaDir, Element metadata, String id, List<Element> moreFields, String isTemplate, String title, boolean group) throws Exception {
 
         if(Log.isDebugEnabled(Geonet.INDEX_ENGINE))
             Log.debug(Geonet.INDEX_ENGINE, "Deleting "+id+" from index");
-				delete("_id", id);
+		if (group) {
+            deleteGroup("_id", id);
+        }
+		else {
+            delete("_id", id);
+        }
         if(Log.isDebugEnabled(Geonet.INDEX_ENGINE))
             Log.debug(Geonet.INDEX_ENGINE, "Finished Delete");
 
@@ -888,6 +963,32 @@ public class SearchManager {
                 allText((Element) aChildren, sb);
             }
 		}
+	}
+
+	/**
+     * TODO javadoc.
+     *
+     * @param fld
+     * @param txt
+     * @throws Exception
+     */
+	public void delete(String fld, String txt) throws Exception {
+		synchronized (_tracker.MUTEX) {
+			// System.out.println("** START SYNCHRONIZED delete. Workspace? " +
+			// workspace);
+//			_tracker.openWriter();
+			try {
+				_indexWriter.deleteDocuments(new Term(fld, txt));
+			} finally {
+				if (Log.isDebugEnabled(Geonet.INDEX_ENGINE)) {
+					Log.debug(Geonet.INDEX_ENGINE, "Closing Writer from delete");
+				}
+//				_tracker.closeWriter();
+				// System.out.println("** END SYNCHRONIZED delete. Workspace? "
+				// + workspace);
+			}
+		}
+		_spatial.writer().delete(txt);
 	}
 
     /**
@@ -1291,6 +1392,34 @@ public class SearchManager {
 		}
 	}
 
+	/**
+	 * Optimizes the Lucene index (See {@link IndexWriter#optimize()}).
+     *
+     * @return
+     */
+	public boolean optimizeIndex() throws Exception {
+	    boolean result = optimizeIndexWithoutSendingTopic();
+
+        if (result && ClusterConfig.isEnabled()) {
+            OptimizeIndexMessage message = new OptimizeIndexMessage();
+            message.setSenderClientID(ClusterConfig.getClientID());
+            Producer optimizeIndexProducer = ClusterConfig.get(Geonet.ClusterMessageTopic.OPTIMIZEINDEX);
+            optimizeIndexProducer.produce(message);
+        }
+
+        return result;
+	}
+
+    public boolean optimizeIndexWithoutSendingTopic() {
+        try {
+            _tracker.optimize();
+            return true;
+        } catch (Throwable e) {
+            Log.error(Geonet.INDEX_ENGINE, "Exception while optimizing lucene index: " + e.getMessage());
+            return false;
+        }
+    }
+
     /**
 	 *  Rebuilds the Lucene index.
 	 *
@@ -1307,14 +1436,16 @@ public class SearchManager {
 		Dbms dbms = (Dbms) context.getResourceManager().open(Geonet.Res.MAIN_DB);
 
 		try {
-//			if (_indexWriter.isOpen()) {
-//				throw new Exception("Cannot rebuild index while it is being updated - please wait till later");
-//			}
+/*
+			if (_tracker.isOpen()) {
+				throw new Exception("Cannot rebuild index while it is being updated - please wait till later");
+			}
+*/
 			if (!xlinks) {
 			    synchronized (_tracker) {
 			        setupIndex(true);
                 }
-			    dataMan.init(context, dbms, true);
+			    dataMan.init(context, dbms, true, false);
 			}
             else {
 				dataMan.rebuildIndexXLinkedMetadata(context);
@@ -1730,17 +1861,8 @@ public class SearchManager {
         return clazz.getConstructor(org.apache.lucene.search.Query.class, int.class, Geometry.class, Pair.class);
     }
 
-    LuceneIndexLanguageTracker getIndexTracker() {
+    public LuceneIndexLanguageTracker getIndexTracker() {
 		return _tracker;
 	}
 
-    public boolean optimizeIndex() {
-        try {
-            _tracker.optimize();
-            return true;
-        } catch (Throwable e) {
-            Log.error(Geonet.INDEX_ENGINE, "Exception while optimizing lucene index: " + e.getMessage());
-            return false;
-        }
-    }
 }

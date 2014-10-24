@@ -35,6 +35,10 @@
     <requestedlanguage_docLocaleonly>Document language is the requested language</requestedlanguage_docLocaleonly>
     <requestedlanguagesorted>Search results in requested language sorted on top</requestedlanguagesorted>
 
+    <clustering>Clustering</clustering>
+    <enableClustering>Enable clustering</enableClustering>
+    <JMSBrokerConnectionURL>JMS broker URL(s)</JMSBrokerConnectionURL>
+
 	<oai>OAI Provider</oai>
 		<datesearch>Datesearch</datesearch>
 		<datesearchopt>
@@ -388,7 +392,12 @@
         <tip id="requestedlanguage.ignored">
             Ignore requested language for search results.
         </tip>
-
+        <tip id="clustering.enable">
+            Enable this for clustering.
+        </tip>
+        <tip id="clustering.jmsurl">
+            Enter the URL to your JMS broker. E.g. failover://tcp://localhost:61616.
+        </tip>
     </tips>
 	<data.dataDir>Data directory:</data.dataDir>
 	<data.resources>Resources directory:</data.resources>

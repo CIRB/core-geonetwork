@@ -387,7 +387,7 @@ GeoNetwork.MetadataResultsView = Ext.extend(Ext.DataView, {
         }
         // TODO : only register if one map available ?
        
-        this.on('selectionchange', this.selectionChange);
+        this.on('selectionchange', this.selectionChange, this);
     },
     /** api: method[setStore] 
      *  :param store: ``GeoNetwork.data.MetadataResultsStore`` A metadata store
@@ -497,6 +497,10 @@ GeoNetwork.MetadataResultsView = Ext.extend(Ext.DataView, {
     applyTemplate: function(name){
         this.tpl = this.templates[name];
         this.refresh();
+    	if (this.catalogue.getSelectedRecords()>0) {
+            this.catalogue.metadataSelectNone();
+            this.selectNone();
+    	}
     },
     /** private: method[initStyle]
      *  Define default layer styles
@@ -677,14 +681,15 @@ GeoNetwork.MetadataResultsView = Ext.extend(Ext.DataView, {
     },
     selectAllInPage: function(){
         var checkboxes = Ext.DomQuery.select('input.selector'), idx;
-        for (idx = 0; idx < checkboxes.length; ++idx) {
-            checkboxes[idx].checked = true;
-            Ext.each(this.getRecords(this.getNodes()), function(r){
-                var uuid = r.get('uuid');
-                this.catalogue.metadataSelect('add', [uuid]);
-            }, this);
-            // FIXME : selection calls may not end in call order
-            // then selection indicator may be wrong
+        var uuidList = [];
+        Ext.each(this.getRecords(this.getNodes()), function(r){
+            uuidList.push(r.get('uuid'));
+        }, this);
+        if (uuidList.length>0) {
+            this.catalogue.metadataSelect('add', uuidList);
+	        for (idx = 0; idx < checkboxes.length; ++idx) {
+	            checkboxes[idx].checked = true;
+	        }
         }
     },
     selectNone: function(){

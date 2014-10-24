@@ -228,7 +228,7 @@ public class Aligner
 
 				//--------------------------------------------------------------------
 				
-				public void handleMetadataFiles(File[] files, Element info, int index) throws Exception {}
+				public void handleMetadataFiles(File[] files/*, Element info*/, int index) throws Exception {}
 				
 				//--------------------------------------------------------------------
 
@@ -352,7 +352,7 @@ public class Aligner
 		addPrivileges(id, info.getChild("privileges"));
 
 		dbms.commit();
-		dataMan.indexMetadata(dbms, id);
+        dataMan.indexMetadataGroup(dbms, id, true);
 		result.addedMetadata++;
 
 		return id;
@@ -529,7 +529,7 @@ public class Aligner
 
 					//-----------------------------------------------------------------
 					
-					public void handleMetadataFiles(File[] files, Element info, int index) throws Exception
+					public void handleMetadataFiles(File[] files/*, Element info*/, int index) throws Exception
 					{
 						//md[index] = mdata;
 					}
@@ -637,7 +637,7 @@ public class Aligner
 		addPrivileges(id, info.getChild("privileges"));
 
 		dbms.commit();
-		dataMan.indexMetadata(dbms, id);
+        dataMan.indexMetadataGroup(dbms, id, true);
 	}
 
 	/**

@@ -218,7 +218,9 @@
 	<privileges>Privilèges</privileges>
 	<categories>Categories</categories>
 	<url>URL</url>
-	<capabUrl>Capabilities URL</capabUrl>
+	<capabUrl>Capabilities URL FRE</capabUrl>
+	<capabUrlENG>Capabilities URL ENG</capabUrlENG>
+	<capabUrlDUT>Capabilities URL DUT</capabUrlDUT>
 	<outputSchema>Outputschema</outputSchema>
 	<icon>Icon</icon>
 	<group>Groupe</group>
@@ -407,6 +409,7 @@
 	</tipHeader>
 	
 	<notRun>En attente du premier lancement</notRun>
+	<running>En cours</running>
 	
 	<tips>
 		<!-- geonetwork harvesting type - - - - - - - - - - - - - - - - - - - - - - -->

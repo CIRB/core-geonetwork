@@ -535,6 +535,7 @@ public class Geonet {
 	public static final String DATA_MANAGER = GEONETWORK + ".datamanager";
 	public static final String SVN_MANAGER = GEONETWORK + ".svnmanager";
 	public static final String SCHEMA_MANAGER = GEONETWORK + ".schemamanager";
+    public static final String CLUSTER      = GEONETWORK + ".cluster";
     public static final String JMS      = GEONETWORK + ".jms";
 	public static final String DB			= GEONETWORK + ".database";
 	public static final String THESAURUS_MAN = GEONETWORK + ".thesaurus-man";

@@ -219,7 +219,9 @@
 	<privileges>Privileges</privileges>
 	<categories>Categories</categories>
 	<url>URL</url>
-	<capabUrl>Service URL</capabUrl>
+	<capabUrl>Capabilities URL FRE</capabUrl>
+	<capabUrlENG>Capabilities URL ENG</capabUrlENG>
+	<capabUrlDUT>Capabilities URL DUT</capabUrlDUT>
 	<outputSchema>Outputschema</outputSchema>
 	<icon>Icon</icon>
 	<group>Group</group>

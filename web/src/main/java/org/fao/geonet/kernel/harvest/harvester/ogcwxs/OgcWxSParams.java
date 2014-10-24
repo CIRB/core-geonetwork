@@ -59,6 +59,8 @@ public class OgcWxSParams extends AbstractParams
 		Element opt  = node.getChild("options");
 
 		url       		= Util.getParam(site, "url",  "");
+		urlENG       		= Util.getParam(site, "urlENG",  "");
+		urlDUT       		= Util.getParam(site, "urlDUT",  "");
 		icon      		= Util.getParam(site, "icon", "");
 		ogctype   		= Util.getParam(site, "ogctype", "");
 		lang  	  		= Util.getParam(opt, "lang",  "");
@@ -83,10 +85,11 @@ public class OgcWxSParams extends AbstractParams
 		Element site = node.getChild("site");
 		Element opt  = node.getChild("options");
 
-		url       		= Util.getParam(site,  "url",  url);
+		url       		= Util.getParam(site,  "url",  "");
+		urlENG       	= Util.getParam(site,  "urlENG",  "");
+		urlDUT       	= Util.getParam(site,  "urlDUT",  "");
 		icon      		= Util.getParam(site,  "icon", icon);
 		ogctype  		= Util.getParam(site,  "ogctype", ogctype);
-		
 		lang  	  		= Util.getParam(opt, "lang",  lang);
 		topic  	  		= Util.getParam(opt, "topic",  topic);
 		createThumbnails= Util.getParam(opt, "createThumbnails",  createThumbnails);
@@ -108,6 +111,8 @@ public class OgcWxSParams extends AbstractParams
 		copyTo(copy);
 
 		copy.url  				= url;
+		copy.urlENG  			= urlENG;
+		copy.urlDUT  			= urlDUT;
 		copy.icon 				= icon;
 		copy.ogctype		 	= ogctype;
 		copy.lang 				= lang;
@@ -127,6 +132,8 @@ public class OgcWxSParams extends AbstractParams
 	//---------------------------------------------------------------------------
 
 	public String url;
+	public String urlENG;
+	public String urlDUT;
 	public String icon;
 	public String ogctype;
 	public String lang;

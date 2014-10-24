@@ -558,7 +558,8 @@ Added by GVB
 	'newWindow': "New Window",
 	'mdEditor': "Metadata editor",
 	'List': "Results",
-	'noSearchResults': "Your search request has no results. To start a new search request, return to the search window."
+	'noSearchResults': "Your search request has no results. To start a new search request, return to the search window.",
+	'doAction.wait': "Patience please ..."
 };
 
 OpenLayers.Util.extend(OpenLayers.Lang.en, GeoNetwork.lang.en);

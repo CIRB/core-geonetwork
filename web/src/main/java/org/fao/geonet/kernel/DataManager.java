@@ -66,6 +66,9 @@ import org.fao.geonet.exceptions.MetadataNotFoundEx;
 import org.fao.geonet.exceptions.NoSchemaMatchesException;
 import org.fao.geonet.exceptions.SchemaMatchConflictException;
 import org.fao.geonet.exceptions.SchematronValidationErrorEx;
+import org.fao.geonet.jms.ClusterConfig;
+import org.fao.geonet.jms.Producer;
+import org.fao.geonet.jms.message.reindex.ReIndexMessage;
 import org.fao.geonet.kernel.csw.domain.CswCapabilitiesInfo;
 import org.fao.geonet.kernel.csw.domain.CustomElementSet;
 import org.fao.geonet.kernel.harvest.HarvestManager;
@@ -139,7 +142,7 @@ public class DataManager {
 		this.xmlSerializer = xmlSerializer;
 		this.svnManager    = svnManager;
 
-		init(context, dbms, false);
+		init(context, dbms, false, true);
 	}
 
 	/**
@@ -152,55 +155,66 @@ public class DataManager {
 	 * @param force         Force reindexing all from scratch
 	 *
 	 **/
-	public synchronized void init(ServiceContext context, Dbms dbms, Boolean force) throws Exception {
+	public synchronized void init(ServiceContext context, Dbms dbms, boolean force, boolean startup) throws Exception {
 
-		// get all metadata from DB
-		Element result = dbms.select("SELECT id, changeDate FROM Metadata ORDER BY id ASC");
-		
-        if(Log.isDebugEnabled(Geonet.DATA_MANAGER))
-		    Log.debug(Geonet.DATA_MANAGER, "DB CONTENT:\n'"+ Xml.getString(result) +"'");
+        initMetadata(context, dbms, force, startup);
+	}
 
-		// get lastchangedate of all metadata in index
-		Map<String,String> docs = searchMan.getDocsChangeDate();
-
+	/**
+	 * 
+	 * @param context
+	 * @param dbms
+	 * @param force
+	 * @param startup
+	 * @param result
+	 * @param docs
+	 * @param workspace
+	 * @throws Exception
+	 */
+	private void reindex(ServiceContext context, Dbms dbms, boolean force,
+			boolean startup, Element result, Map<String, String> docs) throws Exception {
+		// System.out.println("reindex(). workspace? " + workspace);
 		// set up results HashMap for post processing of records to be indexed
-		ArrayList<String> toIndex = new ArrayList<String>();
+		List<String> toIndex = new ArrayList<String>();
 
-        if (Log.isDebugEnabled(Geonet.DATA_MANAGER))
-            Log.debug(Geonet.DATA_MANAGER, "INDEX CONTENT:");
+		if (Log.isDebugEnabled(Geonet.DATA_MANAGER)) {
+			Log.debug(Geonet.DATA_MANAGER, "INDEX CONTENT (metadata):");
+		}
 
 		// index all metadata in DBMS if needed
-		for(int i = 0; i < result.getContentSize(); i++) {
+		for (int i = 0; i < result.getContentSize(); i++) {
 			// get metadata
 			Element record = (Element) result.getContent(i);
-			String  id     = record.getChildText("id");
-			int iId = Integer.parseInt(id);
+			String id = record.getChildText("id");
 
-            if (Log.isDebugEnabled(Geonet.DATA_MANAGER))
-                Log.debug(Geonet.DATA_MANAGER, "- record ("+ id +")");
-
+			if (Log.isDebugEnabled(Geonet.DATA_MANAGER)) {
+				Log.debug(Geonet.DATA_MANAGER, "workspace - record (" + id
+						+ ")");
+			}
 			String idxLastChange = docs.get(id);
 
 			// if metadata is not indexed index it
 			if (idxLastChange == null) {
 				Log.debug(Geonet.DATA_MANAGER, "-  will be indexed");
 				toIndex.add(id);
-	
+			}
 			// else, if indexed version is not the latest index it
-			} else {
+			else {
 				docs.remove(id);
-	
-				String lastChange    = record.getChildText("changedate");
+				String lastChange = record.getChildText("changedate");
 
-                if(Log.isDebugEnabled(Geonet.DATA_MANAGER))
-                    Log.debug(Geonet.DATA_MANAGER, "- lastChange: " + lastChange);
-                if(Log.isDebugEnabled(Geonet.DATA_MANAGER))
-                    Log.debug(Geonet.DATA_MANAGER, "- idxLastChange: " + idxLastChange);
-	
+				if (Log.isDebugEnabled(Geonet.DATA_MANAGER)) {
+					Log.debug(Geonet.DATA_MANAGER, "- lastChange: "
+							+ lastChange);
+					Log.debug(Geonet.DATA_MANAGER, "- idxLastChange: "
+							+ idxLastChange);
+				}
+
 				// date in index contains 't', date in DBMS contains 'T'
 				if (force || !idxLastChange.equalsIgnoreCase(lastChange)) {
-                    if(Log.isDebugEnabled(Geonet.DATA_MANAGER))
-                        Log.debug(Geonet.DATA_MANAGER, "-  will be indexed");
+					if (Log.isDebugEnabled(Geonet.DATA_MANAGER)) {
+						Log.debug(Geonet.DATA_MANAGER, "-  will be indexed");
+					}
 					toIndex.add(id);
 				}
 			}
@@ -208,23 +222,52 @@ public class DataManager {
 
 		// if anything to index then schedule it to be done after servlet is
 		// up so that any links to local fragments are resolvable
-		if ( toIndex.size() > 0 ) {
-            batchRebuild(context,toIndex);
+		if (toIndex.size() > 0) {
+			boolean sendReIndexMessages = !startup;
+			batchRebuild(context, toIndex, sendReIndexMessages);
 		}
 
-		if (docs.size() > 0) { // anything left?
-            if(Log.isDebugEnabled(Geonet.DATA_MANAGER))
-                Log.debug(Geonet.DATA_MANAGER, "INDEX HAS RECORDS THAT ARE NOT IN DB:");
+		if (docs.size() > 0 && Log.isDebugEnabled(Geonet.DATA_MANAGER)) { // anything
+																			// left?
+			Log.debug(Geonet.DATA_MANAGER,
+					"INDEX HAS RECORDS THAT ARE NOT IN DB:");
 		}
 
-		// remove from index metadata not in DBMS
-		for ( String id : docs.keySet() )
-		{
+		// remove from index docs not in DBMS
+		for (String id : docs.keySet()) {
 			searchMan.delete("_id", id);
-
-            if(Log.isDebugEnabled(Geonet.DATA_MANAGER))
-                Log.debug(Geonet.DATA_MANAGER, "- removed record (" + id + ") from index");
+			if (Log.isDebugEnabled(Geonet.DATA_MANAGER)) {
+				Log.debug(Geonet.DATA_MANAGER, "- removed doc (" + id
+						+ ") from index");
+			}
 		}
+	}
+
+	/**
+	 * 
+	 * @param context
+	 * @param dbms
+	 * @param force
+	 * @param startup
+	 * @throws Exception
+	 */
+	private void initMetadata(ServiceContext context, Dbms dbms, boolean force,
+			boolean startup) throws Exception {
+		// get all metadata from DB
+		Element result = dbms
+				.select("SELECT id, changeDate FROM Metadata ORDER BY id ASC");
+
+		if (Log.isDebugEnabled(Geonet.DATA_MANAGER)) {
+			Log.debug(Geonet.DATA_MANAGER,
+					"DB CONTENT (metadata):\n'" + Xml.getString(result) + "'");
+		}
+		// get lastchangedate of all metadata in index
+		Map<String, String> docs = searchMan.getDocsChangeDate();
+
+		// System.out.println("initmmdd: db contents: " + Xml.getString(result)
+		// + "\nfromidx: " + docs.size());
+
+		reindex(context, dbms, force, startup, result, docs);
 	}
 
     /**
@@ -249,7 +292,7 @@ public class DataManager {
                 stringIds.add(id.toString());
             }
             // execute indexing operation
-            batchRebuild(context,stringIds);
+            batchRebuild(context,stringIds, true);
 		}
 	}
     
@@ -259,7 +302,7 @@ public class DataManager {
      * @param context
      * @param ids
      */
-    public void batchRebuild(ServiceContext context, List<String> ids) {
+    public void batchRebuild(ServiceContext context, List<String> ids, boolean sendReIndexMessages) {
 
         // split reindexing task according to number of processors we can assign
         int threadCount = ThreadUtils.getNumberOfThreads();
@@ -274,7 +317,7 @@ public class DataManager {
             int start = index;
             int count = Math.min(perThread,ids.size()-start);
             // create threads to process this chunk of ids
-            Runnable worker = new IndexMetadataTask(context, ids, start, count);
+            Runnable worker = new IndexMetadataTask(context, ids, start, count, sendReIndexMessages);
             executor.execute(worker);
             index += count;
         }
@@ -290,9 +333,9 @@ public class DataManager {
      */
     public void indexInThreadPoolIfPossible(Dbms dbms, String id) throws Exception {
         if(ServiceContext.get() == null ) {
-            indexMetadata(dbms, id);
+            indexMetadata(dbms, id, false, true);
         } else {
-            indexInThreadPool(ServiceContext.get(), id, dbms);
+            indexInThreadPool(ServiceContext.get(), id, dbms, true);
         }
     }
 
@@ -303,8 +346,8 @@ public class DataManager {
      * @param id
      * @throws SQLException
      */
-	public void indexInThreadPool(ServiceContext context, String id, Dbms dbms) throws SQLException {
-        indexInThreadPool(context, Collections.singletonList(id), dbms);
+	public void indexInThreadPool(ServiceContext context, String id, Dbms dbms, boolean sendReIndexMessages) throws SQLException {
+        indexInThreadPool(context, Collections.singletonList(id), dbms, sendReIndexMessages);
     }
     /**
      * Adds metadata ids to the thread pool for indexing.
@@ -313,7 +356,7 @@ public class DataManager {
      * @param ids
      * @throws SQLException
      */
-    public void indexInThreadPool(ServiceContext context, List<String> ids, Dbms dbms) throws SQLException {
+    public void indexInThreadPool(ServiceContext context, List<String> ids, Dbms dbms, boolean sendReIndexMessages) throws SQLException {
 
         if(dbms != null) dbms.commit();
 
@@ -321,7 +364,7 @@ public class DataManager {
             GeonetContext gc = (GeonetContext) context.getHandlerContext(Geonet.CONTEXT_NAME);
 
             if (ids.size() > 0) {
-                Runnable worker = new IndexMetadataTask(context, ids);
+                Runnable worker = new IndexMetadataTask(context, ids, sendReIndexMessages);
                 gc.getThreadPool().runTask(worker);
             }
         } 
@@ -341,18 +384,21 @@ public class DataManager {
         private final List<String> ids;
         private int beginIndex;
         private int count;
+        private boolean sendReIndexMessages;
 
-        IndexMetadataTask(ServiceContext context, List<String> ids) {
+        IndexMetadataTask(ServiceContext context, List<String> ids, boolean sendReIndexMessages) {
             this.context = context;
             this.ids = ids;
             this.beginIndex = 0;
             this.count = ids.size();
+            this.sendReIndexMessages = sendReIndexMessages;
         }
-        IndexMetadataTask(ServiceContext context, List<String> ids, int beginIndex, int count) {
+        IndexMetadataTask(ServiceContext context, List<String> ids, int beginIndex, int count, boolean sendReIndexMessages) {
             this.context = context;
             this.ids = ids;
             this.beginIndex = beginIndex;
             this.count = count;
+            this.sendReIndexMessages = sendReIndexMessages;
         }
 
         /**
@@ -363,37 +409,28 @@ public class DataManager {
             try {
                 // poll context to see whether servlet is up yet
                 while (!context.isServletInitialized()) {
-                    if(Log.isDebugEnabled(Geonet.DATA_MANAGER))
+                    if(Log.isDebugEnabled(Geonet.DATA_MANAGER)) {
                         Log.debug(Geonet.DATA_MANAGER, "Waiting for servlet to finish initializing..");
+                    }
                     Thread.sleep(10000); // sleep 10 seconds
                 }
                 Dbms dbms = (Dbms) context.getResourceManager().openDirect(Geonet.Res.MAIN_DB);
+                boolean bException = false;
                 try {
-
-                    if (ids.size() > 1) {
+                    if (this.ids.size() > 1) {
                         // servlet up so safe to index all metadata that needs indexing
-                        try {
-                            for(int i=beginIndex; i<beginIndex+count; i++) {
-                                try {
-                                    indexMetadata(dbms, ids.get(i).toString());
-                                }
-                                catch (Exception e) {
-                                    Log.error(Geonet.INDEX_ENGINE, "Error indexing metadata '"+ids.get(i)+"': "+e.getMessage()+"\n"+ Util.getStackTrace(e));
-                                }
-                            }
-                        }
-                        finally {
-                        }
+                    	indexMetadataGroup(dbms, this.ids, this.beginIndex, this.count, this.sendReIndexMessages);
+                	} else {
+                        indexMetadata(dbms, this.ids.get(0), false, this.sendReIndexMessages);
                     }
-                    else {
-                        indexMetadata(dbms, ids.get(0));
-                    }
-                }
-                finally {
-                    //-- commit Dbms resource (which makes it available to pool again)
-                    //-- to avoid exhausting Dbms pool
-                    context.getResourceManager().close(Geonet.Res.MAIN_DB, dbms);
-                }
+    	        } catch (Exception e) {
+    	        	bException = true;
+		            if (dbms != null) {
+		            	context.getResourceManager().abort(Geonet.Res.MAIN_DB, dbms);
+		            }
+    	        } finally {
+					if (!bException && dbms != null) context.getResourceManager().close(Geonet.Res.MAIN_DB, dbms);
+    			}
             }
             catch (Exception e) {
                 Log.error(Geonet.DATA_MANAGER, "Reindexing thread threw exception");
@@ -406,10 +443,71 @@ public class DataManager {
      * TODO javadoc.
      *
      * @param dbms
+     * @param ids
+     * @param moreFields
+     * @param workspace
+     * @param sendReIndexMessages whether to send reindex messages to peer nodes in cluster
+     * @throws Exception hmm
+     */
+	public void indexMetadataGroup(Dbms dbms, List<String> ids, int beginIndex, int count, boolean sendReIndexMessages) throws Exception {
+		synchronized (searchMan.getIndexTracker().MUTEX) {
+//                System.out.println("** START SYNCHRONIZED indexMetadataGroup by id list.");
+			searchMan.startIndexGroup();
+			try {
+		        for(int i=beginIndex; i<beginIndex+count; i++) {
+		            try {
+		            	indexMetadata(dbms, ids.get(i), true, sendReIndexMessages);
+		            }
+		            catch (Exception e) {
+	                    Log.error(Geonet.INDEX_ENGINE, "Error indexing metadata '"+ids.get(i)+"': "+e.getMessage()+"\n"+ Util.getStackTrace(e));
+		            }
+		        }
+		    }
+		    finally {
+		    	searchMan.endIndexGroup();
+//    	            System.out.println("** END SYNCHRONIZED indexMetadataGroup by id list.");
+	    	}
+		}
+	}
+
+    /**
+     * TODO javadoc.
+     *
+     * @param dbms
+     * @param ids
+     * @param moreFields
+     * @param workspace
+     * @param sendReIndexMessages whether to send reindex messages to peer nodes in cluster
+     * @throws Exception hmm
+     */
+	public void indexMetadataGroup(Dbms dbms, String id, boolean sendReIndexMessages) throws Exception {
+		synchronized (searchMan.getIndexTracker().MUTEX) {
+//                System.out.println("** START SYNCHRONIZED indexMetadataGroup by id.");
+			searchMan.startIndexGroup();
+			try {
+		        try {
+		        	indexMetadata(dbms, id, true, sendReIndexMessages);
+		        }
+		        catch (Exception e) {
+	                Log.error(Geonet.INDEX_ENGINE, "Error indexing metadata '"+id+"': "+e.getMessage()+"\n"+ Util.getStackTrace(e));
+		        }
+			} finally {
+		    	searchMan.endIndexGroup();
+//    	            System.out.println("** END SYNCHRONIZED indexMetadataGroup by id.");
+	    	}
+		}
+	}
+	/**
+     * Indexes metadata without sending ReIndexMessage to JMS topic.
+     *
+     * @param dbms
      * @param id
+     * @param indexGroup
+     * @param workspace
      * @throws Exception
      */
-	public void indexMetadata(Dbms dbms, String id) throws Exception {
+    public void indexMetadataWithoutSendingTopic(Dbms dbms, String id, boolean indexGroup) throws Exception {
+        Log.debug(Geonet.CLUSTER, "Executing indexMetadataWithoutSendingTopic on metadata with id " + id);
         try {
             Vector<Element> moreFields = new Vector<Element>();
             int id$ = new Integer(id);
@@ -418,22 +516,25 @@ public class DataManager {
             Element md   = xmlSerializer.selectNoXLinkResolver(dbms, "Metadata", id);
             if (xmlSerializer.resolveXLinks()) {
                 List<Attribute> xlinks = Processor.getXLinks(md);
-                if (xlinks.size() > 0) {
-                    moreFields.add(SearchManager.makeField("_hasxlinks", "1", true, true));
-                    StringBuilder sb = new StringBuilder();
-                    for (Attribute xlink : xlinks) {
-                        sb.append(xlink.getValue()); sb.append(" ");
-                    }
-                    moreFields.add(SearchManager.makeField("_xlink", sb.toString(), true, true));
-                    Processor.detachXLink(md);
-                }
-                else {
-                    moreFields.add(SearchManager.makeField("_hasxlinks", "0", true, true));
-                }
-            }
-            else {
-                moreFields.add(SearchManager.makeField("_hasxlinks", "0", true, true));
-            }
+				if (xlinks.size() > 0) {
+					moreFields.add(SearchManager.makeField("_hasxlinks",
+							"1", true, true));
+					StringBuilder sb = new StringBuilder();
+					for (Attribute xlink : xlinks) {
+						sb.append(xlink.getValue());
+						sb.append(" ");
+					}
+					moreFields.add(SearchManager.makeField("_xlink",
+							sb.toString(), true, true));
+					Processor.detachXLink(md);
+				} else {
+					moreFields.add(SearchManager.makeField("_hasxlinks",
+							"0", true, true));
+				}
+			} else {
+				moreFields.add(SearchManager.makeField("_hasxlinks", "0",
+						true, true));
+			}
 
             // get metadata table fields
             String query = "SELECT schemaId, createDate, changeDate, source, isTemplate, root, " +
@@ -516,13 +617,13 @@ public class DataManager {
             // get status
             List<Element> statuses = dbms.select("SELECT statusId, userId, changeDate FROM MetadataStatus WHERE metadataId = ? ORDER BY changeDate DESC", id$)
                                     .getChildren();
-						if (statuses.size() > 0) {
-							Element stat = (Element)statuses.get(0);
-							String status = stat.getChildText("statusid");
-              moreFields.add(SearchManager.makeField("_status", status, true, true));
-							String statusChangeDate = stat.getChildText("changedate");
-              moreFields.add(SearchManager.makeField("_statusChangeDate", statusChangeDate, true, true));
-						}
+			if (statuses.size() > 0) {
+				Element stat = (Element)statuses.get(0);
+				String status = stat.getChildText("statusid");
+				moreFields.add(SearchManager.makeField("_status", status, true, true));
+				String statusChangeDate = stat.getChildText("changedate");
+				moreFields.add(SearchManager.makeField("_statusChangeDate", statusChangeDate, true, true));
+			}
 
             // getValidationInfo
             // -1 : not evaluated
@@ -533,8 +634,7 @@ public class DataManager {
                                                  .getChildren();
             if (validationInfo.size() == 0) {
                 moreFields.add(SearchManager.makeField("_valid", "-1", true, true));
-            }
-            else {
+			} else {
                 String isValid = "1";
                 for (Object elem : validationInfo) {
                     Element vi = (Element) elem;
@@ -547,7 +647,54 @@ public class DataManager {
                 }
                 moreFields.add(SearchManager.makeField("_valid", isValid, true, true));
             }
-            searchMan.index(schemaMan.getSchemaDir(schema), md, id, moreFields, isTemplate, title);
+            if (indexGroup) {
+            	searchMan.indexGroup(schemaMan.getSchemaDir(schema), md, id, moreFields, isTemplate, title);
+            } else {
+                searchMan.index(schemaMan.getSchemaDir(schema), md, id, moreFields, isTemplate, title);
+            }
+        }
+		catch (Exception x) {
+			Log.error(Geonet.DATA_MANAGER, "The metadata document index with id=" + id + " is corrupt/invalid - ignoring it. Error: " + x.getMessage());
+			x.printStackTrace();
+		}
+    }
+
+    /**
+     * TODO javadoc.
+     *
+     * @param dbms
+     * @param id
+     * @throws Exception
+     */
+	public void indexMetadata(Dbms dbms, String id, boolean indexGroup, boolean sendReIndexMessages) throws Exception {
+        try {
+            //
+            // notify peers if clustered
+            //
+            if(sendReIndexMessages && ClusterConfig.isEnabled()) {
+                ReIndexMessage message = new ReIndexMessage();
+                message.setId(id);
+                message.setIndexGroup(Boolean.toString(/*indexGroup*/false));
+                message.setSenderClientID(ClusterConfig.getClientID());
+                Producer reIndexProducer = ClusterConfig.get(Geonet.ClusterMessageTopic.REINDEX);
+
+                if(reIndexProducer == null) {
+                    System.err.println("CLUSTER ERROR: DataManager fails to retrieve producer for REINDEX message. Starting ClusterConfiguration verification.");
+                    try {
+                        ClusterConfig.verifyClusterConfig();
+                        System.err.println("ClusterConfiguration verification could not confirm the problem. Trying once more to get the reindex producer.");
+                        reIndexProducer = ClusterConfig.get(Geonet.ClusterMessageTopic.REINDEX);
+                    }
+                    catch(Exception x) {
+                        System.err.println("ClusterConfiguration verification has confirmed the problem. Reinitializing ClusterConfiguration (TODO really do it).");
+                        // TODO ClusterConfig.initialize();
+                    }
+                }
+
+                reIndexProducer.produce(message);
+            }
+            indexMetadataWithoutSendingTopic(dbms, id, indexGroup);
+
         }
 		catch (Exception x) {
 			Log.error(Geonet.DATA_MANAGER, "The metadata document index with id=" + id + " is corrupt/invalid - ignoring it. Error: " + x.getMessage());
@@ -1263,7 +1410,7 @@ public class DataManager {
      */
 	public void setHarvested(Dbms dbms, int id, String harvestUuid) throws Exception {
 		setHarvestedExt(dbms, id, harvestUuid);
-        indexMetadata(dbms, Integer.toString(id));
+        indexMetadata(dbms, Integer.toString(id), false, true);
 	}
 
     /**
@@ -1749,9 +1896,10 @@ public class DataManager {
     		}
 		}
         finally {
+            dbms.commit();
             if(index) {
                 //--- update search criteria
-                indexMetadata(dbms, id);
+                indexMetadata(dbms, id, false, true);
             }
 		}
 		return true;
@@ -1788,7 +1936,7 @@ public class DataManager {
 	 * @param lang Language from context
 	 * @return
 	 */
-	public boolean doValidate(Dbms dbms, String schema, String id, Document doc, String lang) {
+	public synchronized boolean doValidate(Dbms dbms, String schema, String id, Document doc, String lang) {
 		HashMap <String, Integer[]> valTypeAndStatus = new HashMap<String, Integer[]>();
 		boolean valid = true;
 
@@ -2004,7 +2152,7 @@ public class DataManager {
      * @param id
      * @throws Exception
      */
-	public synchronized void deleteMetadata(ServiceContext context, Dbms dbms, String id) throws Exception {
+	public void deleteMetadata(ServiceContext context, Dbms dbms, String id) throws Exception {
         String uuid = getMetadataUuid(dbms, id);
         String isTemplate = getMetadataTemplate(dbms, id);
 
@@ -2027,9 +2175,51 @@ public class DataManager {
             notifyMetadataDelete(dbms, id, uuid);
         }
 
+        if(ClusterConfig.isEnabled()) {
+            // to delete metadata from index
+            ReIndexMessage message = new ReIndexMessage();
+            message.setId(id);
+            message.setSenderClientID(ClusterConfig.getClientID());
+            message.setDeleteMetadata(true);
+            message.setWorkspace(false);
+
+            // to delete workspace from index
+            ReIndexMessage message2 = new ReIndexMessage();
+            message2.setId(id);
+            message2.setSenderClientID(ClusterConfig.getClientID());
+            message2.setDeleteMetadata(true);
+            message2.setWorkspace(true);
+
+            Producer reIndexProducer = ClusterConfig.get(Geonet.ClusterMessageTopic.REINDEX);
+
+            if(reIndexProducer == null) {
+                System.err.println("CLUSTER ERROR: DataManager fails to retrieve producer for REINDEX message. Starting ClusterConfiguration verification.");
+                try {
+                    ClusterConfig.verifyClusterConfig();
+                    System.err.println("ClusterConfiguration verification could not confirm the problem. Trying once more to get the reindex producer.");
+                    reIndexProducer = ClusterConfig.get(Geonet.ClusterMessageTopic.REINDEX);
+                }
+                catch(Exception x) {
+                    System.err.println("ClusterConfiguration verification has confirmed the problem. Reinitializing ClusterConfiguration (TODO really do it).");
+                    // TODO ClusterConfig.initialize();
+                }
+            }
+            else {
+                reIndexProducer.produce(message);
+                reIndexProducer.produce(message2);
+            }
+
+        }
+
 		//--- update search criteria
 		searchMan.delete("_id", id+"");
 	}
+
+    public void deleteMetadataWithoutSendingTopic(ServiceContext context, Dbms dbms, String id, boolean workspace) throws Exception {
+        //--- update search criteria
+        Log.debug(Geonet.CLUSTER, "ReIndexMessageHandler processing delete");
+        searchMan.delete("_id", id);
+    }
 
     /**
      *
@@ -2459,7 +2649,7 @@ public class DataManager {
      */
 	public void setStatus(ServiceContext context, Dbms dbms, int id, int status, String changeDate, String changeMessage) throws Exception {
 		setStatusExt(context, dbms, id, status, changeDate, changeMessage);
-    indexMetadata(dbms, Integer.toString(id));
+    indexMetadata(dbms, Integer.toString(id), false, true);
 	}
 
     /**
@@ -2474,7 +2664,8 @@ public class DataManager {
      * @throws Exception
      */
 	public void setStatusExt(ServiceContext context, Dbms dbms, int id, int status, String changeDate, String changeMessage) throws Exception {
-		dbms.execute("INSERT into MetadataStatus(metadataId, statusId, userId, changeDate, changeMessage) VALUES (?,?,?,?,?)", id, status, (context.getUserSession()!=null && context.getUserSession().getUserId()!=null)?context.getUserSession().getUserId():1, changeDate, changeMessage);
+		dbms.execute("INSERT into MetadataStatus(metadataId, statusId, userId, changeDate, changeMessage) VALUES (?,?,?,?,?)", id, status, (context.getUserSession()!=null && context.getUserSession().getUserId()!=null)?Integer.parseInt(context.getUserSession().getUserId()):1, changeDate, changeMessage);
+		dbms.commit();
 		if (svnManager != null) {
 		    svnManager.setHistory(dbms, id+"", context);
 		}
@@ -3314,30 +3505,35 @@ public class DataManager {
         }
 
         public void run() {
-        Dbms dbms = null;
-        try {
-            dbms  = (Dbms) srvContext.getResourceManager().openDirect(Geonet.Res.MAIN_DB);
-            String updateQuery = "UPDATE Metadata SET popularity = popularity +1 WHERE id = ?";
-            Integer iId = new Integer(id);
-            dbms.execute(updateQuery, iId);
-            indexMetadata(dbms, id);
+	        Dbms dbms = null;
+			boolean bException = false;
+	        try {
+	            dbms  = (Dbms) srvContext.getResourceManager().openDirect(Geonet.Res.MAIN_DB);
+	            String updateQuery = "UPDATE Metadata SET popularity = popularity +1 WHERE id = ?";
+	            Integer iId = new Integer(id);
+	            dbms.execute(updateQuery, iId);
+	            indexMetadata(dbms, id, false, true);
+	        } catch (Exception e) {
+	        	bException = true;
+	            Log.warning(Geonet.DATA_MANAGER, "The following exception is ignored: " + e.getMessage());
+	            e.printStackTrace();
+				try {
+		            if (dbms != null) {
+		            	srvContext.getResourceManager().abort(Geonet.Res.MAIN_DB, dbms);
+		            }
+				} catch (Exception ex) {
+					Log.error(Geonet.DATA_MANAGER, "There may have been an error aborting the connection during updating the popularity of the metadata "+id+". Error: " + e.getMessage());
+					ex.printStackTrace();
+				}
+	        } finally {
+				try {
+					if (!bException && dbms != null) srvContext.getResourceManager().close(Geonet.Res.MAIN_DB, dbms);
+				} catch (Exception e) {
+					Log.error(Geonet.DATA_MANAGER, "There may have been an error closing  the connection during updating the popularity of the metadata "+id+". Error: " + e.getMessage());
+					e.printStackTrace();
+				}
+			}
         }
-        catch (Exception e) {
-            Log.error(Geonet.DATA_MANAGER, "The following exception is ignored: " + e.getMessage());
-            e.printStackTrace();
-        }
-        finally {
-                try {
-                    if (dbms != null) srvContext.getResourceManager().close(Geonet.Res.MAIN_DB, dbms);
-                }
-                catch (Exception e) {
-                    Log.error(Geonet.DATA_MANAGER, "There may have been an error updating the popularity of the metadata "+id+". Error: " + e.getMessage());
-                    e.printStackTrace();
-                }
-            }
-
-        }
-
     }
     public enum UpdateDatestamp {
         yes, no

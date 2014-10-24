@@ -51,14 +51,17 @@
 		<xsl:variable name="ows">
 			<xsl:choose>
 				<xsl:when
-					test="(local-name(.)='WFS_Capabilities' and namespace-uri(.)='http://www.opengis.net/wfs' and @version='1.1.0') 
+					test="(local-name(.)='WFS_Capabilities' and (namespace-uri(.)='http://www.opengis.net/wfs' or namespace-uri(.)='http://www.opengis.net/ows') and @version='1.1.0') 
 					or (local-name(.)='Capabilities' and namespace-uri(.)='http://www.opengeospatial.net/wps')
-					or (local-name(.)='Capabilities' and namespace-uri(.)='http://www.opengis.net/wps/1.0.0')">
-					true
-				</xsl:when>
-				<xsl:otherwise>
-					false
-				</xsl:otherwise>
+					or (local-name(.)='Capabilities' and namespace-uri(.)='http://www.opengis.net/wps/1.0.0')"><xsl:value-of select="true()"/></xsl:when>
+				<xsl:otherwise><xsl:value-of select="false()"/></xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="wfs">
+			<xsl:choose>
+				<xsl:when
+					test="local-name(.)='WFS_Capabilities' and (namespace-uri(.)='http://www.opengis.net/wfs' or namespace-uri(.)='http://www.opengis.net/ows') and @version='1.1.0'"><xsl:value-of select="true()"/></xsl:when>
+				<xsl:otherwise><xsl:value-of select="false()"/></xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
 
@@ -161,7 +164,7 @@
 				<locale>
 					<PT_Locale id="DUT">
 						<languageCode>
-							<LanguageCode codeList="" codeListValue="dut" />
+							<LanguageCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#gmd:LanguageCode" codeListValue="dut" />
 						</languageCode>
 						<characterEncoding />
 					</PT_Locale>
@@ -171,7 +174,7 @@
 				<locale>
 					<PT_Locale id="FRE">
 						<languageCode>
-							<LanguageCode codeList="" codeListValue="fre" />
+							<LanguageCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#gmd:LanguageCode" codeListValue="fre" />
 						</languageCode>
 						<characterEncoding />
 					</PT_Locale>
@@ -181,7 +184,7 @@
 				<locale>
 					<PT_Locale id="ENG">
 						<languageCode>
-							<LanguageCode codeList="" codeListValue="eng" />
+							<LanguageCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#gmd:LanguageCode" codeListValue="eng" />
 						</languageCode>
 						<characterEncoding />
 					</PT_Locale>
@@ -217,6 +220,9 @@
 						</xsl:with-param>
 						<xsl:with-param name="ows">
 							<xsl:value-of select="$ows" />
+						</xsl:with-param>
+						<xsl:with-param name="wfs">
+							<xsl:value-of select="$wfs" />
 						</xsl:with-param>
 						<xsl:with-param name="lang">
 							<xsl:value-of select="$lang" />
@@ -262,30 +268,20 @@
 							<onLine>
 								<CI_OnlineResource>
 									<linkage>
-										<URL>
+										<xsl:variable name="urls">
 											<xsl:choose>
-												<xsl:when test="$ows='true'">
-													<xsl:value-of
-														select="//ows:Operation[@name='GetCapabilities']/ows:DCP/ows:HTTP/ows:Get/@xlink:href|
-                                                	//ows11:Operation[@name='GetCapabilities']/ows11:DCP/ows11:HTTP/ows11:Get/@xlink:href" />
-												</xsl:when>
-												<xsl:when test="name(.)='WMS_Capabilities'">
-													<xsl:value-of
-														select="//wms:GetCapabilities/wms:DCPType/wms:HTTP/wms:Get/wms:OnlineResource/@xlink:href" />
-												</xsl:when>
-												<xsl:when test="name(.)='WFS_Capabilities'">
-													<xsl:value-of
-														select="//wfs:GetCapabilities/wfs:DCPType/wfs:HTTP/wfs:Get/@onlineResource" />
-												</xsl:when>
-												<xsl:when test="name(.)='WMT_MS_Capabilities'">
-													<xsl:value-of
-														select="//GetCapabilities/DCPType/HTTP/Get/OnlineResource[1]/@xlink:href" />
-												</xsl:when>
-												<xsl:otherwise>
-													<xsl:value-of
-														select="//wcs:GetCapabilities//wcs:OnlineResource[1]/@xlink:href" />
-												</xsl:otherwise>
+												<xsl:when test="$ows='true'"><xsl:value-of select="//ows:Operation[@name='GetCapabilities']/ows:DCP/ows:HTTP/ows:Get/@xlink:href|//ows11:Operation[@name='GetCapabilities']/ows11:DCP/ows11:HTTP/ows11:Get/@xlink:href" /></xsl:when>
+												<xsl:when test="name(.)='WMS_Capabilities'"><xsl:value-of select="//wms:GetCapabilities/wms:DCPType/wms:HTTP/wms:Get/wms:OnlineResource/@xlink:href" /></xsl:when>
+												<xsl:when test="name(.)='WFS_Capabilities'"><xsl:value-of select="//wfs:GetCapabilities/wfs:DCPType/wfs:HTTP/wfs:Get/@onlineResource" /></xsl:when>
+												<xsl:when test="name(.)='WMT_MS_Capabilities'"><xsl:value-of select="//GetCapabilities/DCPType/HTTP/Get/OnlineResource[1]/@xlink:href" /></xsl:when>
+												<xsl:otherwise><xsl:value-of select="//wcs:GetCapabilities//wcs:OnlineResource[1]/@xlink:href" /></xsl:otherwise>
 											</xsl:choose>
+										</xsl:variable>
+										<xsl:if test="normalize-space($urls[1])=''">
+											<xsl:attribute name="gco:nilReason" select="'missing'"/>
+										</xsl:if>
+										<URL>
+											<xsl:value-of select="$urls[1]"/>
 										</URL>
 									</linkage>
 									<protocol>
@@ -401,25 +397,20 @@
 									<specification>
 										<CI_Citation>
 											<title>
+<!--
 												<xsl:choose>
 													<xsl:when test="$lang='dut'">
-														<gco:CharacterString>Verordening (EG) nr. 976/2009 van de
-															Commissie van 19 oktober 2009 tot uitvoering van Richtlijn
-															2007/2/EG van het Europees Parlement en de Raad wat
-															betreft
-															de netwerkdiensten
-														</gco:CharacterString>
+														<gco:CharacterString>Verordening (EG) nr. 976/2009 van de Commissie van 19 oktober 2009 tot uitvoering van Richtlijn 2007/2/EG van het Europees Parlement en de Raad wat betreft de netwerkdiensten</gco:CharacterString>
+													</xsl:when>
+													<xsl:when test="$lang='eng'">
+														<gco:CharacterString>Commission Regulation (EC) No 1205/2008 of 3 December 2008 implementing Directive 2007/2/EC of the European Parliament and of the Council as regards metadata</gco:CharacterString>
 													</xsl:when>
 													<xsl:otherwise>
-														<gco:CharacterString>Règlement (CE) N o 976/2009 de la
-															commission du 19 octobre 2009 portant modalités
-															d’application de la directive 2007/2/CE du Parlement
-															européen et du Conseil en ce qui concerne les services en
-															réseau
-														</gco:CharacterString>
+														<gco:CharacterString>Règlement (CE) N o 976/2009 de la commission du 19 octobre 2009 portant modalités d’application de la directive 2007/2/CE du Parlement européen et du Conseil en ce qui concerne les services en réseau</gco:CharacterString>
 													</xsl:otherwise>
 												</xsl:choose>
-	
+-->
+												<gco:CharacterString>Règlement (CE) N o 976/2009 de la commission du 19 octobre 2009 portant modalités d’application de la directive 2007/2/CE du Parlement européen et du Conseil en ce qui concerne les services en réseau</gco:CharacterString>
 											</title>
 											<alternateTitle gco:nilReason="missing">
 												<gco:CharacterString />
@@ -439,16 +430,20 @@
 										</CI_Citation>
 									</specification>
 									<explanation>
+<!--
 										<xsl:choose>
 											<xsl:when test="$lang='dut'">
-												<gco:CharacterString>Zie de gerefereerde specificatie.
-												</gco:CharacterString>
+												<gco:CharacterString>Zie de gerefereerde specificatie.</gco:CharacterString>
+											</xsl:when>
+											<xsl:when test="$lang='eng'">
+												<gco:CharacterString>Voir la spécification référencée.</gco:CharacterString>
 											</xsl:when>
 											<xsl:otherwise>
-												<gco:CharacterString>Voir la spécification référencée.
-												</gco:CharacterString>
+												<gco:CharacterString>Voir la spécification référencée.</gco:CharacterString>
 											</xsl:otherwise>
 										</xsl:choose>
+-->
+										<gco:CharacterString>Voir la spécification référencée.</gco:CharacterString>
 	
 									</explanation>
 									<pass>

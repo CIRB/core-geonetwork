@@ -56,6 +56,7 @@ import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.csw.common.Csw;
 import org.fao.geonet.jms.ClusterConfig;
 import org.fao.geonet.jms.ClusterConfigurationException;
+import org.fao.geonet.jms.ClusterException;
 import org.fao.geonet.kernel.AccessManager;
 import org.fao.geonet.kernel.DataManager;
 import org.fao.geonet.kernel.SchemaManager;
@@ -392,7 +393,7 @@ public class Geonetwork implements ApplicationHandler {
         MetadataNotifierManager metadataNotifierMan = new MetadataNotifierManager(dataMan);
 
         logger.info("  - Metadata notifier ...");
-/*
+
         //--- initialize cluster configuration
         try {
             ClusterConfig.initialize(handlerConfig, settingMan, context);
@@ -402,8 +403,8 @@ public class Geonetwork implements ApplicationHandler {
             x.printStackTrace();
             ClusterConfig.setEnabled(false);
         }
-*/
-		//------------------------------------------------------------------------
+
+        //------------------------------------------------------------------------
 		//--- return application context
 
 		GeonetContext gnContext = new GeonetContext();
@@ -780,7 +781,18 @@ public class Geonetwork implements ApplicationHandler {
         logger.info("shutting down CSW HarvestResponse executionService");
         CswHarvesterResponseExecutionService.getExecutionService().shutdownNow();		
 
-		//------------------------------------------------------------------------
+        try {
+            if(ClusterConfig.isEnabled()) {
+                logger.info("shutting down cluster configuration");
+                ClusterConfig.shutdown();
+            }
+        } 
+        catch (ClusterException x) {
+            logger.error("Error shutting down cluster configuration: " + x.getMessage());
+            x.printStackTrace();
+        }
+
+        //------------------------------------------------------------------------
 		//--- end search
 		logger.info("  - search...");
 

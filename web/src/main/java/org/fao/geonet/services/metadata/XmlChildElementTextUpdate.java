@@ -56,11 +56,8 @@ public class XmlChildElementTextUpdate implements Service
 	//---
 	//--------------------------------------------------------------------------
 
-    private String stylePath;
-
 	public void init(String appPath, ServiceConfig params) throws Exception
     {
-        this.stylePath = appPath + Geonet.Path.UPDATE_STYLESHEETS;
     }
 
 	//--------------------------------------------------------------------------
@@ -107,11 +104,7 @@ public class XmlChildElementTextUpdate implements Service
                     List<Namespace> nss = new ArrayList<Namespace>();
                     nss.addAll(md.getAdditionalNamespaces());
                     nss.add(md.getNamespace());
-                    Object extentObject = Xml.selectSingle(md, "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent", nss);
             		System.out.println("Processing record with uuid " + uuid);
-            		if (extentObject!=null) {
-                        System.out.println(Xml.getString((Element)extentObject));
-            		}
                     Object o = Xml.selectSingle(md, xpathExpression, nss);
                     if (o!=null && o instanceof Element) {
                     	String oldChildTextValue = ((Element)o).getText(); 

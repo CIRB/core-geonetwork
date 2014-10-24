@@ -102,7 +102,7 @@ public class GeoPRESTHarvester extends AbstractHarvester
 		//--- force the creation of a new uuid
 		params.uuid = UUID.randomUUID().toString();
 
-		String id = settingMan.add(dbms, "harvesting", "node", getType());
+		String id = settingMan.add(dbms, "harvesting", "node", getType(), false);
 
 		storeNode(dbms, params, "id:"+id);
 		Lib.sources.update(dbms, params.uuid, params.name, true);
@@ -147,16 +147,16 @@ public class GeoPRESTHarvester extends AbstractHarvester
 	{
 		GeoPRESTParams params = (GeoPRESTParams) p;
 
-		settingMan.add(dbms, "id:"+siteId, "baseUrl", params.baseUrl);
-		settingMan.add(dbms, "id:"+siteId, "icon",     params.icon);
+		settingMan.add(dbms, "id:"+siteId, "baseUrl", params.baseUrl, false);
+		settingMan.add(dbms, "id:"+siteId, "icon",     params.icon, false);
 
 		//--- store search nodes
 
 		for (Search s : params.getSearches())
 		{
-			String  searchID = settingMan.add(dbms, path, "search", "");
+			String  searchID = settingMan.add(dbms, path, "search", "", false);
 
-			settingMan.add(dbms, "id:"+searchID, "freeText", s.freeText);
+			settingMan.add(dbms, "id:"+searchID, "freeText", s.freeText, false);
 		}
 	}
 

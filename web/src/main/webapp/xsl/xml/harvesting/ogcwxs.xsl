@@ -12,6 +12,8 @@
 
 	<xsl:template match="*" mode="site">
 		<url><xsl:value-of select="url/value" /></url>
+		<urlENG><xsl:value-of select="urlENG/value" /></urlENG>
+		<urlDUT><xsl:value-of select="urlDUT/value" /></urlDUT>
 		<ogctype><xsl:value-of select="ogctype/value" /></ogctype>
 		<icon><xsl:value-of select="icon/value" /></icon>
 	</xsl:template>

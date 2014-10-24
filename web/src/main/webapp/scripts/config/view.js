@@ -205,6 +205,9 @@ ConfigView.prototype.setData = function(data)
   $('requestedLanguage.only').value = data['REQUESTED_LANGUAGE_ONLY'];
   $('requestedLanguage.sorted').checked = data['REQUESTED_LANGUAGE_SORTED'] == 'true';
 
+    $('clustering.enable').checked = data['CLUSTERING_ENABLE'] == 'true';
+    $('clustering.jmsurl').value = data['CLUSTERING_JMSURL'];
+
 	$('searchStats.enable').checked = data['SEARCHSTATS_ENABLE'] == 'true';
 
 	$('downloadservice.simple')        .checked = data['DOWNLOADSERVICE_SIMPLE'] == 'true';
@@ -332,6 +335,9 @@ ConfigView.prototype.getData = function()
     AUTODETECT_ENABLE : $('autodetect.enable').checked,
     REQUESTED_LANGUAGE_ONLY: $('requestedLanguage.only').value,
     REQUESTED_LANGUAGE_SORTED : $('requestedLanguage.sorted').checked,
+
+        CLUSTERING_ENABLE : $('clustering.enable').checked,
+        CLUSTERING_JMSURL : $('clustering.jmsurl').value,
 
 		SEARCHSTATS_ENABLE : $('searchStats.enable').checked,
 	

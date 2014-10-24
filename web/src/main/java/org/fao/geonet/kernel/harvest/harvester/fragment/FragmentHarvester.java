@@ -365,9 +365,9 @@ public class FragmentHarvester {
 
 				dataMan.setTemplateExt(dbms, iId, "s", title);
 				dataMan.setHarvestedExt(dbms, iId, params.uuid, harvestUri);
-        dataMan.indexMetadata(dbms, id);
+		        dbms.commit();
+		        dataMan.indexMetadataGroup(dbms, id, true);
 
-        dbms.commit();
 
 				harvestSummary.updatedMetadata.add(uuid);
 				harvestSummary.fragmentsUpdated++;
@@ -405,9 +405,9 @@ public class FragmentHarvester {
 	
 		dataMan.setTemplateExt(dbms, iId, "s", null);
 		dataMan.setHarvestedExt(dbms, iId, params.uuid, harvestUri);
-		dataMan.indexMetadata(dbms, id);
-
 		dbms.commit();
+		dataMan.indexMetadataGroup(dbms, id, true);
+
 		harvestSummary.fragmentsAdded ++;
     }
 
@@ -569,9 +569,9 @@ public class FragmentHarvester {
         dbms.execute("DELETE FROM MetadataCateg WHERE metadataId=?", iId);
         addCategories(id);
 
-        dataMan.indexMetadata(dbms, id);	
-
         dbms.commit();
+        dataMan.indexMetadataGroup(dbms, id, true);	
+
 				harvestSummary.recordsUpdated++;
 				harvestSummary.updatedMetadata.add(recUuid);
 	}
@@ -609,11 +609,11 @@ public class FragmentHarvester {
 		
 		dataMan.setTemplateExt(dbms, iId, "n", null); 
 		dataMan.setHarvestedExt(dbms, iId, params.uuid, harvestUri);
-		dataMan.indexMetadata(dbms, id);
-
         if(log.isDebugEnabled())
             log.debug("	- Commit "+id);
 		dbms.commit();
+		dataMan.indexMetadataGroup(dbms, id, true);
+
 		harvestSummary.recordsBuilt++;
 	}
 

@@ -567,8 +567,12 @@ GeoNetwork.Catalogue = Ext.extend(Ext.util.Observable, {
      *  Initialize results and summary stores.
      */
     search: function(formOrParams, onSuccess, onFailure, startRecord, updateStore, metadataStore, summaryStore, async){
-        
-        var isCatalogueMdStore = this.metadataStore === metadataStore;
+/*        
+    	if (this.getSelectedRecords()>0) {
+        	this.metadataSelectNone();
+    	}
+*/
+    	var isCatalogueMdStore = this.metadataStore === metadataStore;
         if (isCatalogueMdStore) {
             this.updateStatus(OpenLayers.i18n('searching'));
         }
@@ -682,12 +686,15 @@ GeoNetwork.Catalogue = Ext.extend(Ext.util.Observable, {
         var app = this;
         var i = 0;
         
-        for (i = 0; i < uuids.length; i++) {
-            OpenLayers.Request.GET({
+		if (uuids.length>0) {
+            OpenLayers.Request.POST({
                 url: this.services.mdSelect,
-                params: {
-                    id: uuids[i],
+                data: OpenLayers.Util.getParameterString({
+                    id: uuids.join(","),
                     selected: type
+                }),
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
                 },
                 success: function(response){
                     var nb = response.responseXML.documentElement.getElementsByTagName("Selected")[0].childNodes[0].nodeValue;
@@ -1009,10 +1016,28 @@ GeoNetwork.Catalogue = Ext.extend(Ext.util.Observable, {
             url = this.services.rootUrl + url;
         }
         
-        OpenLayers.Request.GET({
+		var scope = Ext.getCmp("GNtabs");
+
+        if (scope!=null) {
+        	if (!scope.loadingMask) {
+	            scope.loadingMask = new Ext.LoadMask(scope.getEl(), {
+	                msg: OpenLayers.i18n('doAction.wait')
+	            });
+            } else {
+            	scope.loadingMask.msg=OpenLayers.i18n('doAction.wait');
+            }
+	        scope.loadingMask.show();
+        }
+        OpenLayers.Request.POST({
             url: url,
-            params: params,
+            data: OpenLayers.Util.getParameterString(params),
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
             success: function(response){
+		        if (scope!=null && scope.loadingMask !== null) {
+		            scope.loadingMask.hide();
+		        }
                 if (msgSuccess) {
                     Ext.Msg.alert(msgSuccess, response.responseText);
                 }
@@ -1022,6 +1047,9 @@ GeoNetwork.Catalogue = Ext.extend(Ext.util.Observable, {
                 }
             },
             failure: function(response){
+		        if (scope!=null && scope.loadingMask !== null) {
+		            scope.loadingMask.hide();
+		        }
                 if (msgFailure) {
                     Ext.Msg.alert(msgFailure, response.responseText);
                 }
@@ -1073,10 +1101,10 @@ GeoNetwork.Catalogue = Ext.extend(Ext.util.Observable, {
             return false;
         } else {
             // Reset user cookie information
-            var cookie = Ext.state.Manager.getProvider();
-            if (cookie) {
-                cookie.set('user', undefined);
-            }
+//            var cookie = Ext.state.Manager.getProvider();
+//            if (cookie) {
+//                cookie.set('user', undefined);
+//            }
             return false;
         }
     },
@@ -1093,7 +1121,7 @@ GeoNetwork.Catalogue = Ext.extend(Ext.util.Observable, {
      *		user. Those information are required in the client side.
      */
     login: function(username, password){
-        var app = this, user;
+        var cat = this, user;
 
         OpenLayers.Request.GET({
             url: this.services.login,
@@ -1105,17 +1133,17 @@ GeoNetwork.Catalogue = Ext.extend(Ext.util.Observable, {
             success: function(response){
                 user = response.responseXML.getElementsByTagName('record')[0];
                 
-                app.identifiedUser = {
+                cat.identifiedUser = {
                     username: user ? user.getElementsByTagName('username')[0].firstChild.nodeValue : '-',
                     name: user ? user.getElementsByTagName('name')[0].firstChild.nodeValue : '-',
                     surname: user ? user.getElementsByTagName('surname')[0].firstChild.nodeValue : '-',
                     role: user ? user.getElementsByTagName('profile')[0].firstChild.nodeValue : 'guest'
                 };
-                app.onAfterLogin();
+                cat.onAfterLogin();
             },
             failure: function(response){
-                app.identifiedUser = undefined;
-                app.onAfterBadLogin();
+            	cat.identifiedUser = undefined;
+            	cat.onAfterBadLogin();
                 // TODO : Get Exception from GeoNetwork
             }
         });
@@ -1126,16 +1154,16 @@ GeoNetwork.Catalogue = Ext.extend(Ext.util.Observable, {
      *  Fires the afterLogout or afterBadLogout events
      */
     logout: function(){
-        var app = this;
+        var cat = this;
         OpenLayers.Request.GET({
             url: this.services.logout,
             success: function(response){
-                app.identifiedUser = undefined;
-                app.onAfterLogout();
+                cat.identifiedUser = undefined;
+                cat.onAfterLogout();
             },
             failure: function(response){
-                app.identifiedUser = undefined;
-                app.onAfterBadLogout();
+                cat.identifiedUser = undefined;
+                cat.onAfterBadLogout();
             }
         });
     },

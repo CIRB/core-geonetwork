@@ -67,10 +67,10 @@ public class LocalFilesystemHarvester extends AbstractHarvester {
 	@Override
 	protected void storeNodeExtra(Dbms dbms, AbstractParams params, String path, String siteId, String optionsId) throws SQLException {
 		LocalFilesystemParams lp = (LocalFilesystemParams) params;
-		settingMan.add(dbms, "id:"+siteId, "icon", lp.icon);
-		settingMan.add(dbms, "id:"+siteId, "recurse", lp.recurse);
-		settingMan.add(dbms, "id:"+siteId, "directory", lp.directoryname);
-		settingMan.add(dbms, "id:"+siteId, "nodelete", lp.nodelete);
+		settingMan.add(dbms, "id:"+siteId, "icon", lp.icon, false);
+		settingMan.add(dbms, "id:"+siteId, "recurse", lp.recurse, false);
+		settingMan.add(dbms, "id:"+siteId, "directory", lp.directoryname, false);
+		settingMan.add(dbms, "id:"+siteId, "nodelete", lp.nodelete, false);
 	}
 
 	@Override
@@ -83,7 +83,7 @@ public class LocalFilesystemHarvester extends AbstractHarvester {
 		//--- force the creation of a new uuid
 		params.uuid = UUID.randomUUID().toString();
 		
-		String id = settingMan.add(dbms, "harvesting", "node", getType());
+		String id = settingMan.add(dbms, "harvesting", "node", getType(), false);
 		storeNode(dbms, params, "id:"+id);
 		
 		Lib.sources.update(dbms, params.uuid, params.name, true);
@@ -303,7 +303,7 @@ public class LocalFilesystemHarvester extends AbstractHarvester {
 		addCategories(id, localCateg, dbms);
 
 		dbms.commit();
-		dataMan.indexMetadata(dbms, id);
+		dataMan.indexMetadataGroup(dbms, id, true);
 	}
 
 	
@@ -340,7 +340,7 @@ public class LocalFilesystemHarvester extends AbstractHarvester {
 		addCategories(id, localCateg, dbms);
 
 		dbms.commit();
-		dataMan.indexMetadata(dbms, id);
+		dataMan.indexMetadataGroup(dbms, id, true);
 		return id;
 	}
 	

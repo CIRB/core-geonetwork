@@ -22,9 +22,26 @@
 
 package org.fao.geonet.kernel;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+
 import jeeves.utils.Log;
 import jeeves.utils.Xml;
+
 import org.fao.geonet.constants.Geonet;
+import org.fao.geonet.jms.ClusterConfig;
+import org.fao.geonet.jms.ClusterException;
+import org.fao.geonet.jms.Producer;
+import org.fao.geonet.jms.message.thesaurus.AddThesaurusElemMessage;
+import org.fao.geonet.jms.message.thesaurus.DeleteThesaurusElemMessage;
+import org.fao.geonet.jms.message.thesaurus.UpdateThesaurusElemMessage;
 import org.fao.geonet.languages.IsoLanguagesMapper;
 import org.fao.geonet.util.ISODate;
 import org.jdom.Element;
@@ -45,16 +62,6 @@ import org.openrdf.sesame.query.QueryResultsTable;
 import org.openrdf.sesame.repository.local.LocalRepository;
 import org.openrdf.sesame.sail.StatementIterator;
 import org.springframework.util.StringUtils;
-
-import java.io.File;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class Thesaurus {
 	private String fname;
@@ -106,7 +113,8 @@ public class Thesaurus {
 		this.thesaurusFile = thesaurusFile; 
 		this.downloadUrl = buildDownloadUrl(fname, type, dname, siteUrl);
 		this.keywordUrl = buildKeywordUrl(fname, type, dname, siteUrl);
-    retrieveThesaurusTitle(thesaurusFile, dname + "." + fname);
+		
+        retrieveThesaurusTitle(thesaurusFile, dname + "." + fname);
 
 	}
 
@@ -134,7 +142,7 @@ public class Thesaurus {
 		return type;
 	}
 
-  public String getTitle() {
+    public String getTitle() {
 		return title;
 	}
 
@@ -142,7 +150,7 @@ public class Thesaurus {
 		return version;
 	}
 
-  public String getDate() {
+    public String getDate() {
 		return date;
 	}
 
@@ -204,7 +212,7 @@ public class Thesaurus {
 	public QueryResultsTable performRequest(String query) throws IOException, MalformedQueryException,
             QueryEvaluationException, AccessDeniedException {
         if(Log.isDebugEnabled(Geonet.THESAURUS))
-            Log.debug(Geonet.THESAURUS, "Query : " + query);
+        Log.debug(Geonet.THESAURUS, "Query : " + query);
 
         //printResultsTable(resultsTable);
 		return repository.performTableQuery(QueryLanguage.SERQL, query);
@@ -245,10 +253,32 @@ public class Thesaurus {
      * @throws IOException
      * @throws AccessDeniedException
      */
-	public URI addElement(String code, String prefLab, String note, String lang) throws GraphException, IOException,
-            AccessDeniedException {
+    public URI addElement(String code, String prefLab, String note, String lang) throws GraphException, IOException,
+            AccessDeniedException, ClusterException {
 
         lang = toiso639_1_Lang(lang);
+        URI uri = addElementWithoutSendingTopic(code, prefLab, note,  lang);
+
+        // TODO: Maybe better to add methods in ThesaurusManager to abstract add/delete/update thesaurus manager and move this code there?
+        if(ClusterConfig.isEnabled()) {
+            AddThesaurusElemMessage message = new AddThesaurusElemMessage();
+            message.setOriginatingClientID(ClusterConfig.getClientID());
+            message.setThesaurusName(getKey());
+            message.setNewid(code);
+            message.setPrefLab(prefLab);
+            message.setDefinition(note);
+            message.setLang(lang);
+
+            Producer addThesaurusElProducer = ClusterConfig.get(Geonet.ClusterMessageTopic.ADDTHESAURUS_ELEM);
+            addThesaurusElProducer.produce(message);
+        }
+
+        return uri;
+    }
+
+	public URI addElementWithoutSendingTopic(String code, String prefLab, String note, String lang) throws GraphException, IOException,
+            AccessDeniedException {
+
 		Graph myGraph = new org.openrdf.model.impl.GraphImpl();
 
 		ValueFactory myFactory = myGraph.getValueFactory();
@@ -290,9 +320,33 @@ public class Thesaurus {
      * @throws AccessDeniedException
      * @throws GraphException
      */
-	public void addElement(String code, String prefLab, String note, String east, String west, String south,
-                           String north, String lang) throws IOException, AccessDeniedException, GraphException {
+    public void addElement(String code, String prefLab, String note, String east, String west, String south,
+                           String north, String lang) throws IOException, AccessDeniedException, GraphException, ClusterException {
         lang = toiso639_1_Lang(lang);
+        addElementWithoutSendingTopic(code,prefLab, note, east,  west,  south, north, lang);
+
+        // TODO: Maybe better to add methods in ThesaurusManager to abstract add/delete/update thesaurus manager and move this code there?
+        if(ClusterConfig.isEnabled()) {
+            AddThesaurusElemMessage message = new AddThesaurusElemMessage();
+            message.setOriginatingClientID(ClusterConfig.getClientID());
+            message.setThesaurusName(getKey());
+            message.setNewid(code);
+            message.setPrefLab(prefLab);
+            message.setDefinition(note);
+            message.setLang(lang);
+            message.setEast(east);
+            message.setWest(west);
+            message.setNorth(north);
+            message.setSouth(south);
+
+            Producer addThesaurusElProducer = ClusterConfig.get(Geonet.ClusterMessageTopic.ADDTHESAURUS_ELEM);
+            addThesaurusElProducer.produce(message);
+        }
+
+    }
+
+	public void addElementWithoutSendingTopic(String code, String prefLab, String note, String east, String west, String south,
+                           String north, String lang) throws IOException, AccessDeniedException, GraphException {
 		Graph myGraph = new org.openrdf.model.impl.GraphImpl();
 
 		ValueFactory myFactory = myGraph.getValueFactory();
@@ -353,13 +407,13 @@ public class Thesaurus {
      * @throws AccessDeniedException
      */
     public void removeElement(KeywordBean keyword) throws MalformedQueryException,
-            QueryEvaluationException, IOException, AccessDeniedException {
+            QueryEvaluationException, IOException, AccessDeniedException, ClusterException {
         String namespace = keyword.getNameSpaceCode();
         String code = keyword.getRelativeCode();
 
         removeElement(namespace, code);
     }
-
+    
     /**
      * Remove keyword from thesaurus.
      * 
@@ -367,7 +421,24 @@ public class Thesaurus {
      * @param code
      * @throws AccessDeniedException
      */
-    public void removeElement(String namespace, String code) throws AccessDeniedException {
+    public void removeElement(String namespace, String code) throws AccessDeniedException, ClusterException {
+        removeElementWithoutSendingTopic(namespace, code);
+
+        // TODO: Maybe better to add methods in ThesaurusManager to abstract add/delete/update thesaurus manager and move this code there?
+        if(ClusterConfig.isEnabled()) {
+            DeleteThesaurusElemMessage message = new DeleteThesaurusElemMessage();
+            message.setOriginatingClientID(ClusterConfig.getClientID());
+            message.setNamespace(namespace) ;
+            message.setCode(code);
+            message.setThesaurusName(getKey()) ;
+            
+            Producer deleteThesaurusElProducer = ClusterConfig.get(Geonet.ClusterMessageTopic.DELETETHESAURUS_ELEM);
+            deleteThesaurusElProducer.produce(message);
+        }
+    }
+
+
+    public void removeElementWithoutSendingTopic(String namespace, String code) throws AccessDeniedException {
         Graph myGraph = repository.getGraph();
         ValueFactory myFactory = myGraph.getValueFactory();
         URI subject = myFactory.createURI(namespace, code);
@@ -397,9 +468,32 @@ public class Thesaurus {
      * @throws AccessDeniedException
      * @throws GraphException
      */
-	public URI updateElement(String namespace, String id, String prefLab, String note, String lang) throws IOException,
-            MalformedQueryException, QueryEvaluationException, AccessDeniedException, GraphException {
+    public URI updateElement(String namespace, String id, String prefLab, String note, String lang) throws IOException,
+            MalformedQueryException, QueryEvaluationException, AccessDeniedException, GraphException, ClusterException {
         lang = toiso639_1_Lang(lang);
+        URI uri = updateElementWithoutSendingTopic(namespace, id, prefLab, note, lang);
+
+        // TODO: Maybe better to add methods in ThesaurusManager to abstract add/delete/update thesaurus manager and move this code there?
+        if(ClusterConfig.isEnabled()) {
+            UpdateThesaurusElemMessage message = new UpdateThesaurusElemMessage();
+            message.setOriginatingClientID(ClusterConfig.getClientID());
+            message.setThesaurusName(getKey());
+            message.setNamespace(namespace);
+            message.setNewid(id);
+            message.setPrefLab(prefLab);
+            message.setDefinition(note);
+            message.setLang(lang);
+
+            Producer addThesaurusElProducer = ClusterConfig.get(Geonet.ClusterMessageTopic.UPDATETHESAURUS_ELEM);
+            addThesaurusElProducer.produce(message);
+        }
+
+
+        return uri;
+    }
+
+	public URI updateElementWithoutSendingTopic(String namespace, String id, String prefLab, String note, String lang) throws IOException,
+            MalformedQueryException, QueryEvaluationException, AccessDeniedException, GraphException {
 		// Get thesaurus graph
 		Graph myGraph = repository.getGraph();		
 		
@@ -482,12 +576,39 @@ public class Thesaurus {
      * @throws QueryEvaluationException
      * @throws GraphException
      */
-	public void updateElement(String namespace, String id, String prefLab, String note, String east, String west,
+    public void updateElement(String namespace, String id, String prefLab, String note, String east, String west,
+                              String south, String north, String lang) throws AccessDeniedException, IOException,
+            MalformedQueryException, QueryEvaluationException, GraphException, ClusterException {
+
+      updateElementWithoutSendingTopic(namespace, id, prefLab, note, east, west, south, north, lang);
+
+        // TODO: Maybe better to add methods in ThesaurusManager to abstract add/delete/update thesaurus manager and move this code there?
+        if(ClusterConfig.isEnabled()) {
+            UpdateThesaurusElemMessage message = new UpdateThesaurusElemMessage();
+            message.setOriginatingClientID(ClusterConfig.getClientID());
+            message.setThesaurusName(getKey());
+            message.setNamespace(namespace);
+            message.setNewid(id);
+            message.setPrefLab(prefLab);
+            message.setDefinition(note);
+            message.setLang(lang);
+            message.setEast(east);
+            message.setWest(west);
+            message.setSouth(south);
+            message.setNorth(north);
+
+            Producer addThesaurusElProducer = ClusterConfig.get(Geonet.ClusterMessageTopic.UPDATETHESAURUS_ELEM);
+            addThesaurusElProducer.produce(message);
+        }
+    }
+    
+    
+	public void updateElementWithoutSendingTopic(String namespace, String id, String prefLab, String note, String east, String west,
                               String south, String north, String lang) throws AccessDeniedException, IOException,
             MalformedQueryException, QueryEvaluationException, GraphException {
 
 		// update label and definition
-		URI subject = updateElement(namespace, id, prefLab, note, lang);
+		URI subject = updateElementWithoutSendingTopic(namespace, id, prefLab, note, lang);
 
 		// update bbox
 
@@ -603,22 +724,22 @@ public class Thesaurus {
      * Retrieves the thesaurus title from rdf file.
      *
      * Used to set the thesaurusName, thesaurusDate and thesaurusVersion
-		 * for keywords. Note we assume that the thesaurus is versioned according
-		 * to the SKOS Core Guide on http://www.w3.org/TR/2005/WD-swbp-skos-core-guide-20051102/#secschemeversioning
+     * for keywords. Note we assume that the thesaurus is versioned according
+     * to the SKOS Core Guide on http://www.w3.org/TR/2005/WD-swbp-skos-core-guide-20051102/#secschemeversioning
      *
      */
     private void retrieveThesaurusTitle(File thesaurusFile, String defaultTitle) {
-				// set defaults as in the case of a local thesaurus file, this info
-				// may not be present yet
-				this.title = defaultTitle;
-        this.date = new ISODate().toString();
-				this.version = "unknown"; // not really acceptable!
+		// set defaults as in the case of a local thesaurus file, this info
+		// may not be present yet
+		this.title = defaultTitle;
+		this.date = new ISODate().toString();
+		this.version = "unknown"; // not really acceptable!
 
         try {
             Element thesaurusEl = Xml.loadFile(thesaurusFile);
 
             List<Namespace> theNSs = new ArrayList<Namespace>();
-						Namespace rdfNs = Namespace.getNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+	    Namespace rdfNs = Namespace.getNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
             theNSs.add(rdfNs);
             theNSs.add(Namespace.getNamespace("skos", "http://www.w3.org/2004/02/skos/core#"));
             theNSs.add(Namespace.getNamespace("dc", "http://purl.org/dc/elements/1.1/"));
@@ -670,11 +791,16 @@ public class Thesaurus {
         if (dateEl == null) return thesaurusDate;
 
         String dateVal = dateEl.getText();
+        // inspire-theme.rdf contains an invalid date starting with Fry
+        if(dateVal.startsWith("Fry")) {
+            dateVal = dateVal.replace("Fry", "Fri");
+        }
 
         // Try several date formats (date format seem not unified)
         List<SimpleDateFormat> dfList = new ArrayList<SimpleDateFormat>();
 
         dfList.add(new SimpleDateFormat("EEE MMM d HH:mm:ss z yyyy"));
+        dfList.add(new SimpleDateFormat("EEE MMM d HH:mm:ss zzz yyyy"));
         dfList.add(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
         dfList.add(new SimpleDateFormat("yyyy-MM-dd"));
 

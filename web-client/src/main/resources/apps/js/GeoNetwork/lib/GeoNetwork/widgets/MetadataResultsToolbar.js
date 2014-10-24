@@ -201,7 +201,7 @@ GeoNetwork.MetadataResultsToolbar = Ext.extend(Ext.Toolbar, {
             handler: function(){
             	Ext.Msg.confirm(OpenLayers.i18n('deleteRecords'), OpenLayers.i18n('deleteConfirms'), function (btn) {
             		if (btn == 'yes') {
-		                this.catalogue.massiveOp('delete', function() {
+		                this.catalogue.massiveOp('Delete', function() {
 		                    this.catalogue.metadataSelectNone();
 		                });
 					}
@@ -428,7 +428,7 @@ GeoNetwork.MetadataResultsToolbar = Ext.extend(Ext.Toolbar, {
         var selectAllInPageAction = new Ext.Action({
             text: OpenLayers.i18n('allInPage'),
             handler: function(){
-                this.catalogue.metadataSelectNone();
+//                this.catalogue.metadataSelectNone();
                 /* Select currently selected nodes assuming catalogue action will work fine */
                 this.metadataResultsView.selectAllInPage();
             },
@@ -509,7 +509,7 @@ GeoNetwork.MetadataResultsToolbar = Ext.extend(Ext.Toolbar, {
     updatePrivileges: function(catalogue, user){
         // TODO : this.ownerAction visible to userAdmin only #781
         var actions = [this.deleteAction, this.ownerAction, this.updateCategoriesAction, 
-                        this.updatePrivilegesAction, this.createMetadataAction, this.mdImportAction,
+                        this.updatePrivilegesAction, this.updateStatusAction, this.updateVersionAction, this.createMetadataAction, this.mdImportAction,
                         this.mdImportAction, this.adminAction, this.otherItem];
         Ext.each(actions, function(){
             this.setVisible(user);

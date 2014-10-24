@@ -232,7 +232,7 @@ Validator.prototype.urlVal = function(rule)
 	var text  = rule.ctrl.value;
 	var result= null;
 	
-	if (!this.isURL(text))
+	if (text.length>0 && !this.isURL(text))
 		result = ['notURL'];
 		
 	return result;

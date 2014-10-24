@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -50,6 +52,8 @@ public class LuceneIndexLanguageTracker {
     private final Map<String, NRTCachingDirectory> dirs = new HashMap<String, NRTCachingDirectory>();
     private final Map<String, TrackingIndexWriter> trackingWriters = new HashMap<String, TrackingIndexWriter>();
     private final Map<String, GeonetworkNRTManager> searchManagers = new HashMap<String, GeonetworkNRTManager>();
+    public static Object MUTEX = new Object();
+    private final Lock optimizingLock = new ReentrantLock();
     private final Timer commitTimer;
     private final LuceneConfig luceneConfig;
     private final File indexContainingDir;
@@ -213,15 +217,27 @@ public class LuceneIndexLanguageTracker {
         }
     }
     public synchronized void optimize() throws CorruptIndexException, IOException {
-        for (TrackingIndexWriter writer: trackingWriters.values()) {
-            try {
-                writer.getIndexWriter().forceMergeDeletes(true);
-                writer.getIndexWriter().forceMerge(1,false);
-            } catch (OutOfMemoryError e) {
-                reset();
-                throw new RuntimeException(e);
-            }
-        }
+		// System.out.println("Optimizing the Lucene Index started...");
+		if (optimizingLock.tryLock()) {
+			System.out.println("Lock successfully");
+			synchronized (MUTEX) {
+				// System.out.println("** START SYNCHRONIZED optimize.");
+				try {
+					for (TrackingIndexWriter writer : trackingWriters.values()) {
+						try {
+							writer.getIndexWriter().forceMergeDeletes(true);
+							writer.getIndexWriter().forceMerge(1, false);
+						} catch (OutOfMemoryError e) {
+							reset();
+							throw new RuntimeException(e);
+						}
+					}
+				} finally {
+					optimizingLock.unlock();
+					System.out.println("Unlock successfully");
+				}
+			}
+		}
     }
 
     private class CommitTimerTask extends TimerTask {

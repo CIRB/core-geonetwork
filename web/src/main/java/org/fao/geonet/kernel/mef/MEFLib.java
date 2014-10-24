@@ -23,22 +23,10 @@
 
 package org.fao.geonet.kernel.mef;
 
-import jeeves.exceptions.BadInputEx;
-import jeeves.exceptions.BadParameterEx;
-import jeeves.resources.dbms.Dbms;
-import jeeves.server.context.ServiceContext;
-import jeeves.utils.BinaryFile;
-import jeeves.utils.Xml;
-import jeeves.xlink.Processor;
-import org.fao.geonet.GeonetContext;
-import org.fao.geonet.constants.Edit;
-import org.fao.geonet.constants.Geonet;
-import org.fao.geonet.exceptions.MetadataNotFoundEx;
-import org.fao.geonet.kernel.AccessManager;
-import org.fao.geonet.kernel.DataManager;
-import org.fao.geonet.util.ISODate;
-import org.jdom.Document;
-import org.jdom.Element;
+import static org.fao.geonet.kernel.mef.MEFConstants.DIR_PRIVATE;
+import static org.fao.geonet.kernel.mef.MEFConstants.DIR_PUBLIC;
+import static org.fao.geonet.kernel.mef.MEFConstants.FS;
+import static org.fao.geonet.kernel.mef.MEFConstants.VERSION;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -49,15 +37,28 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import static org.fao.geonet.kernel.mef.MEFConstants.DIR_PRIVATE;
-import static org.fao.geonet.kernel.mef.MEFConstants.DIR_PUBLIC;
-import static org.fao.geonet.kernel.mef.MEFConstants.FS;
-import static org.fao.geonet.kernel.mef.MEFConstants.VERSION;
+import jeeves.exceptions.BadInputEx;
+import jeeves.exceptions.BadParameterEx;
+import jeeves.resources.dbms.Dbms;
+import jeeves.server.context.ServiceContext;
+import jeeves.utils.BinaryFile;
+import jeeves.utils.Xml;
+
+import org.fao.geonet.GeonetContext;
+import org.fao.geonet.constants.Edit;
+import org.fao.geonet.constants.Geonet;
+import org.fao.geonet.exceptions.MetadataNotFoundEx;
+import org.fao.geonet.kernel.AccessManager;
+import org.fao.geonet.kernel.DataManager;
+import org.fao.geonet.util.ISODate;
+import org.jdom.Document;
+import org.jdom.Element;
 
 
 /**
@@ -152,9 +153,31 @@ public class MEFLib {
 	
 	// --------------------------------------------------------------------------
 	
-	public static List<String> doImport(Element params, ServiceContext context,
-			File mefFile, String stylePath, Dbms dbms) throws Exception {
-		return Importer.doImport(params, context, mefFile, stylePath, dbms);
+    /**
+    *
+    * @param params
+    * @param schemaSchematronMap
+    * @param context
+    * @param mefFile
+    * @param stylePath
+    * @return
+    * @throws Exception
+    */
+	public static List<String> doImportIndexGroup(Element params, Map<String, Set<String>> schemaSchematronMap, ServiceContext context, File mefFile, String stylePath) throws Exception {
+		return Importer.doImport(params, schemaSchematronMap, context, mefFile, stylePath, true);
+	}
+
+   /**
+    *
+    * @param params
+    * @param context
+    * @param mefFile
+    * @param stylePath
+    * @return
+    * @throws Exception
+    */
+	public static List<String> doImport(Element params, Map<String, Set<String>> schemaSchematronMap, ServiceContext context, File mefFile, String stylePath) throws Exception {
+		return Importer.doImport(params, schemaSchematronMap, context, mefFile, stylePath);
 	}
 
 	// --------------------------------------------------------------------------

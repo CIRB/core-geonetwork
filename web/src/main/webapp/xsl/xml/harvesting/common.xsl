@@ -18,6 +18,7 @@
 			<site>
 				<name><xsl:value-of select="$site/name/value" /></name>
 				<uuid><xsl:value-of select="$site/uuid/value" /></uuid>
+                <nodeId><xsl:value-of select="$site/nodeId/value" /></nodeId>
 				<account>
 					<use><xsl:value-of select="$site/useAccount/value" /></use>
 					<username><xsl:value-of select="$site/useAccount/children/username/value" /></username>
@@ -47,6 +48,12 @@
 			
 			<info>
 				<lastRun><xsl:value-of select="$info/lastRun/value" /></lastRun>
+				<xsl:if test="$info/clusterRunning">
+                	<clusterRunning><xsl:value-of select="$info/clusterRunning/value" /></clusterRunning>
+                </xsl:if>
+				<xsl:if test="$info/running">
+	                <running><xsl:value-of select="$info/running/value" /></running>
+                </xsl:if>
 			</info>
 		</node>
 	</xsl:template>

@@ -218,8 +218,8 @@ public class Aligner
 		dataMan.setStatusExt(context, dbms, iId, new Integer(Params.Status.APPROVED),
 				new ISODate().toString(), "Status veranderd na harvesting");
 
-		dbms.commit();
-		dataMan.indexMetadata(dbms, id);
+//		dbms.commit();
+		dataMan.indexMetadataGroup(dbms, id, true);
 		result.addedMetadata++;
 	}
 
@@ -330,8 +330,8 @@ public class Aligner
 				dataMan.setStatusExt(context, dbms, Integer.parseInt(id), new Integer(Params.Status.APPROVED),
 						new ISODate().toString(), "Status veranderd na harvesting");
 
-				dbms.commit();
-				dataMan.indexMetadata(dbms, id);
+//				dbms.commit();
+				dataMan.indexMetadataGroup(dbms, id, true);
 				result.updatedMetadata++;
 			}
 		}

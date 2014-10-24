@@ -23,15 +23,6 @@
 
 package org.fao.geonet.kernel.setting;
 
-import jeeves.resources.dbms.Dbms;
-import jeeves.server.resources.ProviderManager;
-import jeeves.server.resources.ResourceListener;
-import jeeves.server.resources.ResourceProvider;
-import jeeves.utils.Log;
-
-import org.fao.geonet.constants.Geonet;
-import org.jdom.Element;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,6 +31,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import jeeves.resources.dbms.Dbms;
+import jeeves.server.resources.ProviderManager;
+import jeeves.server.resources.ResourceListener;
+import jeeves.server.resources.ResourceProvider;
+import jeeves.utils.Log;
+
+import org.fao.geonet.constants.Geonet;
+import org.fao.geonet.jms.ClusterConfig;
+import org.fao.geonet.jms.ClusterException;
+import org.fao.geonet.jms.Producer;
+import org.fao.geonet.jms.message.settings.SettingsMessage;
+import org.jdom.Element;
 
 //=============================================================================
 
@@ -180,6 +184,20 @@ public class SettingManager
 				return false;
 
 			dbms.execute("UPDATE Settings SET name=? WHERE id=?", name, s.getId());
+            if(ClusterConfig.isEnabled()) {
+                try {
+                    Producer settingMessageProducer = ClusterConfig.get(Geonet.ClusterMessageTopic.SETTINGS);
+                    SettingsMessage settingsMessage = new SettingsMessage();
+                    settingsMessage.setSenderClientID(ClusterConfig.getClientID());
+                    settingsMessage.setOrigin("setname");
+                    settingMessageProducer.produce(settingsMessage);
+                }
+                catch (ClusterException x) {
+                    System.err.println(x.getMessage());
+                    x.printStackTrace();
+                    // todo what ?
+                }
+            }
 			tasks.add(Task.getNameChangedTask(dbms, s, name));
 
 			return true;
@@ -247,6 +265,22 @@ public class SettingManager
 				}
 			}
 
+            dbms.commit();
+
+            if(ClusterConfig.isEnabled()) {
+                try {
+                    Producer settingMessageProducer = ClusterConfig.get(Geonet.ClusterMessageTopic.SETTINGS);
+                    SettingsMessage settingsMessage = new SettingsMessage();
+                    settingsMessage.setSenderClientID(ClusterConfig.getClientID());
+                    settingsMessage.setOrigin("setValues");
+                    settingMessageProducer.produce(settingsMessage);
+                }
+                catch (ClusterException x) {
+                    System.err.println(x.getMessage());
+                    x.printStackTrace();
+                    // todo what ?
+                }
+            }
 			return success;
 		} finally {
 			lock.writeLock().unlock();
@@ -264,7 +298,7 @@ public class SettingManager
      * @return
      * @throws SQLException
      */
-	public String add(Dbms dbms, String path, Object name, Object value) throws SQLException
+	public String add(Dbms dbms, String path, Object name, Object value, boolean sendTopicMessage) throws SQLException
 	{
 		if (name == null)
 			throw new IllegalArgumentException("Name cannot be null");
@@ -294,6 +328,21 @@ public class SettingManager
 			String query = "INSERT INTO Settings(id, parentId, name, value) VALUES(?, ?, ?, ?)";
 
 			dbms.execute(query, child.getId(), parent.getId(), sName, sValue);
+
+            if (sendTopicMessage && ClusterConfig.isEnabled()) {
+                try {
+                    Producer settingMessageProducer = ClusterConfig.get(Geonet.ClusterMessageTopic.SETTINGS);
+                    SettingsMessage settingsMessage = new SettingsMessage();
+                    settingsMessage.setSenderClientID(ClusterConfig.getClientID());
+                    settingsMessage.setOrigin("add");
+                    settingMessageProducer.produce(settingsMessage);
+                }
+                catch (ClusterException x) {
+                    System.err.println(x.getMessage());
+                    x.printStackTrace();
+                    // todo what ?
+                }
+            }
 
 			tasks.add(Task.getAddedTask(dbms, parent, child));
 
@@ -328,6 +377,20 @@ public class SettingManager
 
 			remove(dbms, s);
 
+            if(ClusterConfig.isEnabled()) {
+                try {
+                    Producer settingMessageProducer = ClusterConfig.get(Geonet.ClusterMessageTopic.SETTINGS);
+                    SettingsMessage settingsMessage = new SettingsMessage();
+                    settingsMessage.setSenderClientID(ClusterConfig.getClientID());
+                    settingsMessage.setOrigin("remove");
+                    settingMessageProducer.produce(settingsMessage);
+                }
+                catch (ClusterException x) {
+                    System.err.println("ERROR Setting Remove ClusterMessage sending: " + x.getMessage());
+                    x.printStackTrace();
+                    // todo what ?
+                }
+            }
 			return true;
 		}
 		finally

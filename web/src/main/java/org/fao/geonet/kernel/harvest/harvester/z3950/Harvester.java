@@ -344,8 +344,7 @@ class Harvester {
 					} 
 				}
 			
-				dataMan.indexMetadata(dbms, id$);
-				dbms.commit();
+				dataMan.indexMetadata(dbms, id$, false, true);
 
 				result.addedMetadata++;
 			}

@@ -32,6 +32,7 @@ import jeeves.utils.Util;
 import org.fao.geonet.GeonetContext;
 import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.constants.Params;
+import org.fao.geonet.csw.common.Csw;
 import org.fao.geonet.exceptions.MetadataNotFoundEx;
 import org.fao.geonet.kernel.AccessManager;
 import org.fao.geonet.kernel.DataManager;
@@ -139,11 +140,18 @@ public class Show implements Service
 		Attribute schemaLocAtt = sm.getSchemaLocation(mdInfo.schemaId, context);
 		if (schemaLocAtt != null) {
 			if (elMd.getAttribute(schemaLocAtt.getName(), schemaLocAtt.getNamespace()) == null) {
+				
+				if (mdInfo.schemaId.equals("iso19139")) {
+					// if document has srv namespace then add srv schemaLocation
+					if (elMd.getNamespace("srv") != null) {
+						schemaLocAtt = new Attribute("schemaLocation", "http://www.isotc211.org/2005/srv http://schemas.opengis.net/iso/19139/20060504/srv/srv.xsd", Csw.NAMESPACE_XSI);
+					}
+				}
 				elMd.setAttribute(schemaLocAtt);
-				// make sure namespace declaration for schemalocation is present -
-				// remove it first (does nothing if not there) then add it
 				elMd.removeNamespaceDeclaration(schemaLocAtt.getNamespace()); 
 				elMd.addNamespaceDeclaration(schemaLocAtt.getNamespace());
+				// make sure namespace declaration for schemalocation is present -
+				// remove it first (does nothing if not there) then add it
 			}
 		}
 

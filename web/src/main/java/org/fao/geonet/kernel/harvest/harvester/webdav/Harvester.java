@@ -191,7 +191,7 @@ class Harvester {
 		addCategories(id);
 
 		dbms.commit();
-		dataMan.indexMetadata(dbms, id);
+		dataMan.indexMetadataGroup(dbms, id, true);
 		result.added++;
 	}
 
@@ -328,7 +328,7 @@ class Harvester {
 			dbms.execute("DELETE FROM MetadataCateg WHERE metadataId=?", Integer.parseInt(record.id));
 			addCategories(record.id);
 			dbms.commit();
-			dataMan.indexMetadata(dbms, record.id);
+			dataMan.indexMetadataGroup(dbms, record.id, true);
 			result.updated++;
 		}
 	}

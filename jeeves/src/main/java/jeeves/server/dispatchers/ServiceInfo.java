@@ -243,6 +243,7 @@ public class ServiceInfo
 			//--- in case of exception we have to abort all resources
 
 			context.getResourceManager().abort();
+//			e.printStackTrace(System.out);
 			ServiceManager.error("Exception when executing service");
 			ServiceManager.error(" (C) Exc : " + e);
 

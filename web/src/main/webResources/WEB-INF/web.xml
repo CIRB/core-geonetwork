@@ -11,10 +11,11 @@
         <!--<param-value>Joe</param-value>-->
     <!--</context-param>-->
     <!-- H2 DB starter configuration / remove if you don't use H2 -->
+<!--
     <listener>
       <listener-class>org.h2.server.web.DbStarter</listener-class>
     </listener>
-  
+-->  
     <!-- shut down java cache used for xlinks and spatial index -->
     <listener>
         <listener-class>
@@ -167,6 +168,7 @@
         <init-param>
             <param-name>geonetwork.drivemapping</param-name>
             <param-value>net use x: \\CI109835\geonetworkcirb_data_shared /PERSISTENT:NO</param-value>
+<!--            <param-value>net use x: \\PCPB359\geonetworkcirb_data_shared /PERSISTENT:NO</param-value>-->
         </init-param>
         <init-param>
             <param-name>geonetwork.dir</param-name>

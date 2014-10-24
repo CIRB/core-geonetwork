@@ -23,6 +23,8 @@
 
 package org.fao.geonet.services.config;
 
+import javax.servlet.ServletContext;
+
 import jeeves.interfaces.Logger;
 import jeeves.interfaces.Service;
 import jeeves.server.ServiceConfig;
@@ -30,12 +32,13 @@ import jeeves.server.context.ServiceContext;
 
 import org.fao.geonet.GeonetContext;
 import org.fao.geonet.constants.Geonet;
+import org.fao.geonet.jms.ClusterConfig;
+import org.fao.geonet.jms.Producer;
+import org.fao.geonet.jms.message.reindex.ReloadLuceneConfigMessage;
 import org.fao.geonet.kernel.csw.CatalogDispatcher;
 import org.fao.geonet.kernel.search.LuceneConfig;
 import org.fao.geonet.kernel.search.SearchManager;
 import org.jdom.Element;
-
-import javax.servlet.ServletContext;
 
 public class Reload implements Service {
 
@@ -68,7 +71,14 @@ public class Reload implements Service {
 		CatalogDispatcher cd = gc.getCatalogDispatcher();
 		cd.reloadLuceneConfiguration(lc);
 
-		Logger logger = context.getLogger();
+        if (ClusterConfig.isEnabled()) {
+            ReloadLuceneConfigMessage message = new ReloadLuceneConfigMessage();
+            message.setSenderClientID(ClusterConfig.getClientID());
+            Producer reloadLuceneConfigProducer = ClusterConfig.get(Geonet.ClusterMessageTopic.RELOADINDEXCONF);
+            reloadLuceneConfigProducer.produce(message);
+        }
+
+        Logger logger = context.getLogger();
 		logger.info("  - Lucene configuration is:");
 		String config = lc.toString();
 		logger.info(config);

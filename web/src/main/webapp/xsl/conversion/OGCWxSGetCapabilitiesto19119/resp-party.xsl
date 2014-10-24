@@ -12,7 +12,8 @@
 										xmlns:wcs="http://www.opengis.net/wcs"
 										xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 										xmlns:geobru="http://geobru.irisnet.be"
-										extension-element-prefixes="wcs ows wfs owsg ows11">
+										extension-element-prefixes="wcs ows wfs owsg ows11"
+										exclude-result-prefixes="#all">
 
 	<!-- ============================================================================= -->
 
@@ -121,11 +122,13 @@
 		<onlineResource>
 			<CI_OnlineResource>
 				<linkage>
+					<xsl:variable name="urls" select="//Service/OnlineResource/@xlink:href|ows:ProviderSite/@xlink:href|ows11:ProviderSite/@xlink:href"/>
+					<xsl:if test="normalize-space($urls[1])=''">
+						<xsl:attribute name="gco:nilReason" select="'missing'"/>
+					</xsl:if>
 					<URL>
-                        <xsl:value-of select="//Service/OnlineResource/@xlink:href|
-                           ows:ProviderSite/@xlink:href|
-                           ows11:ProviderSite/@xlink:href"/>
-                    </URL>
+						<xsl:value-of select="$urls[1]"/>
+					</URL>
 				</linkage>
 			</CI_OnlineResource>
 		</onlineResource>

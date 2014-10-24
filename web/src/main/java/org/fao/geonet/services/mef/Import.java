@@ -25,20 +25,21 @@ package org.fao.geonet.services.mef;
 
 import jeeves.constants.Jeeves;
 import jeeves.interfaces.Service;
-import jeeves.resources.dbms.Dbms;
 import jeeves.server.ServiceConfig;
 import jeeves.server.context.ServiceContext;
 import jeeves.utils.Util;
-import org.fao.geonet.GeonetContext;
 import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.constants.Params;
-import org.fao.geonet.kernel.DataManager;
 import org.fao.geonet.kernel.mef.MEFLib;
 import org.jdom.Element;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Import MEF file.
@@ -72,20 +73,22 @@ public class Import implements Service {
         String fileType = Util.getParam(params, "file_type", "mef");
 		String uploadDir = context.getUploadDir();
 
-		GeonetContext gc = (GeonetContext) context.getHandlerContext(Geonet.CONTEXT_NAME);
-		DataManager   dm = gc.getDataManager();
-		Dbms dbms = (Dbms) context.getResourceManager().open(Geonet.Res.MAIN_DB);
-
 		File file = new File(uploadDir, mefFile);
 
-		List<String> id = MEFLib.doImport(params, context, file, stylePath, dbms);
+        boolean validate = Util.getParam(params, Params.VALIDATE, "off").equals("on");
+
+        Map<String, Set<String>> schemaSchematronMap = new HashMap<String, Set<String>>();
+        if(validate) {
+            schemaSchematronMap = getSchemaSchematronMapping(params);
+        }
+		List<String> id = MEFLib.doImport(params, schemaSchematronMap, context, file, stylePath);
         String ids = "";
 
         Iterator<String> iter = id.iterator();
         while (iter.hasNext()) {
             String item = (String) iter.next();
             ids += item + ";";
-						dm.indexInThreadPool(context, item, dbms);	
+
         }
 
         file.delete();
@@ -112,6 +115,41 @@ public class Import implements Service {
 		// --- return success with all metadata id
 		return result;
 	}
+
+    /**
+     * TODO this method is duplicated in ImportFromDir.
+     *
+     * @param params
+     * @return
+     */
+    private Map<String, Set<String>> getSchemaSchematronMapping(Element params) {
+        //
+        // create a mapping to know which schemas should be invoking which of their schematrons as indicated by the user
+        //
+        Map<String, String> schematronsParams = Util.getParamsByPrefix(params, "schematron-");
+        System.out.println("found # " + schematronsParams.size() + " sctr params" );
+        Map<String, Set<String>> schemaSchematronMap = new HashMap<String, Set<String>>();
+        for(String param: schematronsParams.keySet()) {
+            // strip prefix 'schematron-'
+            param = param.substring("schematron-".length());
+            int firstHyphen = param.indexOf('-');
+            if(firstHyphen < 0) {
+                System.out.println("WARNING: unexpected schematron parameter seen in ImportFromDir, ignoring it: " + param);
+            }
+            else {
+                String schemaName = param.substring(0, firstHyphen);
+                String schematronName = param.substring(++firstHyphen);
+                System.out.println("found schematronparameter for schema " + schemaName + " with sctr name " + schematronName );
+                Set<String> schematronsForSchema = schemaSchematronMap.get(schemaName);
+                if(schematronsForSchema == null) {
+                    schematronsForSchema = new HashSet<String>();
+                }
+                schematronsForSchema.add(schematronName);
+                schemaSchematronMap.put(schemaName, schematronsForSchema);
+            }
+        }
+        return schemaSchematronMap;
+    }
 }
 
 // =============================================================================

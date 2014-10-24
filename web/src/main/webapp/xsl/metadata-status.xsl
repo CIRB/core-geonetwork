@@ -21,19 +21,21 @@
 								</tr>
 		
 								<xsl:variable name="lang" select="/root/gui/language"/>
+								<xsl:variable name="profile" select="/root/gui/session/profile"/>
+								<xsl:variable name="currentStatus" select="/root/response/status"/>                                            
 					
 								<!-- loop on all status -->
 		
-								<xsl:for-each select="/root/response/statusvalues/status">
-								  <xsl:sort select="label/child::*[name() = $lang]"/>
+								<xsl:for-each select="/root/response/statusvalues/status[label/child::*[name() = $lang]]">
+<!--								  <xsl:sort select="label/child::*[name() = $lang]"/>-->
+                                 <!-- do not display status JUSTCREATED -->
+									<xsl:if test="id != '0' and id != '6'">
 									<tr>
 										<td class="padded" align="left" colspan="2">
-											<xsl:variable name="profile" select="/root/gui/session/profile"/>
-
 											<input type="radio" name="status" value="{id}" id="st{id}">
-												<xsl:if test="on">
-													<xsl:attribute name="checked"/>
-												</xsl:if>
+                                                <xsl:if test="$currentStatus=id">
+                                                    <xsl:attribute name="checked"/>
+                                                </xsl:if>
 												<!-- status value submitted is disabled for reviewers  -->
 												<xsl:if test="$profile='Reviewer' or contains($profile,'Admin')">
 													<xsl:if test="name='submitted'">
@@ -53,27 +55,28 @@
 											</input>
 										</td>
 									</tr>
+									</xsl:if>
 								</xsl:for-each>				
-								<tr width="100%">
-									<td align="left">
-										<xsl:value-of select="/root/gui/strings/changeLogMessage"/>
-									</td>
-									<td align="left">
-										<textarea rows="8" cols="25" id="changeMessage" name="changeMessage"><xsl:value-of select="/root/gui/strings/defaultStatusChangeMessage"/></textarea>
-									</td>
-								</tr>
-								<tr width="100%">
-									<td align="center" colspan="2">
-										<xsl:choose>
-											<xsl:when test="contains(/root/gui/reqService,'metadata.batch')">
-												<button class="content" onclick="radioModalUpdate('status','metadata.batch.update.status','true','{concat(/root/gui/strings/results,' ',/root/gui/strings/batchUpdateStatusTitle)}')"><xsl:value-of select="/root/gui/strings/submit"/></button>
-											</xsl:when>
-											<xsl:otherwise>
-												<button class="content" onclick="radioModalUpdate('status','metadata.status');"><xsl:value-of select="/root/gui/strings/submit"/></button>
-											</xsl:otherwise>
-										</xsl:choose>
-									</td>
-								</tr>
+	                            <tr width="100%">
+	                                <td align="left">
+	                                    <xsl:value-of select="/root/gui/strings/changeLogMessage"/>
+	                                </td>
+	                                <td align="left">
+	                                    <textarea rows="8" cols="25" id="changeMessage" name="changeMessage"><xsl:value-of select="/root/gui/strings/defaultStatusChangeMessage"/></textarea>
+	                                </td>
+	                            </tr>
+	                            <tr width="100%">
+	                                <td align="center" colspan="2">
+	                                    <xsl:choose>
+	                                        <xsl:when test="contains(/root/gui/reqService,'metadata.batch')">
+	                                            <button class="content" onclick="radioModalUpdate('status','metadata.batch.update.status','true','{concat(/root/gui/strings/results,' ',/root/gui/strings/batchUpdateStatusTitle)}',this);this.disabled = true;"><xsl:value-of select="/root/gui/strings/submit"/></button>
+	                                        </xsl:when>
+	                                        <xsl:otherwise>
+	                                            <button class="content" onclick="radioModalUpdate('status','metadata.status','true','{/root/gui/strings/status}',this);this.disabled = true;"><xsl:value-of select="/root/gui/strings/submit"/></button>
+	                                        </xsl:otherwise>
+	                                    </xsl:choose>
+	                                </td>
+	                            </tr>
 							</table>
 					</xsl:if>
 				</div>          

@@ -22,21 +22,32 @@
 
 package org.fao.geonet.kernel;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FilenameFilter;
+import java.io.OutputStream;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import jeeves.resources.dbms.Dbms;
-import jeeves.utils.Log;
-import jeeves.utils.Xml;
-import jeeves.server.resources.ResourceManager;
 import jeeves.server.context.ServiceContext;
+import jeeves.server.resources.ResourceManager;
+import jeeves.utils.Log;
 import jeeves.utils.Util;
+import jeeves.utils.Xml;
 import jeeves.xlink.Processor;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.fao.geonet.constants.Geonet;
+import org.fao.geonet.jms.ClusterConfig;
+import org.fao.geonet.jms.ClusterException;
+import org.fao.geonet.jms.Producer;
+import org.fao.geonet.jms.message.thesaurus.AddThesaurusMessage;
+import org.fao.geonet.jms.message.thesaurus.DeleteThesaurusMessage;
 import org.fao.geonet.kernel.oaipmh.Lib;
-
 import org.jdom.Element;
-
 import org.openrdf.sesame.Sesame;
 import org.openrdf.sesame.config.ConfigurationException;
 import org.openrdf.sesame.config.RepositoryConfig;
@@ -44,16 +55,6 @@ import org.openrdf.sesame.config.SailConfig;
 import org.openrdf.sesame.constants.RDFFormat;
 import org.openrdf.sesame.repository.local.LocalRepository;
 import org.openrdf.sesame.repository.local.LocalService;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FilenameFilter;
-import java.io.OutputStream;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 //=============================================================================
 
@@ -271,7 +272,7 @@ public class ThesaurusManager {
 
 
 		Dbms dbms = null;
-
+		boolean bException = false;
 		try {
 			dbms = (Dbms) rm.openDirect(Geonet.Res.MAIN_DB);
 
@@ -288,9 +289,16 @@ public class ThesaurusManager {
 	
 			String styleSheet = dm.getSchemaDir("iso19135") + "convert/" + Geonet.File.EXTRACT_SKOS_FROM_ISO19135;
 			Xml.transform(root, styleSheet, os);
-		} finally {
-			if (dbms != null) rm.close(Geonet.Res.MAIN_DB, dbms);
-		}
+        } catch (Exception e) {
+        	bException = true;
+            if (dbms != null) {
+            	rm.abort(Geonet.Res.MAIN_DB, dbms);
+            }
+			throw e;
+        } finally {
+            if (!bException && dbms != null)
+            	rm.close(Geonet.Res.MAIN_DB, dbms);
+        }
 	}
 
 	/**
@@ -317,29 +325,66 @@ public class ThesaurusManager {
 	 * @param gst
 	 */
 	public void addThesaurus(Thesaurus gst) throws Exception {
+        addThesaurusWithoutSendingTopic(gst);
 
+        if(ClusterConfig.isEnabled()) {
+            AddThesaurusMessage message = new AddThesaurusMessage();
+            message.setOriginatingClientID(ClusterConfig.getClientID());
+            message.setFname(gst.getFname());
+            message.setType(gst.getType());
+            message.setDir(gst.getDname());
+            message.setThesaurusFile(gst.getFile().getPath()) ;
+            Producer addThesaurusProducer = ClusterConfig.get(Geonet.ClusterMessageTopic.ADDTHESAURUS);
+            addThesaurusProducer.produce(message);
+        }
+	}
+	
+	/**
+	 * 
+	 * @param gst
+	 */
+	public void addThesaurusWithoutSendingTopic(Thesaurus gst) throws Exception {
 		String thesaurusName = gst.getKey();
 
-        if(Log.isDebugEnabled(Geonet.THESAURUS_MAN))
-            Log.debug(Geonet.THESAURUS_MAN, "Adding thesaurus : "+ thesaurusName);
+		if (Log.isDebugEnabled(Geonet.THESAURUS_MAN))
+			Log.debug(Geonet.THESAURUS_MAN, "Adding thesaurus : "
+					+ thesaurusName);
 
 		if (existsThesaurus(thesaurusName)) {
-			throw new Exception ("A thesaurus exists with code " + thesaurusName);
+			throw new Exception("A thesaurus exists with code " + thesaurusName);
 		}
-		
-		createThesaurusRepository(gst);	
+
+		createThesaurusRepository(gst);
 		thesauriMap.put(thesaurusName, gst);
+	}
+
+	/**
+	 * 
+	 * @param name
+	 * @throws ClusterException 
+	 */
+	public void remove(String name) throws Exception{
+        removeWithoutSendingTopic(name);
+
+        if(ClusterConfig.isEnabled()) {
+            DeleteThesaurusMessage message = new DeleteThesaurusMessage();
+            message.setOriginatingClientID(ClusterConfig.getClientID());
+            message.setName(name);
+
+            Producer deleteThesaurusProducer = ClusterConfig.get(Geonet.ClusterMessageTopic.DELETETHESAURUS);
+            deleteThesaurusProducer.produce(message);
+        }
 	}
 	
 	/**
 	 * 
 	 * @param name
 	 */
-	public void remove(String name){
+	public void removeWithoutSendingTopic(String name) {
 		service.removeRepository(name);
 		thesauriMap.remove(name);
 	}
-	
+
 	/**
 	 * 
 	 * @param gst

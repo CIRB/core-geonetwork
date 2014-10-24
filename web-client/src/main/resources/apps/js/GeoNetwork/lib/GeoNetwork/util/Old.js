@@ -58,28 +58,57 @@ function clearAll(id){
  *  Modal box with checkbox validation
  *
  */
-function checkBoxModalUpdate(div, service, modalbox, title){
+function checkBoxModalUpdate(div, service, modalbox, title, button){
     var boxes = Ext.DomQuery.select('input[type="checkbox"]');
     var pars = "?";
+    var params = {};
+
     if (service === 'metadata.admin' || service === 'metadata.category') {
-        pars += "id=" + Ext.getDom('metadataid').value;
+//        pars += "id=" + Ext.getDom('metadataid').value;
+        params["id"] = Ext.getDom('metadataid').value;
     }
     Ext.each(boxes, function(s){
         if (s.checked && s.name != "") {
-            pars += "&" + s.name + "=on";
+//            pars += "&" + s.name + "=on";
+			params[s.name] = "on";
         }
     });
     
     // FIXME : title is not an error message title
-    catalogue.doAction(service + pars, null, null, title, function(response){
-        Ext.getDom(div).innerHTML = response.responseText;
+    catalogue.doAction(service/* + pars*/, /*null*/params, null, title, function(response){
+        if(Ext.getDom(div)) {
+	        Ext.getDom(div).innerHTML = response.responseText;
+        }
         if (service === 'metadata.admin' || service === 'metadata.category') {
             Ext.getCmp('modalWindow').close();
+        } else {
+        	if (response.status==408 || response.status==504) {
+		    	Ext.MessageBox.alert(OpenLayers.i18n('error'), "Request timeout");
+		        Ext.getCmp('modalWindow').close();
+        	} else {
+		        if(response.responseXML && response.responseXML.getElementsByTagName("error").length > 0) {
+		            var errorst = "";
+		            Ext.each(response.responseXML.getElementsByTagName("error"), 
+		                    function(e) {
+		            	errorst += e.textContent || e.innerText || e.text;});
+		            Ext.MessageBox.alert(OpenLayers.i18n('error'), OpenLayers.i18n(errorst));
+			        Ext.getCmp('modalWindow').close();
+		        }
+	        }
         }
-    }, null);
+    }, function(response){
+    	if (response.status==408 || response.status==504) {
+	    	Ext.MessageBox.alert(OpenLayers.i18n('error'), "Request timeout");
+    	} else {
+	    	getError(response);
+    	}
+    	if (button) {
+        	button.disabled=false;
+    	}
+    });
 }
 
-function radioModalUpdate(div, service, modalbox, title) {
+function radioModalUpdate(div, service, modalbox, title,button) {
     var pars = '?';
     var inputs = Ext.DomQuery.select('input[type="hidden"],textarea,select', div);
     Ext.each(inputs, function(s) {
@@ -92,12 +121,35 @@ function radioModalUpdate(div, service, modalbox, title) {
         }
     });
     
-    catalogue.doAction(service + pars, null, null, title, function(response){
-        Ext.getDom(div).innerHTML = response.responseText;
+    catalogue.doAction(service + pars, null, null, /*title*/null, function(response){
+        if(Ext.getDom(div)) {
+            Ext.getDom(div).innerHTML = response.responseText;
+        }
         if (service === 'metadata.status') {
             Ext.getCmp('modalWindow').close();
+        } else {
+        	if (response.status==408 || response.status==504) {
+		    	Ext.MessageBox.alert(OpenLayers.i18n('error'), "Request timeout");
+		        Ext.getCmp('modalWindow').close();
+        	}
         }
-    }, null);
+        if(response.responseXML && response.responseXML.getElementsByTagName("error").length > 0) {
+            var errorst = "";
+            Ext.each(response.responseXML.getElementsByTagName("error"), 
+                    function(e) {
+            	errorst += e.textContent || e.innerText || e.text;});
+            Ext.MessageBox.alert(OpenLayers.i18n('error'), OpenLayers.i18n(errorst));
+        }
+    }, function(response){
+    	if (response.status==408 || response.status==504) {
+	    	Ext.MessageBox.alert(OpenLayers.i18n('error'), "Request timeout");
+    	} else {
+	    	getError(response);
+    	}
+    	if (button) {
+        	button.disabled=false;
+    	}
+    });
 }
 
 
@@ -218,3 +270,25 @@ function checkBatchNewOwner(action, title) {
     });
 }
 
+function getError(response){
+    if (response && response.responseText) {
+        var errorPage = response.responseText, 
+            errorTitle1, errorTitle, 
+            errorMsg, errorMsg1, errorMsg2;
+            
+        errorTitle = errorPage.match(/<h2 class=\"error\"\>(.*)<\/h2\>/);
+        errorTitle1 = errorTitle || errorPage.match(/<div id=\"error\"\>\n[ ]*<h2>(.*)<\/h2\>/);
+        errorMsg = errorPage.match(/<\/h2\>\n[ ]*<p\><\/p\>(.*)/);
+        if (!errorMsg) {
+             errorMsg1 = errorPage.match(/<p id=\"error\">(.*)<\/p\>/);
+             errorMsg2 = errorPage.match(/<p id=\"stacktrace\">(.*)<\/p\>/);
+             errorMsg = errorMsg1[1] + errorMsg2[1];
+        } else {
+            errorMsg = errorMsg[1];
+        }
+        
+        if (errorTitle1) {
+            Ext.Msg.alert(errorTitle1[1], (errorMsg ? errorMsg : ''));
+        }
+    } 
+}

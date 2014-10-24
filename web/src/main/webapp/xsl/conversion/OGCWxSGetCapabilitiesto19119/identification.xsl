@@ -18,7 +18,8 @@
                                         xmlns:gml="http://www.opengis.net/gml"
 										xmlns:math="http://exslt.org/math"
 										xmlns:exslt="http://exslt.org/common"
-										extension-element-prefixes="math exslt wcs ows wps wps1 ows11 wfs gml">
+										extension-element-prefixes="math exslt wcs ows wps wps1 ows11 wfs gml"
+										exclude-result-prefixes="#all">
 
 	<!-- ============================================================================= -->
 
@@ -26,6 +27,7 @@
 		<xsl:param name="topic"/>
 		<xsl:param name="ogctype"/>
 		<xsl:param name="ows"/>
+		<xsl:param name="wfs"/>
 		<xsl:param name="lang"/>
 		<xsl:param name="titleDUT"/>
 		<xsl:param name="titleENG"/>
@@ -37,8 +39,8 @@
 		
 		<citation>
 			<CI_Citation>
-				<title>
-					<gco:CharacterString>
+				<title xsi:type="gmd:PT_FreeText_PropertyType">
+					<xsl:variable name="title">
 						<xsl:choose>
 							<xsl:when test="$ows='true'">
 								<xsl:value-of select="ows:ServiceIdentification/ows:Title|
@@ -57,7 +59,25 @@
 								<xsl:value-of select="wcs:Service/wcs:label"/>
 							</xsl:otherwise>
 						</xsl:choose>
-					</gco:CharacterString>
+					</xsl:variable>
+					<gco:CharacterString><xsl:value-of select="normalize-space($title)"/></gco:CharacterString>
+					<PT_FreeText>
+						<xsl:if test="$lang!='dut'">
+							<textGroup>
+								<LocalisedCharacterString locale="#DUT"><xsl:if test="normalize-space($titleDUT)!=''"><xsl:value-of select="$titleDUT"/></xsl:if><xsl:if test="normalize-space($titleDUT)=''"><xsl:value-of select="normalize-space($title)"/></xsl:if></LocalisedCharacterString>
+							</textGroup>
+						</xsl:if>
+						<xsl:if test="$lang!='eng'">
+							<textGroup>
+								<LocalisedCharacterString locale="#ENG"><xsl:if test="normalize-space($titleENG)!=''"><xsl:value-of select="$titleENG"/></xsl:if><xsl:if test="normalize-space($titleENG)=''"><xsl:value-of select="normalize-space($title)"/></xsl:if></LocalisedCharacterString>
+							</textGroup>
+						</xsl:if>
+						<xsl:if test="$lang!='fre'">
+							<textGroup>
+								<LocalisedCharacterString locale="#FRE"><xsl:if test="normalize-space($titleFRE)!=''"><xsl:value-of select="$titleFRE"/></xsl:if><xsl:if test="normalize-space($titleFRE)=''"><xsl:value-of select="normalize-space($title)"/></xsl:if></LocalisedCharacterString>
+							</textGroup>
+						</xsl:if>
+					</PT_FreeText>
 				</title>
 				<date>
 					<CI_Date>
@@ -77,8 +97,8 @@
 
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-		<abstract>
-			<gco:CharacterString>
+		<abstract xsi:type="gmd:PT_FreeText_PropertyType">
+			<xsl:variable name="abstract">
 				<xsl:choose>
 					<xsl:when test="$ows='true'">
 						<xsl:value-of select="ows:ServiceIdentification/ows:Abstract|
@@ -97,7 +117,25 @@
 						<xsl:value-of select="wcs:Service/wcs:description"/>
 					</xsl:otherwise>
 				</xsl:choose>
-			</gco:CharacterString>
+			</xsl:variable>
+			<gco:CharacterString><xsl:value-of select="normalize-space($abstract)"/></gco:CharacterString>
+			<PT_FreeText>
+				<xsl:if test="$lang!='dut'">
+					<textGroup>
+						<LocalisedCharacterString locale="#DUT"><xsl:if test="normalize-space($abstractDUT)!=''"><xsl:value-of select="$abstractDUT"/></xsl:if><xsl:if test="normalize-space($abstractDUT)=''"><xsl:value-of select="normalize-space($abstract)"/></xsl:if></LocalisedCharacterString>
+					</textGroup>
+				</xsl:if>
+				<xsl:if test="$lang!='eng'">
+					<textGroup>
+						<LocalisedCharacterString locale="#ENG"><xsl:if test="normalize-space($abstractENG)!=''"><xsl:value-of select="$abstractENG"/></xsl:if><xsl:if test="normalize-space($abstractENG)=''"><xsl:value-of select="normalize-space($abstract)"/></xsl:if></LocalisedCharacterString>
+					</textGroup>
+				</xsl:if>
+				<xsl:if test="$lang!='fre'">
+					<textGroup>
+						<LocalisedCharacterString locale="#FRE"><xsl:if test="normalize-space($abstractFRE)!=''"><xsl:value-of select="$abstractFRE"/></xsl:if><xsl:if test="normalize-space($abstractFRE)=''"><xsl:value-of select="normalize-space($abstract)"/></xsl:if></LocalisedCharacterString>
+					</textGroup>
+				</xsl:if>
+			</PT_FreeText>
 		</abstract>
 
 		<!--idPurp-->
@@ -151,16 +189,22 @@
 		<descriptiveKeywords>
 			<MD_Keywords>
 				<keyword xsi:type="gmd:PT_FreeText_PropertyType">
-					<gco:CharacterString>infoMapAccessService</gco:CharacterString>
+					<xsl:variable name="keyword">
+						<xsl:choose>
+							<xsl:when test="$wfs">infoFeatureAccessService</xsl:when>
+							<xsl:otherwise>infoMapAccessService</xsl:otherwise>
+						</xsl:choose>
+					</xsl:variable>
+					<gco:CharacterString><xsl:value-of select="$keyword"/></gco:CharacterString>
 					<PT_FreeText>
 						<textGroup>
-							<LocalisedCharacterString locale="#DUT">infoMapAccessService</LocalisedCharacterString>
+							<LocalisedCharacterString locale="#DUT"><xsl:value-of select="$keyword"/></LocalisedCharacterString>
 						</textGroup>
 						<textGroup>
-							<LocalisedCharacterString locale="#FRE">infoMapAccessService</LocalisedCharacterString>
+							<LocalisedCharacterString locale="#FRE"><xsl:value-of select="$keyword"/></LocalisedCharacterString>
 						</textGroup>
 						<textGroup>
-							<LocalisedCharacterString locale="#ENG">infoMapAccessService</LocalisedCharacterString>
+							<LocalisedCharacterString locale="#ENG"><xsl:value-of select="$keyword"/></LocalisedCharacterString>
 						</textGroup>
 					</PT_FreeText>
 				</keyword>
@@ -187,6 +231,9 @@
 						<xsl:when test="$lang='dut'"> 
 				            <gco:CharacterString>Geen voorwaarde van toepassing. Vrij gebruik onder voorbehoud van vermelding van de bron en de datum van de laatste wijziging.</gco:CharacterString>
 						</xsl:when>
+						<xsl:when test="$lang='eng'"> 
+				            <gco:CharacterString>No condition applies.  Free use under the condition that the source and the latest revision date are mentioned.</gco:CharacterString>
+						</xsl:when> 
 						<xsl:otherwise>
 				            <gco:CharacterString>Aucune condition ne s’applique. Utilisation libre sous réserve de mentionner la source et la date de la dernière mise à jour.</gco:CharacterString>
 						</xsl:otherwise>
@@ -202,9 +249,13 @@
 				<otherConstraints>
 					<xsl:choose>
 						<xsl:when test="$lang='dut'"> 
+	           				<gco:CharacterString>Geen toegangsrestricties</gco:CharacterString>
+						</xsl:when>
+						<xsl:when test="$lang='eng'"> 
+	           				<gco:CharacterString>No accessConstraints</gco:CharacterString>
 						</xsl:when>
 						<xsl:otherwise>
-            				<gco:CharacterString>Geen toegangsrestricties</gco:CharacterString>
+ 							<gco:CharacterString>Pas de restrictions d’accès</gco:CharacterString>
 						</xsl:otherwise>
 					</xsl:choose>
 				</otherConstraints>
@@ -214,7 +265,13 @@
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->		
 		
 		<srv:serviceType>
-			<gco:LocalName>view</gco:LocalName>
+			<xsl:variable name="serviceType">
+				<xsl:choose>
+					<xsl:when test="$wfs">download</xsl:when>
+					<xsl:otherwise>view</xsl:otherwise>
+				</xsl:choose>
+			</xsl:variable>
+			<gco:LocalName><xsl:value-of select='$serviceType'/></gco:LocalName>
 		</srv:serviceType>
 		<srv:serviceTypeVersion>
 			<gco:CharacterString><xsl:value-of select='@version'/></gco:CharacterString>
@@ -223,8 +280,34 @@
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 		<srv:accessProperties>
 			<MD_StandardOrderProcess>
-				<fees>
-					<gco:CharacterString><xsl:value-of select="$s/Fees|$s/wms:Fees|$s/wfs:Fees|$s/ows:Fees|$s/ows11:Fees|$s/wcs:fees"/></gco:CharacterString>
+				<fees xsi:type="gmd:PT_FreeText_PropertyType">
+					<xsl:variable name="fees"><xsl:value-of select="normalize-space($s/Fees|$s/wms:Fees|$s/wfs:Fees|$s/ows:Fees|$s/ows11:Fees|$s/wcs:fees)"/></xsl:variable>
+					<xsl:variable name="feesExists" select="not($fees='' or upper-case($fees)='NONE')"/>
+					<xsl:if test="$feesExists">
+						<gco:CharacterString><xsl:value-of select="$fees"/></gco:CharacterString>
+					</xsl:if>
+					<xsl:if test="not($feesExists)">
+						<gco:CharacterString><xsl:call-template name="get-fees-translation"><xsl:with-param name="feesLang" select="$lang"/></xsl:call-template></gco:CharacterString>
+					</xsl:if>
+					<xsl:if test="not($feesExists)">
+						<PT_FreeText>
+							<xsl:if test="$lang!='dut'">
+								<textGroup>
+									<LocalisedCharacterString locale="#DUT"><xsl:call-template name="get-fees-translation"><xsl:with-param name="feesLang" select="'dut'"/></xsl:call-template></LocalisedCharacterString>
+								</textGroup>
+							</xsl:if>
+							<xsl:if test="$lang!='eng'">
+								<textGroup>
+									<LocalisedCharacterString locale="#ENG"><xsl:call-template name="get-fees-translation"><xsl:with-param name="feesLang" select="'eng'"/></xsl:call-template></LocalisedCharacterString>
+								</textGroup>
+							</xsl:if>
+							<xsl:if test="$lang!='fre'">
+								<textGroup>
+									<LocalisedCharacterString locale="#FRE"><xsl:call-template name="get-fees-translation"><xsl:with-param name="feesLang" select="'fre'"/></xsl:call-template></LocalisedCharacterString>
+								</textGroup>
+							</xsl:if>
+						</PT_FreeText>
+					</xsl:if>
 				</fees>
 			</MD_StandardOrderProcess>
 		</srv:accessProperties>
@@ -272,10 +355,14 @@
 										<xsl:choose>
 											<xsl:when test="$ows='true'">
 												<xsl:for-each select="//ows:WGS84BoundingBox/ows:LowerCorner">
+													<xsl:message select="concat('xmin:',substring-before(., ' '))"/>
+													<xsl:message select="concat('ymin:',substring-after(., ' '))"/>
 													<xmin><xsl:value-of	select="substring-before(., ' ')"/></xmin>
 													<ymin><xsl:value-of	select="substring-after(., ' ')"/></ymin>
 												</xsl:for-each>
 												<xsl:for-each select="//ows:WGS84BoundingBox/ows:UpperCorner">
+													<xsl:message select="concat('xmax:',substring-before(., ' '))"/>
+													<xsl:message select="concat('ymax:',substring-after(., ' '))"/>
 													<xmax><xsl:value-of	select="substring-before(., ' ')"/></xmax>
 													<ymax><xsl:value-of	select="substring-after(., ' ')"/></ymax>
 												</xsl:for-each>
@@ -391,23 +478,28 @@
                           <gco:CharacterString><xsl:value-of select="ows:Identifier|ows11:Identifier"/></gco:CharacterString> 
                       </srv:invocationName> 
                     </xsl:if>
-                    <xsl:variable name="formats" select="Format|wms:Format|ows:Parameter[@name='AcceptFormats' or @name='outputFormat']"/>
+                    <xsl:variable name="formats">
+                    	<xsl:choose>
+                    		<xsl:when test="$operationName='GetGmlObject'"><xsl:value-of select="../ows:Operation[@name='GetFeature']/ows:Parameter[@name='AcceptFormats' or @name='outputFormat']/ows:Value[contains(upper-case(.),'GML')]"/></xsl:when>
+                    		<xsl:otherwise><xsl:value-of select="Format|wms:Format|ows:Parameter[@name='AcceptFormats' or @name='outputFormat']/ows:Value"/></xsl:otherwise>
+                   		</xsl:choose> 
+                    </xsl:variable>
                     <xsl:if test="count($formats)>0">
 						<srv:connectPoint>
 							<CI_OnlineResource>
 								<linkage>
-									<URL>
-										<xsl:choose>
-											<xsl:when test="$ows='true'">
-												<xsl:variable name="urls" select=".//ows:Get[1]/@xlink:href"/>
-												<xsl:value-of select="$urls[1]"/><!-- FIXME supposed at least one Get -->
-											</xsl:when>
-											<xsl:otherwise>
-												<xsl:variable name="urls" select=".//OnlineResource[1]/@xlink:href|.//wms:OnlineResource[1]/@xlink:href"/>
-												<xsl:value-of select="$urls[1]"/>
-											</xsl:otherwise>
-										</xsl:choose>
-									</URL>
+										<xsl:variable name="urls">
+											<xsl:choose>
+												<xsl:when test="$ows='true'"><xsl:value-of select=".//ows:Get[1]/@xlink:href"/></xsl:when>
+												<xsl:otherwise><xsl:value-of select=".//OnlineResource[1]/@xlink:href|.//wms:OnlineResource[1]/@xlink:href"/></xsl:otherwise>
+											</xsl:choose>
+										</xsl:variable>
+										<xsl:if test="normalize-space($urls[1])=''">
+											<xsl:attribute name="gco:nilReason" select="'missing'"/>
+										</xsl:if>
+										<URL>
+											<xsl:value-of select="$urls[1]"/>
+										</URL>
 								</linkage>
 								<protocol>
 									<gco:CharacterString>
@@ -419,7 +511,10 @@
 												</xsl:call-template>
 											</xsl:when>
 											<xsl:when test="$ows='true'">
-												<xsl:value-of select="$formats[1]/ows:Value"/>
+												<xsl:choose>
+													<xsl:when test="$operationName='GetFeature' or $operationName='GetGmlObject'">OGC:WFS</xsl:when>
+													<xsl:otherwise><xsl:value-of select="$formats[1]"/></xsl:otherwise>
+												</xsl:choose>												
 											</xsl:when>
 											<xsl:otherwise>
 												<xsl:value-of select="$formats[1]"/>
@@ -451,7 +546,13 @@
 						<srv:connectPoint>
 							<CI_OnlineResource>
 								<linkage>
-									<URL><xsl:value-of select="..//wfs:Get[1]/@onlineResource"/></URL>
+									<xsl:variable name="urls" select="..//wfs:Get[1]/@onlineResource"/>
+									<xsl:if test="normalize-space($urls[1])=''">
+										<xsl:attribute name="gco:nilReason" select="'missing'"/>
+									</xsl:if>
+									<URL>
+										<xsl:value-of select="$urls[1]"/>
+									</URL>
 								</linkage>
 								<protocol>
 									<gco:CharacterString><xsl:value-of select="name($wfsformats[1])"/></gco:CharacterString>
@@ -609,7 +710,7 @@
 		
 		
 		<xsl:choose>
-		 	<xsl:when test="//wfs:FeatureType">
+		 	<xsl:when test="//wfs:FeatureType|FeatureType">
 				<spatialRepresentationType>
 					<MD_SpatialRepresentationTypeCode codeList="./resources/codeList.xml#MD_SpatialRepresentationTypeCode" codeListValue="vector" />
 				</spatialRepresentationType>
@@ -801,6 +902,15 @@
 					<xsl:otherwise>WWW:LINK-1.0-http--link</xsl:otherwise>
                	</xsl:choose>
 			</xsl:when>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="get-fees-translation">
+		<xsl:param name="feesLang"/>
+		<xsl:choose>
+			<xsl:when test="$feesLang='dut'">Geen kosten</xsl:when>
+			<xsl:when test="$feesLang='eng'">No Fees</xsl:when>
+			<xsl:otherwise>Pas de frais</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 </xsl:stylesheet>

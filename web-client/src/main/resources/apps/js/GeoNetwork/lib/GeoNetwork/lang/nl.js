@@ -549,7 +549,8 @@ Added by GVB
 	'newWindow': "nieuw venster",
 	'mdEditor': "Metadata editor",
 	'List': "Resultaten",
-	'noSearchResults': "Uw zoekactie leverde geen resultaten op. Om een nieuwe zoekactie te starten, kunt u terugkeren naar het zoekscherm."
+	'noSearchResults': "Uw zoekactie leverde geen resultaten op. Om een nieuwe zoekactie te starten, kunt u terugkeren naar het zoekscherm.",
+	'doAction.wait': "Even geduld ..."
 };
 
 OpenLayers.Util.extend(OpenLayers.Lang.nl, GeoNetwork.Lang.nl);

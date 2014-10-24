@@ -86,26 +86,26 @@ public class ResourceManager
 	public synchronized Object open(String name) throws Exception
 	{
 
-        if(Log.isDebugEnabled(Log.RESOURCES))
-            Log.debug (Log.RESOURCES, "Opening: " + name + " in thread: " + Thread.currentThread().getId());
-
-
 		String resourceId = name + ":" + Thread.currentThread().getId();
-		Object resource = htResources.get(resourceId);
+        if(Log.isDebugEnabled(Log.RESOURCES)) {
+            Log.debug (Log.RESOURCES, "Opening: " + resourceId + " RESOURCEMANAGER: " + this.hashCode());
+        }
 
+		Object resource = htResources.get(resourceId);
+		boolean bExisting = true;
 		if (resource == null) {
-            if(Log.isDebugEnabled(Log.RESOURCES))
-                Log.debug  (Log.RESOURCES, "  Null resource, opening a new one from the resource provider.");
+			bExisting = false;
 			ResourceProvider provider = provManager.getProvider(name);
 
             TimerContext timingContext = resourceManagerWaitForResourceTimer.time();
             try {
+            	if(Log.isDebugEnabled(Log.RESOURCES)) {
+                    Log.debug(Log.RESOURCES, this.hashCode() + "-THREAD-" + Thread.currentThread().getId() + "-");
+            	}
 			    resource = provider.open();
             } finally {
                 timingContext.stop();
             }
-
-
 
 			if (resource != null) {
 				htResources.put(resourceId, resource);
@@ -113,10 +113,14 @@ public class ResourceManager
                 openMetrics(resource);
             }
 		}
-        if(Log.isDebugEnabled(Log.RESOURCES))
-            Log.debug  (Log.RESOURCES, "  Returning: " + resource);
+        if(Log.isDebugEnabled(Log.RESOURCES)) {
+            Log.debug  (Log.RESOURCES, "Connection ready to use: " + resourceId + " " + resource.hashCode() + " RESOURCEMANAGER: " + this.hashCode());
+        }
 
         resourceTracker.openResource(resource);
+        if(Log.isDebugEnabled(Log.RESOURCES)) {
+            Log.debug(Log.RESOURCES, this.hashCode() + "-THREAD-" + Thread.currentThread().getId() + "-" + (bExisting ? "Cached" : "New and cached") + " resource opened");
+        }
         return resource;
 	}
 
@@ -132,26 +136,43 @@ public class ResourceManager
 	 */
 	public synchronized Object openDirect(String name) throws Exception
 	{
-        if(Log.isDebugEnabled(Log.RESOURCES))
-            Log.debug (Log.RESOURCES, "DIRECT Open: " + name + " in thread: " + Thread.currentThread().getId());
+		String resourceId = name + ":" + Thread.currentThread().getId();
+        if(Log.isDebugEnabled(Log.RESOURCES)) {
+            Log.debug (Log.RESOURCES, "Opening direct ; " + resourceId + " RESOURCEMANAGER: " + this.hashCode());
+        }
 		ResourceProvider provider = provManager.getProvider(name);
 
 		Object resource;
         TimerContext timingContext = resourceManagerWaitForResourceTimer.time();
         try {
+        	if(Log.isDebugEnabled(Log.RESOURCES)) {
+                Log.debug  (Log.RESOURCES, this.hashCode() + "-THREAD-" + Thread.currentThread().getId() + "-");
+        	}
             resource = provider.open();
         } finally {
             timingContext.stop();
         }
 
-        if(resource != null)
-            openMetrics(resource);
+        if(resource != null) {
+/*
+        	if (!htResources.containsKey(resourceId)) {
+    			htResources.put(resourceId, resource);
+        	}
+*/
+        	if(Log.isDebugEnabled(Log.RESOURCES)) {
+                Log.debug  (Log.RESOURCES, this.hashCode() + "-THREAD-" + Thread.currentThread().getId() + "-" + "Begin open");
+        	}
+            openMetrics(resource);        	
+        }
 
-        if(Log.isDebugEnabled(Log.RESOURCES))
-            Log.debug  (Log.RESOURCES, "  Returning: " + resource);
+        if(Log.isDebugEnabled(Log.RESOURCES)) {
+            Log.debug  (Log.RESOURCES, "Connection (open direct) ready to use: " + resourceId + " " + resource.hashCode() + " RESOURCEMANAGER: " + this.hashCode());
+        }
 
         resourceTracker.openDirectResource(resource);
-
+        if(Log.isDebugEnabled(Log.RESOURCES)) {
+            Log.debug  (Log.RESOURCES, this.hashCode() + "-THREAD-" + Thread.currentThread().getId() + "-New resource direct opened");
+        }
         return resource;
 	}
 
@@ -225,18 +246,26 @@ public class ResourceManager
 	public synchronized void close(String name, Object resource) throws Exception
 	{
         closeMetrics(resource); // This must be done before removing from htResource
-        if(Log.isDebugEnabled(Log.RESOURCES))
-            Log.debug (Log.RESOURCES, "Closing: " + name + " in thread: " + Thread.currentThread().getId());
 		String resourceId = name + ":" + Thread.currentThread().getId();
+        if(Log.isDebugEnabled(Log.RESOURCES)) {
+            Log.debug (Log.RESOURCES, "Closing: " + resourceId + " " + resource.hashCode());
+        }
+        boolean bExisting = false;
 		Object cachedResource = htResources.get(resourceId);
 		if (cachedResource != null && cachedResource == resource) {
+			bExisting = true;
 			htResources.remove(resourceId);
 		} else {
-            if(Log.isDebugEnabled(Log.RESOURCES))
-                Log.debug (Log.RESOURCES, "Cannot find resource: " + name + ":" + Thread.currentThread().getId() + " in resources table (this may not be an error)");
+            if(Log.isDebugEnabled(Log.RESOURCES)) {
+                Log.debug (Log.RESOURCES, "Connection to close is not in cache: " + resourceId + " " + resource.hashCode() + " RESOURCEMANAGER: " + this.hashCode());
+            }
 		}
 		ResourceProvider provider = provManager.getProvider(name);
+		int hashCode = resource.hashCode();
 		provider.close(resource);
+        if(Log.isDebugEnabled(Log.RESOURCES)) {
+            Log.debug (Log.RESOURCES, this.hashCode() + "-THREAD-" + Thread.currentThread().getId() + "-" + (bExisting ? "Cached" : "Uncached") + " resource closed");
+        }
 	}
 
 	//--------------------------------------------------------------------------
@@ -246,17 +275,26 @@ public class ResourceManager
 	public synchronized void abort(String name, Object resource) throws Exception
 	{
         closeMetrics(resource); // This must be done before removing from htResource
-        if(Log.isDebugEnabled(Log.RESOURCES))
-            Log.debug (Log.RESOURCES, "Aborting: " + name + " in thread: " + Thread.currentThread().getId());
 		String resourceId = name + ":" + Thread.currentThread().getId();
-		if (htResources.get(resourceId) != null) {
+        if(Log.isDebugEnabled(Log.RESOURCES)) {
+            Log.debug (Log.RESOURCES, "Aborting connection : " + resourceId + " " + resource.hashCode() + " RESOURCEMANAGER: " + this.hashCode());
+        }
+		Object cachedResource = htResources.get(resourceId);
+		boolean bExisting = false;
+		if (cachedResource != null && cachedResource == resource) {
+			bExisting = true;
 			htResources.remove(resourceId);
 		} else {
-            if(Log.isDebugEnabled(Log.RESOURCES))
-                Log.debug (Log.RESOURCES, "Cannot find resource: " + name + ":" + Thread.currentThread().getId() + " in resources table (this may not be an error)");
+            if(Log.isDebugEnabled(Log.RESOURCES)) {
+                Log.debug (Log.RESOURCES, "Connection to abort is not in cache: " + resourceId + " " + resource.hashCode() + " RESOURCEMANAGER: " + this.hashCode());
+            }
 		}
 		ResourceProvider provider = provManager.getProvider(name);
+		int hashCode = resource.hashCode();
 		provider.abort(resource);
+        if(Log.isDebugEnabled(Log.RESOURCES)) {
+            Log.debug (Log.RESOURCES, this.hashCode() + "-THREAD-" + Thread.currentThread().getId() + "-" + (bExisting ? "Cached" : "Uncached") + " resource aborted");
+        }
 	}
 
 	//--------------------------------------------------------------------------
@@ -288,17 +326,43 @@ public class ResourceManager
 
 	private void release(boolean commit) throws Exception
 	{
+		if(Log.isDebugEnabled(Log.RESOURCES)) {
+            Log.debug (Log.RESOURCES, "Releasing of " + htResources.size() + " resources in RESOURCEMANAGER: " + this.hashCode());
+        }
+        
 		Exception errorExc = null;
+		int closed = 0;
+		int aborted = 0;
 		
+		String threadId = "" + Thread.currentThread().getId();
+		int iCount = 1;
 		for (Map.Entry<String, Object> entry : htResources.entrySet()) {
             closeMetrics(entry.getValue()); // This must be done before removing from htResource
-
-			ResourceProvider provider = provManager.getProvider(entry.getKey().split(":")[0]);
-
+            String resourceId = entry.getKey();
+            String providerName = resourceId.split(":")[0];
+            if(Log.isDebugEnabled(Log.RESOURCES)) {
+                Log.debug (Log.RESOURCES, this.hashCode() + "-THREAD-" + Thread.currentThread().getId() + "-Releasing resource " + iCount++ + "/" + htResources.size());
+            }
+            if (!resourceId.equals(providerName + ":" + threadId)) {
+    			System.out.println(this.hashCode() + "-THREAD-" + Thread.currentThread().getId() + "-IMPOSSIBLE CASE");
+            }
+			ResourceProvider provider = provManager.getProvider(providerName);
 			try
 			{
-				if (commit)	provider.close(entry.getValue());
-					else 		provider.abort(entry.getValue());
+				if (commit)	{
+					provider.close(entry.getValue());
+					if(Log.isDebugEnabled(Log.RESOURCES)) {
+			            Log.debug (Log.RESOURCES, this.hashCode() + "-THREAD-" + Thread.currentThread().getId() + "-Cached resource released by close");
+					}
+					closed++;
+				} else {
+					provider.abort(entry.getValue());
+					if(Log.isDebugEnabled(Log.RESOURCES)) {
+			            Log.debug (Log.RESOURCES, this.hashCode() + "-THREAD-" + Thread.currentThread().getId() + "-Cached resource released by abort");
+					}
+					aborted++;
+				}
+//    				htResources.remove(resourceId);
 			}
 			catch (Exception ex)
 			{
@@ -308,8 +372,13 @@ public class ResourceManager
 
 		htResources.clear();
 
-		if (errorExc != null)
+		if (errorExc != null) {
+            Log.error (Log.RESOURCES, "Exception in release resources");
 			throw errorExc;
+		}
+        if(Log.isDebugEnabled(Log.RESOURCES)) {
+            Log.debug (Log.RESOURCES, "End of release resources (" + closed + " resources closed and " + aborted + " resources aborted");
+        }
 	}
 
     Map<Object, TimerContext> timerContexts = new HashMap<Object, TimerContext>();

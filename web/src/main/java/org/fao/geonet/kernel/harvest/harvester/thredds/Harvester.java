@@ -454,7 +454,7 @@ class Harvester
 		dataMan.setTemplateExt(dbms, iId, "n", null);
 		dataMan.setHarvestedExt(dbms, iId, params.uuid, uri);
 
-        dataMan.indexMetadata(dbms, id);
+        dataMan.indexMetadata(dbms, id, false, true);
 		
 		dbms.commit();
 	}

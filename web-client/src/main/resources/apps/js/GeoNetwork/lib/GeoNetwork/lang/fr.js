@@ -575,6 +575,7 @@ GeoNetwork.Lang.fr = {
 	'newWindow' : "nouvelle fenêtre",
 	'mdEditor' : "Editeur de métadonnées",
 	'List' : "Résultats",
-	'noSearchResults': "Votre recherche n'a donné aucun résultat. Pour effectuer une nouvelle recherche, veuillez retourner sur l'onglet Recherche."
+	'noSearchResults': "Votre recherche n'a donné aucun résultat. Pour effectuer une nouvelle recherche, veuillez retourner sur l'onglet Recherche.",
+	'doAction.wait': "Veuillez patienter ..."
 };
 OpenLayers.Util.extend(OpenLayers.Lang.fr, GeoNetwork.Lang.fr);

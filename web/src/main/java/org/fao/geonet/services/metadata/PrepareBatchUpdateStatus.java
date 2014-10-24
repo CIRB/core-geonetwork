@@ -23,24 +23,21 @@
 
 package org.fao.geonet.services.metadata;
 
+import java.util.List;
+
 import jeeves.constants.Jeeves;
-import jeeves.server.UserSession;
 import jeeves.interfaces.Service;
 import jeeves.resources.dbms.Dbms;
 import jeeves.server.ServiceConfig;
+import jeeves.server.UserSession;
 import jeeves.server.context.ServiceContext;
+
 import org.fao.geonet.GeonetContext;
 import org.fao.geonet.constants.Geonet;
-import org.fao.geonet.kernel.AccessManager;
 import org.fao.geonet.kernel.DataManager;
 import org.fao.geonet.kernel.SelectionManager;
 import org.fao.geonet.lib.Lib;
 import org.jdom.Element;
-
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 
 //=============================================================================
 
@@ -67,14 +64,14 @@ public class PrepareBatchUpdateStatus implements Service
 	{
 		GeonetContext gc = (GeonetContext) context.getHandlerContext(Geonet.CONTEXT_NAME);
 		DataManager dataMan = gc.getDataManager();
-		AccessManager am = gc.getAccessManager();
+//		AccessManager am = gc.getAccessManager();
 		UserSession us = context.getUserSession();
 
 		Dbms dbms = (Dbms) context.getResourceManager().open(Geonet.Res.MAIN_DB);
 
 		context.info("Get selected metadata");
 		SelectionManager sm = SelectionManager.getManager(us);
-
+/*
 		Set<Integer> ids = new HashSet<Integer>();
 
 		//-----------------------------------------------------------------------
@@ -91,7 +88,7 @@ public class PrepareBatchUpdateStatus implements Service
 			}
 		}
 		}
-
+*/
 		//-----------------------------------------------------------------------
 		//--- retrieve status values
 		Element elStatus = Lib.local.retrieve(dbms, "StatusValues");
@@ -100,17 +97,17 @@ public class PrepareBatchUpdateStatus implements Service
 		for (Element el : list) {
 			el.setName(Geonet.Elem.STATUS);
 		}
-
+/*
 		//-----------------------------------------------------------------------
 		//--- get the list of content reviewers for this metadata record
 		Element cRevs = am.getContentReviewers(dbms, ids);
 		cRevs.setName("contentReviewers");
-
+*/
 		//-----------------------------------------------------------------------
 		//--- put all together
 		Element elRes = new Element(Jeeves.Elem.RESPONSE)
-										.addContent(elStatus)
-										.addContent(cRevs);
+										.addContent(elStatus)/*
+										.addContent(cRevs)*/;
 
 		return elRes;
 	}

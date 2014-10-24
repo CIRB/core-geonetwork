@@ -54,6 +54,8 @@ function init()
 		{ id:'ogcwxs.name',        type:'length',   minSize :1,  maxSize :200 },
 		{ id:'ogcwxs.capabUrl',    type:'length',   minSize :1,  maxSize :200 },
 		{ id:'ogcwxs.capabUrl',    type:'url' },
+		{ id:'ogcwxs.capabUrlENG',    type:'url' },
+		{ id:'ogcwxs.capabUrlDUT',    type:'url' },
 		{ id:'ogcwxs.username',    type:'length',   minSize :0,  maxSize :200 },
 		{ id:'ogcwxs.password',    type:'length',   minSize :0,  maxSize :200 }
 	]);
@@ -71,9 +73,11 @@ function setEmpty()
 	$('ogcwxs.useLayerMd').checked = false;
 	$('ogcwxs.createThumbnails').checked = false;
 	$('ogcwxs.ogctype').value = 'WMS111';
-	$('ogcwxs.lang').value = 'eng';
+	$('ogcwxs.lang').value = 'fre';
 	$('ogcwxs.topic').value = '';	
 	$('ogcwxs.capabUrl').value = '';
+	$('ogcwxs.capabUrlENG').value = '';
+	$('ogcwxs.capabUrlDUT').value = '';
 	
 	var icons = $('ogcwxs.icon').options;
 	
@@ -103,6 +107,14 @@ function setData(node)
 	var options  = node.getElementsByTagName('options')[0];
 
 	hvutil.setOption(site, 'url', 				  'ogcwxs.capabUrl');
+//	var urlENG = document.getElementById('ogcwxs.capabUrlENG');
+//	if (urlENG!=null && urlENG.value.length > 0) {
+		hvutil.setOption(site, 'urlENG', 				  'ogcwxs.capabUrlENG');
+//	}
+//	var urlDUT = document.getElementById('ogcwxs.capabUrlDUT');
+//	if (urlDUT!=null && urlDUT.value.length > 0) {
+		hvutil.setOption(site, 'urlDUT', 				  'ogcwxs.capabUrlDUT');
+//	}
 	hvutil.setOption(site, 'ogctype',		      'ogcwxs.ogctype');
 	hvutil.setOption(site, 'icon',            	  'ogcwxs.icon');
 	hvutil.setOption(options, 'topic',	 		  'ogcwxs.topic');
@@ -145,9 +157,11 @@ function getData()
     var data = this.getDataCommon();
 	
 	data.CAPAB_URL        = $F('ogcwxs.capabUrl');
+	data.CAPAB_URL_ENG        = $F('ogcwxs.capabUrlENG');
+	data.CAPAB_URL_DUT        = $F('ogcwxs.capabUrlDUT');
 	data.ICON             = $F('ogcwxs.icon');
 	data.OGCTYPE          = $F('ogcwxs.ogctype');
-	data.LANG             = $F('ogcwxs.lang');
+	data.LANG             = /*$F('ogcwxs.lang')*/'fre';
 	data.TOPIC            = $F('ogcwxs.topic');
 	data.DATASETCATEGORY  = ($F('ogcwxs.datasetCategory')==null?'':$F('ogcwxs.datasetCategory'));
 	data.OUTPUTSCHEMA     = $F('ogcwxs.outputSchema');

@@ -140,7 +140,7 @@ GeoNetwork.app = function() {
 		});
 
 		catalogue.on('afterBadLogin', loginAlert, this);
-
+/*
 		// Store user info in cookie to be displayed if user reload the page
 		// Register events to set cookie values
 		catalogue.on('afterLogin', function() {
@@ -156,6 +156,7 @@ GeoNetwork.app = function() {
 			catalogue.identifiedUser = user;
 			loginForm.login(catalogue, true);
 		}
+*/
 	}
 	function getResultsMap() {
 		// Create map panel

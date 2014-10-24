@@ -143,7 +143,10 @@ public class Set implements Service
         new ConfigEntry(ConfigEntry.Type.STRING,   false, "requestedLanguage/only",             "system/requestedLanguage/only"),
         new ConfigEntry(ConfigEntry.Type.BOOL,   true, "requestedLanguage/sorted",     "system/requestedLanguage/sorted"),
 
-		new ConfigEntry(ConfigEntry.Type.BOOL,   false, "downloadservice/simple",             "system/downloadservice/simple"),
+        new ConfigEntry(ConfigEntry.Type.BOOL,   true,  "clustering/enable",             "system/clustering/enable"),
+        new ConfigEntry(ConfigEntry.Type.STRING, false, "clustering/jmsurl",             "system/clustering/jmsurl"),
+
+        new ConfigEntry(ConfigEntry.Type.BOOL,   false, "downloadservice/simple",             "system/downloadservice/simple"),
 		new ConfigEntry(ConfigEntry.Type.BOOL,   false, "downloadservice/withdisclaimer",     "system/downloadservice/withdisclaimer"),
 		new ConfigEntry(ConfigEntry.Type.BOOL,   false,  "downloadservice/leave",             "system/downloadservice/leave"),
 		

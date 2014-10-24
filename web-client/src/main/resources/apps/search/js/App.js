@@ -130,11 +130,14 @@ GeoNetwork.app = function () {
             renderTo: 'login-form',
             catalogue: catalogue,
             layout: 'hbox',
+			bodyStyle : {
+				"background-color" : "transparent"
+			},
             hideLoginLabels: GeoNetwork.hideLoginLabels
         });
         
         catalogue.on('afterBadLogin', loginAlert, this);
-        
+/*        
         // Store user info in cookie to be displayed if user reload the page
         // Register events to set cookie values
         catalogue.on('afterLogin', function () {
@@ -150,6 +153,7 @@ GeoNetwork.app = function () {
             catalogue.identifiedUser = user;
             loginForm.login(catalogue, true);
         }
+*/
     }
     
     /**

@@ -58,7 +58,7 @@ public class GeonetworkDataDirectory {
 	public GeonetworkDataDirectory(String webappName, String path,
 			ServiceConfig handlerConfig, JeevesServlet jeevesServlet) {
         if (Log.isDebugEnabled(Geonet.DATA_DIRECTORY))
-            Log.debug(Geonet.DATA_DIRECTORY,
+		Log.debug(Geonet.DATA_DIRECTORY,
 				"Check and create if needed GeoNetwork data directory");
 		this.jeevesServlet = jeevesServlet;
 		setDataDirectory(webappName, path, handlerConfig);
@@ -88,9 +88,9 @@ public class GeonetworkDataDirectory {
 				"Servlet context parameter ", "Config.xml appHandler parameter", "System environment variable " };
 
 		String dataDirStr = null;
-
+		
         if (Log.isDebugEnabled(Geonet.DATA_DIRECTORY))
-            Log.debug(Geonet.DATA_DIRECTORY, "lookupProperty " + key);
+		Log.debug(Geonet.DATA_DIRECTORY, "lookupProperty " + key);
 		
 		// Loop over variable access methods
 		for (int j = 0; j < typeStrs.length && dataDirStr == null; j++) {
@@ -120,7 +120,7 @@ public class GeonetworkDataDirectory {
 				continue;
 			}
             if (Log.isDebugEnabled(Geonet.DATA_DIRECTORY))
-                Log.debug(Geonet.DATA_DIRECTORY, " Found " + typeStr + "for " + key
+			Log.debug(Geonet.DATA_DIRECTORY, " Found " + typeStr + "for " + key
 					+ " with value " + value);
 			
 			dataDirStr = value;
@@ -191,7 +191,6 @@ public class GeonetworkDataDirectory {
 								+ System.getProperty("user.name") + ").");
 				useDefaultDataDir = true;
 			}
-	
 /*
 			// commented otherwise mapped drives can not be used
 			if (!systemDataFolder.isAbsolute()) {
@@ -241,6 +240,9 @@ public class GeonetworkDataDirectory {
 		setResourceDir(webappName, handlerConfig, systemDataDir, ".data" + KEY_SUFFIX,
 				"data" + File.separator + "metadata_data",
 				Geonet.Config.DATA_DIR);
+        setResourceDir(webappName, handlerConfig, systemDataDir, ".clusterconfig" + KEY_SUFFIX,
+                "config" + File.separator + "cluster",
+                Geonet.Config.CLUSTER_CONFIG);
 		setResourceDir(webappName, handlerConfig, systemDataDir, ".svn" + KEY_SUFFIX,
 				"data" + File.separator + "metadata_subversion",
 				Geonet.Config.SUBVERSION_PATH);
@@ -262,8 +264,8 @@ public class GeonetworkDataDirectory {
 	 * Checks if data directory is empty or not. If empty, add mandatory
 	 * elements (ie. codelist).
 	 * 
-	 * @param dataSystemDir
 	 * @param path
+     * @param handlerConfig
 	 */
 	private void initDataDirectory(String path, ServiceConfig handlerConfig) {
 		Log.info(Geonet.DATA_DIRECTORY,
@@ -289,7 +291,8 @@ public class GeonetworkDataDirectory {
 				+ File.separator + Geonet.File.SCHEMA_PLUGINS_CATALOG;
 		File schemaCatFile = new File(schemaCatPath);
 		if (!schemaCatFile.exists()) {
-			Log.info(Geonet.DATA_DIRECTORY,
+//			Log.info(Geonet.Config.CONFIG_DIR,
+					Log.info(Geonet.DATA_DIRECTORY,
 					"     - Copying schema plugin catalogue ...");
 			try {
 				FileInputStream in = new FileInputStream(path + "WEB-INF"
@@ -299,11 +302,32 @@ public class GeonetworkDataDirectory {
 				BinaryFile.copy(in, out, true, true);
 			} catch (IOException e) {
 				Log.info(
+//						Geonet.Config.CONFIG_DIR,
 						Geonet.DATA_DIRECTORY,
 						"      - Error copying schema plugin catalogue: "
 								+ e.getMessage());
 			}
 		}
+
+        String configClusterPath = handlerConfig.getValue(Geonet.Config.CLUSTER_CONFIG)
+                + File.separator + "config-cluster.xml";
+        File configClusterFile = new File(configClusterPath);
+        if (!configClusterFile.exists()) {
+            Log.info(Geonet.DATA_DIRECTORY,
+                    "     - Copying cluster config catalogue ...");
+            try {
+                FileInputStream in = new FileInputStream(path + "WEB-INF"
+                        + File.separator + "config-cluster.xml");
+                FileOutputStream out = new FileOutputStream(configClusterFile);
+
+                BinaryFile.copy(in, out, true, true);
+            } catch (IOException e) {
+                Log.info(
+                        Geonet.DATA_DIRECTORY,
+                        "      - Error copying cluster config catalogue: "
+                                + e.getMessage());
+            }
+        }
 
 	}
 

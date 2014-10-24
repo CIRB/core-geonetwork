@@ -35,7 +35,7 @@ import java.io.InputStream;
 public interface IMEFVisitor {
 	public void handleMetadata(Element md, int index) throws Exception;
 
-	public void handleMetadataFiles(File[] File, Element info, 
+	public void handleMetadataFiles(File[] File/*, Element info*/, 
 			int index) throws Exception;
 
 	public void handleInfo(Element info, int index) throws Exception;

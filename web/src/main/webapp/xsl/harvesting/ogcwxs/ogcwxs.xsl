@@ -47,9 +47,21 @@
 			</tr>
 
 			<tr>
-				<td class="padded"><xsl:value-of select="/root/gui/harvesting/capabUrl"/></td>
+				<td class="padded"><xsl:value-of select="/root/gui/harvesting/capabUrl"/> (*)</td>
 				<td class="padded">
-					<input id="ogcwxs.capabUrl" class="content" type="text" value="http://" size="30"/>
+					<input id="ogcwxs.capabUrl" class="content" type="text"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="padded"><xsl:value-of select="/root/gui/harvesting/capabUrlENG"/></td>
+				<td class="padded">
+					<input id="ogcwxs.capabUrlENG" class="content" type="text"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="padded"><xsl:value-of select="/root/gui/harvesting/capabUrlDUT"/></td>
+				<td class="padded">
+					<input id="ogcwxs.capabUrlDUT" class="content" type="text"/>
 				</td>
 			</tr>
 			<!-- TODO : Do we have to set up an account for WxS secured ? For BA support ?  -->
@@ -76,12 +88,15 @@
 			</tr>			
 			<tr>
 				<td class="padded"><xsl:value-of select="/root/gui/harvesting/wxslang"/></td>
-				<td class="padded">
+				<td class="padded">FRE
+					<input id="ogcwxs.lang" type="hidden" value="fre"/>
+<!--
 					<select id="ogcwxs.lang">
-					<!--  TODO loop on languages -->
+						<option value="dut">dut</option>
 						<option value="eng">eng</option>
 						<option value="fre">fre</option>
 					</select>
+-->
 				</td>
 			</tr>
 			<tr>

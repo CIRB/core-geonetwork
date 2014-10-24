@@ -141,6 +141,8 @@ var updateTemp =
 '      <name>{NAME}</name>'+
 '      <ogctype>{OGCTYPE}</ogctype>'+
 '      <url>{CAPAB_URL}</url>'+
+'      <urlENG>{CAPAB_URL_ENG}</urlENG>'+
+'      <urlDUT>{CAPAB_URL_DUT}</urlDUT>'+
 '      <icon>{ICON}</icon>'+
 '      <account>'+
 '        <use>{USE_ACCOUNT}</use>'+

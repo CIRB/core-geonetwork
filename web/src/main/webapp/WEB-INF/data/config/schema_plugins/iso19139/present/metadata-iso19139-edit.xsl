@@ -3681,10 +3681,19 @@
     <xsl:param name="schema" />
     <xsl:param name="edit" />
     
-    <xsl:call-template name="iso19139String">
-      <xsl:with-param name="schema" select="$schema"/>
-      <xsl:with-param name="edit"   select="$edit"/>
-    </xsl:call-template>
+    <xsl:variable name="isLocalizedCharStringField" select="name(.)='gmd:fees'"/>
+    <xsl:if test="$isLocalizedCharStringField">
+	    <xsl:call-template name="localizedCharStringField">
+	      <xsl:with-param name="schema" select="$schema" />
+	      <xsl:with-param name="edit" select="$edit" />
+	    </xsl:call-template>
+    </xsl:if>
+    <xsl:if test="not($isLocalizedCharStringField)">
+	    <xsl:call-template name="iso19139String">
+	      <xsl:with-param name="schema" select="$schema"/>
+	      <xsl:with-param name="edit"   select="$edit"/>
+	    </xsl:call-template>
+    </xsl:if>
   </xsl:template>
   
   

@@ -23,17 +23,20 @@
 
 package jeeves.utils;
 
-import jeeves.exceptions.BadInputEx;
-import jeeves.exceptions.BadParameterEx;
-import jeeves.exceptions.MissingParameterEx;
-import org.jdom.Element;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import jeeves.exceptions.BadInputEx;
+import jeeves.exceptions.BadParameterEx;
+import jeeves.exceptions.MissingParameterEx;
+
+import org.jdom.Element;
 
 //=============================================================================
 
@@ -83,6 +86,24 @@ public final class Util
 
 		return value;
 	}
+
+    /**
+    *
+    * @param el
+    * @param prefix
+    * @return
+    */
+   public static Map<String, String> getParamsByPrefix(Element el, String prefix) {
+       Map<String, String> result = new HashMap<String, String>();
+       List children = el.getChildren();
+       for(Object child : children) {
+           Element childE = (Element) child;
+           if(childE.getName().startsWith(prefix)) {
+               result.put(childE.getName(), childE.getTextTrim());
+           }
+       }
+       return result;
+   }
 
 	//--------------------------------------------------------------------------
 

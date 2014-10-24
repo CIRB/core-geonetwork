@@ -64,6 +64,9 @@ ConfigModel.prototype.getConfig_OK = function(node)
       REQUESTED_LANGUAGE_ONLY : xml.evalXPath(node, 'requestedLanguage/only'),
       REQUESTED_LANGUAGE_SORTED : xml.evalXPath(node, 'requestedLanguage/sorted'),
 
+      CLUSTERING_ENABLE : xml.evalXPath(node, 'clustering/enable'),
+      CLUSTERING_JMSURL : xml.evalXPath(node, 'clustering/jmsurl'),
+
 			DOWNLOADSERVICE_LEAVE         : xml.evalXPath(node, 'downloadservice/leave'),
 			DOWNLOADSERVICE_SIMPLE         : xml.evalXPath(node, 'downloadservice/simple'),
 			DOWNLOADSERVICE_WITHDISCLAIMER : xml.evalXPath(node, 'downloadservice/withdisclaimer'),
@@ -159,8 +162,8 @@ ConfigModel.updateTemp =
 '		<organization>{SITE_ORGAN}</organization>'+
 '	</site>'+
 '	<server>'+
-'		<protocol>{SERVER_PROTOCOL}</protocol>'+
 '		<host>{SERVER_HOST}</host>'+
+'		<protocol>{SERVER_PROTOCOL}</protocol>'+
 '		<port>{SERVER_PORT}</port>'+
 '	</server>'+
 '	<intranet>'+
@@ -208,6 +211,10 @@ ConfigModel.updateTemp =
 '        <only>{REQUESTED_LANGUAGE_ONLY}</only>' +
 '        <sorted>{REQUESTED_LANGUAGE_SORTED}</sorted>' +
 '	</requestedLanguage>'+
+'   <clustering>'+
+'		<enable>{CLUSTERING_ENABLE}</enable>'+
+'		<jmsurl>{CLUSTERING_JMSURL}</jmsurl>'+
+'   </clustering>'+
 '	<downloadservice>'+
 '		<leave>{DOWNLOADSERVICE_LEAVE}</leave>'+
 '		<simple>{DOWNLOADSERVICE_SIMPLE}</simple>'+

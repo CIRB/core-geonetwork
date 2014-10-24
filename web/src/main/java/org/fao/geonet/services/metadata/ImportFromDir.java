@@ -23,59 +23,58 @@
 
 package org.fao.geonet.services.metadata;
 
-import jeeves.exceptions.XSDValidationErrorEx;
-import jeeves.interfaces.Service;
-import jeeves.resources.dbms.Dbms;
-import jeeves.server.ServiceConfig;
-import jeeves.server.context.ServiceContext;
-import jeeves.utils.Util;
-import jeeves.utils.Xml;
-import org.fao.geonet.GeonetContext;
-import org.fao.geonet.constants.Geonet;
-import org.fao.geonet.constants.Params;
-import org.fao.geonet.exceptions.SchematronValidationErrorEx;
-import org.fao.geonet.kernel.DataManager;
-import org.fao.geonet.kernel.search.spatial.Pair;
-import org.fao.geonet.kernel.MetadataIndexerProcessor;
-import org.fao.geonet.kernel.mef.MEFLib;
-import org.fao.geonet.util.ThreadUtils;
-import org.jdom.Element;
-
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
-
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import jeeves.exceptions.XSDValidationErrorEx;
+import jeeves.interfaces.Service;
+import jeeves.resources.dbms.Dbms;
+import jeeves.server.ServiceConfig;
+import jeeves.server.context.ServiceContext;
+import jeeves.utils.Log;
+import jeeves.utils.Util;
+import jeeves.utils.Xml;
+
+import org.fao.geonet.GeonetContext;
+import org.fao.geonet.constants.Geonet;
+import org.fao.geonet.constants.Params;
+import org.fao.geonet.exceptions.SchematronValidationErrorEx;
+import org.fao.geonet.kernel.DataManager;
+import org.fao.geonet.kernel.MetadataIndexerProcessor;
+import org.fao.geonet.kernel.mef.MEFLib;
+import org.fao.geonet.util.ThreadUtils;
+import org.jdom.Element;
+
 // FIXME: this class could be moved to DataManager
 
-//=============================================================================
-
-/** Import all metadata found inside a given directory
+/**
+ * Import all metadata found inside a given directory
   */
-
-public class ImportFromDir implements Service
-{
+public class ImportFromDir implements Service {
 	private FilenameFilter filter = new FilenameFilter()
 	{
 		public boolean accept(File dir, String name)
 		{
-			if (name.equals(CONFIG_FILE))
+            if(name.equals(CONFIG_FILE)) {
 				return false;
+            }
 
 			return !name.startsWith(".");
 		}
 	};
-
-	//--------------------------------------------------------------------------
 
 	/**
 	 * Filter xml or mef files.
@@ -84,42 +83,38 @@ public class ImportFromDir implements Service
 	{
 		public boolean accept(File dir, String name)
 		{
-			if (name.equals(CONFIG_FILE))
+            if(name.equals(CONFIG_FILE)) {
 				return false;
+            }
 
-			if (name.startsWith("."))
+            if(name.startsWith(".")) {
 				return false;
+            }
 
-			if (name.toLowerCase().endsWith(".xml") || name.toLowerCase().endsWith(".mef"))
+            if(name.toLowerCase().endsWith(".xml") || name.toLowerCase().endsWith(".mef")) {
 				return true;
-			else
+            }
+            else {
 				return false;
 		}
+		}
 	};
-
-	//--------------------------------------------------------------------------
 
 	private String stylePath;
     private List<Exception> exceptions = new ArrayList<Exception>();
     private boolean failOnError;
 	private static final String CONFIG_FILE = "import-config.xml";
 
-	//--------------------------------------------------------------------------
-	//---
-	//--- Init
-	//---
-	//--------------------------------------------------------------------------
-
+    /**
+     *
+     * @param appPath
+     * @param params
+     * @throws Exception
+     */
 	public void init(String appPath, ServiceConfig params) throws Exception
 	{
 		this.stylePath = appPath + Geonet.Path.IMPORT_STYLESHEETS;
 	}
-
-	//--------------------------------------------------------------------------
-	//---
-	//--- API
-	//---
-	//--------------------------------------------------------------------------
 
 	/**
 	 * util.import service allow to import metadata in batch mode using 2 
@@ -135,20 +130,23 @@ public class ImportFromDir implements Service
 	 * 
 	 * Return the number of record inserted and the list of exceptions.
 	 */
-	public Element exec(Element params, ServiceContext context) throws Exception
-	{
+	public Element exec(Element params, ServiceContext context) throws Exception {
+        System.out.println("ImportFromDir params: " + Xml.getString(params));
+
 		String dir  = Util.getParam(params, Params.DIR);
 		failOnError = Util.getParam(params, Params.FAIL_ON_ERROR, "off").equals("on");
 		File   file = new File(dir +"/"+ CONFIG_FILE);
-
-		//-----------------------------------------------------------------------
 
 		long start = System.currentTimeMillis();
 
 		int result;
 
-		if (file.exists())	result = configImport(params, context, file);
-			else 					result = standardImport(params, context);
+        if(file.exists()) {
+            result = configImport(params, context, file);
+        }
+        else {
+            result = standardImport(params, context);
+        }
 
 		long end = System.currentTimeMillis();
 		long duration = (end - start) / 1000;
@@ -161,17 +159,22 @@ public class ImportFromDir implements Service
 		
 		if (exceptions.size() > 0) {
 			Element ex = new Element("exceptions").setAttribute("count", ""+exceptions.size());
-			for (Exception e : exceptions)
+            for(Exception e : exceptions) {
                 if (e instanceof SchematronValidationErrorEx) {
-                    ex.addContent(new Element("exception").addContent((Element) ((SchematronValidationErrorEx) e).getObject()));
+                    ex.addContent(new Element("exception").addContent((Element) ((SchematronValidationErrorEx) e)
+                            .getObject()));
 
-                } else if (e instanceof XSDValidationErrorEx) {
-                        ex.addContent(new Element("exception").addContent((Element) ((XSDValidationErrorEx) e).getObject()));
+                }
+                else if(e instanceof XSDValidationErrorEx) {
+                    ex.addContent(new Element("exception").addContent((Element) ((XSDValidationErrorEx) e).getObject
+                            ()));
 
-                } else {
+                }
+                else {
                     ex.addContent(new Element("exception").setText(e.getMessage()));
 
                 }
+            }
 
 
 			response.addContent(ex);
@@ -186,16 +189,30 @@ public class ImportFromDir implements Service
 	//---
 	//--------------------------------------------------------------------------
 
-	public class ImportCallable implements Callable<Pair<List<String>,List<Exception>>> {
+    /**
+     *
+     */
+	public class ImportCallable implements Callable<List<Exception>> {
 		private final File files[];
 		private final int beginIndex, count;
 		private final Element params;
 		private final String stylePath;
 		private final boolean failOnError;
 		private final ServiceContext context;
-		private final Dbms dbms;
+        private Map<String, Set<String>> schemaSchematronMap;
 
-		ImportCallable(File files[], int beginIndex, int count, Element params, ServiceContext context, String stylePath, boolean failOnError, Dbms dbms) {
+
+        /**
+         *
+         * @param files
+         * @param beginIndex
+         * @param count
+         * @param params
+         * @param context
+         * @param stylePath
+         * @param failOnError
+         */
+		ImportCallable(File files[], int beginIndex, int count, Element params, Map<String, Set<String>> schemaSchematronMap, ServiceContext context, String stylePath, boolean failOnError) {
 			this.files = files;
 			this.beginIndex = beginIndex;
 			this.count = count;
@@ -203,100 +220,110 @@ public class ImportFromDir implements Service
 			this.context = context;
 			this.stylePath = stylePath;
 			this.failOnError = failOnError;
-			this.dbms = dbms;
+            this.schemaSchematronMap = schemaSchematronMap;
 		}
 
-
-		public Pair<List<String>,List<Exception>> call() throws Exception {
-			List<String> ids = new ArrayList<String>();
+        /**
+         *
+         * @return
+         * @throws Exception
+         */
+		public List<Exception> call() throws Exception {
 			List<Exception> exceptions = new ArrayList<Exception>();
 
 			for(int i=beginIndex; i<beginIndex+count; i++) {
 				try {
-					List<String> nIds = MEFLib.doImport(params, context, files[i], stylePath, dbms);
-					ids.addAll(nIds);
+					MEFLib.doImportIndexGroup(params, schemaSchematronMap, context, files[i], stylePath);
 				} catch (Exception e) {
-					if (failOnError) {
+                    if(failOnError) {
 						throw e;
-					}
+                    }
+					
 					exceptions.add(e);
 				}
 			}
-			return Pair.read(ids,exceptions);
+            for(Exception x : exceptions) {
+                System.out.println("\n\n\n\nxxx: " + x.getMessage() + " -- ");
+                x.printStackTrace();
+            }
+			return exceptions;
 		}
 	}
 
-	public class ImportMetadata {
+    /**
+     *
+     */
+	public class ImportMetadataReindexer extends MetadataIndexerProcessor {
 		Element params;
 		File files[];
 		String stylePath;
 		ServiceContext context;
-		List<String> ids = new ArrayList<String>();
 		List<Exception> exceptions = new ArrayList<Exception>();
+        Map<String, Set<String>> schemaSchematronMap;
 
-
-		public ImportMetadata(Element params, ServiceContext context, File files[], String stylePath, boolean failOnError) {
+        /**
+         *
+         * @param dm
+         * @param params
+         * @param context
+         * @param files
+         * @param schemaSchematronMap
+         * @param stylePath
+         * @param failOnError
+         */
+		public ImportMetadataReindexer(DataManager dm, Element params, ServiceContext context, File files[], Map<String, Set<String>> schemaSchematronMap, String stylePath, boolean failOnError) {
+			super (dm);
 			this.params = params;
 			this.context = context;
 			this.files = files;
 			this.stylePath = stylePath;
+            this.schemaSchematronMap = schemaSchematronMap;
 		}
 
+        /**
+         *
+         * @throws Exception
+         */
 		public void process() throws Exception {
 			int threadCount = ThreadUtils.getNumberOfThreads();
 
 			ExecutorService executor = Executors.newFixedThreadPool(threadCount);
 
 			int perThread;
-			if (files.length < threadCount) perThread = files.length;
-			else perThread = files.length / threadCount;
+            if(files.length < threadCount) {
+                perThread = files.length;
+            }
+            else {
+                perThread = files.length / threadCount;
+            }
 			int index = 0;
-
-			// batch import is transactional - open up one dbms channel for each thread
-			// - we abort the dbms channels if we get an exception otherwise commit
-			List<Dbms> dbmsList = new ArrayList<Dbms>();
-			try {
-				List<Future<Pair<List<String>,List<Exception>>>> sList = new ArrayList<Future<Pair<List<String>,List<Exception>>>>();
-				while(index < files.length) {
-					int start = index;
-					int count = Math.min(perThread,files.length-start);
-					// create threads to process this chunk of files
-					Dbms dbms = (Dbms) context.getResourceManager().openDirect(Geonet.Res.MAIN_DB);
-					dbmsList.add(dbms);
-					Callable<Pair<List<String>,List<Exception>>> worker = new ImportCallable(files, start, count, params, context, stylePath, failOnError, dbms);
-					Future<Pair<List<String>,List<Exception>>> submit = executor.submit(worker);
-					sList.add(submit);
-					index += count;
-				}
-	
-				for (Future<Pair<List<String>,List<Exception>>> future : sList) {
-					try {
-						ids.addAll(future.get().one());
-						exceptions.addAll(future.get().two());
-					} catch (InterruptedException e) {
-						exceptions.add(e);
-						e.printStackTrace();
-					} catch (ExecutionException e) {
-						e.printStackTrace();
-						exceptions.add(e);
-					}
-				}
-		
-				for (Dbms dbms : dbmsList) {
-					if (exceptions.size() > 0 && failOnError) dbms.abort();
-					else dbms.commit();
-				}
-			} finally {
-				for (Dbms dbms : dbmsList) {
-					context.getResourceManager().close(Geonet.Res.MAIN_DB, dbms);
-				}
+	        if (Log.isDebugEnabled(Geonet.THREADPOOL)) {
+	            Log.debug(Geonet.THREADPOOL, "ImportMetadataReindexer on " + files.length + " files and a threadCount of " + threadCount);
+	        }
+			List<Future<List<Exception>>> submitList = new ArrayList<Future<List<Exception>>>();
+			while(index < files.length) {
+				int start = index;
+				int count = Math.min(perThread,files.length-start);
+				// create threads to process this chunk of files
+				Callable<List<Exception>> worker = new ImportCallable(files, start, count, params, schemaSchematronMap, context, stylePath, failOnError);
+				Future<List<Exception>> submit = executor.submit(worker);
+		        if (Log.isDebugEnabled(Geonet.THREADPOOL)) {
+		            Log.debug(Geonet.THREADPOOL, "Worker with for processing " + count + " files");
+		        }
+				submitList.add(submit);
+				index += count;
 			}
 
+			for (Future<List<Exception>> future : submitList) {
+				try {
+					exceptions.addAll(future.get());
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+					e.printStackTrace();
+				}
+			}
 			executor.shutdown();
-		}
-
-		public List<String> getIds() {
-			return ids;
 		}
 
 		public List<Exception> getExceptions() {
@@ -304,12 +331,49 @@ public class ImportFromDir implements Service
 		}
 	}
 
-	//--------------------------------------------------------------------------
-	//---
-	//--- Standard import
-	//---
-	//--------------------------------------------------------------------------
+    /**
+     *
+     * TODO this method is duplicated in Import.
+     *
+     * @param params
+     * @return
+     */
+    private Map<String, Set<String>> getSchemaSchematronMapping(Element params) {
+        //
+        // create a mapping to know which schemas should be invoking which of their schematrons as indicated by the user
+        //
+        Map<String, String> schematronsParams = Util.getParamsByPrefix(params, "schematron-");
+        System.out.println("found # " + schematronsParams.size() + " sctr params" );
+        Map<String, Set<String>> schemaSchematronMap = new HashMap<String, Set<String>>();
+        for(String param: schematronsParams.keySet()) {
+            // strip prefix 'schematron-'
+            param = param.substring("schematron-".length());
+            int firstHyphen = param.indexOf('-');
+            if(firstHyphen < 0) {
+                System.out.println("WARNING: unexpected schematron parameter seen in ImportFromDir, ignoring it: " + param);
+            }
+            else {
+                String schemaName = param.substring(0, firstHyphen);
+                String schematronName = param.substring(++firstHyphen);
+                System.out.println("found schematronparameter for schema " + schemaName + " with sctr name " + schematronName );
+                Set<String> schematronsForSchema = schemaSchematronMap.get(schemaName);
+                if(schematronsForSchema == null) {
+                    schematronsForSchema = new HashSet<String>();
+                }
+                schematronsForSchema.add(schematronName);
+                schemaSchematronMap.put(schemaName, schematronsForSchema);
+            }
+        }
+        return schemaSchematronMap;
+    }
 
+    /**
+     *
+     * @param params
+     * @param context
+     * @return
+     * @throws Exception
+     */
 	private int standardImport(Element params, ServiceContext context) throws Exception
 	{
 		GeonetContext gc = (GeonetContext) context.getHandlerContext(Geonet.CONTEXT_NAME);
@@ -317,28 +381,34 @@ public class ImportFromDir implements Service
 
 		String dir      = Util.getParam(params, Params.DIR);
 		
+        boolean validate = Util.getParam(params, Params.VALIDATE, "off").equals("on");
+
+        Map<String, Set<String>> schemaSchematronMap = new HashMap<String, Set<String>>();
+        if(validate) {
+            schemaSchematronMap = getSchemaSchematronMapping(params);
+        }
+
 		File files[] = new File(dir).listFiles(mdFilter);
 
-		if (files == null)
+        if(files == null) {
 			throw new Exception("Directory not found: " + dir);
+        }
 
-		ImportMetadata r = new ImportMetadata(params, context, files, stylePath, failOnError);
-		r.process();
-		List<String> ids = r.getIds();
+		ImportMetadataReindexer r = new ImportMetadataReindexer(dm, params, context, files, schemaSchematronMap, stylePath, failOnError);
+		r.processWithFastIndexing();
 		exceptions = r.getExceptions();
-	
-		context.info("Now reindexing "+ids.size());
-
-		dm.batchRebuild(context, ids);
+		
 		return files.length;
 	}
 
-	//--------------------------------------------------------------------------
-	//---
-	//--- Config import
-	//---
-	//--------------------------------------------------------------------------
-
+    /**
+     *
+     * @param params
+     * @param context
+     * @param configFile
+     * @return
+     * @throws Exception
+     */
 	private int configImport(Element params, ServiceContext context, File configFile) throws Exception
 	{
 		GeonetContext gc = (GeonetContext) context.getHandlerContext(Geonet.CONTEXT_NAME);
@@ -352,10 +422,16 @@ public class ImportFromDir implements Service
 
 		boolean validate = Util.getParam(params, Params.VALIDATE, "off").equals("on");
 
+        Map<String, Set<String>> schemaSchematronMap = new HashMap<String, Set<String>>();
+        if(validate) {
+            schemaSchematronMap = getSchemaSchematronMapping(params);
+        }
+
 		File sites[] = new File(dir).listFiles(filter);
 
-		if (sites == null)
+        if(sites == null) {
 			throw new Exception("Directory not found : " + dir);
+        }
 
 		int counter = 0;
 
@@ -363,37 +439,43 @@ public class ImportFromDir implements Service
 
 		for(int i=0; i<sites.length; i++)
 		{
-            if(context.isDebug())
-                context.debug("Scanning site : "+sites[i]);
+            if(context.isDebug()) {
+			context.debug("Scanning site : "+sites[i]);
+            }
 
 			File categs[] = sites[i].listFiles(filter);
 
-			if (categs == null)
+            if(categs == null) {
 				throw new Exception("Cannot scan categories in : " + sites[i].getPath());
+            }
 
 			for(int j=0; j<categs.length; j++)
 			{
-                if(context.isDebug())
-                    context.debug("   Scanning category : "+categs[j]);
+                if(context.isDebug()) {
+				context.debug("   Scanning category : "+categs[j]);
+                }
 
 				String catDir  = categs[j].getName();
 				File   files[] = categs[j].listFiles(mdFilter);
 
-				if (files == null)
+                if(files == null) {
 					throw new Exception("Cannot scan files in : " + categs[j].getPath());
+                }
 
 				for(int k=0; k<files.length; k++)
 				{
 					Element xml = Xml.loadFile(files[k]);
 
-					if (!style.equals("_none_"))
+                    if(! style.equals("_none_")) {
 						xml = Xml.transform(xml, stylePath +"/"+ style);
+                    }
 
 					String category = config.mapCategory(catDir);
 					String schema   = config.mapSchema(catDir);
 
-					if (validate)
+                    if(validate) {
 						dm.validate(schema, xml);
+                    }
 
 					alImport.add(new ImportInfo(schema, category, xml));
 					counter++;
@@ -403,15 +485,9 @@ public class ImportFromDir implements Service
 
 		//--- step 2 : insert metadata
 
-		List<String> ids = new ArrayList<String>();
-		for (ImportInfo ii : alImport) {
-			String mId = insert(ii.schema, ii.xml, group, context, ii.category);
-			ids.add(mId);
-		}
-
-		//--- step 3 : index inserted metadata
-
-		dm.batchRebuild(context, ids);
+        for(ImportInfo ii : alImport) {
+			insert(ii.schema, ii.xml, group, context, ii.category);
+        }
 
 		return counter;
 	}
@@ -422,7 +498,7 @@ public class ImportFromDir implements Service
 	//---
 	//--------------------------------------------------------------------------
 
-	private String insert(String schema, Element xml, String group, ServiceContext context,
+	private void insert(String schema, Element xml, String group, ServiceContext context,
 							  String category) throws Exception
 	{
 		GeonetContext gc = (GeonetContext) context.getHandlerContext(Geonet.CONTEXT_NAME);
@@ -433,10 +509,13 @@ public class ImportFromDir implements Service
 
 		String uuid = dm.extractUUID(schema, xml);
 
-		if (uuid.length() == 0)
+        if(uuid.length() == 0) {
 			uuid = UUID.randomUUID().toString();
+        }
 
-		if (category.equals("_none_")) category = null;
+        if(category.equals("_none_")) {
+            category = null;
+        }
 		//-----------------------------------------------------------------------
 		//--- insert metadata into the system
 
@@ -445,12 +524,10 @@ public class ImportFromDir implements Service
         String docType = null, title = null, createDate = null, changeDate = null;
         boolean ufo = true, indexImmediate = true;
         String isTemplate = "n";
-				int mId = context.getSerialFactory().getSerial(dbms, "Metadata");
+        int mId = context.getSerialFactory().getSerial(dbms, "Metadata");
         dm.insertMetadata(context, dbms, schema, xml, mId, uuid, context.getUserSession().getUserIdAsInt(), group, gc.getSiteId(),
-                         isTemplate, docType, title, category, createDate, changeDate, ufo, indexImmediate);
-
-		return mId+"";
-
+                isTemplate, docType, title, category, createDate, changeDate, ufo, indexImmediate);
+        mId++;
 	}
 
 }
@@ -526,8 +603,9 @@ class ImportConfig
 	{
 		String mapping = (String) htCategMapping.get(catDir);
 
-		if (mapping == null)
+        if(mapping == null) {
 			mapping = defaultCateg;
+        }
 
 		return mapping;
 	}
@@ -538,8 +616,9 @@ class ImportConfig
 	{
 		String mapping = (String) htSchemaMapping.get(catDir);
 
-		if (mapping == null)
+        if(mapping == null) {
 			mapping = defaultSchema;
+        }
 
 		return mapping;
 	}
@@ -582,8 +661,9 @@ class ImportConfig
 
 			String categId = (String) htCategId.get(to);
 
-			if (categId == null)
+            if(categId == null) {
 				throw new IllegalArgumentException("Category not found : "+ to);
+            }
 
 			htCategMapping.put(dir, categId);
 		}
@@ -591,8 +671,9 @@ class ImportConfig
 		String defaultTo = categMapping.getChild(DEFAULT).getAttributeValue(ATTR_TO);
 		String defaultId = (String) htCategId.get(defaultTo);
 
-		if (defaultId == null)
+        if(defaultId == null) {
 			throw new IllegalArgumentException("Default category not found : "+ defaultTo);
+        }
 
 		defaultCateg = defaultTo;
 	}
@@ -610,16 +691,18 @@ class ImportConfig
 			String dir = el.getAttributeValue(ATTR_DIR);
 			String to  = el.getAttributeValue(ATTR_TO);
 
-			if (!dm.existsSchema(to))
+            if(! dm.existsSchema(to)) {
 				throw new IllegalArgumentException("Schema not found : "+ to);
+            }
 
 			htSchemaMapping.put(dir, to);
 		}
 
 		String defaultTo = schemaMapping.getChild(DEFAULT).getAttributeValue(ATTR_TO);
 
-		if (!dm.existsSchema(defaultTo))
+        if(! dm.existsSchema(defaultTo)) {
 			throw new IllegalArgumentException("Default schema not found : "+ defaultTo);
+        }
 
 		defaultSchema = defaultTo;
 	}	

@@ -23,12 +23,16 @@
 
 package org.fao.geonet.services.metadata;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import jeeves.constants.Jeeves;
 import jeeves.interfaces.Service;
 import jeeves.resources.dbms.Dbms;
 import jeeves.server.ServiceConfig;
 import jeeves.server.context.ServiceContext;
-import jeeves.utils.Xml;
+
 import org.fao.geonet.GeonetContext;
 import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.constants.Params;
@@ -37,10 +41,6 @@ import org.fao.geonet.kernel.DataManager;
 import org.fao.geonet.lib.Lib;
 import org.fao.geonet.services.Utils;
 import org.jdom.Element;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 //=============================================================================
 
@@ -136,7 +136,7 @@ public class GetStatus implements Service
 		Element elRes = new Element(Jeeves.Elem.RESPONSE)
 										.addContent(new Element(Geonet.Elem.ID).setText(id))
 										.addContent(elStatus)
-										.addContent(cRevs);
+										.addContent(cRevs).addContent(new Element(Geonet.Elem.STATUS).setText(status));
 
 		return elRes;
 	}

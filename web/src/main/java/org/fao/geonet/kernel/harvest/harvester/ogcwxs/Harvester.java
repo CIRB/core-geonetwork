@@ -195,12 +195,9 @@ class Harvester
         UUIDMapper localUuids = new UUIDMapper(dbms, params.uuid);
 
 
+        String requestParams = "SERVICE=" + params.ogctype.substring(0,3) + "&VERSION=" + params.ogctype.substring(3) + "&REQUEST=" + GETCAPABILITIES;
         // Try to load capabilities document
-		this.capabilitiesUrl = getBaseUrl(params.url) +
-        		"SERVICE=" + params.ogctype.substring(0,3) +
-        		"&VERSION=" + params.ogctype.substring(3) +
-        		"&REQUEST=" + GETCAPABILITIES
-        		;
+		this.capabilitiesUrl = getBaseUrl(params.url) + requestParams;
 
         if(log.isDebugEnabled()) log.debug("GetCapabilities document: " + this.capabilitiesUrl);
 		
@@ -214,20 +211,26 @@ class Harvester
         }
         
         xml = req.execute();
-/*
-        req.setUrl(new URL(this.capabilitiesUrl));
-        xml = req.execute();
-        req.setUrl(new URL(this.capabilitiesUrl));
-        xml = req.execute();
-*/
+        Element xmlENG = null;
+        Element xmlDUT = null;
+        try {
+	        req.setUrl(new URL(getBaseUrl(params.urlENG) + requestParams));
+	        xmlENG = req.execute();
+        } catch(Exception e) {
+        	log.error("Error executing getcapabilities for translation of title and abstract: " + getBaseUrl(params.urlENG) + requestParams);
+        }
+        try {
+	        req.setUrl(new URL(getBaseUrl(params.urlDUT) + requestParams));
+	        xmlDUT = req.execute();
+	    } catch(Exception e) {
+        	log.error("Error executing getcapabilities for translation of title and abstract: " + getBaseUrl(params.urlDUT) + requestParams);
+	    }
         Map titles = new HashMap<String,String>();
-        titles.put("DUT", "Nederlandse titel");
-        titles.put("ENG", "English title");
-        titles.put("FRE", "Titre français");
+        putTranslations(xml,xmlENG,xmlDUT, titles, "wms:Service/wms:Title|ows:ServiceIdentification/ows:Title|ows11:ServiceIdentification/ows11:Title|" +
+				"wfs:Service/wfs:Title|wms:Service/wms:Title|Service/Title|ervice/wcs:label");
         Map abstracts = new HashMap<String,String>();
-        abstracts.put("DUT", "Nederlandse abstract");
-        abstracts.put("ENG", "English abstract");
-        abstracts.put("FRE", "Abstract français");
+        putTranslations(xml,xmlENG,xmlDUT, abstracts, "ows:ServiceIdentification/ows:Abstract|ows11:ServiceIdentification/ows11:Abstract|wfs:Service/wfs:Abstract|" +
+        		"wms:Service/wms:Abstract|Service/Abstract|wcs:Service/wcs:description");
 		//-----------------------------------------------------------------------
 		//--- remove old metadata
 		for (String uuid : localUuids.getUUIDs())
@@ -257,7 +260,39 @@ class Harvester
 		return result;
 	}
 	
-	
+	private void putTranslations(Element xml, Element xmlENG, Element xmlDUT,
+			Map<String,String> translationsMap, String xpathExpression) throws JDOMException {
+		XPath xp = XPath.newInstance(xpathExpression);
+		addOGCNamespaces(xp);
+		Object extentObject;
+		if (xml!=null) {
+	        extentObject = xp.selectSingleNode(xml);
+			if (extentObject!=null) {
+				translationsMap.put("FRE", ((Element)extentObject).getText());
+			}
+		}
+		if (xmlENG!=null) {
+	        extentObject = xp.selectSingleNode(xmlENG);
+			if (extentObject!=null) {
+				translationsMap.put("ENG", ((Element)extentObject).getText());
+			}
+		}
+		if (xmlDUT!=null) {
+	        extentObject = xp.selectSingleNode(xmlDUT);
+			if (extentObject!=null) {
+				translationsMap.put("DUT", ((Element)extentObject).getText());
+			}
+		}
+	}
+
+	private void addOGCNamespaces(XPath xp) {
+		xp.addNamespace("wfs", "http://www.opengis.net/wfs");
+		xp.addNamespace("wcs", "http://www.opengis.net/wcs");
+		xp.addNamespace("wms", "http://www.opengis.net/wms");
+		xp.addNamespace("ows", "http://www.opengis.net/ows");
+		xp.addNamespace("ows11", "http://www.opengis.net/ows/1.1");
+		xp.addNamespace("sos", "http://www.opengis.net/sos/1.0");		
+	}
 
 	/** 
      * Add metadata to the node for a WxS service
@@ -348,16 +383,13 @@ class Harvester
 			
 			//--- Select layers, featureTypes and Coverages (for layers having no child named layer = not take group of layer into account) 
 			// and add the metadata
-			XPath xp = XPath.newInstance ("//Layer[count(./*[name(.)='Layer'])=0] | " + 
-											"//wms:Layer[count(./*[name(.)='Layer'])=0] | " +
-											"//wfs:FeatureType | " +
-											"//wcs:CoverageOfferingBrief | " +
-											"//sos:ObservationOffering");
-			xp.addNamespace("wfs", "http://www.opengis.net/wfs");
-			xp.addNamespace("wcs", "http://www.opengis.net/wcs");
-			xp.addNamespace("wms", "http://www.opengis.net/wms");
-			xp.addNamespace("sos", "http://www.opengis.net/sos/1.0");
 										
+			XPath xp = XPath.newInstance ("//Layer[count(./*[name(.)='Layer'])=0] | " + 
+					"//wms:Layer[count(./*[name(.)='Layer'])=0] | " +
+					"//wfs:FeatureType | " +
+					"//wcs:CoverageOfferingBrief | " +
+					"//sos:ObservationOffering");
+			addOGCNamespaces(xp);
 			List<Element> layers = xp.selectNodes(capa);
 			if (layers.size()>0) {
 				log.info("  - Number of layers, featureTypes or Coverages found : " + layers.size());
@@ -629,19 +661,19 @@ class Harvester
 				org.jdom.Attribute href = onLineSrc.getAttribute ("href", xlink);
 
 				if (href != null) {	// No metadataUrl attribute for that layer
-					log.error("Processing layer " + reg.name);
+					if(log.isDebugEnabled()) log.debug("Processing layer " + reg.name);
 					mdXml = href.getValue ();
 					if (mdXml.indexOf("irisnetlab.be")>-1) {
 						mdXml = mdXml.replaceAll("irisnetlab.be", "irisnet.be");
-						log.error("MetadataUrl for layer " + reg.name + " contains irisnetlab in url, must be irisnet.be and is replaced automaticly");
+						log.warning("MetadataUrl for layer " + reg.name + " contains irisnetlab in url, must be irisnet.be and is replaced automaticly");
 					}
 					if (mdXml.indexOf("newgeonetwork")>-1) {
 						mdXml = mdXml.replaceAll("newgeonetwork", "geonetwork");
-						log.error("MetadataUrl for layer " + reg.name + " contains newgeonetwork in url, must be geonetwork and is replaced automaticly");
+						log.warning("MetadataUrl for layer " + reg.name + " contains newgeonetwork in url, must be geonetwork and is replaced automaticly");
 					}
 					if (mdXml.indexOf("apps/search/index.html?uuid")>-1) {
 						mdXml = mdXml.replaceAll("apps/search/index.html.uuid", "srv/eng/csw?Request=GetRecordById&Service=CSW&Version=2.0.2&elementSetName=full&outputSchema=http://www.isotc211.org/2005/gmd&id");
-						log.error("MetadataUrl for layer " + reg.name + " contains apps/search/index.html?uuid in url, must be srv/eng/csw?Request=GetRecordById&Service=CSW&Version=2.0.2&elementSetName=full&outputSchema=http://www.isotc211.org/2005/gmd&id and is replaced automaticly");
+						log.warning("MetadataUrl for layer " + reg.name + " contains apps/search/index.html?uuid in url, must be srv/eng/csw?Request=GetRecordById&Service=CSW&Version=2.0.2&elementSetName=full&outputSchema=http://www.isotc211.org/2005/gmd&id and is replaced automaticly");
 					}
 					try {
 
@@ -654,7 +686,7 @@ class Harvester
 						}	
 //						xml = Xml.loadFile (new URL(mdXml));
 //						xml = new XmlRequest(new URL(mdXml)).execute();
-						log.error("Loading MetadataUrl " + mdXml);
+						if(log.isDebugEnabled()) log.debug("Loading MetadataUrl " + mdXml);
 						xml = request.execute();
 
                         // If url is CSW GetRecordById remove envelope
@@ -697,7 +729,7 @@ class Harvester
 						loaded = false;
 					}
 				} else {
-					log.info("  - No href attribute found in MetadataUrl tag of layer " + reg.name);
+					log.error("  - No href attribute found in MetadataUrl tag of layer " + reg.name);
 					loaded = false;
 				}
 			} else {
@@ -757,7 +789,7 @@ class Harvester
 				
 				dbms.commit();
 				
-				dataMan.indexMetadata(dbms, reg.id);
+				dataMan.indexMetadataGroup(dbms, reg.id, true);
 				
 				result.layer ++;
 				log.info("  - metadata loaded with uuid: " + reg.uuid + "/internal id: " + reg.id);

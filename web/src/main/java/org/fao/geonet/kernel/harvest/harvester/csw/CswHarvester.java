@@ -102,7 +102,7 @@ public class CswHarvester extends AbstractHarvester
 		//--- force the creation of a new uuid
 		params.uuid = UUID.randomUUID().toString();
 
-		String id = settingMan.add(dbms, "harvesting", "node", getType());
+		String id = settingMan.add(dbms, "harvesting", "node", getType(), false);
 
 		storeNode(dbms, params, "id:"+id);
 		Lib.sources.update(dbms, params.uuid, params.name, true);
@@ -147,22 +147,22 @@ public class CswHarvester extends AbstractHarvester
 	{
 		CswParams params = (CswParams) p;
 
-		settingMan.add(dbms, "id:"+siteId, "capabUrl", params.capabUrl);
-		settingMan.add(dbms, "id:"+siteId, "outputSchema", params.outputSchema);
-		settingMan.add(dbms, "id:"+siteId, "icon",     params.icon);
+		settingMan.add(dbms, "id:"+siteId, "capabUrl", params.capabUrl, false);
+		settingMan.add(dbms, "id:"+siteId, "outputSchema", params.outputSchema, false);
+		settingMan.add(dbms, "id:"+siteId, "icon",     params.icon, false);
 
 		//--- store search nodes
 
 		for (Search s : params.getSearches())
 		{
-			String  searchID = settingMan.add(dbms, path, "search", "");
+			String  searchID = settingMan.add(dbms, path, "search", "", false);
 
-			settingMan.add(dbms, "id:"+searchID, "freeText", s.freeText);
-			settingMan.add(dbms, "id:"+searchID, "title",    s.title);
-			settingMan.add(dbms, "id:"+searchID, "abstract", s.abstrac);
-			settingMan.add(dbms, "id:"+searchID, "subject",  s.subject);
-			settingMan.add(dbms, "id:"+searchID, "minscale", s.minscale);
-			settingMan.add(dbms, "id:"+searchID, "maxscale", s.maxscale);
+			settingMan.add(dbms, "id:"+searchID, "freeText", s.freeText, false);
+			settingMan.add(dbms, "id:"+searchID, "title",    s.title, false);
+			settingMan.add(dbms, "id:"+searchID, "abstract", s.abstrac, false);
+			settingMan.add(dbms, "id:"+searchID, "subject",  s.subject, false);
+			settingMan.add(dbms, "id:"+searchID, "minscale", s.minscale, false);
+			settingMan.add(dbms, "id:"+searchID, "maxscale", s.maxscale, false);
 		}
 	}
 

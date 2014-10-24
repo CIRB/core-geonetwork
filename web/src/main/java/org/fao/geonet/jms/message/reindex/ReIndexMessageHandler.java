@@ -25,6 +25,7 @@ package org.fao.geonet.jms.message.reindex;
 import jeeves.resources.dbms.Dbms;
 import jeeves.server.context.ServiceContext;
 import jeeves.utils.Log;
+
 import org.fao.geonet.GeonetContext;
 import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.jms.ClusterConfig;
@@ -64,7 +65,7 @@ public class ReIndexMessageHandler implements MessageHandler {
                 dbms = (Dbms) context.getResourceManager().open(Geonet.Res.MAIN_DB);                
                 if (!reIndexMessage.isDeleteMetadata()) {
                     dataManager.indexMetadataWithoutSendingTopic(dbms, reIndexMessage.getId(),
-                            Boolean.parseBoolean(reIndexMessage.getIndexGroup()), reIndexMessage.isWorkspace());
+                            Boolean.parseBoolean(reIndexMessage.getIndexGroup()));
 
                 }
                 else {
