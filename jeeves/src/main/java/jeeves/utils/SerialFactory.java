@@ -61,16 +61,18 @@ public class SerialFactory
 
 	public synchronized int getSerial(Dbms dbms, String table, String field, int minSerial) throws SQLException
 	{
-		Integer intSerial = htSerials.get(table);
+//		Integer intSerial = htSerials.get(table);
 
 		//--- is the serial already in memory ?
 
-		if (intSerial == null)
-		{
+//		if (intSerial == null)
+//		{
 			//--- no, we must get the last serial from the related table
 
-			Element res = dbms.select("SELECT MAX("+field+") as maxid FROM " + table);
-
+//			Element res = dbms.select("SELECT MAX("+field+") as maxid FROM " + table);
+		table = table.toLowerCase();
+		Element res = dbms.select("SELECT nextval('" + table + "_seq') as maxid FROM " + table);
+		
 			String strSerial = res.getChild(Jeeves.Elem.RECORD).getChildText("maxid");
 
 			int i;
@@ -79,13 +81,14 @@ public class SerialFactory
 				else                   i = Integer.parseInt(strSerial);
 
 			i = (i < minSerial) ? minSerial : i;
-			intSerial = new Integer(i);
-		}
+//			intSerial = new Integer(i);
+			return new Integer(i);
+//		}
 
-		int newSerial = intSerial.intValue() +1;
-		htSerials.put(table, new Integer(newSerial));
+//		int newSerial = intSerial.intValue() +1;
+//		htSerials.put(table, new Integer(newSerial));
 
-		return newSerial;
+//		return newSerial;
 	}
 }
 

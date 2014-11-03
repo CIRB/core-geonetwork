@@ -304,7 +304,7 @@
 														</xsl:otherwise>
 													</xsl:choose>
 												</xsl:when>
-												<xsl:when test="name(.)='WFS_Capabilities'">
+												<xsl:when test="name(.)='WFS_Capabilities' or $wfs">
 													<xsl:choose>
 														<xsl:when test="$ogctype='WFS1.0.0'">
 															OGC:WFS-1.0.0-http-get-capabilities
@@ -323,15 +323,33 @@
 											</xsl:choose>
 										</gco:CharacterString>
 									</protocol>
+									<xsl:variable name="serviceTitle">
+										<xsl:call-template name="get-title">
+											<xsl:with-param name="ows">
+												<xsl:value-of select="$ows" />
+											</xsl:with-param>
+										</xsl:call-template>
+									</xsl:variable>
 									<name>
-										<gco:CharacterString />
+										<gco:CharacterString>
+											<xsl:value-of select="$serviceTitle"/>
+										</gco:CharacterString>
 									</name>
+									<xsl:variable name="serviceAbstract">
+										<xsl:call-template name="get-abstract">
+											<xsl:with-param name="ows">
+												<xsl:value-of select="$ows" />
+											</xsl:with-param>
+										</xsl:call-template>
+									</xsl:variable>
 									<description>
 										<gco:CharacterString>
 											<xsl:choose>
-												<xsl:when
-													test="name(.)='WMS_Capabilities' and not(./wms:Service/wms:Title='')">
-													<xsl:value-of select="./wms:Service/wms:Title" />
+												<xsl:when test="not($serviceAbstract='')">
+													<xsl:value-of select="$serviceAbstract" />
+												</xsl:when>
+												<xsl:when test="not($serviceTitle='')">
+													<xsl:value-of select="$serviceTitle" />
 												</xsl:when>
 												<xsl:when test="$ows='true'">
 													<xsl:value-of

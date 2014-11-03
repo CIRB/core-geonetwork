@@ -406,6 +406,9 @@ class Harvester
 			}
 //		}	
 
+		String codeListUpdateStyleSheet = dataMan.getSchemaDir(schema) + Geonet.File.UPDATE_HARVEST_INFO;
+		md = Xml.transform(md, codeListUpdateStyleSheet);
+
         // Save iso19119 metadata in DB
 		log.info("  - Adding metadata for services with " + uuid);
 		DateFormat df = new SimpleDateFormat ("yyyy-MM-dd'T'HH:mm:ss");
@@ -617,8 +620,9 @@ class Harvester
 		if (params.useLayerMd && !params.ogctype.substring(0,3).equals("WMS")) {
 			log.info("  - MetadataUrl harvester only supported for WMS layers.");
 		}
-		
-		if (/*params.useLayerMd && */params.ogctype.substring(0,3).equals("WMS")) {
+		boolean bIsWMS = params.ogctype.substring(0,3).equals("WMS");
+		boolean bIsWFS = params.ogctype.substring(0,3).equals("WFS");
+		if (/*params.useLayerMd && */ bIsWMS|| bIsWFS) {
 			
 			Namespace xlink 	= Namespace.getNamespace ("http://www.w3.org/1999/xlink");
 			
@@ -633,7 +637,12 @@ class Harvester
             boolean addNsPrefix = !layer.getNamespace().equals(Namespace.NO_NAMESPACE);
             if (addNsPrefix) dummyNsPrefix = "x:";
 
-            XPath mdUrl 		= XPath.newInstance ("./" + dummyNsPrefix + "MetadataURL[(@type='TC211' or @type='ISO19115:2005' or @type='ISO19115:2003') and (" + dummyNsPrefix + "Format='text/plain' or " + dummyNsPrefix + "Format='text/xml' or " + dummyNsPrefix + "Format='text/html' or " + dummyNsPrefix + "Format='application/xml')]/" + dummyNsPrefix + "OnlineResource");
+            XPath mdUrl = null;
+            if (bIsWMS) {
+            	mdUrl = XPath.newInstance ("./" + dummyNsPrefix + "MetadataURL[(@type='TC211' or type='FGDC' or @type='ISO19115:2005' or @type='ISO19115:2003') and (" + dummyNsPrefix + "Format='text/plain' or " + dummyNsPrefix + "Format='text/xml' or " + dummyNsPrefix + "Format='text/html' or " + dummyNsPrefix + "Format='application/xml')]/" + dummyNsPrefix + "OnlineResource");
+            } else if (bIsWFS) {
+            	mdUrl = XPath.newInstance ("./" + dummyNsPrefix + "MetadataURL[(@type='TC211' or @type='FGDC' or @type='19115' or @type='19139') and (@format='text/plain' or @format='text/xml' or @format='text/html' or @format='application/xml')]");
+            }
             if (addNsPrefix) mdUrl.addNamespace("x", layer.getNamespace().getURI());
             Element onLineSrc 	= (Element) mdUrl.selectSingleNode (layer);
 
@@ -658,11 +667,14 @@ class Harvester
             }
 */
 			if (onLineSrc != null) {
-				org.jdom.Attribute href = onLineSrc.getAttribute ("href", xlink);
+				org.jdom.Attribute href = null;
+				if (bIsWMS) {
+					href = onLineSrc.getAttribute ("href", xlink);
+				}
 
-				if (href != null) {	// No metadataUrl attribute for that layer
+				if ((bIsWMS && href != null) || (bIsWFS && onLineSrc.getValue()!=null)) {	// No metadataUrl attribute for that layer
 					if(log.isDebugEnabled()) log.debug("Processing layer " + reg.name);
-					mdXml = href.getValue ();
+					mdXml = (bIsWMS ? href.getValue() : onLineSrc.getValue());
 					if (mdXml.indexOf("irisnetlab.be")>-1) {
 						mdXml = mdXml.replaceAll("irisnetlab.be", "irisnet.be");
 						log.warning("MetadataUrl for layer " + reg.name + " contains irisnetlab in url, must be irisnet.be and is replaced automaticly");

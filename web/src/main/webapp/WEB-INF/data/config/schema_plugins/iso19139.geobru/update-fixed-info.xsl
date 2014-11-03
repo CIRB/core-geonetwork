@@ -239,7 +239,7 @@
 	<!-- codelists: set @codeList path -->
 	<!-- ================================================================= -->
 	<xsl:template match="gmd:LanguageCode[@codeListValue]" priority="10">
-		<gmd:LanguageCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#gmd:LanguageCode">
+		<gmd:LanguageCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#gmd:LanguageCode">
 			<xsl:apply-templates select="@*[name(.)!='codeList']"/>
 		</gmd:LanguageCode>
 	</xsl:template>
@@ -249,7 +249,7 @@
 		<xsl:copy>
 			<xsl:apply-templates select="@*"/>
 			<xsl:attribute name="codeList">
-			  <xsl:value-of select="concat('http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#',local-name(.))"/>
+			  <xsl:value-of select="concat('http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#',local-name(.))"/>
 			</xsl:attribute>
 		</xsl:copy>
 	</xsl:template>
@@ -260,7 +260,7 @@
 		<xsl:copy>
 			<xsl:apply-templates select="@*"/>
 			<xsl:attribute name="codeList">
-				<xsl:value-of select="concat('http://www.isotc211.org/2005/iso19119/resources/Codelist/gmxCodelists.xml#',local-name(.))"/>
+				<xsl:value-of select="concat('http://www.isotc211.org/2005/iso19119/resources/codelist/gmxCodelists.xml#',local-name(.))"/>
 			</xsl:attribute>
 		</xsl:copy>
 	</xsl:template>

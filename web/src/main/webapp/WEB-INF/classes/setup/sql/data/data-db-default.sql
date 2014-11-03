@@ -1004,10 +1004,50 @@ INSERT INTO Settings VALUES (954,952,'sorted','false');
 
 INSERT INTO Settings VALUES (956,1,'clustering',NULL);
 INSERT INTO Settings VALUES (957,956,'enable','false');
-INSERT INTO Settings VALUES (958,956,'jmsurl','failover://tcp://localhost:61616');
+INSERT INTO Settings VALUES (958,956,'jmsurl','failover://tcp://localhost:61616?randomize=false&maxReconnectAttempts=5');
 
 -- ======================================================================
 -- === Table: Users
 -- ======================================================================
 
 INSERT INTO Users VALUES  (1,'admin','d033e22ae348aeb566fc214aec3585c4da997','admin','admin','Administrator','','','','','','','','');
+DROP sequence if exists metadatanotifiers_seq;
+CREATE SEQUENCE metadatanotifiers_seq
+   INCREMENT 1
+   START 1;
+select setval('metadatanotifiers_seq', max(id)) FROM metadatanotifiers;
+DROP sequence if exists groups_seq;
+CREATE SEQUENCE groups_seq
+   INCREMENT 1
+   START 1;
+select setval('groups_seq', max(id)) FROM groups;
+DROP sequence if exists metadata_seq;
+CREATE SEQUENCE metadata_seq
+   INCREMENT 1
+   START 1;
+select setval('metadata_seq', max(id)) FROM metadata;
+DROP sequence if exists categories_seq;
+CREATE SEQUENCE categories_seq
+   INCREMENT 1
+   START 1;
+select setval('categories_seq', max(id)) FROM categories;
+DROP sequence if exists users_seq;
+CREATE SEQUENCE users_seq
+   INCREMENT 1
+   START 1;
+select setval('users_seq', max(id)) FROM users;
+DROP sequence if exists params_seq;
+CREATE SEQUENCE params_seq
+   INCREMENT 1
+   START 1;
+select setval('params_seq', max(id)) FROM params;
+DROP sequence if exists requests_seq;
+CREATE SEQUENCE requests_seq
+   INCREMENT 1
+   START 1;
+select setval('requests_seq', max(id)) FROM requests;
+DROP sequence if exists harvesthistory_seq;
+CREATE SEQUENCE harvesthistory_seq
+   INCREMENT 1
+   START 1;
+select setval('harvesthistory_seq', max(id)) FROM harvesthistory;
