@@ -18,11 +18,6 @@ public class LuceneIndexWriterFactory {
     public LuceneIndexWriterFactory( LuceneIndexLanguageTracker tracker ) {
         this.tracker = tracker;
     }
-
-    public void commit() throws Exception {
-        tracker.commit();
-    }
-
     public void addDocument( String locale, Document doc ) throws Exception {
         if(Log.isDebugEnabled(Geonet.INDEX_ENGINE)) {
             Log.debug(Geonet.INDEX_ENGINE, "Adding document to "+locale+" index");
@@ -37,7 +32,11 @@ public class LuceneIndexWriterFactory {
         tracker.withWriter(new Function() {
             @Override
             public void apply(TrackingIndexWriter input) throws CorruptIndexException, IOException {
-                    input.deleteDocuments(term);
+            		synchronized(input) {
+                        input.deleteDocuments(term);
+//                      input.getIndexWriter().commit();
+//                      input.getIndexWriter().getReader().reopen();
+            		}
             }
         });
     }

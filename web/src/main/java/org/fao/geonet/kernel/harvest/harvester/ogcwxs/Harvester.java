@@ -231,6 +231,8 @@ class Harvester
         Map abstracts = new HashMap<String,String>();
         putTranslations(xml,xmlENG,xmlDUT, abstracts, "ows:ServiceIdentification/ows:Abstract|ows11:ServiceIdentification/ows11:Abstract|wfs:Service/wfs:Abstract|" +
         		"wms:Service/wms:Abstract|Service/Abstract|wcs:Service/wcs:description");
+        Map accessConstraints = new HashMap<String,String>();
+        putTranslations(xml,xmlENG,xmlDUT, accessConstraints, "ServiceIdentification/AccessConstraints|wms:ServiceIdentification/wms:AccessConstraints|wfs:Service/wfs:AccessConstraints|ows:ServiceIdentification/ows:AccessConstraints|ows11:ServiceIdentification/ows11:AccessConstraints|Service/AccessConstraints|wcs:Service/wcs:AccessConstraints");
 		//-----------------------------------------------------------------------
 		//--- remove old metadata
 		for (String uuid : localUuids.getUUIDs())
@@ -251,7 +253,7 @@ class Harvester
 		if (result.locallyRemoved > 0)
 			dbms.commit ();
         // Convert from GetCapabilities to ISO19119
-        addMetadata (xml, titles, abstracts);
+        addMetadata (xml, titles, abstracts, accessConstraints);
         
         dbms.commit ();
             
@@ -264,23 +266,32 @@ class Harvester
 			Map<String,String> translationsMap, String xpathExpression) throws JDOMException {
 		XPath xp = XPath.newInstance(xpathExpression);
 		addOGCNamespaces(xp);
-		Object extentObject;
+		List nodes;
 		if (xml!=null) {
-	        extentObject = xp.selectSingleNode(xml);
-			if (extentObject!=null) {
-				translationsMap.put("FRE", ((Element)extentObject).getText());
+	        nodes = xp.selectNodes(xml);
+			if (nodes!=null && nodes.size()>0) {
+				int count=1;
+				for (Object node : nodes) {
+					translationsMap.put("FRE" + count++, ((Element)node).getText());
+				}
 			}
 		}
 		if (xmlENG!=null) {
-	        extentObject = xp.selectSingleNode(xmlENG);
-			if (extentObject!=null) {
-				translationsMap.put("ENG", ((Element)extentObject).getText());
+	        nodes = xp.selectNodes(xmlENG);
+			if (nodes!=null && nodes.size()>0) {
+				int count=1;
+				for (Object node : nodes) {
+					translationsMap.put("ENG" + count++, ((Element)node).getText());
+				}
 			}
 		}
 		if (xmlDUT!=null) {
-	        extentObject = xp.selectSingleNode(xmlDUT);
-			if (extentObject!=null) {
-				translationsMap.put("DUT", ((Element)extentObject).getText());
+	        nodes = xp.selectNodes(xmlDUT);
+			if (nodes!=null && nodes.size()>0) {
+				int count=1;
+				for (Object node : nodes) {
+					translationsMap.put("DUT" + count++, ((Element)node).getText());
+				}
 			}
 		}
 	}
@@ -307,7 +318,7 @@ class Harvester
      * @param capa      GetCapabilities document
      *                   
      */
-	 private void addMetadata (Element capa, Map<String,String> titles, Map<String,String> abstracts) throws Exception
+	 private void addMetadata (Element capa, Map<String,String> titles, Map<String,String> abstracts, Map<String,String> accessConstraints) throws Exception
 	 {
 		if (capa == null)
 			return;
@@ -359,12 +370,18 @@ class Harvester
 		param.put("ogctype", params.ogctype);
 		param.put("outputSchema", params.outputSchema);
 		param.put("uuid", uuid);
-		param.put("titleDUT", titles.get("DUT"));
-		param.put("titleENG", titles.get("ENG"));
-		param.put("titleFRE", titles.get("FRE"));
-		param.put("abstractDUT", abstracts.get("DUT"));
-		param.put("abstractENG", abstracts.get("ENG"));
-		param.put("abstractFRE", abstracts.get("FRE"));
+		param.put("titleDUT", titles.get("DUT1"));
+		param.put("titleENG", titles.get("ENG1"));
+		param.put("titleFRE", titles.get("FRE1"));
+		param.put("abstractDUT", abstracts.get("DUT1"));
+		param.put("abstractENG", abstracts.get("ENG1"));
+		param.put("abstractFRE", abstracts.get("FRE1"));
+		param.put("accessConstraintDUT1", accessConstraints.get("DUT1"));
+		param.put("accessConstraintENG1", accessConstraints.get("ENG1"));
+		param.put("accessConstraintFRE1", accessConstraints.get("FRE1"));
+		param.put("accessConstraintDUT2", accessConstraints.get("DUT2"));
+		param.put("accessConstraintENG2", accessConstraints.get("ENG2"));
+		param.put("accessConstraintFRE2", accessConstraints.get("FRE2"));
 		
 		Element md = Xml.transform (capa, styleSheet, param);
 		

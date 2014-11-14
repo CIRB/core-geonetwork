@@ -33,6 +33,8 @@
 
 
   <xsl:template name="getXPath">
+	<xsl:param name="node" select="."/>
+<!--
     <xsl:for-each select="ancestor-or-self::*">
       <xsl:if test="not(position() = 1)">
         <xsl:value-of select="name()"/>
@@ -41,8 +43,17 @@
         <xsl:text>/</xsl:text>
       </xsl:if>
     </xsl:for-each>
-    <!-- Check if is an attribute: http://www.dpawson.co.uk/xsl/sect2/nodetest.html#d7610e91 -->
     <xsl:if test="count(. | ../@*) = count(../@*)">/@<xsl:value-of select="name()"/></xsl:if>
+-->
+	    <xsl:for-each select="$node/ancestor-or-self::*">
+	      <xsl:if test="not(position() = 1)">
+	        <xsl:value-of select="name()"/>
+	      </xsl:if>
+	      <xsl:if test="not(position() = 1) and not(position() = last())">
+	        <xsl:text>/</xsl:text>
+	      </xsl:if>
+	    </xsl:for-each>
+	    <xsl:if test="count($node | $node/../@*) = count($node/../@*)">/@<xsl:value-of select="$node/name()"/></xsl:if>
   </xsl:template>
 
   <xsl:template name="getTitleColor">
@@ -118,14 +129,17 @@
   <xsl:template name="getTitle">
     <xsl:param name="name"/>
     <xsl:param name="schema"/>
+    <xsl:param name="node" select="."/>
     
     <xsl:variable name="fullContext">
-        <xsl:call-template name="getXPath"/>
+        <xsl:call-template name="getXPath">
+			<xsl:with-param name="node" select="$node"/>
+        </xsl:call-template>
     </xsl:variable>
 
 	<xsl:variable name="possibleConditions" select="'mandatory|obligatoire|verplicht'"/>
-    <xsl:variable name="context" select="name(parent::node())"/>
-    <xsl:variable name="contextIsoType" select="parent::node()/@gco:isoType"/>
+    <xsl:variable name="context" select="name($node/parent::node())"/>
+    <xsl:variable name="contextIsoType" select="$node/parent::node()/@gco:isoType"/>
     
 		<xsl:variable name="condition" />
 		<xsl:variable name="title">

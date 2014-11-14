@@ -35,6 +35,12 @@
 		<xsl:param name="abstractDUT"/>
 		<xsl:param name="abstractENG"/>
 		<xsl:param name="abstractFRE"/>
+		<xsl:param name="accessConstraintDUT1"/>
+		<xsl:param name="accessConstraintENG1"/>
+		<xsl:param name="accessConstraintFRE1"/>
+		<xsl:param name="accessConstraintDUT2"/>
+		<xsl:param name="accessConstraintENG2"/>
+		<xsl:param name="accessConstraintFRE2"/>
 		<xsl:variable name="s" select="Service|wfs:Service|wms:Service|ows:ServiceIdentification|ows11:ServiceIdentification|wcs:Service"/>
 		
 		<citation>
@@ -200,20 +206,55 @@
 		
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->		
 		
+					<xsl:message select="'VOOR'"/>
 		<resourceConstraints>
 			<MD_Constraints>
 				<useLimitation>
-					<xsl:choose>
-						<xsl:when test="$lang='dut'"> 
-				            <gco:CharacterString>Geen voorwaarde van toepassing. Vrij gebruik onder voorbehoud van vermelding van de bron en de datum van de laatste wijziging.</gco:CharacterString>
-						</xsl:when>
-						<xsl:when test="$lang='eng'"> 
-				            <gco:CharacterString>No condition applies.  Free use under the condition that the source and the latest revision date are mentioned.</gco:CharacterString>
-						</xsl:when> 
-						<xsl:otherwise>
-				            <gco:CharacterString>Aucune condition ne s’applique. Utilisation libre sous réserve de mentionner la source et la date de la dernière mise à jour.</gco:CharacterString>
-						</xsl:otherwise>
-					</xsl:choose>
+					<xsl:variable name="accessConstraintFRE" select="normalize-space($accessConstraintFRE1)" />
+					<xsl:variable name="accessConstraintDUT"><xsl:if test="$accessConstraintFRE!=''"><xsl:value-of select="normalize-space($accessConstraintDUT1)" /></xsl:if></xsl:variable>
+					<xsl:variable name="accessConstraintENG"><xsl:if test="$accessConstraintFRE!=''"><xsl:value-of select="normalize-space($accessConstraintENG1)" /></xsl:if></xsl:variable>
+					<gco:CharacterString>
+						<xsl:call-template name="get-accessConstraint-translation">
+							<xsl:with-param name="type" select="1"/>
+							<xsl:with-param name="accessConstraintLang" select="$lang"/>
+							<xsl:with-param name="accessConstraint" select="$accessConstraintFRE"/>
+						</xsl:call-template>
+					</gco:CharacterString>
+					<PT_FreeText>
+						<xsl:if test="$lang!='dut'">
+							<textGroup>
+								<LocalisedCharacterString locale="#DUT">
+									<xsl:call-template name="get-accessConstraint-translation">
+										<xsl:with-param name="type" select="1"/>
+										<xsl:with-param name="accessConstraintLang" select="'dut'"/>
+										<xsl:with-param name="accessConstraint"><xsl:if test="$accessConstraintDUT!=''"><xsl:value-of select="$accessConstraintDUT"/></xsl:if><xsl:if test="$accessConstraintDUT=''"><xsl:value-of select="$accessConstraintFRE"/></xsl:if></xsl:with-param>
+									</xsl:call-template>
+								</LocalisedCharacterString>
+							</textGroup>
+						</xsl:if>
+						<xsl:if test="$lang!='eng'">
+							<textGroup>
+								<LocalisedCharacterString locale="#ENG">
+									<xsl:call-template name="get-accessConstraint-translation">
+										<xsl:with-param name="type" select="1"/>
+										<xsl:with-param name="accessConstraintLang" select="'eng'"/>
+										<xsl:with-param name="accessConstraint"><xsl:if test="$accessConstraintENG!=''"><xsl:value-of select="$accessConstraintENG"/></xsl:if><xsl:if test="$accessConstraintENG=''"><xsl:value-of select="$accessConstraintFRE"/></xsl:if></xsl:with-param>
+									</xsl:call-template>
+								</LocalisedCharacterString>
+							</textGroup>
+						</xsl:if>
+						<xsl:if test="$lang!='fre'">
+							<textGroup>
+								<LocalisedCharacterString locale="#FRE">
+									<xsl:call-template name="get-accessConstraint-translation">
+										<xsl:with-param name="type" select="1"/>
+										<xsl:with-param name="accessConstraintLang" select="'fre'"/>
+										<xsl:with-param name="accessConstraint"><xsl:value-of select="$accessConstraintFRE"/></xsl:with-param>
+									</xsl:call-template>
+								</LocalisedCharacterString>
+							</textGroup>
+						</xsl:if>
+					</PT_FreeText>
 				</useLimitation>
 			</MD_Constraints>
 		</resourceConstraints>
@@ -223,17 +264,51 @@
 					<MD_RestrictionCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/gmxCodelists.xml#MD_RestrictionCode" codeListValue="otherRestrictions">otherRestrictions</MD_RestrictionCode>
 				</accessConstraints>
 				<otherConstraints>
-					<xsl:choose>
-						<xsl:when test="$lang='dut'"> 
-	           				<gco:CharacterString>Geen toegangsrestricties</gco:CharacterString>
-						</xsl:when>
-						<xsl:when test="$lang='eng'"> 
-	           				<gco:CharacterString>No accessConstraints</gco:CharacterString>
-						</xsl:when>
-						<xsl:otherwise>
- 							<gco:CharacterString>Pas de restrictions d’accès</gco:CharacterString>
-						</xsl:otherwise>
-					</xsl:choose>
+					<xsl:variable name="accessConstraintFRE" select="normalize-space($accessConstraintFRE2)" />
+					<xsl:variable name="accessConstraintDUT"><xsl:if test="$accessConstraintFRE!=''"><xsl:value-of select="normalize-space($accessConstraintDUT2)" /></xsl:if></xsl:variable>
+					<xsl:variable name="accessConstraintENG"><xsl:if test="$accessConstraintFRE!=''"><xsl:value-of select="normalize-space($accessConstraintENG2)" /></xsl:if></xsl:variable>
+					<gco:CharacterString>
+						<xsl:call-template name="get-accessConstraint-translation">
+							<xsl:with-param name="type" select="2"/>
+							<xsl:with-param name="accessConstraintLang" select="$lang"/>
+							<xsl:with-param name="accessConstraint" select="$accessConstraintFRE"/>
+						</xsl:call-template>
+					</gco:CharacterString>
+					<PT_FreeText>
+						<xsl:if test="$lang!='dut'">
+							<textGroup>
+								<LocalisedCharacterString locale="#DUT">
+									<xsl:call-template name="get-accessConstraint-translation">
+										<xsl:with-param name="type" select="2"/>
+										<xsl:with-param name="accessConstraintLang" select="'dut'"/>
+										<xsl:with-param name="accessConstraint"><xsl:if test="$accessConstraintDUT!=''"><xsl:value-of select="$accessConstraintDUT"/></xsl:if><xsl:if test="$accessConstraintDUT=''"><xsl:value-of select="$accessConstraintFRE"/></xsl:if></xsl:with-param>
+									</xsl:call-template>
+								</LocalisedCharacterString>
+							</textGroup>
+						</xsl:if>
+						<xsl:if test="$lang!='eng'">
+							<textGroup>
+								<LocalisedCharacterString locale="#ENG">
+									<xsl:call-template name="get-accessConstraint-translation">
+										<xsl:with-param name="type" select="2"/>
+										<xsl:with-param name="accessConstraintLang" select="'eng'"/>
+										<xsl:with-param name="accessConstraint"><xsl:if test="$accessConstraintENG!=''"><xsl:value-of select="$accessConstraintENG"/></xsl:if><xsl:if test="$accessConstraintENG=''"><xsl:value-of select="$accessConstraintFRE"/></xsl:if></xsl:with-param>
+									</xsl:call-template>
+								</LocalisedCharacterString>
+							</textGroup>
+						</xsl:if>
+						<xsl:if test="$lang!='fre'">
+							<textGroup>
+								<LocalisedCharacterString locale="#FRE">
+									<xsl:call-template name="get-accessConstraint-translation">
+										<xsl:with-param name="type" select="2"/>
+										<xsl:with-param name="accessConstraintLang" select="'fre'"/>
+										<xsl:with-param name="accessConstraint"><xsl:value-of select="$accessConstraintFRE"/></xsl:with-param>
+									</xsl:call-template>
+								</LocalisedCharacterString>
+							</textGroup>
+						</xsl:if>
+					</PT_FreeText>
 				</otherConstraints>
 			</MD_LegalConstraints>
 		</resourceConstraints>
@@ -331,14 +406,10 @@
 										<xsl:choose>
 											<xsl:when test="$ows='true'">
 												<xsl:for-each select="//ows:WGS84BoundingBox/ows:LowerCorner">
-													<xsl:message select="concat('xmin:',substring-before(., ' '))"/>
-													<xsl:message select="concat('ymin:',substring-after(., ' '))"/>
 													<xmin><xsl:value-of	select="substring-before(., ' ')"/></xmin>
 													<ymin><xsl:value-of	select="substring-after(., ' ')"/></ymin>
 												</xsl:for-each>
 												<xsl:for-each select="//ows:WGS84BoundingBox/ows:UpperCorner">
-													<xsl:message select="concat('xmax:',substring-before(., ' '))"/>
-													<xsl:message select="concat('ymax:',substring-after(., ' '))"/>
 													<xmax><xsl:value-of	select="substring-before(., ' ')"/></xmax>
 													<ymax><xsl:value-of	select="substring-after(., ' ')"/></ymax>
 												</xsl:for-each>
@@ -921,6 +992,31 @@
 			<xsl:when test="$feesLang='dut'">Geen kosten</xsl:when>
 			<xsl:when test="$feesLang='eng'">No Fees</xsl:when>
 			<xsl:otherwise>Pas de frais</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="get-accessConstraint-translation">
+		<xsl:param name="type"/>
+		<xsl:param name="accessConstraintLang"/>
+		<xsl:param name="accessConstraint"/>
+		<xsl:choose>
+			<xsl:when test="not($accessConstraint='')"><xsl:value-of select="$accessConstraint"/></xsl:when>
+			<xsl:otherwise>
+				<xsl:if test="$type=1">
+					<xsl:choose>
+						<xsl:when test="$accessConstraintLang='dut'">Geen voorwaarde van toepassing. Vrij gebruik onder voorbehoud van vermelding van de bron en de datum van de laatste wijziging.</xsl:when>
+						<xsl:when test="$accessConstraintLang='eng'">No condition applies.  Free use under the condition that the source and the latest revision date are mentioned.</xsl:when> 
+						<xsl:otherwise>Aucune condition ne s’applique. Utilisation libre sous réserve de mentionner la source et la date de la dernière mise à jour.</xsl:otherwise>
+					</xsl:choose>
+				</xsl:if>
+				<xsl:if test="$type=2">
+					<xsl:choose>
+						<xsl:when test="$accessConstraintLang='dut'">Geen toegangsrestricties</xsl:when>
+						<xsl:when test="$accessConstraintLang='eng'">No accessConstraints</xsl:when>
+						<xsl:otherwise>Pas de restrictions d’accès</xsl:otherwise>
+					</xsl:choose>
+				</xsl:if>
+			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 

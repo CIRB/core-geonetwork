@@ -30,9 +30,9 @@ import jeeves.interfaces.Service;
 import jeeves.resources.dbms.Dbms;
 import jeeves.server.ServiceConfig;
 import jeeves.server.context.ServiceContext;
-import jeeves.utils.Util;
 import jeeves.utils.Xml;
 
+import org.apache.commons.lang.StringUtils;
 import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.constants.Params;
 import org.jdom.Attribute;
@@ -73,12 +73,35 @@ public class Get implements Service {
      */
     public Element exec(Element params, ServiceContext context)
             throws Exception {
-        String uuid = Util.getParam(params, Params.UUID);
+    	String uuid = null;
+    	String root = null;
+    	String child = null;
+    	Element param = params.getChild(Params.UUID);
+    	if (param!=null) {
+            uuid = param.getTextTrim();
+    	}
+    	param = params.getChild(Params.ROOT);
+    	if (param!=null) {
+    		root = param.getTextTrim();
+        	param = params.getChild(Params.CHILD);
+        	if (param!=null) {
+        		child = param.getTextTrim();
+        	}
+    	}
         
         // Retrieve template
         Dbms dbms = (Dbms) context.getResourceManager().open (Geonet.Res.MAIN_DB);
-        Element rec = dbms.select("SELECT data FROM metadata WHERE isTemplate = 's' AND uuid = ?", uuid);
-
+        Element rec = null;
+        if (StringUtils.isNotBlank(root)) {
+            if (StringUtils.isNotBlank(child)) {
+            	rec = dbms.select("SELECT data FROM metadata WHERE isTemplate = 's' AND root = ? AND data like ?", root, "%" + child + "%");
+            } else {
+            	rec = dbms.select("SELECT data FROM metadata WHERE isTemplate = 's' AND root = ?", root);            	
+            }
+        } else {
+        	rec = dbms.select("SELECT data FROM metadata WHERE isTemplate = 's' AND uuid = ?", uuid);
+        }
+        
         String xmlData = rec.getChild(Jeeves.Elem.RECORD).getChildText("data");
         rec = Xml.loadString(xmlData, false);
         Element tpl = (Element) rec.detach();

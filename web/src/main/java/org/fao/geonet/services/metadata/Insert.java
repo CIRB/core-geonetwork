@@ -132,7 +132,7 @@ public class Insert implements Service
 		// Import record
 		Importer.importRecord(uuid, localId , uuidAction, md, schema, 0,
 				gc.getSiteId(), gc.getSiteName(), context, id, date,
-				date, group, isTemplate, dbms);
+				date, group, isTemplate, dbms, title);
 		
 		int iId = Integer.parseInt(id.get(0));
 		

@@ -450,24 +450,20 @@ public class DataManager {
      * @throws Exception hmm
      */
 	public void indexMetadataGroup(Dbms dbms, List<String> ids, int beginIndex, int count, boolean sendReIndexMessages) throws Exception {
-		synchronized (searchMan.getIndexTracker().MUTEX) {
-//                System.out.println("** START SYNCHRONIZED indexMetadataGroup by id list.");
-			searchMan.startIndexGroup();
-			try {
-		        for(int i=beginIndex; i<beginIndex+count; i++) {
-		            try {
-		            	indexMetadata(dbms, ids.get(i), true, sendReIndexMessages);
-		            }
-		            catch (Exception e) {
-	                    Log.error(Geonet.INDEX_ENGINE, "Error indexing metadata '"+ids.get(i)+"': "+e.getMessage()+"\n"+ Util.getStackTrace(e));
-		            }
-		        }
-		    }
-		    finally {
-		    	searchMan.endIndexGroup();
-//    	            System.out.println("** END SYNCHRONIZED indexMetadataGroup by id list.");
-	    	}
-		}
+		searchMan.startIndexGroup();
+		try {
+	        for(int i=beginIndex; i<beginIndex+count; i++) {
+	            try {
+	            	indexMetadata(dbms, ids.get(i), true, sendReIndexMessages);
+	            }
+	            catch (Exception e) {
+                    Log.error(Geonet.INDEX_ENGINE, "Error indexing metadata '"+ids.get(i)+"': "+e.getMessage()+"\n"+ Util.getStackTrace(e));
+	            }
+	        }
+	    }
+	    finally {
+	    	searchMan.endIndexGroup();
+    	}
 	}
 
     /**
@@ -481,21 +477,17 @@ public class DataManager {
      * @throws Exception hmm
      */
 	public void indexMetadataGroup(Dbms dbms, String id, boolean sendReIndexMessages) throws Exception {
-		synchronized (searchMan.getIndexTracker().MUTEX) {
-//                System.out.println("** START SYNCHRONIZED indexMetadataGroup by id.");
-			searchMan.startIndexGroup();
-			try {
-		        try {
-		        	indexMetadata(dbms, id, true, sendReIndexMessages);
-		        }
-		        catch (Exception e) {
-	                Log.error(Geonet.INDEX_ENGINE, "Error indexing metadata '"+id+"': "+e.getMessage()+"\n"+ Util.getStackTrace(e));
-		        }
-			} finally {
-		    	searchMan.endIndexGroup();
-//    	            System.out.println("** END SYNCHRONIZED indexMetadataGroup by id.");
-	    	}
-		}
+		searchMan.startIndexGroup();
+		try {
+	        try {
+	        	indexMetadata(dbms, id, true, sendReIndexMessages);
+	        }
+	        catch (Exception e) {
+                Log.error(Geonet.INDEX_ENGINE, "Error indexing metadata '"+id+"': "+e.getMessage()+"\n"+ Util.getStackTrace(e));
+	        }
+		} finally {
+	    	searchMan.endIndexGroup();
+    	}
 	}
 	/**
      * Indexes metadata without sending ReIndexMessage to JMS topic.
@@ -1515,8 +1507,10 @@ public class DataManager {
      * @throws Exception hmm
      */
 	public void increasePopularity(ServiceContext srvContext, String id) throws Exception {
+/*
 		GeonetContext gc = (GeonetContext) srvContext.getHandlerContext(Geonet.CONTEXT_NAME);
 		gc.getThreadPool().runTask(new IncreasePopularityTask(srvContext, id));
+*/
 	}
 
     /**
@@ -2182,14 +2176,14 @@ public class DataManager {
             message.setSenderClientID(ClusterConfig.getClientID());
             message.setDeleteMetadata(true);
             message.setWorkspace(false);
-
+/*
             // to delete workspace from index
             ReIndexMessage message2 = new ReIndexMessage();
             message2.setId(id);
             message2.setSenderClientID(ClusterConfig.getClientID());
             message2.setDeleteMetadata(true);
             message2.setWorkspace(true);
-
+*/
             Producer reIndexProducer = ClusterConfig.get(Geonet.ClusterMessageTopic.REINDEX);
 
             if(reIndexProducer == null) {
@@ -2206,7 +2200,7 @@ public class DataManager {
             }
             else {
                 reIndexProducer.produce(message);
-                reIndexProducer.produce(message2);
+//                reIndexProducer.produce(message2);
             }
 
         }
@@ -2569,6 +2563,11 @@ public class DataManager {
 
 		setOperation(context, dbms, id, groupId, AccessManager.OPER_VIEW);
 		setOperation(context, dbms, id, groupId, AccessManager.OPER_NOTIFY);
+
+		// set edit privilege, but not to one of the hardcoded 'system' groups
+        if(!(groupId.equals("-1") || groupId.equals("0") || groupId.equals("1"))) {
+            setOperation(context, dbms, id, groupId, AccessManager.OPER_EDITING);
+        }
 		//
 		// Restrictive: new and inserted records should not be editable, 
 		// their resources can't be downloaded and any interactive maps can't be 

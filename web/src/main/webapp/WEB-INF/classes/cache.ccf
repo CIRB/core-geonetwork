@@ -14,7 +14,8 @@ jcs.default.elementattributes.IsEternal=false
 
 jcs.auxiliary.DC=org.apache.jcs.auxiliary.disk.indexed.IndexedDiskCacheFactory
 jcs.auxiliary.DC.attributes=org.apache.jcs.auxiliary.disk.indexed.IndexedDiskCacheAttributes
-jcs.auxiliary.DC.attributes.DiskPath=/opt/jakarta/apache-tomcat-7.0.26/webapps/geonetwork/WEB-INF/jcs_caching
+#jcs.auxiliary.DC.attributes.DiskPath=C:/projects/GitHub-CIRB/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/geonetwork-main/WEB-INF/jcs_caching
+jcs.auxiliary.DC.attributes.DiskPath=/opt/jakarta/apache-tomcat-7.0.27-port8080/webapps/geonetwork/WEB-INF/jcs_caching
 
 # XLink cache
 jcs.region.xlink=DC

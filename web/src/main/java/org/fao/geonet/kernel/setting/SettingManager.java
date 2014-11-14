@@ -655,15 +655,11 @@ public class SettingManager
 
 	private int getNextSerial(Dbms dbms) throws SQLException
 	{
-		if (maxSerial == 0)
-		{
-			List   list = dbms.select("SELECT MAX(id) AS max FROM Settings").getChildren();
-			String max  = ((Element) list.get(0)).getChildText("max");
+		List   list = dbms.select("select nextval('settings_seq') AS max FROM Settings").getChildren();
+		String max  = ((Element) list.get(0)).getChildText("max");
 
-			maxSerial = Integer.parseInt(max);
-		}
-
-		return ++maxSerial;
+		maxSerial = Integer.parseInt(max);
+		return maxSerial;
 	}
 
 	//---------------------------------------------------------------------------

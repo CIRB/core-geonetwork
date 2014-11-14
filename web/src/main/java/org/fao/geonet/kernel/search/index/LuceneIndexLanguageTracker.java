@@ -52,7 +52,7 @@ public class LuceneIndexLanguageTracker {
     private final Map<String, NRTCachingDirectory> dirs = new HashMap<String, NRTCachingDirectory>();
     private final Map<String, TrackingIndexWriter> trackingWriters = new HashMap<String, TrackingIndexWriter>();
     private final Map<String, GeonetworkNRTManager> searchManagers = new HashMap<String, GeonetworkNRTManager>();
-    public static Object MUTEX = new Object();
+//    public static Object MUTEX = new Object();
     private final Lock optimizingLock = new ReentrantLock();
     private final Timer commitTimer;
     private final LuceneConfig luceneConfig;
@@ -122,11 +122,11 @@ public class LuceneIndexLanguageTracker {
         boolean tokenExpired = false;
         boolean lastVersionUpToDate = true;
         for (GeonetworkNRTManager manager : searchManagers.values()) {
-            if (!luceneConfig.useNRTManagerReopenThread()
+        	if (luceneConfig.useNRTManagerReopenThread()
                     || Boolean.parseBoolean(System.getProperty(LuceneConfig.USE_NRT_MANAGER_REOPEN_THREAD))) {
                 manager.maybeRefresh();
             }
-            AcquireResult result = manager.acquire(versionToken, versionTracker);
+        	AcquireResult result = manager.acquire(versionToken, versionTracker);
             lastVersionUpToDate = lastVersionUpToDate && result.lastVersionUpToDate;
             tokenExpired = tokenExpired || result.newSearcher;
             if (searchLanguage!=null) {
@@ -152,7 +152,9 @@ public class LuceneIndexLanguageTracker {
 
     synchronized void commit() throws CorruptIndexException, IOException {
         for (TrackingIndexWriter writer : trackingWriters.values()) {
-            writer.getIndexWriter().commit();
+            synchronized(writer) {
+            	writer.getIndexWriter().commit();
+            }
         }
     }
     synchronized void withWriter(Function function) throws CorruptIndexException, IOException {
@@ -162,7 +164,12 @@ public class LuceneIndexLanguageTracker {
     }
     synchronized void addDocument(String language, Document doc) throws CorruptIndexException, LockObtainFailedException, IOException {
         open(language);
-        trackingWriters.get(language).addDocument(doc);
+        TrackingIndexWriter writer = trackingWriters.get(language);
+        synchronized(writer) {
+            writer.addDocument(doc);
+//            writer.getIndexWriter().commit();
+//            writer.getIndexWriter().getReader().reopen();
+        }
     }
     synchronized void open(String language) throws CorruptIndexException, LockObtainFailedException, IOException {
         language = normalize(language);
@@ -173,10 +180,9 @@ public class LuceneIndexLanguageTracker {
     }
     
     public synchronized void reset() throws IOException {
-        close();
-
+    	close();
         FileUtils.deleteDirectory(indexContainingDir);
-        indexContainingDir.mkdirs();
+    	indexContainingDir.mkdirs();
         dirs.clear();
         trackingWriters.clear();
         searchManagers.clear();
@@ -193,13 +199,15 @@ public class LuceneIndexLanguageTracker {
             }
         }
         for (TrackingIndexWriter writer: trackingWriters.values()) {
-            try {
-                writer.getIndexWriter().close(true);
-            } catch (OutOfMemoryError e) {
-                writer.getIndexWriter().close(true);
-            } catch (Throwable e) {
-                errors.add(e);
-            }
+        	synchronized(writer) {
+                try {
+                    writer.getIndexWriter().close(true);
+                } catch (OutOfMemoryError e) {
+                    writer.getIndexWriter().close(true);
+                } catch (Throwable e) {
+                    errors.add(e);
+                }
+        	}
         }
         for (NRTCachingDirectory dir: dirs.values()) {
             try {
@@ -220,10 +228,10 @@ public class LuceneIndexLanguageTracker {
 		// System.out.println("Optimizing the Lucene Index started...");
 		if (optimizingLock.tryLock()) {
 			System.out.println("Lock successfully");
-			synchronized (MUTEX) {
-				// System.out.println("** START SYNCHRONIZED optimize.");
-				try {
-					for (TrackingIndexWriter writer : trackingWriters.values()) {
+			// System.out.println("** START SYNCHRONIZED optimize.");
+			try {
+				for (TrackingIndexWriter writer : trackingWriters.values()) {
+					synchronized(writer) {
 						try {
 							writer.getIndexWriter().forceMergeDeletes(true);
 							writer.getIndexWriter().forceMerge(1, false);
@@ -232,10 +240,10 @@ public class LuceneIndexLanguageTracker {
 							throw new RuntimeException(e);
 						}
 					}
-				} finally {
-					optimizingLock.unlock();
-					System.out.println("Unlock successfully");
 				}
+			} finally {
+				optimizingLock.unlock();
+				System.out.println("Unlock successfully");
 			}
 		}
     }
@@ -247,7 +255,9 @@ public class LuceneIndexLanguageTracker {
             for (TrackingIndexWriter writer: trackingWriters.values()) {
                 try {
                     try {
-                        writer.getIndexWriter().commit();
+                        synchronized(writer) {
+                        	writer.getIndexWriter().commit();
+                        }
                     } catch (Throwable e) {
                         Log.error(Geonet.LUCENE, "Error committing writer: "+writer, e);
                     }

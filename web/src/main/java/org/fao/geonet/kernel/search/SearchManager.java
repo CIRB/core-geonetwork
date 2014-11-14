@@ -678,33 +678,17 @@ public class SearchManager {
 	public void index(String schemaDir, Element metadata, String id, List<Element> moreFields, String isTemplate,
  String title)
             throws Exception {
-		if (isTemplate.equals("n") || isTemplate.equals("y")) {
-
-	        synchronized(_tracker.MUTEX) {
-//	            System.out.println("** START SYNCHRONIZED index. Workspace? " + workspace + ", title: " + title);
-		        if(Log.isDebugEnabled(Geonet.INDEX_ENGINE)) {
-		            Log.debug(Geonet.INDEX_ENGINE, "indexing metadata, opening Writer from index");
-		        }
-		        List<Pair<String, Document>> docs = buildIndexDocument(schemaDir, metadata, id, moreFields, isTemplate, title, false);
-//				_tracker.openWriter();
-				try {
-		            for( Pair<String, Document> document : docs ) {
-		                _indexWriter.addDocument(document.one(), document.two());
-		                if(Log.isDebugEnabled(Geonet.INDEX_ENGINE)) {
-		                    Log.debug(Geonet.INDEX_ENGINE, "adding document in locale " + document.one());
-		                }
-		            }
-				}
-		        finally {
-		            if(Log.isDebugEnabled(Geonet.INDEX_ENGINE)) {
-		                Log.debug(Geonet.INDEX_ENGINE, "Closing Writer from index");
-		            }
-//					_tracker.closeWriter();
-//		            System.out.println("** END SYNCHRONIZED index. Workspace? " + workspace);
-				}
-	        }
+//		if (isTemplate.equals("n") || isTemplate.equals("y")) {
+	        List<Pair<String, Document>> docs = buildIndexDocument(schemaDir, metadata, id, moreFields, isTemplate, title, false);
+			try {
+	            for( Pair<String, Document> document : docs ) {
+	                _indexWriter.addDocument(document.one(), document.two());
+	            }
+			}
+	        finally {
+			}
 			_spatial.writer().index(schemaDir, id, metadata);
-		}
+//		}
     }
 
     /**
@@ -733,14 +717,17 @@ public class SearchManager {
      */
 	public void indexGroup(String schemaDir, Element metadata, String id, List<Element> moreFields, String isTemplate,
                            String title) throws Exception {
-        synchronized(_tracker.MUTEX) {
-        	List<Pair<String, Document>> docs = buildIndexDocument(schemaDir, metadata, id, moreFields, isTemplate, title, true);
-//			System.out.println("** indexGroup. Workspace? " + workspace);
-        	for( Pair<String, Document> document : docs ) {
-        		_indexWriter.addDocument(document.one(), document.two());
-        	}
-        	_spatial.writer().index(schemaDir, id, metadata);
-        }
+//		if (isTemplate.equals("n") || isTemplate.equals("y")) {
+			List<Pair<String, Document>> docs = buildIndexDocument(schemaDir, metadata, id, moreFields, isTemplate, title, true);
+			try {
+	            for( Pair<String, Document> document : docs ) {
+	                _indexWriter.addDocument(document.one(), document.two());
+	            }
+			}
+	        finally {
+			}
+			_spatial.writer().index(schemaDir, id, metadata);
+//		}
 	}
 
     /**
@@ -751,8 +738,6 @@ public class SearchManager {
 	public void endIndexGroup() throws Exception {
         if(Log.isDebugEnabled(Geonet.INDEX_ENGINE))
         	Log.debug(Geonet.INDEX_ENGINE, "Closing Writer from endIndexGroup");
-//        _tracker.closeWriter();
-//        System.out.println("===>NA CLOSEWRITER IN END INDEXGROUP");
 	}
 
     /**
@@ -804,16 +789,24 @@ public class SearchManager {
 		// check for subtemplates
 		if (isTemplate.equals("s")) {
 			// create empty document with only title and "any" fields
-			xmlDoc = new Element("Document");
-
-			Element defaultDoc = new Element("Document");
-            defaultDoc.setAttribute(Geonet.LUCENE_LOCALE_KEY, Geonet.DEFAULT_LANGUAGE);
-            xmlDoc.addContent(defaultDoc);
-
-           StringBuilder sb = new StringBuilder();
-			allText(metadata, sb);
-			SearchManager.addField(defaultDoc, LuceneIndexField.TITLE, title, true, true);
-			SearchManager.addField(defaultDoc, LuceneIndexField.ANY, sb.toString(), true, true);
+			xmlDoc = new Element("Documents");
+			Element engDoc = new Element("Document");
+			Element freDoc = new Element("Document");
+			Element dutDoc = new Element("Document");
+			engDoc.setAttribute("locale", "eng");
+			SearchManager.addField(engDoc, "_docLocale", "eng", true, true);
+			SearchManager.addField(engDoc, LuceneIndexField.TITLE, title, true, true);
+            xmlDoc.addContent(engDoc);
+			freDoc.setAttribute("locale", "fre");
+			SearchManager.addField(freDoc, "_docLocale", "eng", true, true);
+			SearchManager.addField(freDoc, LuceneIndexField.TITLE, title, true, true);
+            xmlDoc.addContent(freDoc);
+			dutDoc.setAttribute("locale", "dut");
+			SearchManager.addField(dutDoc, "_docLocale", "eng", true, true);
+			SearchManager.addField(dutDoc, LuceneIndexField.TITLE, title, true, true);
+            xmlDoc.addContent(dutDoc);
+//            StringBuilder sb = new StringBuilder();
+//			allText(metadata, sb);
 		}
         else {
             if(Log.isDebugEnabled(Geonet.INDEX_ENGINE))
@@ -973,19 +966,11 @@ public class SearchManager {
      * @throws Exception
      */
 	public void delete(String fld, String txt) throws Exception {
-		synchronized (_tracker.MUTEX) {
-			// System.out.println("** START SYNCHRONIZED delete. Workspace? " +
-			// workspace);
-//			_tracker.openWriter();
-			try {
-				_indexWriter.deleteDocuments(new Term(fld, txt));
-			} finally {
-				if (Log.isDebugEnabled(Geonet.INDEX_ENGINE)) {
-					Log.debug(Geonet.INDEX_ENGINE, "Closing Writer from delete");
-				}
-//				_tracker.closeWriter();
-				// System.out.println("** END SYNCHRONIZED delete. Workspace? "
-				// + workspace);
+		try {
+			_indexWriter.deleteDocuments(new Term(fld, txt));
+		} finally {
+			if (Log.isDebugEnabled(Geonet.INDEX_ENGINE)) {
+				Log.debug(Geonet.INDEX_ENGINE, "Closing Writer from delete");
 			}
 		}
 		_spatial.writer().delete(txt);

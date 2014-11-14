@@ -103,7 +103,7 @@
               gmd:dataQualityInfo|gmd:contentInfo|gmd:distributionFormat|
               gmd:referenceSystemInfo|gmd:spatialResolution|gmd:offLine|gmd:projection|gmd:ellipsoid|gmd:extent[name(..)!='gmd:EX_TemporalExtent']|gmd:attributes|gmd:verticalCRS|
               gmd:geographicBox|gmd:EX_TemporalExtent|gmd:MD_Distributor|
-              srv:containsOperations|srv:SV_CoupledResource|
+              srv:containsOperations|srv:SV_CoupledResource|gmd:onLine|
               gmd:metadataConstraints">
     <xsl:param name="schema"/>
     <xsl:param name="edit"/>
@@ -2234,7 +2234,7 @@
     <xsl:param name="schema"/>
     <xsl:param name="edit"/>
 
-    
+<!--     
     <xsl:if test="$edit=false()">
       <xsl:if test="count(gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:protocol/gco:CharacterString[contains(string(.),'download')])>1 and
                   //geonet:info/download='true'">
@@ -2259,12 +2259,41 @@
         </xsl:call-template>
       </xsl:if>
     </xsl:if>
+-->
     <xsl:apply-templates mode="complexElement" select=".">
       <xsl:with-param name="schema" select="$schema"/>
       <xsl:with-param name="edit"   select="$edit"/>
     </xsl:apply-templates>
   </xsl:template>
   
+    <xsl:template mode="iso19139" match="gmd:MD_DigitalTransferOptions">
+        <xsl:param name="schema"/>
+        <xsl:param name="edit"/>
+		        <xsl:apply-templates mode="elementEP" select="gmd:unitsOfDistribution|geonet:child[string(@name)='unitsOfDistribution']">
+		            <xsl:with-param name="schema" select="$schema"/>
+		            <xsl:with-param name="edit"   select="$edit"/>
+		        </xsl:apply-templates>
+		        <xsl:apply-templates mode="elementEP" select="gmd:transferSize">
+		            <xsl:with-param name="schema" select="$schema"/>
+		            <xsl:with-param name="edit"   select="$edit"/>
+		        </xsl:apply-templates>
+				<xsl:if test="$edit=true()">
+					<xsl:apply-templates mode="addElement" select="geonet:child[@name='onLine' and @prefix='gmd']">
+			            <xsl:with-param name="schema" select="$schema"/>
+			            <xsl:with-param name="edit"   select="$edit"/>
+			            <xsl:with-param name="visible"   select="count(gmd:onLine)=0"/>
+					</xsl:apply-templates>
+				</xsl:if>
+ 		        <xsl:apply-templates mode="complexElement" select="gmd:onLine">
+		            <xsl:with-param name="schema" select="$schema"/>
+		            <xsl:with-param name="edit"   select="$edit"/>
+		        </xsl:apply-templates>
+		        <xsl:apply-templates mode="elementEP" select="gmd:offLine">
+		            <xsl:with-param name="schema" select="$schema"/>
+		            <xsl:with-param name="edit"   select="$edit"/>
+		        </xsl:apply-templates>
+	</xsl:template>
+
   <!-- ============================================================================= 
   Custom element layout
   -->
@@ -2328,7 +2357,7 @@
   <!-- online resources -->
   <!-- ============================================================================= -->
 
-  <xsl:template mode="iso19139" match="gmd:CI_OnlineResource" priority="2">
+  <xsl:template mode="iso19139" match="gmd:CI_OnlineResource" priority="3">
     <xsl:param name="schema"/>
     <xsl:param name="edit"/>
     
@@ -2377,7 +2406,18 @@
               </xsl:choose>
             </a>
             <xsl:if test="string($description)!=''">
-              <br/><xsl:value-of select="$description"/>
+                <xsl:choose>
+                    <xsl:when test="string($name)!=''">
+               <xsl:if test="string($description)!=string($name)">
+                   <br/><xsl:value-of select="$description"/>
+                  </xsl:if>
+                    </xsl:when>
+                    <xsl:otherwise>
+               <xsl:if test="string($description)!=string($linkage)">
+                   <br/><xsl:value-of select="$description"/>
+                  </xsl:if>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:if>
           </xsl:with-param>
         </xsl:apply-templates>
@@ -2389,7 +2429,6 @@
 
   <xsl:template mode="iso19139EditOnlineRes" match="*">
     <xsl:param name="schema"/>
-  
     <xsl:variable name="id" select="generate-id(.)"/>
     <tr><td colspan="2"><div id="{$id}"/></td></tr>
     <xsl:apply-templates mode="complexElement" select=".">
@@ -2418,44 +2457,44 @@
           <xsl:with-param name="schema" select="$schema"/>
           <xsl:with-param name="edit"   select="true()"/>
         </xsl:apply-templates>
-        
         <xsl:choose>
-          <xsl:when test="matches(gmd:protocol[1]/gco:CharacterString,'^WWW:DOWNLOAD-.*-http--download.*') 
+            <xsl:when test="string(gmd:protocol[1]/gco:CharacterString)='WWW:DOWNLOAD-1.0-http--download'
             and string(gmd:name/gco:CharacterString|gmd:name/gmx:MimeFileType)!=''">
-            <xsl:apply-templates mode="iso19139FileRemove" select="gmd:name/gco:CharacterString|gmd:name/gmx:MimeFileType">
-              <xsl:with-param name="access" select="'private'"/>
-              <xsl:with-param name="id" select="$id"/>
-            </xsl:apply-templates>
-          </xsl:when>
-          <xsl:when test="string(gmd:protocol[1]/gco:CharacterString)='DB:POSTGIS' 
+                <xsl:apply-templates mode="iso19139FileRemove" select="gmd:name/gco:CharacterString|gmd:name/gmx:MimeFileType">
+					<xsl:with-param name="schema" select="$schema"/>
+                    <xsl:with-param name="access" select="if (contains(gmd:linkage/gmd:URL,'access=public')) then 'public' else 'private'"/>
+                    <xsl:with-param name="id" select="$id"/>
+					<xsl:with-param name="geo" select="false()"/>
+                </xsl:apply-templates>
+            </xsl:when>
+            <xsl:when test="string(gmd:protocol[1]/gco:CharacterString)='DB:POSTGIS'
             and string(gmd:name/gco:CharacterString|gmd:name/gmx:MimeFileType)!=''">
-            <xsl:apply-templates mode="iso19139GeoPublisher" select="gmd:name/gco:CharacterString">
-            <xsl:with-param name="access" select="'db'"/>
-            <xsl:with-param name="id" select="$id"/>
-            </xsl:apply-templates>
-          </xsl:when>
-          <xsl:when test="(string(gmd:protocol[1]/gco:CharacterString)='FILE:GEO'
-            or string(gmd:protocol[1]/gco:CharacterString)='FILE:RASTER') 
+                <xsl:apply-templates mode="iso19139GeoPublisher" select="gmd:name/gco:CharacterString">
+                    <xsl:with-param name="access" select="'db'"/>
+                    <xsl:with-param name="id" select="$id"/>
+                </xsl:apply-templates>
+            </xsl:when>
+            <xsl:when test="(string(gmd:protocol[1]/gco:CharacterString)='FILE:GEO'
+            or string(gmd:protocol[1]/gco:CharacterString)='FILE:RASTER')
             and string(gmd:linkage/gmd:URL)!=''">
-            <xsl:apply-templates mode="iso19139GeoPublisher" select="gmd:name/gco:CharacterString">
-              <xsl:with-param name="access" select="'fileOrUrl'"/>
-              <xsl:with-param name="id" select="$id"/>
-            </xsl:apply-templates>
-          </xsl:when>
-          <xsl:otherwise>
-            <!-- use elementEP for geonet:child only -->
-            <xsl:apply-templates mode="elementEP" select="geonet:child[string(@name)='name']">
-              <xsl:with-param name="schema" select="$schema"/>
-              <xsl:with-param name="edit"   select="true()"/>
-            </xsl:apply-templates>
+                <xsl:apply-templates mode="iso19139GeoPublisher" select="gmd:name/gco:CharacterString">
+                    <xsl:with-param name="access" select="'fileOrUrl'"/>
+                    <xsl:with-param name="id" select="$id"/>
+                </xsl:apply-templates>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- use elementEP for geonet:child only -->
+                <xsl:apply-templates mode="elementEP" select="geonet:child[string(@name)='name']">
+                    <xsl:with-param name="schema" select="$schema"/>
+                    <xsl:with-param name="edit"   select="true()"/>
+                </xsl:apply-templates>
 
-            <xsl:apply-templates mode="iso19139" select="gmd:name">
-              <xsl:with-param name="schema" select="$schema"/>
-              <xsl:with-param name="edit"   select="true()"/>
-            </xsl:apply-templates>
-          </xsl:otherwise>
+                <xsl:apply-templates mode="iso19139" select="gmd:name">
+                    <xsl:with-param name="schema" select="$schema"/>
+                    <xsl:with-param name="edit"   select="true()"/>
+                </xsl:apply-templates>
+            </xsl:otherwise>
         </xsl:choose>
-
         <xsl:apply-templates mode="elementEP" select="gmd:description|geonet:child[string(@name)='description']">
           <xsl:with-param name="schema" select="$schema"/>
           <xsl:with-param name="edit"   select="true()"/>
@@ -2676,40 +2715,54 @@
 
     <xsl:choose>
       <xsl:when test="$edit=true()">
-        <xsl:variable name="protocol" select="../gmd:protocol/gco:CharacterString"/>
-        <xsl:variable name="pref" select="../gmd:protocol/gco:CharacterString/geonet:element/@ref"/>
-        <xsl:variable name="ref" select="gco:CharacterString/geonet:element/@ref|gmx:MimeFileType/geonet:element/@ref"/>
-        <xsl:variable name="value" select="gco:CharacterString|gmx:MimeFileType"/>
-        <xsl:variable name="button" select="matches($protocol,'^WWW:DOWNLOAD-.*-http--download.*') and normalize-space($value)=''"/>
+		<xsl:variable name="protocol" select="../gmd:protocol/gco:CharacterString"/>
+		<xsl:variable name="pref" select="../gmd:protocol/gco:CharacterString/geonet:element/@ref"/>
+		<xsl:variable name="ref" select="gco:CharacterString/geonet:element/@ref|gmx:MimeFileType/geonet:element/@ref"/>
+		<xsl:variable name="urlRef" select="../gmd:linkage/gmd:URL/geonet:element/@ref"/>
+		<xsl:variable name="value" select="gco:CharacterString|gmx:MimeFileType"/>
+		<xsl:variable name="button" select="starts-with($protocol,'WWW:DOWNLOAD') and contains($protocol,'http') and normalize-space($value)=''"/>
 
-        <xsl:call-template name="simpleElementGui">
-          <xsl:with-param name="schema" select="$schema"/>
-          <xsl:with-param name="edit" select="$edit"/>
-          <xsl:with-param name="title" select="/root/gui/strings/file"/>
-          <xsl:with-param name="text">
-            <button class="content" onclick="Ext.getCmp('editorPanel').showFileUploadPanel({//geonet:info/id}, '{$ref}');" type="button">
-              <xsl:value-of select="/root/gui/strings/insertFileMode"/>
-            </button>
-          </xsl:with-param>
-          <xsl:with-param name="id" select="concat('db_',$ref)"/>
-          <xsl:with-param name="visible" select="$button"/>
-        </xsl:call-template>
-
-        <xsl:call-template name="simpleElementGui">
-          <xsl:with-param name="schema" select="$schema"/>
-          <xsl:with-param name="edit" select="$edit"/>
-          <xsl:with-param name="title">
-            <xsl:call-template name="getTitle">
-              <xsl:with-param name="name"   select="name(.)"/>
-              <xsl:with-param name="schema" select="$schema"/>
-            </xsl:call-template>
-          </xsl:with-param>
-          <xsl:with-param name="text">
-            <input id="_{$ref}" class="md" type="text" name="_{$ref}" value="{$value}" size="40" />
-            </xsl:with-param>
-          <xsl:with-param name="id" select="concat('di_',$ref)"/>
-          <xsl:with-param name="visible" select="not($button)"/>
-        </xsl:call-template>
+                <xsl:call-template name="simpleElementGui">
+                    <xsl:with-param name="schema" select="$schema"/>
+                    <xsl:with-param name="edit" select="$edit"/>
+                    <xsl:with-param name="title">
+                        <xsl:call-template name="getTitle">
+                            <xsl:with-param name="name"   select="name(.)"/>
+                            <xsl:with-param name="schema" select="$schema"/>
+                        </xsl:call-template>
+                    </xsl:with-param>
+                    <xsl:with-param name="text">
+		                <table width="100%">
+		                <tr>
+		                    <td width="70%">
+		                        <input id="_{$ref}" class="md" type="text" name="_{$ref}" value="{$value}" size="40" />
+		                    </td>
+		                    <td align="left">
+		                    	<button id="{concat('db_',$ref)}" class="content" onclick="Ext.getCmp('editorPanel').showFileUploadPanel('{//geonet:info/id}', '{//geonet:info/uuid}', '{$ref}', '{$urlRef}');" type="button">
+		                    		<xsl:attribute name="style">
+									    <xsl:choose>
+									        <xsl:when test="$button">display:block;</xsl:when>
+									        <xsl:otherwise>display:none;</xsl:otherwise>
+									    </xsl:choose>
+									</xsl:attribute>
+		                            <xsl:value-of select="/root/gui/strings/insertFileMode"/>
+		                        </button>
+							</td>
+						</tr>
+						</table>
+                    </xsl:with-param>
+                    <xsl:with-param name="id" select="concat('di_',$ref)"/>
+                    <xsl:with-param name="visible" select="true()"/>
+<!--
+                    <xsl:with-param name="visible" select="not($button)"/>
+-->
+                </xsl:call-template>
+                <xsl:if test="gmx:MimeFileType">
+			        <xsl:call-template name="mimetype">
+			            <xsl:with-param name="ref" select="$ref"/>
+			            <xsl:with-param name="type" select="gmx:MimeFileType/@type"/>
+			        </xsl:call-template>
+		        </xsl:if>
       </xsl:when>
       <xsl:otherwise>
         <xsl:apply-templates mode="element" select=".">
@@ -2723,31 +2776,73 @@
   <!-- ============================================================================= -->
 
   <xsl:template mode="iso19139FileRemove" match="*">
+	<xsl:param name="schema"/>
     <xsl:param name="access" select="'public'"/>
     <xsl:param name="id"/>
     <xsl:param name="geo" select="true()"/>
+  	<xsl:variable name="ref" select="geonet:element/@ref"/>
   
     <xsl:call-template name="simpleElementGui">
-      <xsl:with-param name="title" select="/root/gui/strings/file"/>
+            <xsl:with-param name="title">
+            	<xsl:choose>
+	            	<xsl:when test="name(.)='gmx:FileName'">
+		            	<xsl:value-of select="/root/gui/strings/file"/>
+            		</xsl:when>
+            		<xsl:otherwise>
+	                   	<xsl:call-template name="getTitle">
+	        		       <xsl:with-param name="name" select="name(..)"/>
+			               <xsl:with-param name="schema" select="$schema"/>
+			               <xsl:with-param name="node" select=".."/>
+	                   	</xsl:call-template>
+            		</xsl:otherwise>
+            	</xsl:choose>
+           	</xsl:with-param>
       <xsl:with-param name="text">
-        <table width="100%"><tr>
-          <xsl:variable name="ref" select="geonet:element/@ref"/>
-          <xsl:variable name="value" select="string(.)"/>
-          <td width="70%"><xsl:value-of select="$value"/></td>
-          <td align="right">
-            <input type="hidden" id="_{$ref}" value="{$value}"/>
-            <button type="button" onclick="javascript:doFileRemoveAction('{/root/gui/locService}/resources.del.new','{$ref}','{$access}','{$id}')"><xsl:value-of select="/root/gui/strings/remove"/></button>
-            <xsl:if test="$geo">
-              <xsl:call-template name="iso19139GeoPublisherButton">
-                <xsl:with-param name="access" select="$access"/>
-              </xsl:call-template>
-            </xsl:if>
-          </td>
-        </tr></table>
+                <table width="100%"><tr>
+					<xsl:variable name="urlRef" select="../../gmd:linkage/gmd:URL/geonet:element/@ref"/>
+                    <td width="70%">
+                        <xsl:value-of select="string(.)"/>
+                    </td>
+                    <td align="left">
+                        <button type="button" onclick="javascript:doFileRemoveAction('{/root/gui/locService}/resources.del.new','{if (string-length($urlRef) > 0) then concat($ref,',',$urlRef) else $ref}','{$access}','{$id}')"><xsl:value-of select="/root/gui/strings/remove"/></button>
+                        <xsl:if test="$geo">
+                            <xsl:call-template name="iso19139GeoPublisherButton">
+                                <xsl:with-param name="access" select="$access"/>
+                            </xsl:call-template>
+                        </xsl:if>
+                    </td>
+                </tr></table>
       </xsl:with-param>
       <xsl:with-param name="schema"/>
     </xsl:call-template>
-  </xsl:template>
+        <xsl:if test="name(.)='gmx:MimeFileType'">
+	        <xsl:call-template name="mimetype">
+	            <xsl:with-param name="ref" select="$ref"/>
+	            <xsl:with-param name="type" select="@type"/>
+	        </xsl:call-template>
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:template name="mimetype">
+        <xsl:param name="ref"/>
+        <xsl:param name="type"/>
+		<input type="hidden" name="_{concat($ref,'_type')}" id="_{concat($ref,'_type')}" value="{$type}"/>
+<!--
+		<tr>
+			<th class="main {name(.)}"><label class="" for="_">Mime-Type</label></th>
+			<td>
+			    <xsl:variable name="optionValues" select="replace(replace(string-join(/root/gui/strings/mimetypeChoice[@value]/@value, '#,#'), '''', '\\'''), '#', '''')"/>
+			    <xsl:variable name="optionLabels" select="replace(replace(string-join(/root/gui/strings/mimetypeChoice[@value], '#,#'), '''', '\\'''), '#', '''')"/>
+				<xsl:call-template name="combobox">
+					<xsl:with-param name="ref" select="concat($ref,'_type')"/>
+					<xsl:with-param name="value" select="$type"/>
+					<xsl:with-param name="optionValues" select="$optionValues"/>
+					<xsl:with-param name="optionLabels" select="$optionLabels"/>
+				</xsl:call-template>
+			</td>
+	    </tr>
+-->
+    </xsl:template>
 
 
   <!-- Add button for publication in GeoServer -->
@@ -3549,7 +3644,7 @@
     >
     <xsl:param name="schema" />
     <xsl:param name="edit" />
-    <xsl:variable name="isLocalizedCharStringField" select="(name(.)='gmd:title' and name(..)='gmd:CI_Citation' and name(../..)='gmd:citation') or name(.)='gmd:abstract'"/>
+    <xsl:variable name="isLocalizedCharStringField" select="(name(.)='gmd:title' and name(..)='gmd:CI_Citation' and name(../..)='gmd:citation') or name(.)='gmd:abstract' or name(.)='gmd:useLimitation' or name(.)='gmd:otherConstraints'"/>
     <!-- Define a class variable if form element as
       to be a textarea instead of a simple text input.
       This parameter define the class of the textarea (see CSS). -->

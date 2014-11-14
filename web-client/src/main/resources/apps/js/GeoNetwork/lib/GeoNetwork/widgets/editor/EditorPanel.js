@@ -172,7 +172,7 @@ GeoNetwork.editor.EditorPanel = Ext.extend(Ext.Panel, {
      *  
      *  Show panel to upload a file.
      */
-    showFileUploadPanel: function(id, ref){
+    showFileUploadPanel: function(id, uuid, ref, urlRef){
         var panel = this;
         
         // FIXME : could be improved. Here we clean the window.
@@ -199,7 +199,7 @@ GeoNetwork.editor.EditorPanel = Ext.extend(Ext.Panel, {
                     value: 'private' // FIXME
                 }, {
                     name: 'ref',
-                    allowBlank: false,
+//                    allowBlank: false,
                     hidden: true,
                     value: ref
                 }, {
@@ -228,6 +228,7 @@ GeoNetwork.editor.EditorPanel = Ext.extend(Ext.Panel, {
                     iconCls: 'attachedAdd',
                     handler: function(){
                         if (fileUploadPanel.getForm().isValid()) {
+                        	var accessFieldValue = fileUploadPanel.getForm().findField("access").getValue();
                             fileUploadPanel.getForm().submit({
                                 url: panel.catalogue.services.upload,
                                 waitMsg: OpenLayers.i18n('uploading'),
@@ -237,12 +238,19 @@ GeoNetwork.editor.EditorPanel = Ext.extend(Ext.Panel, {
                                     if (name) {
                                         name.value = fname;
                                     }
+                                    var url = Ext.getDom('_' + urlRef);
+                                    if (url) {
+                                        url.value = this.catalogue.services.rootUrl + 'resources.get?uuid=' + uuid + '&fname=' + fname + '&access=' + accessFieldValue;
+                                    }
                                     // Trigger update
                                     panel.save();
                                     
                                     // Hide window
                                     panel.fileUploadWindow.hide();
-                                }
+                                },
+	                            failure: function(fileUploadPanel, o){
+	                            	panel.getError2(o.response);
+	                            }
                                 // TODO : improve error message
                                 // Currently return  Unexpected token < from ext doDecode
                             });
@@ -920,6 +928,22 @@ GeoNetwork.editor.EditorPanel = Ext.extend(Ext.Panel, {
 //            // Do something else
 //        }
     },
+
+    getError2: function(response){
+        if (response && response.responseText) {
+            var errorPage = response.responseText
+            errorMsg = errorPage.match(/message<\/b\>[ ]<u\>(.*)/);
+            if (errorMsg) {
+                Ext.Msg.alert("Fout",errorMsg[1]);
+            } else {
+                errorMsg = errorPage.match(/<p\>Exception[ ]:[ ](.*)<\/p\>/);
+                if (errorMsg) {
+                    Ext.Msg.alert("Fout",errorMsg[1]);
+                }
+            }
+        } 
+    },
+    
     /** api: method[updateEditor]
      * 
      *  :param html: ``String``  HTML to use for panel update
@@ -1321,8 +1345,43 @@ GeoNetwork.editor.EditorPanel = Ext.extend(Ext.Panel, {
             }
             this.initPanelLayout();
         }, this);
+    },
+    /**
+     * Method: retrieveSubTemplate
+     *
+     * Load subtemplate with 'elementName' as root, add the resulting xml to e new element 'name' and add this to the element with reference ref
+     */
+    retrieveSubTemplate: function(ref, name, elementName, ommitNameTag){
+        var self = this;
+        var elementNameArray = elementName.split("|");
+        Ext.Ajax.request({
+            url: self.catalogue.services.subTemplate + "?root=" + elementNameArray[0] + (elementNameArray.length==2 ? "&child=" + elementNameArray[1] : ""),
+            method: 'GET',
+            scope: this,
+            success: function(response){
+                var st = response.responseText;
+                var subtemplates = [];
+                subtemplates.push((ommitNameTag ? "" : ("<" + name + self.generateNamespaceDeclaration() + ">"))  + response.responseText + (ommitNameTag ? "" : "</" + name + ">"))
+                GeoNetwork.editor.EditorTools.addHiddenFormFieldForFragment({ref:ref,name:name}, subtemplates, self);
+            },
+            failure: self.getError
+        });
+    },
+    /**
+     * Create namespace declaration
+     * 
+     * @param {Object} onlyThoseNamespaces  Restrict namespaces list
+     */
+    generateNamespaceDeclaration: function(onlyThoseNamespaces) {
+        var ns = '';
+        for (var n in this.namespaces) {
+            if ((onlyThoseNamespaces && onlyThoseNamespaces[n]) || !onlyThoseNamespaces) {
+                ns += ' xmlns:' + n + '="' + this.namespaces[n] + '"';
+            }
+        }
+        return ns;
     }
-});
+    });
 
 /** api: xtype = gn_editor_editorpanel */
 Ext.reg('gn_editor_editorpanel', GeoNetwork.editor.EditorPanel);

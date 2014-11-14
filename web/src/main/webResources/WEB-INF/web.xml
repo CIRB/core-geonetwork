@@ -157,40 +157,61 @@
     <servlet>
         <servlet-name>gn-servlet</servlet-name>
         <servlet-class>jeeves.server.sources.http.JeevesServlet</servlet-class>
-        <!-- Specified what overrides to use if the 
-        	(servlet.getServletContext().getServletContextName()).jeeves.configuration.overrides.file 
-        	system parameter is not specified.
-        -->
 		<init-param>
 			<param-name>jeeves.configuration.overrides.file</param-name>
 			<param-value>${system.specific.overrides},${web.xml.main.config.overrides}${web.xml.widget.config.overrides}</param-value>
 		</init-param>        
-        <init-param>
-            <param-name>geonetwork.drivemapping</param-name>
-            <param-value>net use x: \\CI109835\geonetworkcirb_data_shared /PERSISTENT:NO</param-value>
-<!--            <param-value>net use x: \\PCPB359\geonetworkcirb_data_shared /PERSISTENT:NO</param-value>-->
-        </init-param>
-        <init-param>
-            <param-name>geonetwork.dir</param-name>
+		<init-param>
+			<param-name>jeeves.configuration.overrides.file</param-name>
+			<param-value>,/WEB-INF/config-overrides-prod.xml</param-value>
+		</init-param>
+		<init-param>
+			<param-name>geonetwork.dir</param-name>
+			<param-value>/data/geonetwork_data_shared</param-value>
+		</init-param>
+		<init-param>
+			<param-name>geonetwork.lucene.dir</param-name>
+			<param-value>/opt/jakarta/apache-tomcat-7.0.27-port8080/data/geonetwork/lucene</param-value>
+		</init-param>
+		<init-param>
+			<param-name>geonetwork.svn.dir</param-name>
+			<param-value>/opt/jakarta/apache-tomcat-7.0.27-port8080/data/geonetwork/svn</param-value>
+		</init-param>
+	        <init-param>
+        	    <param-name>geonetwork.clusterconfig.dir</param-name>
+	            <param-value>/opt/jakarta/apache-tomcat-7.0.27-port8080/data/geonetwork/cluster</param-value>
+        	</init-param>
+		<init-param>
+			<param-name>geonetwork.resources.dir</param-name>
+			<param-value>/data/geonetwork_data_shared</param-value>
+		</init-param>    
+<!--
+		<init-param>
+			<param-name>geonetwork.drivemapping</param-name>
+			<param-value>net use x: \\PCPB615\geonetworkcirb_data_shared /PERSISTENT:NO</param-value>
+        	</init-param>
+        	<init-param>
+			<param-name>geonetwork.dir</param-name>
 			<param-value>x:</param-value>
-        </init-param>
-        <init-param>
-            <param-name>geonetwork.lucene.dir</param-name>
-            <param-value>C:\geonetworkcirb_data\lucene</param-value>
-        </init-param>
-        <init-param>
-            <param-name>geonetwork.svn.dir</param-name>
-            <param-value>C:\geonetworkcirb_data\svn</param-value>
-        </init-param>
-        <init-param>
-            <param-name>geonetwork.clusterconfig.dir</param-name>
-            <param-value>C:\geonetworkcirb_data\cluster</param-value>
-        </init-param>
-        <init-param>
-            <param-name>geonetwork.resources.dir</param-name>
-            <param-value>x:</param-value>
-        </init-param>
-        <load-on-startup>1</load-on-startup>
+		</init-param>
+		<init-param>
+			<param-name>geonetwork.lucene.dir</param-name>
+			<param-value>C:\geonetworkcirb_data\lucene</param-value>
+		</init-param>
+		<init-param>
+			<param-name>geonetwork.svn.dir</param-name>
+			<param-value>C:\geonetworkcirb_data\svn</param-value>
+		</init-param>
+		<init-param>
+			<param-name>geonetwork.clusterconfig.dir</param-name>
+			<param-value>C:\geonetworkcirb_data\cluster</param-value>
+		</init-param>
+		<init-param>
+			<param-name>geonetwork.resources.dir</param-name>
+			<param-value>x:</param-value>
+		</init-param>
+-->
+		<load-on-startup>1</load-on-startup>
     </servlet>
 
         <!-- Servlet proxy -->

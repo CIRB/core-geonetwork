@@ -660,7 +660,6 @@
     <xsl:param name="subtemplate" select="false()"/>
 		<xsl:param name="schema"/>
 
-
     <xsl:variable name="name" select="name(.)"/>
 
     <!-- Some sub-template are relevant in different type of elements 
@@ -2101,4 +2100,71 @@
     </div>
   </xsl:template>
 
+  <xsl:template mode="addElement" match="*">
+		<xsl:param name="schema"/>
+		<xsl:param name="edit" select="true"/>
+		<xsl:param name="visible" select="false()"/>
+		<xsl:param name="embedded"/>
+		<xsl:param name="ommitNameTag" select="true()"/>
+		<xsl:param name="title" />
+		<xsl:param name="content" />
+		<xsl:variable name="name" select="concat(@prefix,':',@name)"/>
+		<xsl:variable name="qname"><xsl:value-of select="concat(@prefix,'COLON',@name)"/></xsl:variable>
+	    <xsl:variable name="parentName" select="../geonet:element/@ref|@parent"/>
+<!--
+	    <xsl:variable name="max" select="if (../geonet:element/@max) then ../geonet:element/@max else @max"/>
+		<xsl:variable name="elemId" select="@uuid"/>
+-->
+		<xsl:variable name="isXLinked" select="false()"/>
+		<xsl:variable name="text">
+			<xsl:variable name="options">
+				<options>
+				    <option name="{$name}">
+						<xsl:attribute name="selected">selected</xsl:attribute>
+						<xsl:call-template name="getTitle">
+							<xsl:with-param name="name" select="$name" />
+							<xsl:with-param name="schema" select="$schema"/>
+						</xsl:call-template>
+					</option>
+				</options>
+			</xsl:variable>
+			<select class="md" name="_{$parentName}_{$qname}_subtemplate" size="1">
+				<xsl:if test="count(exslt:node-set($options)//option)=1">
+					<xsl:attribute name="style">visibility:hidden</xsl:attribute>
+				</xsl:if>
+				<xsl:for-each select="exslt:node-set($options)//option">
+					<xsl:sort select="."/>
+					<option value="{@name}"><xsl:value-of select="."/></option>
+				</xsl:for-each>
+			</select>
+		</xsl:variable>
+		<xsl:variable name="addLink">
+			<xsl:variable name="function">Ext.getCmp('editorPanel').retrieveSubTemplate</xsl:variable>
+			<xsl:value-of select="concat('javascript:', $function, '(',$parentName,',',$apos,$name,$apos,',document.mainForm._',$parentName,'_',$qname,'_subtemplate.value,',$ommitNameTag,');')"/>
+		</xsl:variable>
+		<xsl:variable name="helpLink">
+			<xsl:call-template name="getHelpLink">
+				<xsl:with-param name="name" select="$name"/>
+				<xsl:with-param name="schema" select="$schema"/>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="id" select="generate-id(.)"/>
+		<xsl:variable name="selectionRow">
+		    <xsl:call-template name="simpleElementGui">
+				<xsl:with-param name="id" select="concat('_',$parentName,'_',$name,'_subtemplate_row')"/>
+				<xsl:with-param name="title">
+					<xsl:call-template name="getTitle">
+						<xsl:with-param name="name" select="$name"/>
+						<xsl:with-param name="schema" select="$schema"/>
+					</xsl:call-template>
+				</xsl:with-param>
+				<xsl:with-param name="text" select="$text"/>
+				<xsl:with-param name="addLink" select="$addLink"/>
+				<xsl:with-param name="helpLink" select="$helpLink"/>
+				<xsl:with-param name="edit" select="$edit"/>
+				<xsl:with-param name="visible" select="$visible"/>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:copy-of select="$selectionRow"/>
+  </xsl:template>
 </xsl:stylesheet>

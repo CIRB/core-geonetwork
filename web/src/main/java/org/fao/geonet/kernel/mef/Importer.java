@@ -345,7 +345,7 @@ public class Importer {
 
         		importRecord(uuid, localId, uuidAction, md, schema, index,
 						source, sourceName, context, id, createDate,
-						changeDate, groupId, isTemplate, dbms);
+						changeDate, groupId, isTemplate, dbms, null);
 
 				if (fc.size() != 0 && fc.get(index) != null) {
 					// UUID is set as @uuid in root element
@@ -469,7 +469,7 @@ public class Importer {
      */
 	public static void importRecord(String uuid, String localId, String uuidAction, List<Element> md, String schema,
                                     int index, String source, String sourceName, ServiceContext context, List<String> id,
-                                    String createDate, String changeDate, String groupId, String isTemplate, Dbms dbms) throws Exception {
+                                    String createDate, String changeDate, String groupId, String isTemplate, Dbms dbms, String title) throws Exception {
 
 		GeonetContext gc = (GeonetContext) context.getHandlerContext(Geonet.CONTEXT_NAME);
 		DataManager dm = gc.getDataManager();
@@ -538,7 +538,7 @@ public class Importer {
                     //
                     // insert metadata
                     //
-                    String docType = "", title = null, category = null;
+                    String docType = "", category = null;
                     boolean ufo = false, indexImmediate = false;
 //                    String relatedGroupId = dm.getGroupIdFromMetadataGroupRelations(dbms, uuid);
                     dm.insertMetadata(context, dbms, schema, md.get(index), iLocalId, uuid, context.getUserSession().getUserIdAsInt(), /*relatedGroupId!=null ? relatedGroupId : */groupId, source,
@@ -561,7 +561,7 @@ public class Importer {
             // insert metadata
             //
 			int userid = context.getUserSession().getUserIdAsInt();
-            String docType = null, title = null, category = null;
+            String docType = null, category = null;
             boolean ufo = false, indexImmediate = false;
 //            String relatedGroupId = dm.getGroupIdFromMetadataGroupRelations(dbms, uuid);
             id.add(index,

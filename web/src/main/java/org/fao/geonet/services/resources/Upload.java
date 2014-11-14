@@ -125,10 +125,15 @@ public class Upload implements Service
 		}
 
 		// check if file already exists and do whatever overwrite wants
-		if (newFile.exists() && overwrite.equals("no")) {
-			throw new Exception("File upload unsuccessful because "+newFile.getName()+" already exists and overwrite was not permitted");
+		if (overwrite.equals("no")) {
+			if (newFile.exists()) {
+				throw new Exception("File upload unsuccessful because "+newFile.getName()+" already exists and overwrite was not permitted");
+			}
+		} else {
+			if (newFile.exists()) {
+				newFile.delete();
+			}
 		}
-
 	
 		// move uploaded file to destination directory - have two goes
 		try {
@@ -146,11 +151,17 @@ public class Upload implements Service
 		context.info("UPLOADED:"+fname+","+id+","+mdUuid+","+context.getIpAddress()+","+username);
 
 		// update the metadata
+/*
 		Element elem = new Element("_" + ref);
 		params.addContent(elem);
 		elem.setText(fname);
+*/
+//		MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
+//		elemType.setText(mimeTypesMap.getContentType(oldFile.getName()));
+
 		return new Element("response")
 					.addContent(new Element("fname").setText(fname))
+					//.addContent(new Element("ftype").setText(mimeTypesMap.getContentType(oldFile.getName())))
 					.addContent(new Element("fsize").setText(fsize));
 	}
 }

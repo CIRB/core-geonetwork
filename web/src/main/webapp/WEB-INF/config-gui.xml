@@ -261,6 +261,9 @@
       <subtemplate type="gmd:DQ_FormatConsistency">
         <parent id="gmd:report"/>
       </subtemplate>
+      <subtemplate type="gmd:MD_DigitalTransferOptions">
+        <parent id="gmd:transferOptions"/>
+      </subtemplate>
     </mapping>
   </editor-subtemplate>
 

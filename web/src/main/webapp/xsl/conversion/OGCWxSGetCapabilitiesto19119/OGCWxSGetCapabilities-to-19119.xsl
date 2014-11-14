@@ -24,6 +24,12 @@
 	<xsl:param name="abstractDUT"/>
 	<xsl:param name="abstractENG"/>
 	<xsl:param name="abstractFRE"/>
+	<xsl:param name="accessConstraintDUT1"/>
+	<xsl:param name="accessConstraintENG1"/>
+	<xsl:param name="accessConstraintFRE1"/>
+	<xsl:param name="accessConstraintDUT2"/>
+	<xsl:param name="accessConstraintENG2"/>
+	<xsl:param name="accessConstraintFRE2"/>
 
 	<!-- ============================================================================= -->
 
@@ -244,6 +250,24 @@
 						</xsl:with-param>
 						<xsl:with-param name="abstractFRE">
 							<xsl:value-of select="$abstractFRE" />
+						</xsl:with-param>
+						<xsl:with-param name="accessConstraintDUT1">
+							<xsl:value-of select="$accessConstraintDUT1" />
+						</xsl:with-param>
+						<xsl:with-param name="accessConstraintENG1">
+							<xsl:value-of select="$accessConstraintENG1" />
+						</xsl:with-param>
+						<xsl:with-param name="accessConstraintFRE1">
+							<xsl:value-of select="$accessConstraintFRE1" />
+						</xsl:with-param>
+						<xsl:with-param name="accessConstraintDUT2">
+							<xsl:value-of select="$accessConstraintDUT2" />
+						</xsl:with-param>
+						<xsl:with-param name="accessConstraintENG2">
+							<xsl:value-of select="$accessConstraintENG2" />
+						</xsl:with-param>
+						<xsl:with-param name="accessConstraintFRE2">
+							<xsl:value-of select="$accessConstraintFRE2" />
 						</xsl:with-param>
 					</xsl:apply-templates>
 				</srv:SV_ServiceIdentification>

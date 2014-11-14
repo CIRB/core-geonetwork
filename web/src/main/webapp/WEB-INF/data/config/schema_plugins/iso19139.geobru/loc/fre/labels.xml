@@ -3896,11 +3896,13 @@
         <label>Organisation responsable</label>
         <description>Organisation responsable</description>
     </element>
+<!--
     <element name="gmd:CI_ResponsibleParty">
         <label>Organisation responsable</label>
         <description>Identification des personnes et organisations responsables de la ressource</description>
     </element>
-    <element name="gco:lower">
+ -->
+     <element name="gco:lower">
         <label>Cardinalité min</label>
         <description>Cardinalité min</description>
     </element>

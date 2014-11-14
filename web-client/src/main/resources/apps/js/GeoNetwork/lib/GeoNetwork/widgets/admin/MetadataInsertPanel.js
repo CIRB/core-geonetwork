@@ -80,6 +80,10 @@ GeoNetwork.admin.MetadataInsertPanel = Ext.extend(Ext.Panel, {
                 name: 'template',
                 value: 's'
             }, {
+                xtype: 'textfield',
+                name: 'title',
+                fieldLabel: OpenLayers.i18n('title')
+            }, {
                 xtype: 'textarea',
                 name: 'data',
                 fieldLabel: OpenLayers.i18n('xmlData'),

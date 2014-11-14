@@ -92,7 +92,7 @@
 					<xsl:when test="$outputSchema='iso19139.geobru'">
 						<geobru:BXL_Address gco:isoType="CI_Address_Type">
 							<xsl:apply-templates select="." mode="Address"/>
-							<xsl:for-each select="../ContactElectronicMailAddress|../wms:ContactElectronicMailAddress|../wcs:address/wcs:electronicMailAddress|../ows:ElectronicMailAddress|../ows11:ElectronicMailAddress">
+							<xsl:for-each select="../ContactElectronicMailAddress|../wms:ContactElectronicMailAddress|../wcs:address/wcs:electronicMailAddress|ows:ElectronicMailAddress|ows11:ElectronicMailAddress">
 								<electronicMailAddress>
 									<gco:CharacterString><xsl:value-of select="."/></gco:CharacterString>
 								</electronicMailAddress>
@@ -105,7 +105,7 @@
 					<xsl:otherwise>
 						<CI_Address>
 							<xsl:apply-templates select="." mode="Address"/>
-							<xsl:for-each select="../ContactElectronicMailAddress|../wms:ContactElectronicMailAddress|../wcs:address/wcs:electronicMailAddress|../ows:ElectronicMailAddress|../ows11:ElectronicMailAddress">
+							<xsl:for-each select="../ContactElectronicMailAddress|../wms:ContactElectronicMailAddress|../wcs:address/wcs:electronicMailAddress|ows:ElectronicMailAddress|ows11:ElectronicMailAddress">
 								<electronicMailAddress>
 									<gco:CharacterString><xsl:value-of select="."/></gco:CharacterString>
 								</electronicMailAddress>

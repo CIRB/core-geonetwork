@@ -1004,7 +1004,7 @@ INSERT INTO Settings VALUES (954,952,'sorted','false');
 
 INSERT INTO Settings VALUES (956,1,'clustering',NULL);
 INSERT INTO Settings VALUES (957,956,'enable','false');
-INSERT INTO Settings VALUES (958,956,'jmsurl','failover://tcp://localhost:61616?randomize=false&maxReconnectAttempts=5');
+INSERT INTO Settings VALUES (958,956,'jmsurl','failover:(tcp://localhost:61616)?randomize=false&maxReconnectAttempts=5');
 
 -- ======================================================================
 -- === Table: Users

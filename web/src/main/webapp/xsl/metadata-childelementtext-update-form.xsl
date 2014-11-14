@@ -137,8 +137,8 @@
 				            <td class="padded">
 				                <select class="content" name="xpathExpressionHelper" onchange="updateFields(this);">
 				                	<option value="0"></option>
-				                	<option value="1">Dataset metadata - Change date</option>
-				                	<option value="2">Service metadata - Change date </option>
+				                	<option value="1">Dataset-metadata - temporal extent - endposition</option>
+				                	<option value="2">Service-metadata - temporal extent - endposition</option>
 			                	</select>
 				            </td>
 				        </tr>

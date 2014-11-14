@@ -257,6 +257,7 @@ function doRemoveElementAction(action, ref, parentref, id, min){
     var thisElement = Ext.get(id);
     var nextElement = thisElement.next();
     var prevElement = thisElement.prev();
+    var addSubtemplateRow = "_" + parentref + "_" + id.substring(0,id.indexOf('_')) + "_subtemplate_row";
     Ext.Ajax.request({
         url: catalogue.services.rootUrl + action, // TODO : catalogue.url
         method: 'GET',
@@ -276,10 +277,17 @@ function doRemoveElementAction(action, ref, parentref, id, min){
                 var prevElementType = ((prevElement == null)?"":prevElement.id.split("_")[0]);
                 var nextElementType = ((nextElement == null)?"":nextElement.id.split("_")[0]);
 
+                if (id.indexOf("resourceConstraints")==-1 && id.indexOf("report")==-1 && originalElementType!=prevElementType && originalElementType!=nextElementType) {
+	            	var addSubtemplateRowCmp = document.getElementById(addSubtemplateRow);
+	            	if (addSubtemplateRowCmp) {
+	            		addSubtemplateRowCmp.style.display = "block";
+	            	}
+                }
+
                 if (bottomElement(thisElement)) {
                     var doSwapControls = true;
 
-                    if (document.mainForm.currTab.value === 'simple') {
+                    if (document.mainForm && document.mainForm.currTab.value === 'simple') {
                         // only swap if are the same element type in simple view
                         doSwapControls = (originalElementType === prevElementType);
                     }
@@ -503,21 +511,25 @@ function checkForFileUpload(fref, pref){
 	protoIn.value = protoSelect.value;
 
     if (protocolDownloadSelect) {
-        if (finput !== null) {
+/*
+    	if (finput !== null) {
             finput.hide();
         }
+*/
         if (fbuttn !== null) {
             fbuttn.show();
         }
         
         // Reload the editor in order to make the import file button
         // appear for the name element (if existing).
-        Ext.getCmp('editorPanel').callAction('metadata.update.new');
+//        Ext.getCmp('editorPanel').callAction('metadata.update.new');
     } else {
-        if (finput !== null) {
+/*
+    	if (finput !== null) {
             finput.show();
         }
-        if (fbuttn !== null) {
+*/
+    	if (fbuttn !== null) {
             fbuttn.hide();
         }
     }

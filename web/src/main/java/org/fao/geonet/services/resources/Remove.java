@@ -81,14 +81,26 @@ public class Remove implements Service
 
 		// get online resource name
         boolean forEditing = true, withValidationErrors = false, keepXlinkAttributes = false;
+
         Element metadata = dataMan.getMetadata(context, id, forEditing, withValidationErrors, keepXlinkAttributes);
 
-		Element elem     = dataMan.getElementByRef(metadata, ref);
+        String fname = "";
+		String[] elemRefs = ref.split(",");
+		int elemCount = 0;
+		for (String elemRef : elemRefs) {
+	        Element elem     = dataMan.getElementByRef(metadata, elemRef);
 
-		if (elem == null)
-			throw new ObjectNotFoundEx("element with ref='" + ref + "'");
-
-		String fname = elem.getText();
+			if (elem == null) {
+				throw new ObjectNotFoundEx("element with ref='" + elemRef + "'");
+			} else {
+				if (elemCount==0) {
+					fname = elem.getText();
+				}
+				params.addContent(new Element("_" + elemRef));
+//				params.addContent(new Element("_" + elemRef + "_type"));
+			}
+			elemCount++;
+		}
 
 		// delete online resource
 		File dir  = new File(Lib.resource.getDir(context, access, id));
@@ -98,9 +110,10 @@ public class Remove implements Service
 			throw new OperationAbortedEx("unable to delete resource");
 
 		// update the metadata
-		params.addContent(new Element("_" + ref));
+
 		Element version = params.getChild("version");
 		version.setText((Integer.parseInt(version.getText()) + 1)  + "");
+
 		return update.exec(params, context);
 	}
 }

@@ -26,6 +26,7 @@
   <xsl:template mode="iso19139-subtemplate" match="gmd:CI_ResponsibleParty">
     <!-- TODO : multilingual subtemplate are not supported. There is
       no gmd:language element or gmd:locales -->
+	<xsl:message select="'JJJJJ'"/>
     <xsl:variable name="langId">
       <xsl:call-template name="getLangId">
         <xsl:with-param name="langGui" select="/root/gui/language"/>
