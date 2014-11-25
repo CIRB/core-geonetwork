@@ -1965,7 +1965,7 @@
       <xsl:otherwise>
         <!-- not editable text/codelists -->
         <xsl:variable name="label"
-          select="/root/gui/schemas/*[name(.)=$schema]/codelists/codelist[@name = $name]/entry[code=$value]/label"/>
+          select="/root/gui/schemas/*[name(.)=$schema or name(.)='iso19139']/codelists/codelist[@name = $name]/entry[code=$value]/label"/>
         <xsl:choose>
           <xsl:when test="$label">
             <xsl:value-of select="$label"/>
@@ -1976,7 +1976,17 @@
             </xsl:apply-templates>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of select="$value"/>
+			<xsl:variable name="mappedBoolean">
+				<xsl:variable name="context" select="name(..)"/>
+		 		<xsl:value-of select="/root/gui/schemas/*[name(.)=$schema or name(.)='iso19139']/codelists/codelist[@name=$context]/entry[code=$value]/label"/>
+			</xsl:variable>
+          	<xsl:choose>
+				<xsl:when test="$mappedBoolean!=''">
+					<xsl:value-of select="$mappedBoolean"/>
+				</xsl:when>
+          		<xsl:when test="$value='true' or $value='false'"><xsl:value-of select="/root/gui/schemas/*[name(.)=$schema or name(.)='iso19139']/strings/*[name(.)=$value]"/></xsl:when>
+          		<xsl:otherwise><xsl:value-of select="$value"/></xsl:otherwise>
+          	</xsl:choose>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:otherwise>

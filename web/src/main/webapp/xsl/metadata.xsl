@@ -1089,10 +1089,8 @@
         <xsl:param name="name"/>
         <xsl:param name="schema"/>
 
-				<!-- <xsl:message>Running getTitle on <xsl:value-of select="concat($name,' from ',$schema)"/></xsl:message> -->
 
         <xsl:param name="node" select="."/>
-
         <xsl:variable name="fullContext">
             <xsl:call-template name="getXPath" >
 				<xsl:with-param name="node" select="$node"/>
@@ -1116,14 +1114,13 @@
 
                     <!-- Name in current schema -->
                     <xsl:variable name="schematitle" select="string(/root/gui/schemas/*[name(.)=$schema]/labels/element[@name=$name and not(@context)]/label)"/>
-
-										<!-- <xsl:message>Names <xsl:value-of select="concat($schematitleWithContext,' | ',$schematitleWithContextIso,' | ',$schematitle)"/></xsl:message> -->
                     <xsl:choose>
 
                         <xsl:when test="normalize-space($schematitle)='' and
                                         normalize-space($schematitleWithContext)='' and
                                         normalize-space($schematitleWithContextIso)=''">
-                            <xsl:value-of select="string(/root/gui/schemas/iso19139/labels/element[@name=$name]/label)"/>
+							<xsl:value-of select="string(/root/gui/schemas/iso19139/labels/element[@name=$name and not(@context)]/label/string())"/>
+
                         </xsl:when>
                         <xsl:when test="normalize-space($schematitleWithContext)='' and
                                         normalize-space($schematitleWithContextIso)=''">
@@ -1147,7 +1144,6 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-
 
         <xsl:choose>
             <xsl:when test="normalize-space($title)!=''">

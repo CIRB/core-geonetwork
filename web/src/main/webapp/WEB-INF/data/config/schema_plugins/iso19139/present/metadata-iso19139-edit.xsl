@@ -686,8 +686,20 @@
     <xsl:apply-templates mode="simpleElement" select=".">
       <xsl:with-param name="schema"   select="$schema"/>
       <xsl:with-param name="edit"     select="$edit"/>
-      <xsl:with-param name="title"    select="'Name'"/>
-      <xsl:with-param name="text"     select="$text"/>
+	  <xsl:with-param name="title">
+		  <xsl:choose>
+			<xsl:when test="name(..)='srv:serviceType'">
+				<xsl:call-template name="getTitle">
+					<xsl:with-param name="name" select="name(..)"/>
+					<xsl:with-param name="schema" select="$schema"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="'Name'"/>
+			</xsl:otherwise>
+		  </xsl:choose>
+		</xsl:with-param>
+		<xsl:with-param name="text"     select="$text"/>
     </xsl:apply-templates>
   </xsl:template>
 
@@ -1111,8 +1123,14 @@
               <xsl:variable name="label" select="$codelist/entry[code = $value]/label"/>
               <xsl:choose>
                 <xsl:when test="normalize-space($label)!=''">
-                  <b><xsl:value-of select="$label"/></b>
-                  <xsl:value-of select="concat(': ',$codelist/entry[code = $value]/description)"/>
+                  <xsl:choose>
+                  	<xsl:when test="$qname='gmd:MD_KeywordTypeCode'">
+	                  <xsl:value-of select="$label"/>
+                  	</xsl:when>
+                  	<xsl:otherwise>
+						<b><xsl:value-of select="$label"/></b><xsl:value-of select="concat(': ',$codelist/entry[code = $value]/description)"/>
+                  	</xsl:otherwise>
+                  </xsl:choose>
                 </xsl:when>
                 <xsl:otherwise>
                   <b><xsl:value-of select="$value"/></b>
@@ -1310,7 +1328,10 @@
               </xsl:for-each>
               <xsl:if test="gmd:MD_Keywords/gmd:type/gmd:MD_KeywordTypeCode/@codeListValue!=''">
                 <xsl:text> (</xsl:text>
-                <xsl:value-of select="gmd:MD_Keywords/gmd:type/gmd:MD_KeywordTypeCode/@codeListValue"/>
+                <xsl:apply-templates mode="iso19139GetAttributeText" select="gmd:MD_Keywords/gmd:type/gmd:MD_KeywordTypeCode/@codeListValue">
+		          <xsl:with-param name="schema" select="$schema"/>
+		          <xsl:with-param name="edit"   select="false()"/>
+		        </xsl:apply-templates>
                 <xsl:text>)</xsl:text>
               </xsl:if>
               <xsl:text>.</xsl:text>
@@ -2140,19 +2161,21 @@
       <xsl:with-param name="flat"   select="$flat"/>
     </xsl:apply-templates>
     
-    
+<!--     
     <xsl:call-template name="complexElementGui">
       <xsl:with-param name="title" select="/root/gui/strings/metadata"/>
       <xsl:with-param name="content">
+ -->
         <xsl:call-template name="iso19139Metadata">
           <xsl:with-param name="schema" select="$schema"/>
           <xsl:with-param name="edit"   select="$edit"/>
           <xsl:with-param name="flat"   select="$flat"/>
         </xsl:call-template>
+<!--
       </xsl:with-param>
       <xsl:with-param name="schema" select="$schema"/>
     </xsl:call-template>
-    
+ -->    
     <xsl:apply-templates mode="elementEP" select="gmd:contentInfo|geonet:child[string(@name)='contentInfo']
       |gmd:metadataExtensionInfo|geonet:child[string(@name)='metadataExtensionInfo']">
       <xsl:with-param name="schema" select="$schema"/>
@@ -2215,7 +2238,7 @@
         <!-- In view mode display other languages from gmd:locale of gmd:MD_Metadata element -->
         <xsl:if test="../gmd:locale or ../../gmd:locale">
           <xsl:text> (</xsl:text><xsl:value-of select="string(/root/gui/schemas/iso19139/labels/element[@name='gmd:locale' and not(@context)]/label)"/>
-          <xsl:text>:</xsl:text>
+          <xsl:text>: </xsl:text>
           <xsl:for-each select="../gmd:locale|../../gmd:locale">
             <xsl:variable name="c" select="gmd:PT_Locale/gmd:languageCode/gmd:LanguageCode/@codeListValue"/>
             <xsl:value-of select="/root/gui/isoLang/record[code=$c]/label/child::*[name() = $lang]"/>
@@ -2391,7 +2414,8 @@
           <xsl:with-param name="schema" select="$schema"/>
         </xsl:apply-templates>
       </xsl:when>
-      <xsl:when test="string($linkage)!=''">
+      <xsl:otherwise>
+      <xsl:if test="string($linkage)!=''">
         <xsl:apply-templates mode="simpleElement" select=".">
           <xsl:with-param name="schema"  select="$schema"/>
           <xsl:with-param name="text">
@@ -2405,10 +2429,11 @@
                 </xsl:otherwise>
               </xsl:choose>
             </a>
+<!--    
             <xsl:if test="string($description)!=''">
                 <xsl:choose>
                     <xsl:when test="string($name)!=''">
-               <xsl:if test="string($description)!=string($name)">
+	               <xsl:if test="string($description)!=string($name)">
                    <br/><xsl:value-of select="$description"/>
                   </xsl:if>
                     </xsl:when>
@@ -2419,9 +2444,23 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:if>
+-->
           </xsl:with-param>
         </xsl:apply-templates>
-      </xsl:when>
+        <xsl:apply-templates mode="simpleElement" select="gmd:protocol">
+          <xsl:with-param name="schema"  select="$schema"/>
+          <xsl:with-param name="text"><xsl:value-of select="gmd:protocol"/></xsl:with-param>
+        </xsl:apply-templates>
+        <xsl:apply-templates mode="simpleElement" select="gmd:name">
+          <xsl:with-param name="schema"  select="$schema"/>
+          <xsl:with-param name="text"><xsl:value-of select="gmd:name"/></xsl:with-param>
+        </xsl:apply-templates>
+        <xsl:apply-templates mode="simpleElement" select="gmd:description">
+          <xsl:with-param name="schema"  select="$schema"/>
+          <xsl:with-param name="text"><xsl:value-of select="gmd:description"/></xsl:with-param>
+        </xsl:apply-templates>
+      </xsl:if>
+      </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 

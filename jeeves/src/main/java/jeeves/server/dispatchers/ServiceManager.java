@@ -23,7 +23,18 @@
 
 package jeeves.server.dispatchers;
 
-import com.yammer.metrics.core.TimerContext;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
+
 import jeeves.constants.ConfigFile;
 import jeeves.constants.Jeeves;
 import jeeves.exceptions.JeevesException;
@@ -55,17 +66,12 @@ import jeeves.utils.SOAPUtil;
 import jeeves.utils.SerialFactory;
 import jeeves.utils.Util;
 import jeeves.utils.Xml;
-import org.jdom.Element;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
+import org.apache.commons.lang.StringUtils;
+import org.jdom.Element;
+import org.jdom.output.XMLOutputter;
+
+import com.yammer.metrics.core.TimerContext;
 
 //=============================================================================
 
@@ -645,7 +651,8 @@ public class ServiceManager
                         } finally {
                             timerContext.stop();
                         }
-                        response = BinaryFile.encode(200, file, "document.pdf", true);
+                        String uuid = rootElem.getChild("request").getChildText("uuid");
+						response = BinaryFile.encode(200, file, (StringUtils.isNotBlank(uuid) ? uuid : ("export-summary-" + String.valueOf(Calendar.getInstance().getTimeInMillis()))) + ".pdf", true);
                     }
 					catch(Exception e)
 					{
@@ -670,12 +677,23 @@ public class ServiceManager
 			String contentDisposition = BinaryFile.getContentDisposition(response);
 			String contentLength      = BinaryFile.getContentLength(response);
 
-			int cl = (contentLength == null) ? -1 : Integer.parseInt(contentLength);
-
-			req.beginStream(contentType, cl, contentDisposition, cache);
-			BinaryFile.write(response, req.getOutputStream());
-			req.endStream();
-			BinaryFile.removeIfTheCase(response);
+			if(contentLength == null) {
+			    //This means the response is not a pointer to the file, but the file itself to download
+			    XMLOutputter outp = new XMLOutputter();
+			    String s = outp.outputString(response);
+                byte[] bytes = s.getBytes("UTF-8");
+			    
+                req.beginStream(contentType, bytes.length, contentDisposition, cache);
+                outp.output(response, req.getOutputStream());
+                req.endStream();
+			} else {
+    			int cl = (contentLength == null) ? -1 : Integer.parseInt(contentLength);
+    
+    			req.beginStream(contentType, cl, context.getService().equals("resources.get") ? null : contentDisposition, cache);
+    			BinaryFile.write(response, req.getOutputStream());
+    			req.endStream();
+    			BinaryFile.removeIfTheCase(response);
+    		}
 		}
 
 		//--- BLOB output
@@ -755,7 +773,14 @@ public class ServiceManager
                         }
 						//--- then we set the content-type and output the result
 
-						req.beginStream(outPage.getContentType(), cache);
+                        if (context.getService().equals("csv.present")) {
+                        	req.beginStream(outPage.getContentType(), -1, "attachment; filename=" + "export-summary-" + String.valueOf(Calendar.getInstance().getTimeInMillis()) + ".txt", cache);
+                        } else if (context.getService().equals("xml_iso19139_save") || context.getService().equals("xml_iso19110_save")) {
+                            String uuid = rootElem.getChild("request").getChildText("uuid");
+    						req.beginStream(outPage.getContentType(), -1, "attachment; filename=" + (StringUtils.isNotBlank(uuid) ? uuid : "metadata") + ".xml", cache);
+                        } else {
+    						req.beginStream(outPage.getContentType(), cache);                        	
+                        }
 						req.getOutputStream().write(baos.toByteArray());
 						req.endStream();
 					}

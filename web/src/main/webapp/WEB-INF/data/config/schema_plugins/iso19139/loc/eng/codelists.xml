@@ -2000,4 +2000,24 @@
 			<label>Input/output</label>
 		</entry>
 	</codelist>	
+    <codelist name="gmd:pass">
+        <entry>
+            <code>true</code>
+            <label>Conform</label>
+        </entry>
+        <entry>
+            <code>false</code>
+            <label>Not conform</label>
+        </entry>
+    </codelist> 
+    <codelist name="gmd:includedWithDataset">
+        <entry>
+            <code>true</code>
+            <label>Yes</label>
+        </entry>
+        <entry>
+            <code>false</code>
+            <label>No</label>
+        </entry>
+    </codelist> 
 </codelists>

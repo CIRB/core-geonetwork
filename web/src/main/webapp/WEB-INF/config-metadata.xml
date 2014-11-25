@@ -100,6 +100,7 @@
 	    <output sheet="layout-pdf.xsl" file="true" contentType="application/pdf">
 	      <call name="siteURL" class=".guiservices.util.GetSiteURL" />
 	      <call name="sources" class=".guiservices.util.Sources" />
+		  <call name="isoLang"       class =".guiservices.isolanguages.Get"/>
 	    </output>
 	    <error id="access" sheet="error-form.xsl">
 	      <xml name="privError" file="xml/privileges-error.xml" />

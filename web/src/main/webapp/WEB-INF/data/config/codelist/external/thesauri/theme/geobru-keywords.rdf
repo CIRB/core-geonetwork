@@ -74,11 +74,6 @@
     <skos:prefLabel xml:lang="fr">Bruit ferroviaire </skos:prefLabel>
     <skos:prefLabel xml:lang="nl">Spoorweggeluid</skos:prefLabel>
   </skos:Concept>
-  <skos:Concept rdf:about="http://geobru.irisnet.be/keywords#13">
-    <skos:prefLabel xml:lang="en">Areas of sensitive use</skos:prefLabel>
-    <skos:prefLabel xml:lang="fr">Zones d’utilisation sensible </skos:prefLabel>
-    <skos:prefLabel xml:lang="nl">Gevoelige gebruikszones</skos:prefLabel>
-  </skos:Concept>
   <skos:Concept rdf:about="http://geobru.irisnet.be/keywords#14">
     <skos:prefLabel xml:lang="en">Sonian Forest</skos:prefLabel>
     <skos:prefLabel xml:lang="fr">Forêt de Soignes</skos:prefLabel>
@@ -123,6 +118,11 @@
     <skos:prefLabel xml:lang="en">Public transport</skos:prefLabel>
     <skos:prefLabel xml:lang="fr">Transport public</skos:prefLabel>
     <skos:prefLabel xml:lang="nl">Openbaar vervoer</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://geobru.irisnet.be/keywords#23">
+    <skos:prefLabel xml:lang="en">Bruenvi</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Bruenvi</skos:prefLabel>
+    <skos:prefLabel xml:lang="nl">Bruenvi</skos:prefLabel>
   </skos:Concept>
 </rdf:RDF>
 

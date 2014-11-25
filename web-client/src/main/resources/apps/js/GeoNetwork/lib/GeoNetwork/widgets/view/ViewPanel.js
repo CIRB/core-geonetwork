@@ -84,6 +84,7 @@ GeoNetwork.view.ViewPanel = Ext.extend(Ext.Panel, {
     permalinkMenu: undefined,
     tipTpl: undefined,
     metadataSchema: undefined,
+    printButton: undefined,
     cache: {},
     tooltips: [],
     /** api: method[getLinkedData]
@@ -195,6 +196,11 @@ GeoNetwork.view.ViewPanel = Ext.extend(Ext.Panel, {
         // If another mode is active turn off simple mode.
         menu[0][2] = isSimpleModeActive;
         this.updateToolbar(menu);
+        if (this.currTab=="simple") {
+            this.printButton.show();
+        } else {
+            this.printButton.hide();
+        }
     },
     updateToolbar: function(modes){
         var i, m;
@@ -254,16 +260,18 @@ GeoNetwork.view.ViewPanel = Ext.extend(Ext.Panel, {
         this.registerTooltip();
     },
     createPrintMenu: function(){
-        return new Ext.Button({
+        this.printButton = new Ext.Button({
             iconCls: 'print',
             tooltip: OpenLayers.i18n('printTT'),
             listeners: {
                 click: function(c, pressed){
-                	window.open('print.html?uuid=' + this.metadataUuid + '&currTab=' + this.printMode + "&hl=" + this.lang);
+                    this.catalogue.metadataPrint(this.metadataUuid);
+//                	window.open('print.html?uuid=' + this.metadataUuid + '&currTab=' + this.printMode + "&hl=" + this.lang);
                 },
                 scope: this
             }
         });
+        return this.printButton;
     },
     createTooltipMenu: function(){
         return new Ext.Button({

@@ -1882,4 +1882,24 @@
         </entry>
     </codelist>
 	
+    <codelist name="gmd:pass">
+        <entry>
+            <code>true</code>
+            <label>Conforme</label>
+        </entry>
+        <entry>
+            <code>false</code>
+            <label>Non conforme</label>
+        </entry>
+    </codelist> 
+    <codelist name="gmd:includedWithDataset">
+        <entry>
+            <code>true</code>
+            <label>Oui</label>
+        </entry>
+        <entry>
+            <code>false</code>
+            <label>Non</label>
+        </entry>
+    </codelist> 
 </codelists>

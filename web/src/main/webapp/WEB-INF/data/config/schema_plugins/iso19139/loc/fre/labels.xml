@@ -2703,7 +2703,6 @@
     Pour chaque spécification visée en annexe A et B, le degré de conformité (conforme/non conforme/non évalué) doit être indiqué. Pour les autres spécifications, la valeur ne pourra être que (conforme/ non conforme).
     ]]></help>
     <condition>Obligatoire</condition>
-    
   </element>
   <element name="gmd:peakResponse" id="263.0">
     <label>Réponse maximale</label>

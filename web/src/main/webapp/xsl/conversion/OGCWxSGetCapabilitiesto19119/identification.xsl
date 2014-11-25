@@ -173,7 +173,7 @@
 				<keyword xsi:type="gmd:PT_FreeText_PropertyType">
 					<xsl:variable name="keyword">
 						<xsl:choose>
-							<xsl:when test="$wfs">infoFeatureAccessService</xsl:when>
+							<xsl:when test="$wfs=true()">infoFeatureAccessService</xsl:when>
 							<xsl:otherwise>infoMapAccessService</xsl:otherwise>
 						</xsl:choose>
 					</xsl:variable>
@@ -190,6 +190,73 @@
 						</textGroup>
 					</PT_FreeText>
 				</keyword>
+				<type>
+					<MD_KeywordTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="theme"/>
+				</type>
+				<thesaurusName>
+					<CI_Citation>
+						<title>
+							<gco:CharacterString>INSPIRE Service taxonomy</gco:CharacterString>
+						</title>
+						<date gco:nilReason="missing"/>
+						<edition>
+							<gco:CharacterString>http://geonetwork-opensource.org/inspire-theme</gco:CharacterString>
+						</edition>
+						<editionDate>
+							<gco:Date>2010-04-22</gco:Date>
+						</editionDate>
+						<identifier>
+							<MD_Identifier>
+								<code>
+									<gco:CharacterString>geonetwork.thesaurus.external.theme.inspire-service-taxonomy</gco:CharacterString>
+								</code>
+							</MD_Identifier>
+						</identifier>
+					</CI_Citation>
+				</thesaurusName>
+			</MD_Keywords>
+		</descriptiveKeywords>
+
+		<descriptiveKeywords>
+			<MD_Keywords>
+				<keyword xsi:type="gmd:PT_FreeText_PropertyType">
+					<gco:CharacterString>Reporting Inspire</gco:CharacterString>
+					<PT_FreeText>
+						<textGroup>
+							<LocalisedCharacterString locale="#ENG">Reporting Inspire</LocalisedCharacterString>
+						</textGroup>
+						<textGroup>
+							<LocalisedCharacterString locale="#FRE">Reporting Inspire</LocalisedCharacterString>
+						</textGroup>
+						<textGroup>
+							<LocalisedCharacterString locale="#DUT">Reporting Inspire</LocalisedCharacterString>
+						</textGroup>
+					</PT_FreeText>
+				</keyword>
+				<type>
+					<MD_KeywordTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="theme"/>
+				</type>
+				<thesaurusName>
+					<CI_Citation>
+						<title>
+							<gco:CharacterString>GeoBru brussels keywords</gco:CharacterString>
+						</title>
+						<date gco:nilReason="missing"/>
+						<edition>
+							<gco:CharacterString>http://geobru.irisnet.be/brusselskeywords</gco:CharacterString>
+						</edition>
+						<editionDate>
+							<gco:Date>2013-06-12</gco:Date>
+						</editionDate>
+						<identifier>
+							<MD_Identifier>
+								<code>
+									<gco:CharacterString>geonetwork.thesaurus.external.theme.geobru-keywords</gco:CharacterString>
+								</code>
+							</MD_Identifier>
+						</identifier>
+					</CI_Citation>
+				</thesaurusName>
 			</MD_Keywords>
 		</descriptiveKeywords>
 
@@ -206,10 +273,9 @@
 		
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->		
 		
-					<xsl:message select="'VOOR'"/>
 		<resourceConstraints>
 			<MD_Constraints>
-				<useLimitation>
+				<useLimitation xsi:type="gmd:PT_FreeText_PropertyType">
 					<xsl:variable name="accessConstraintFRE" select="normalize-space($accessConstraintFRE1)" />
 					<xsl:variable name="accessConstraintDUT"><xsl:if test="$accessConstraintFRE!=''"><xsl:value-of select="normalize-space($accessConstraintDUT1)" /></xsl:if></xsl:variable>
 					<xsl:variable name="accessConstraintENG"><xsl:if test="$accessConstraintFRE!=''"><xsl:value-of select="normalize-space($accessConstraintENG1)" /></xsl:if></xsl:variable>
@@ -263,7 +329,7 @@
 				<accessConstraints>
 					<MD_RestrictionCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/gmxCodelists.xml#MD_RestrictionCode" codeListValue="otherRestrictions">otherRestrictions</MD_RestrictionCode>
 				</accessConstraints>
-				<otherConstraints>
+				<otherConstraints xsi:type="gmd:PT_FreeText_PropertyType">
 					<xsl:variable name="accessConstraintFRE" select="normalize-space($accessConstraintFRE2)" />
 					<xsl:variable name="accessConstraintDUT"><xsl:if test="$accessConstraintFRE!=''"><xsl:value-of select="normalize-space($accessConstraintDUT2)" /></xsl:if></xsl:variable>
 					<xsl:variable name="accessConstraintENG"><xsl:if test="$accessConstraintFRE!=''"><xsl:value-of select="normalize-space($accessConstraintENG2)" /></xsl:if></xsl:variable>
@@ -318,7 +384,7 @@
 		<srv:serviceType>
 			<xsl:variable name="serviceType">
 				<xsl:choose>
-					<xsl:when test="$wfs">download</xsl:when>
+					<xsl:when test="$wfs=true()">download</xsl:when>
 					<xsl:otherwise>view</xsl:otherwise>
 				</xsl:choose>
 			</xsl:variable>
@@ -922,9 +988,12 @@
 	<xsl:template match="*" mode="Keywords">
 		<!-- TODO : tokenize WFS 100 keywords list -->
 		<xsl:for-each select="Keyword|wms:Keyword|ows:Keyword|ows11:Keyword|wfs:Keywords|wcs:keyword">
-			<keyword>
-				<gco:CharacterString><xsl:value-of select="."/></gco:CharacterString>
-			</keyword>
+			<xsl:variable name="keywordValue" select="normalize-space(.)" />
+			<xsl:if test="$keywordValue!='infoMapAccessService' and $keywordValue!='infoFeatureAccessService'">
+				<keyword>
+					<gco:CharacterString><xsl:value-of select="."/></gco:CharacterString>
+				</keyword>
+			</xsl:if>
 		</xsl:for-each>
 
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->

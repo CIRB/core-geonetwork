@@ -8,4 +8,6 @@
   <refDate>Reference date</refDate>
   <temporalRef>Temporal information</temporalRef>
   <constraintInfo>Access constraint information</constraintInfo>
+  <true>Ja</true>
+  <false>Nee</false>
 </strings>

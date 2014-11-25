@@ -70,7 +70,6 @@
 				<xsl:otherwise><xsl:value-of select="false()"/></xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 			- -->
 
@@ -328,7 +327,7 @@
 														</xsl:otherwise>
 													</xsl:choose>
 												</xsl:when>
-												<xsl:when test="name(.)='WFS_Capabilities' or $wfs">
+												<xsl:when test="name(.)='WFS_Capabilities' or $wfs=true()">
 													<xsl:choose>
 														<xsl:when test="$ogctype='WFS1.0.0'">
 															OGC:WFS-1.0.0-http-get-capabilities

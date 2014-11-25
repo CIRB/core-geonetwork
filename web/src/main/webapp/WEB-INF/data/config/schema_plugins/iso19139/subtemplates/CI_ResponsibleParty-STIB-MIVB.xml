@@ -29,7 +29,7 @@
 <gco:CharacterString>Belgique</gco:CharacterString>
 </gmd:country>
 <gmd:electronicMailAddress>
-<gco:CharacterString>Network_SM&N@stib.irisnet.be</gco:CharacterString>
+<gco:CharacterString>Network_SM&N@amp;stib.irisnet.be</gco:CharacterString>
 </gmd:electronicMailAddress>
 </geobru:BXL_Address>
 </gmd:address>
