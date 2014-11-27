@@ -863,6 +863,18 @@ Ext.ux.form.SuperBoxSelect = Ext.extend(Ext.ux.form.SuperBoxSelect,Ext.form.Comb
         
         if(!e.isNavKeyPress()){
             this.multiSelectMode = false;
+            var letter = String.fromCharCode(e.getKey());
+            var value = null;
+    		this.store.each(function(rec){
+	            if (rec.get(this.valueField).toUpperCase().charAt(0) == letter) {
+	                value = rec.get(this.valueField);
+	                return false;
+	            }
+	        },this);
+    		if (value!=null) {
+    			
+                this.selectByValue(value,true);
+    		}
             this.clearCurrentFocus();
             return;
         }

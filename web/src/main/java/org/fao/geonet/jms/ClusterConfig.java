@@ -247,7 +247,7 @@ public class ClusterConfig {
             register(new Producer(siteID, Geonet.ClusterMessageTopic.HARVESTER_REMOVED, MessagingDomain.PUBLISH_SUBSCRIBE));
             register(new Producer(siteID, Geonet.ClusterMessageTopic.SYSTEM_CONFIGURATION, MessagingDomain.PUBLISH_SUBSCRIBE));
             register(new Producer(siteID, Geonet.ClusterMessageTopic.SYSTEM_CONFIGURATION_RESPONSE, MessagingDomain.PUBLISH_SUBSCRIBE));
-            register(new Producer(siteID, Geonet.ClusterMessageQueue.HARVEST, MessagingDomain.POINT_TO_POINT));
+            register(new Producer(siteID, Geonet.ClusterMessageQueue.HARVEST, MessagingDomain.PUBLISH_SUBSCRIBE));
 
             Log.info(Geonet.JMS, "registered # " + producerMap.size() + " producers");
 
@@ -290,7 +290,7 @@ public class ClusterConfig {
             systemConfigurationResponseMessageHandler = new SystemConfigurationResponseMessageHandler();
             register(new Consumer(siteID, Geonet.ClusterMessageTopic.SYSTEM_CONFIGURATION_RESPONSE, MessagingDomain.PUBLISH_SUBSCRIBE,
                     systemConfigurationResponseMessageHandler));
-            register(new Consumer(siteID, Geonet.ClusterMessageQueue.HARVEST, MessagingDomain.POINT_TO_POINT,
+            register(new Consumer(siteID, Geonet.ClusterMessageQueue.HARVEST, MessagingDomain.PUBLISH_SUBSCRIBE,
                     new HarvestMessageHandler(context)));
 
             Log.info(Geonet.JMS, "registered # " + jmsActors.size() + " producers and consumers");

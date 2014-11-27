@@ -340,22 +340,13 @@ public class SearchController {
 			SchemaManager schemaManager, String schema, Element result,
 			OutputSchema outputSchema, String id) {
 
-		System.out.println("\n\n\n\n*** applyOutputSchema received schema "
-				+ schema + " and outputschema " + outputSchema.name()
-				+ "\n\n\n\n");
 		String conversionFilename;
 		if (outputSchema == OutputSchema.ISO_PROFILE) {
-			System.out
-					.println("transforming GEOBRU metadata to requested outputschema ISO");
 			conversionFilename = "to19139";
 
 			String schemaDir = schemaManager.getSchemaConvertDir(schema)
 					+ File.separator;
 			String styleSheet = schemaDir + conversionFilename + ".xsl";
-
-			System.out
-					.println("\n\n\n\n*** applyElementSetName determined stylesheet "
-							+ styleSheet + "\n\n\n\n");
 
 			try {
 				result = Xml.transform(result, styleSheet);
@@ -376,24 +367,16 @@ public class SearchController {
 			return result;
 
 		} else if (outputSchema == OutputSchema.GEOBRU) {
-			System.out
-					.println("no need to transform GEOBRU metadata to requested outputschema GEOBRU");
 			// no conversion necessary
 			return result;
 		} else if (outputSchema == OutputSchema.OGC_CORE) {
 			// convert to iso and let pre-existing iso-to-ogc short/summary/full
 			// conversions do the rest
-			System.out
-					.println("transforming GEOBRU metadata to ISO, requested outputschema is OGC (further conversion will be handled in applyElementSetName()");
 			conversionFilename = "to19139";
 
 			String schemaDir = schemaManager.getSchemaConvertDir(schema)
 					+ File.separator;
 			String styleSheet = schemaDir + conversionFilename + ".xsl";
-
-			System.out
-					.println("\n\n\n\n*** applyElementSetName determined stylesheet "
-							+ styleSheet + "\n\n\n\n");
 
 			try {
 				result = Xml.transform(result, styleSheet);
@@ -439,7 +422,6 @@ public class SearchController {
     private static Element applyElementSetName(ServiceContext context, SchemaManager schemaManager, String schema,
                                                Element result, OutputSchema outputSchema, ElementSetName elementSetName,
                                                ResultType resultType, String id) throws InvalidParameterValueEx {
-        System.out.println("\n\n\n\n*** applyElementSetName received schema " + schema +  " and outputschema " + outputSchema.name() + "\n\n\n\n");
         String prefix ;
         if (outputSchema == OutputSchema.OGC_CORE) {
             prefix = "ogc";
@@ -454,13 +436,9 @@ public class SearchController {
             throw new InvalidParameterValueEx("outputSchema not supported for metadata " + id + " schema.", schema);
         }
 
-        System.out.println("\n\n\n\n*** applyElementSetName determined prefix " + prefix + "\n\n\n\n");
-        
 		String schemaDir  = schemaManager.getSchemaCSWPresentDir(schema)+ File.separator;
 		String styleSheet = schemaDir + prefix +"-"+ elementSetName +".xsl";
 		
-        System.out.println("\n\n\n\n*** applyElementSetName determined stylesheet " + styleSheet + "\n\n\n\n");
-
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("lang", context.getLanguage());
 		params.put("displayInfo", resultType == ResultType.RESULTS_WITH_SUMMARY ? "true" : "false");

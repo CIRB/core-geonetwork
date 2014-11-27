@@ -373,6 +373,7 @@ public abstract class AbstractHarvester
 	                Log.info(Geonet.HARVESTER, "clustering enabled, creating harvest message");
 	                HarvestMessage message = new HarvestMessage();
 	                message.setId(getID());
+                    message.setSenderClientID(ClusterConfig.getClientID());
 	                Producer harvestProducer = ClusterConfig.get(Geonet.ClusterMessageQueue.HARVEST);
 	                harvestProducer.produce(message);
 	        		return OperResult.OK;
@@ -420,7 +421,7 @@ public abstract class AbstractHarvester
             }
         }
 		Logger logger = Log.createLogger(Geonet.HARVESTER);
-		String nodeName = getParams().name +" ("+ getClass().getSimpleName() +")";
+		String harvesterName = getParams().name +" ("+ getClass().getSimpleName() +")";
 		OperResult result = OperResult.OK;
 
 		try {
@@ -430,17 +431,17 @@ public abstract class AbstractHarvester
             else {
                 status = Status.ACTIVE;
             }
-            System.out.println("Started harvesting at " + (new Date()).toString() +  " from node : " + nodeName);
+            System.out.println("Started harvesting at " + (new Date()).toString() +  " for harvester with name " + harvesterName + " on node with id " + getNodeId());
             HarvestWithIndexProcessor h = new HarvestWithIndexProcessor(dataMan, logger, rm);
             h.processWithFastIndexing();
-            System.out.println("Ended harvesting at " + (new Date()).toString() +  " from node : " + nodeName);
+            System.out.println("Ended harvesting at " + (new Date()).toString() +  " for harvester with name " + harvesterName + " on node with id " + getNodeId());
 
 			rm.close();
 		}
 		catch(Throwable t) {
                         context.getMonitorManager().getCounter(AbstractHarvesterErrorCounter.class).inc();
 			result = OperResult.ERROR;
-			logger.warning("Raised exception while harvesting from : "+ nodeName);
+			logger.warning("Raised exception while harvesting for harvester with name " + harvesterName + " on node with id " + getNodeId());
 			logger.warning(" (C) Class   : "+ t.getClass().getSimpleName());
 			logger.warning(" (C) Message : "+ t.getMessage());
 			error = t;
@@ -556,7 +557,7 @@ public abstract class AbstractHarvester
 
 		@Override
 		public void process() throws Exception {
-			String nodeName = getParams().name +" ("+ getClass().getSimpleName() +")";
+			String harvesterName = getParams().name +" ("+ getClass().getSimpleName() +")";
 	
 			error = null;
 	
@@ -572,7 +573,7 @@ public abstract class AbstractHarvester
 				values.put("harvesting/id:"+ id +"/info/lastRun", lastRun);
 				values.put("harvesting/id:"+ id +"/info/clusterRunning", "true");
 				settingMan.setValues(dbms, values);
-            	System.out.println("Started harvester with uuid " + getParams().uuid + " at " + lastRun + " on node " + nodeName  + " with id " + getNodeId());
+            	System.out.println("Started harvester with uuid " + getParams().uuid + " at " + lastRun + " for harvester with name " + harvesterName  + " on node with id " + getNodeId());
             	doHarvest(logger, rm);
             } catch (Exception ex) {
             	error = ex;
@@ -585,7 +586,7 @@ public abstract class AbstractHarvester
                         ex.printStackTrace();
                     }
                 }
-            	System.out.println("Ended harvester with uuid " + getParams().uuid + " at " + lastRun + " on node " + nodeName  + " with id " + getNodeId());
+            	System.out.println("Ended harvester with uuid " + getParams().uuid + " at " + lastRun + " for harvester with name " + harvesterName  + " on node with id " + getNodeId());
 				Dbms dbms2 = null;
 				try {
 					dbms2 = (Dbms) rm.openDirect(Geonet.Res.MAIN_DB);
@@ -596,7 +597,7 @@ public abstract class AbstractHarvester
 					HarvesterHistoryDao.write(dbms2, context.getSerialFactory(), getType(), getParams().name, getParams().uuid, lastRun, getParams().node, result);
 		        } catch (Exception e) {
 		        	bException = true;
-					logger.warning("Raised exception while attempting to store harvest history from : "+ nodeName);
+					logger.warning("Raised exception while attempting to store harvest history from : "+ harvesterName);
 					e.printStackTrace();
 					logger.warning(" (C) Exc   : "+ e);
 		            if (dbms2 != null) {

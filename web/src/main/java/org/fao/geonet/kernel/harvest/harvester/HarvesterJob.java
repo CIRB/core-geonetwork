@@ -39,6 +39,7 @@ public class HarvesterJob implements Job {
                     Log.info(Geonet.HARVESTER, "clustering enabled, creating harvest message");
                     HarvestMessage message = new HarvestMessage();
                     message.setId(harvester.getID());
+                    message.setSenderClientID(ClusterConfig.getClientID());
                     Producer harvestProducer = ClusterConfig.get(Geonet.ClusterMessageQueue.HARVEST);
                     harvestProducer.produce(message);
                 }
