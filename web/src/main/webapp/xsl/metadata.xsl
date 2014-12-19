@@ -1114,27 +1114,23 @@
 
                     <!-- Name in current schema -->
                     <xsl:variable name="schematitle" select="string(/root/gui/schemas/*[name(.)=$schema]/labels/element[@name=$name and not(@context)]/label)"/>
-                    <xsl:choose>
+<!--                    <xsl:message>Names <xsl:value-of select="concat($schematitleWithContext,' | ',$schematitleWithContextIso,' | ',$schematitle)"/></xsl:message>-->
 
-                        <xsl:when test="normalize-space($schematitle)='' and
-                                        normalize-space($schematitleWithContext)='' and
-                                        normalize-space($schematitleWithContextIso)=''">
-							<xsl:value-of select="string(/root/gui/schemas/iso19139/labels/element[@name=$name and not(@context)]/label/string())"/>
-
-                        </xsl:when>
-                        <xsl:when test="normalize-space($schematitleWithContext)='' and
-                                        normalize-space($schematitleWithContextIso)=''">
-                                <xsl:value-of select="$schematitle"/>
-                        </xsl:when>
-                        <xsl:when test="normalize-space($schematitleWithContext)='' and
-                                        normalize-space($schematitle)=''">
-                                <xsl:value-of select="$schematitleWithContextIso"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                                <xsl:value-of select="$schematitleWithContext"/>
-                        </xsl:otherwise>
-
-                    </xsl:choose>
+					<xsl:choose>
+						<xsl:when test="normalize-space($schematitleWithContext)!=''">
+							<xsl:value-of select="$schematitleWithContext"/>
+						</xsl:when>
+						<xsl:when test="normalize-space($schematitleWithContextIso)!=''">
+							<xsl:value-of select="$schematitleWithContextIso"/>
+						</xsl:when>
+						<xsl:when test="normalize-space($schematitle)!=''">
+							<xsl:value-of select="$schematitle"/>
+						</xsl:when>
+						<xsl:otherwise>
+							  <xsl:value-of
+							    select="/root/gui/schemas/iso19139/labels/element[@name=$name and not(@context)]/label/string()"/>
+						</xsl:otherwise>
+					</xsl:choose>
                 </xsl:when>
 
                 <!-- otherwise just get the title out of the approriate schema help file -->
@@ -1144,7 +1140,6 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-
         <xsl:choose>
             <xsl:when test="normalize-space($title)!=''">
                 <xsl:value-of select="$title"/>

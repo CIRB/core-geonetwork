@@ -1968,7 +1968,7 @@
           select="/root/gui/schemas/*[name(.)=$schema or name(.)='iso19139']/codelists/codelist[@name = $name]/entry[code=$value]/label"/>
         <xsl:choose>
           <xsl:when test="$label">
-            <xsl:value-of select="$label"/>
+            <xsl:value-of select="$label[1]"/>
           </xsl:when>
           <xsl:when test="starts-with($schema,'iso19139') and (gco:CharacterString or gmd:PT_FreeText)">
             <xsl:apply-templates mode="localised" select="..">
@@ -1982,9 +1982,9 @@
 			</xsl:variable>
           	<xsl:choose>
 				<xsl:when test="$mappedBoolean!=''">
-					<xsl:value-of select="$mappedBoolean"/>
+					<xsl:value-of select="$mappedBoolean[1]"/>
 				</xsl:when>
-          		<xsl:when test="$value='true' or $value='false'"><xsl:value-of select="/root/gui/schemas/*[name(.)=$schema or name(.)='iso19139']/strings/*[name(.)=$value]"/></xsl:when>
+          		<xsl:when test="$value='true' or $value='false'"><xsl:value-of select="/root/gui/schemas/*[name(.)=$schema or name(.)='iso19139']/strings/*[name(.)=$value][1]"/></xsl:when>
           		<xsl:otherwise><xsl:value-of select="$value"/></xsl:otherwise>
           	</xsl:choose>
           </xsl:otherwise>
@@ -2149,8 +2149,13 @@
 			</select>
 		</xsl:variable>
 		<xsl:variable name="addLink">
-			<xsl:variable name="function">Ext.getCmp('editorPanel').retrieveSubTemplate</xsl:variable>
-			<xsl:value-of select="concat('javascript:', $function, '(',$parentName,',',$apos,$name,$apos,',document.mainForm._',$parentName,'_',$qname,'_subtemplate.value,',$ommitNameTag,');')"/>
+			<xsl:choose>
+				<xsl:when test="$name='gmd:applicationProfile'"><xsl:value-of select="concat('doNewElementAction(',$apos,'metadata.elem.add.new',$apos,',',$parentName,',',$apos,$name,$apos,',',$apos,'_',$parentName,'_',$name,'_subtemplate_row',$apos,',',$apos,'add',$apos,',',@max,');')"/></xsl:when>
+				<xsl:otherwise>
+					<xsl:variable name="function">Ext.getCmp('editorPanel').retrieveSubTemplate</xsl:variable>
+					<xsl:value-of select="concat('javascript:', $function, '(',$parentName,',',$apos,$name,$apos,',document.mainForm._',$parentName,'_',$qname,'_subtemplate.value,',$ommitNameTag,');')"/>
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:variable>
 		<xsl:variable name="helpLink">
 			<xsl:call-template name="getHelpLink">

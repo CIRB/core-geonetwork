@@ -264,27 +264,7 @@
 			</xsl:attribute>
 		</xsl:copy>
 	</xsl:template>
-
 	<!-- ================================================================= -->
-	<!-- replace gmx:MimeFileType by gmd:CharacterString -->
-	<!-- ================================================================= -->
-
-	<xsl:template match="gmd:CI_OnlineResource[starts-with(gmd:protocol/gco:CharacterString,'WWW:DOWNLOAD-') and contains(gmd:protocol/gco:CharacterString,'http--download') and gmd:name/gmx:MimeFileType]">
-		<xsl:copy>
-			<xsl:copy-of select="@*"/>
-			<xsl:copy-of select="gmd:linkage"/>
-			<xsl:copy-of select="gmd:protocol"/>
-			<xsl:copy-of select="gmd:applicationProfile"/>
-			<gmd:name>
-				<gco:CharacterString><xsl:value-of select="gmd:name/gmx:MimeFileType"/></gco:CharacterString>
-			</gmd:name>
-			<xsl:copy-of select="gmd:description"/>
-			<xsl:copy-of select="gmd:function"/>
-		</xsl:copy>
-	</xsl:template>
-
-	<!-- ================================================================= -->
-
   <xsl:template match="gmx:FileName[name(..)!='gmd:contactInstructions']">
     <xsl:copy>
 			<xsl:attribute name="src">

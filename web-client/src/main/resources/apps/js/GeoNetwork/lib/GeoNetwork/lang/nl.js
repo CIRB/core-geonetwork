@@ -255,7 +255,7 @@ GeoNetwork.Lang.nl = {
     'exportCsv': "Exporteer (CSV)",
     'exportZip': "Exporteer (ZIP)",
     'printSel': "Exporteer (PDF)",
-    'printTT': "Print. Open een nieuwe pagina voor het printen.",
+    'printTT': "Afdrukken naar PDF",
     'newOwner': "Nieuwe eigenaar",
     'updateCategories': "Wijzig categorieën",
     'updatePrivileges': "Wijzig rechten",

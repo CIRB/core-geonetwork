@@ -753,7 +753,7 @@
     </xsl:choose>
   </xsl:template>
   
-  <xsl:template mode="simpleAttribute" match="@xsi:type" priority="99"/>
+  <xsl:template mode="simpleAttribute" match="@xsi:type|gmx:MimeFileType/@type" priority="99"/>
 
   <!-- ================================================================= -->
   <!-- some elements that have both attributes and content               -->
@@ -805,7 +805,7 @@
       <xsl:with-param name="setButton" select="normalize-space(gmx:FileName)=''"/>
       <xsl:with-param name="visible" select="false()"/>
       <xsl:with-param name="action" select="concat('Ext.getCmp(', $apos, 'editorPanel', $apos, 
-        ').showFileUploadPanel(', //geonet:info/id, ', ', $apos, gmx:FileName/geonet:element/@ref, $apos, ');')"/>
+        ').showFileUploadPanel(', //geonet:info/id, ', ', $apos, //geonet:info/uuid, $apos, ', ', $apos, gmx:FileName/geonet:element/@ref, $apos, ');')"/>
     </xsl:call-template>
   </xsl:template>
  
@@ -936,7 +936,7 @@
                   <div class="logo-wrap"><img src="{gmx:FileName/@src}"/></div>
                 </xsl:when>
                 <xsl:otherwise>
-                  <a href="{gmx:FileName/@src}"><xsl:value-of select="gmx:FileName"/></a>
+				  <a href="{gmx:FileName/@src}" target="_blank"><xsl:value-of select="gmx:FileName"/></a>
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:variable>
@@ -2416,6 +2416,36 @@
       </xsl:when>
       <xsl:otherwise>
       <xsl:if test="string($linkage)!=''">
+				<xsl:if test="name(../..)!='gmd:MD_DigitalTransferOptions'">
+			        <xsl:apply-templates mode="elementEP" select="gmd:applicationProfile|geonet:child[string(@name)='applicationProfile']">
+			            <xsl:with-param name="schema" select="$schema"/>
+			            <xsl:with-param name="edit"   select="$edit"/>
+			        </xsl:apply-templates>
+				</xsl:if>
+				<xsl:if test="name(../..)='gmd:MD_DigitalTransferOptions'">
+        		    <xsl:variable name="applicationProfileCount"   select="count(gmd:applicationProfile)"/>
+					<xsl:if test="$applicationProfileCount > 0">
+						<xsl:variable name="applicationProfileValue" select="gmd:applicationProfile/gco:CharacterString/text()"/>
+				        <xsl:call-template name="simpleElementGui">
+				            <xsl:with-param name="schema" select="$schema"/>
+				            <xsl:with-param name="edit" select="$edit"/>
+				            <xsl:with-param name="title">
+				                <xsl:call-template name="getTitle">
+				                    <xsl:with-param name="name"   select="name(gmd:applicationProfile)"/>
+				                    <xsl:with-param name="schema" select="$schema"/>
+				                </xsl:call-template>
+				            </xsl:with-param>
+				            <xsl:with-param name="text">
+								<xsl:for-each select="/root/gui/strings/applicationProfileChoice[@value]">
+									<xsl:if test="string(@value)=$applicationProfileValue">
+				                    	<xsl:value-of select="string(.)"/><br/>
+									</xsl:if>
+								</xsl:for-each>
+								<xsl:text> </xsl:text>(<xsl:value-of select="string($applicationProfileValue)"/>)
+							</xsl:with-param>
+						</xsl:call-template>
+					</xsl:if>
+				</xsl:if>
         <xsl:apply-templates mode="simpleElement" select=".">
           <xsl:with-param name="schema"  select="$schema"/>
           <xsl:with-param name="text">
@@ -2429,21 +2459,21 @@
                 </xsl:otherwise>
               </xsl:choose>
             </a>
-<!--    
-            <xsl:if test="string($description)!=''">
-                <xsl:choose>
-                    <xsl:when test="string($name)!=''">
-	               <xsl:if test="string($description)!=string($name)">
-                   <br/><xsl:value-of select="$description"/>
-                  </xsl:if>
-                    </xsl:when>
-                    <xsl:otherwise>
-               <xsl:if test="string($description)!=string($linkage)">
-                   <br/><xsl:value-of select="$description"/>
-                  </xsl:if>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:if>
+<!--
+	          <xsl:if test="string($description)!=''">
+	              <xsl:choose>
+	                  <xsl:when test="string($name)!=''">
+	             <xsl:if test="string($description)!=string($name)">
+	                 <br/><xsl:value-of select="$description"/>
+	                </xsl:if>
+	                  </xsl:when>
+	                  <xsl:otherwise>
+	             <xsl:if test="string($description)!=string($linkage)">
+	                 <br/><xsl:value-of select="$description"/>
+	                </xsl:if>
+	                  </xsl:otherwise>
+	              </xsl:choose>
+	          </xsl:if>
 -->
           </xsl:with-param>
         </xsl:apply-templates>
@@ -2451,10 +2481,12 @@
           <xsl:with-param name="schema"  select="$schema"/>
           <xsl:with-param name="text"><xsl:value-of select="gmd:protocol"/></xsl:with-param>
         </xsl:apply-templates>
+<!--
         <xsl:apply-templates mode="simpleElement" select="gmd:name">
           <xsl:with-param name="schema"  select="$schema"/>
           <xsl:with-param name="text"><xsl:value-of select="gmd:name"/></xsl:with-param>
         </xsl:apply-templates>
+-->
         <xsl:apply-templates mode="simpleElement" select="gmd:description">
           <xsl:with-param name="schema"  select="$schema"/>
           <xsl:with-param name="text"><xsl:value-of select="gmd:description"/></xsl:with-param>
@@ -2468,6 +2500,7 @@
 
   <xsl:template mode="iso19139EditOnlineRes" match="*">
     <xsl:param name="schema"/>
+    <xsl:variable name="edit" select="true()"/>
     <xsl:variable name="id" select="generate-id(.)"/>
     <tr><td colspan="2"><div id="{$id}"/></td></tr>
     <xsl:apply-templates mode="complexElement" select=".">
@@ -2492,10 +2525,59 @@
         </xsl:apply-templates>
         
         
-        <xsl:apply-templates mode="elementEP" select="gmd:applicationProfile|geonet:child[string(@name)='applicationProfile']">
-          <xsl:with-param name="schema" select="$schema"/>
-          <xsl:with-param name="edit"   select="true()"/>
-        </xsl:apply-templates>
+		<xsl:if test="name(../..)!='gmd:MD_DigitalTransferOptions'">
+	        <xsl:apply-templates mode="elementEP" select="gmd:applicationProfile|geonet:child[string(@name)='applicationProfile']">
+	            <xsl:with-param name="schema" select="$schema"/>
+	            <xsl:with-param name="edit"   select="$edit"/>
+	        </xsl:apply-templates>
+		</xsl:if>
+		<xsl:if test="name(../..)='gmd:MD_DigitalTransferOptions'">
+            <xsl:variable name="applicationProfileCount"   select="count(gmd:applicationProfile)"/>
+			<xsl:if test="$edit=true()">
+				<xsl:apply-templates mode="addElement" select="geonet:child[@name='applicationProfile' and @prefix='gmd']">
+		            <xsl:with-param name="schema" select="$schema"/>
+		            <xsl:with-param name="edit"   select="$edit"/>
+		            <xsl:with-param name="visible"   select="$applicationProfileCount=0"/>
+				</xsl:apply-templates>
+			</xsl:if>
+			<xsl:if test="$applicationProfileCount > 0">
+				<xsl:variable name="applicationProfileValue" select="gmd:applicationProfile/gco:CharacterString/text()"/>
+		        <xsl:call-template name="simpleElementGui">
+		            <xsl:with-param name="schema" select="$schema"/>
+		            <xsl:with-param name="edit" select="$edit"/>
+		            <xsl:with-param name="title">
+		                <xsl:call-template name="getTitle">
+		                    <xsl:with-param name="name"   select="name(gmd:applicationProfile)"/>
+		                    <xsl:with-param name="schema" select="$schema"/>
+		                </xsl:call-template>
+		            </xsl:with-param>
+		            <xsl:with-param name="text">
+				        <xsl:choose>
+				          	<xsl:when test="$edit=true()">
+								<xsl:variable name="ref" select="gmd:applicationProfile/gco:CharacterString/geonet:element/@ref"/>
+							    <xsl:variable name="optionValues" select="replace(replace(string-join(/root/gui/strings/applicationProfileChoice[@value]/@value, '#,#'), '''', '\\'''), '#', '''')"/>
+							    <xsl:variable name="optionLabels" select="replace(replace(string-join(/root/gui/strings/applicationProfileChoice[@value], '#,#'), '''', '\\'''), '#', '''')"/>
+								<xsl:call-template name="combobox">
+									<xsl:with-param name="ref" select="$ref"/>
+									<xsl:with-param name="value" select="$applicationProfileValue"/>
+									<xsl:with-param name="optionValues" select="$optionValues"/>
+									<xsl:with-param name="optionLabels" select="$optionLabels"/>
+								</xsl:call-template>
+				          	</xsl:when>
+							<xsl:otherwise>
+								<xsl:for-each select="/root/gui/strings/applicationProfileChoice[@value]">
+									<xsl:if test="string(@value)=$applicationProfileValue">
+				                    	<xsl:value-of select="string(.)"/><br/>
+									</xsl:if>
+								</xsl:for-each>
+								<xsl:text> </xsl:text>(<xsl:value-of select="string($applicationProfileValue)"/>)
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:with-param>
+				</xsl:call-template>
+			</xsl:if>
+		</xsl:if>
+
         <xsl:choose>
             <xsl:when test="string(gmd:protocol[1]/gco:CharacterString)='WWW:DOWNLOAD-1.0-http--download'
             and string(gmd:name/gco:CharacterString|gmd:name/gmx:MimeFileType)!=''">
@@ -2688,78 +2770,116 @@
   <!-- protocol -->
   <!-- ============================================================================= -->
 
-  <xsl:template mode="iso19139" match="gmd:protocol" priority="2">
-    <xsl:param name="schema"/>
-    <xsl:param name="edit"/>
-    
-    <xsl:choose>
-      <xsl:when test="$edit=true()">
-        <xsl:call-template name="simpleElementGui">
-          <xsl:with-param name="schema" select="$schema"/>
-          <xsl:with-param name="edit" select="$edit"/>
-          <xsl:with-param name="title">
-            <xsl:call-template name="getTitle">
-              <xsl:with-param name="name"   select="name(.)"/>
-              <xsl:with-param name="schema" select="$schema"/>
-            </xsl:call-template>
-          </xsl:with-param>
+    <xsl:template mode="iso19139" match="gmd:protocol" priority="2">
+        <xsl:param name="schema"/>
+        <xsl:param name="edit"/>
 
-          <xsl:with-param name="helpLink">
-              <xsl:call-template name="getHelpLink">
-                  <xsl:with-param name="name" select="name(.)"/>
-                  <xsl:with-param name="schema" select="$schema"/>
-              </xsl:call-template>
-          </xsl:with-param>
-                
-          <xsl:with-param name="text">
-            <xsl:variable name="value" select="string(gco:CharacterString)"/>
-            <xsl:variable name="ref" select="gco:CharacterString/geonet:element/@ref"/>
-            <xsl:variable name="isXLinked" select="count(ancestor-or-self::node()[@xlink:href]) > 0"/>
-            <xsl:variable name="fref" select="../gmd:name/gco:CharacterString/geonet:element/@ref|../gmd:name/gmx:MimeFileType/geonet:element/@ref"/>
-            <input type="hidden" id="_{$ref}" name="_{$ref}" value="{$value}"/>
-            <select id="s_{$ref}" name="s_{$ref}" size="1" onchange="checkForFileUpload('{$fref}', '{$ref}');" class="md">
-              <xsl:if test="$isXLinked"><xsl:attribute name="disabled">disabled</xsl:attribute></xsl:if>
-              <xsl:if test="$value=''">
-                <option value=""/>
-              </xsl:if>
-              <xsl:for-each select="/root/gui/strings/protocolChoice[@value]">
-                <option>
-                  <xsl:if test="string(@value)=$value">
-                    <xsl:attribute name="selected"/>
-                  </xsl:if>
-                  <xsl:attribute name="value"><xsl:value-of select="string(@value)"/></xsl:attribute>
-                  <xsl:value-of select="string(.)"/>
-                </option>
-              </xsl:for-each>
-            </select>
-          </xsl:with-param>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:apply-templates mode="element" select=".">
-          <xsl:with-param name="schema" select="$schema"/>
-          <xsl:with-param name="edit"   select="false()"/>
-        </xsl:apply-templates>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
+		<xsl:variable name="value" select="string(gco:CharacterString)"/>
+		<xsl:if test="$edit=true() or $value!=''">
+	        <xsl:call-template name="simpleElementGui">
+	            <xsl:with-param name="schema" select="$schema"/>
+	            <xsl:with-param name="edit" select="$edit"/>
+	            <xsl:with-param name="title">
+	                <xsl:call-template name="getTitle">
+	                    <xsl:with-param name="name"   select="name(.)"/>
+	                    <xsl:with-param name="schema" select="$schema"/>
+	                </xsl:call-template>
+	            </xsl:with-param>
+	            <xsl:with-param name="text">
+			        <xsl:choose>
+			          	<xsl:when test="$edit=true()">
+							<xsl:variable name="ref" select="gco:CharacterString/geonet:element/@ref"/>
+							<xsl:variable name="fref" select="../gmd:name/gco:CharacterString/geonet:element/@ref|../gmd:name/gmx:MimeFileType/geonet:element/@ref"/>
+	<!-- 
+							<xsl:variable name="isXLinked" select="count(ancestor-or-self::node()[@xlink:href]) > 0"/>
+	-->
+							<xsl:variable name="onchangeFunction" select="'checkForFileUpload'"/>
+							<xsl:variable name="onchangeParams" select="concat($fref,',',$ref,',',$value)"/>
+							<xsl:variable name="onkeyupFunction" select="$onchangeFunction"/>
+							<xsl:variable name="onkeyupParams" select="$onchangeParams"/>
+<!--						    <xsl:variable name="optionValues" select="replace(replace(string-join(/root/gui/strings/protocolChoice[@value and @show='y']/@value, '#,#'), '''', '\\'''), '#', '''')"/>
+						    <xsl:variable name="optionLabels" select="replace(replace(string-join(/root/gui/strings/protocolChoice[@value and @show='y'], '#,#'), '''', '\\'''), '#', '''')"/>-->
+						    <xsl:variable name="optionValues" select="replace(replace(string-join(/root/gui/strings/protocolChoice[@value]/@value, '#,#'), '''', '\\'''), '#', '''')"/>
+						    <xsl:variable name="optionLabels" select="replace(replace(string-join(/root/gui/strings/protocolChoice[@value], '#,#'), '''', '\\'''), '#', '''')"/>
+	                        <xsl:call-template name="combobox">
+	                            <xsl:with-param name="ref" select="$ref"/>
+	<!-- 
+							    <xsl:with-param name="disabled" select="concat('''',$isXLinked,'''')"/>
+	 -->
+							    <xsl:with-param name="onchangeFunction" select="$onchangeFunction"/>
+							    <xsl:with-param name="onchangeParams" select="$onchangeParams"/>
+							    <xsl:with-param name="onkeyupFunction" select="$onkeyupFunction"/>
+							    <xsl:with-param name="onkeyupParams" select="$onkeyupParams"/>
+	                             <xsl:with-param name="value" select="gco:CharacterString/text()"/>
+	                            <xsl:with-param name="optionValues" select="$optionValues"/>
+	                            <xsl:with-param name="optionLabels" select="$optionLabels"/>
+	                        </xsl:call-template>
+	<!--
+			                 <xsl:variable name="ref" select="gco:CharacterString/geonet:element/@ref"/>
+			                 <xsl:variable name="isXLinked" select="count(ancestor-or-self::node()[@xlink:href]) > 0"/>
+			                 <xsl:variable name="fref" select="../gmd:name/gco:CharacterString/geonet:element/@ref|../gmd:name/gmx:MimeFileType/geonet:element/@ref"/>
+			                 <input type="hidden" id="_{$ref}" name="_{$ref}" value="{$value}"/>
+			                 <select id="s_{$ref}" name="s_{$ref}" size="1" onchange="checkForFileUpload('{$fref}', '{$ref}', '{$value}');" class="md">
+			                     <xsl:if test="$isXLinked"><xsl:attribute name="disabled">disabled</xsl:attribute></xsl:if>
+			                     <xsl:if test="$value=''">
+			                         <option value=""/>
+			                     </xsl:if>
+			                     <xsl:for-each select="/root/gui/strings/protocolChoice[@value]">
+			                         <option>
+			                             <xsl:if test="string(@value)=$value">
+			                                 <xsl:attribute name="selected"/>
+			                             </xsl:if>
+			                             <xsl:attribute name="value"><xsl:value-of select="string(@value)"/></xsl:attribute>
+			                             <xsl:value-of select="string(.)"/>
+			                         </option>
+			                     </xsl:for-each>
+			                 </select>
+	-->
+			          	</xsl:when>
+						<xsl:otherwise>
+		                     <xsl:for-each select="/root/gui/strings/protocolChoice[@value]">
+		                             <xsl:if test="string(@value)=$value">
+			                             <xsl:value-of select="string(.)"/><br/>
+		                             </xsl:if>
+							</xsl:for-each>
+							<xsl:text> </xsl:text>(<xsl:value-of select="string($value)"/>)
+						</xsl:otherwise>
+					</xsl:choose>
+	            </xsl:with-param>
+	        </xsl:call-template>
+		</xsl:if>
+    </xsl:template>
 
   <!-- ===================================================================== -->
   <!-- name for onlineresource only -->
   <!-- ===================================================================== -->
 
-  <xsl:template mode="iso19139" match="gmd:name[name(..)='gmd:CI_OnlineResource']" priority="2">
-    <xsl:param name="schema"/>
-    <xsl:param name="edit"/>
+    <xsl:template mode="iso19139" match="gmd:name[name(..)='gmd:CI_OnlineResource']" priority="2">
+        <xsl:param name="schema"/>
+        <xsl:param name="edit"/>
 
-    <xsl:choose>
-      <xsl:when test="$edit=true()">
-		<xsl:variable name="protocol" select="../gmd:protocol/gco:CharacterString"/>
-		<xsl:variable name="pref" select="../gmd:protocol/gco:CharacterString/geonet:element/@ref"/>
-		<xsl:variable name="ref" select="gco:CharacterString/geonet:element/@ref|gmx:MimeFileType/geonet:element/@ref"/>
-		<xsl:variable name="urlRef" select="../gmd:linkage/gmd:URL/geonet:element/@ref"/>
-		<xsl:variable name="value" select="gco:CharacterString|gmx:MimeFileType"/>
-		<xsl:variable name="button" select="starts-with($protocol,'WWW:DOWNLOAD') and contains($protocol,'http') and normalize-space($value)=''"/>
+        <xsl:choose>
+            <xsl:when test="$edit=true()">
+                <xsl:variable name="protocol" select="../gmd:protocol/gco:CharacterString"/>
+                <xsl:variable name="pref" select="../gmd:protocol/gco:CharacterString/geonet:element/@ref"/>
+                <xsl:variable name="ref" select="gco:CharacterString/geonet:element/@ref|gmx:MimeFileType/geonet:element/@ref"/>
+                <xsl:variable name="urlRef" select="../gmd:linkage/gmd:URL/geonet:element/@ref"/>
+                <xsl:variable name="value" select="gco:CharacterString|gmx:MimeFileType"/>
+                <xsl:variable name="button" select="starts-with($protocol,'WWW:DOWNLOAD') and contains($protocol,'http') and normalize-space($value)=''"/>
+<!--
+                <xsl:call-template name="simpleElementGui">
+                    <xsl:with-param name="schema" select="$schema"/>
+                    <xsl:with-param name="edit" select="$edit"/>
+                    <xsl:with-param name="title" select="/root/gui/strings/file"/>
+                    <xsl:with-param name="text">
+                        <button class="content" onclick="Ext.getCmp('editorPanel').showFileUploadPanel('{//geonet:info/id}', '{//geonet:info/uuid}', '{$ref}', '{$urlRef}');" type="button">
+                            <xsl:value-of select="/root/gui/strings/insertFileMode"/>
+                        </button>
+                    </xsl:with-param>
+                    <xsl:with-param name="id" select="concat('db_',$ref)"/>
+                    <xsl:with-param name="visible" select="$button"/>
+                </xsl:call-template>
+-->
 
                 <xsl:call-template name="simpleElementGui">
                     <xsl:with-param name="schema" select="$schema"/>
@@ -2802,15 +2922,15 @@
 			            <xsl:with-param name="type" select="gmx:MimeFileType/@type"/>
 			        </xsl:call-template>
 		        </xsl:if>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:apply-templates mode="element" select=".">
-          <xsl:with-param name="schema" select="$schema"/>
-          <xsl:with-param name="edit"   select="false()"/>
-        </xsl:apply-templates>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates mode="element" select=".">
+                    <xsl:with-param name="schema" select="$schema"/>
+                    <xsl:with-param name="edit"   select="false()"/>
+                </xsl:apply-templates>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
 
   <!-- ============================================================================= -->
 
@@ -2865,8 +2985,7 @@
     <xsl:template name="mimetype">
         <xsl:param name="ref"/>
         <xsl:param name="type"/>
-		<input type="hidden" name="_{concat($ref,'_type')}" id="_{concat($ref,'_type')}" value="{$type}"/>
-<!--
+<!--		<input type="hidden" name="_{concat($ref,'_type')}" id="_{concat($ref,'_type')}" value="{$type}"/>-->
 		<tr>
 			<th class="main {name(.)}"><label class="" for="_">Mime-Type</label></th>
 			<td>
@@ -2880,7 +2999,6 @@
 				</xsl:call-template>
 			</td>
 	    </tr>
--->
     </xsl:template>
 
 

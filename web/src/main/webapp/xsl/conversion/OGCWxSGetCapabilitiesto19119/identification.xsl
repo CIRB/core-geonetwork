@@ -1080,9 +1080,9 @@
 				</xsl:if>
 				<xsl:if test="$type=2">
 					<xsl:choose>
-						<xsl:when test="$accessConstraintLang='dut'">Geen toegangsrestricties</xsl:when>
-						<xsl:when test="$accessConstraintLang='eng'">No accessConstraints</xsl:when>
-						<xsl:otherwise>Pas de restrictions d’accès</xsl:otherwise>
+						<xsl:when test="$accessConstraintLang='dut'">Geen toegangsrestricties.</xsl:when>
+						<xsl:when test="$accessConstraintLang='eng'">No accessConstraints.</xsl:when>
+						<xsl:otherwise>Pas de restrictions d’accès.</xsl:otherwise>
 					</xsl:choose>
 				</xsl:if>
 			</xsl:otherwise>

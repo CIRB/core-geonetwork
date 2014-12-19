@@ -203,5 +203,104 @@ GeoNetwork.Util = {
             iconCls: 'linkIcon',
             menu: menu
         });
-    }
+    },
+    /** 
+     *  Initialize all div with class cal.
+     *  
+     *  Those divs will be replaced by an Ext DateTime or DateField.
+     *
+     */
+    initComboBox: function(editorPanel){
+        var combos = Ext.DomQuery.select('div.combobox'), i;
+        var scope = this;
+        for (i = 0; i < combos.length; i++) {
+            var combo = combos[i];
+            var id = "s" + combo.id.substring(0,combo.id.indexOf("_combobox")); // Give render div id to calendar input and change
+            // its id.
+//            combo.id = id + 'Id'; // In order to get the input if a get by id is made
+            // later (eg. gn_search.js).
+            
+            if (combo.firstChild === null || combo.childNodes.length === 0) { // Check if
+                // already
+                // initialized
+                // or not
+                
+                var valueEl = Ext.getDom(/*id + '_combobox'*/id.substring(1), editorPanel.dom);
+                var value = (valueEl ? valueEl.value : '');
+                var config = combo.getAttribute("config");
+                var jsonConfig = Ext.decode(config);
+                var data = new Array();
+                for (var j=0;j<jsonConfig.optionValues.length;j++) {
+                	data.push([jsonConfig.optionValues[j],jsonConfig.optionLabels[j]]);
+                }
+                var dCombo = new Ext.form.ComboBox({
+                    renderTo: combo,
+                    id: id,
+                    style: 'width: 60%',
+                    name: id,
+                    mode:'local',
+                    value: value,
+                    editable:true,
+                    triggerAction:'all',
+                    selectOnFocus:true,
+                    displayField:'label',
+                    valueField:'value',
+                    forceSelection:false,
+                    autoShow:true,
+                    store:new Ext.data.SimpleStore({
+                        fields:[
+                            'value', 'label'
+                        ],
+                        data: data,
+                        autoLoad:true
+                    }),
+                    onchangeFunction: jsonConfig.onchangeFunction,
+                    onchangeParams: jsonConfig.onchangeParams,
+                    onkeyupFunction: jsonConfig.onkeyupFunction,
+                    onkeyupParams: jsonConfig.onkeyupParams,
+                    listeners: {
+                        change: function(cb, newValue, oldValue){
+                        	Ext.get(this.id.substring(1)).dom.value =  this.getValue();
+                            if (this.onchangeFunction && this.onchangeFunction.length>0) {
+                                if (this.onchangeParams && this.onchangeParams.length>0) {
+                                	scope.executeFunctionByName(this.onchangeFunction,window,this.onchangeParams.split(','));
+                                } else {
+                                	scope.executeFunctionByName(this.onchangeFunction,window);
+                                }
+                            }
+                        }/*,
+                        keyup: function(textField, e){
+                            if (this.onkeyupFunction && this.onkeyupFunction.length>0) {
+                                if (this.onkeyupParams && this.onkeyupParams.length>0) {
+                                	scope.executeFunctionByName(this.onchangeFunction,window,this.onkeyupParams.split(','));
+                                } else {
+                                	scope.executeFunctionByName(this.onkeyupFunction,window);
+                                }
+                            }
+                        }*/
+                    }
+                });
+
+                //Small hack to put date button on its place
+                if (Ext.isChrome){
+                    dCombo.getEl().parent().setHeight("18");
+                }
+/*
+                dCombo.on('change', function() {
+                    Ext.get(this.id.substring(1)).dom.value =  this.getValue();
+                });
+*/                
+            }
+        }
+    },
+    executeFunctionByName: function(functionName, context , args) {
+//      var args = Array.prototype.slice.call(arguments, 2);
+      var namespaces = functionName.split(".");
+      var func = namespaces.pop();
+      for (var i = 0; i < namespaces.length; i++) {
+          context = context[namespaces[i]];
+      }
+      return context[func].apply(context, args);
+  }
+  
 };

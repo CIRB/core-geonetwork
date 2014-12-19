@@ -3,8 +3,10 @@ package org.fao.geonet.util;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -262,6 +264,20 @@ public final class XslUtil
 
 	public static String getCurrentDateTime(String dateFormat, String timeFormat) {
 		return new SimpleDateFormat(dateFormat + "'T'" + timeFormat).format(new Date());
+	}
+
+	public static String formatNumber(String sNumber, String decimals) {
+		NumberFormat nf = NumberFormat.getInstance(Locale.US);
+		nf.setGroupingUsed(false);
+		nf.setMinimumFractionDigits(Integer.parseInt(decimals));
+		nf.setMaximumFractionDigits(Integer.parseInt(decimals));
+		double dNumber = 0.0;
+		try {
+			dNumber = Double.parseDouble(sNumber);
+		} catch (Exception e) {
+            Log.error(Geonet.GEONETWORK, "Failed to format number: " + e.getMessage());
+		}
+		return nf.format(dNumber);
 	}
 
 }

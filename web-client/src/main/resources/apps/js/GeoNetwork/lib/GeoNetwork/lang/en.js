@@ -259,7 +259,7 @@ GeoNetwork.lang.en = {
     'exportCsv': 'Export (CSV)',
     'exportZip': 'Export (ZIP)',
     'printSel': 'Export (PDF)',
-    'printTT': 'Print. Open a new page for printing.',
+    'printTT': 'Export to PDF',
     'newOwner': 'New owner',
     'updateCategories': 'Update categories',
     'updatePrivileges': 'Update privileges',

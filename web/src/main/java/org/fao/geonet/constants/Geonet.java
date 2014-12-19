@@ -566,6 +566,7 @@ public class Geonet {
 	public static final String THREADPOOL = GEONETWORK + ".threadpool";
 	public static final String DATA_DIRECTORY = GEONETWORK + ".data.directory";
     public static final Version LUCENE_VERSION = Version.LUCENE_36;
+    public static final String ATOM    = GEONETWORK + ".atom";
 
     /**
      * Services.

@@ -1411,4 +1411,21 @@
     <formatter.admin>Metadata Formatter Admin</formatter.admin>
     <formatter.admin.des>Administration UI for metadata formatting bundlers</formatter.admin.des>
 	<monitor>Monitor</monitor>
+	<applicationProfileChoice show="y" value=""></applicationProfileChoice>
+	<applicationProfileChoice show="y" value="INSPIRE-Download-Atom">INSPIRE-Download-Atom</applicationProfileChoice>
+	<mimetypeChoice show="y" value="application/x-shapefile">application/x-shapefile for zipped shape files</mimetypeChoice>
+	<mimetypeChoice show="y" value="application/x-gmz">application/x-gmz for zipped gml files</mimetypeChoice>
+	<mimetypeChoice show="y" value="text/xml">text/xml</mimetypeChoice>
+	<mimetypeChoice show="y" value="text/plain">text/plain</mimetypeChoice>
+	<mimetypeChoice show="y" value="text/html">text/html</mimetypeChoice>
+	<mimetypeChoice show="y" value="text/xml">text/xml</mimetypeChoice>
+	<mimetypeChoice show="y" value="image/jpeg">image/jpeg</mimetypeChoice>
+	<mimetypeChoice show="y" value="image/png">image/png</mimetypeChoice>
+	<mimetypeChoice show="y" value="image/gif">image/gif</mimetypeChoice>
+	<mimetypeChoice show="y" value="application/word">application/word</mimetypeChoice>
+	<mimetypeChoice show="y" value="application/xls">application/xls</mimetypeChoice>
+	<mimetypeChoice show="y" value="application/zip">application/zip</mimetypeChoice>
+	<mimetypeChoice show="y" value="application/pdf">application/pdf</mimetypeChoice>
+	<mimetypeChoice show="y" value="application/vnd.google-earth.kml+xml">application/vnd.google-earth.kml+xml</mimetypeChoice>
+	<mimetypeChoice show="y" value="application/vnd.google-earth.kmz">application/vnd.google-earth.kmz</mimetypeChoice>
 </strings>

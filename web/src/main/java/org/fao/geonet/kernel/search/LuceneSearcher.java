@@ -1516,7 +1516,7 @@ public class LuceneSearcher extends MetaSearcher {
      * @return
      * @throws Exception
      */
-    private static Map<String,String> getMetadataFromIndex(String webappName, String priorityLang, String idField, String id, List<String> fieldnames) throws Exception {
+    public static Map<String,String> getMetadataFromIndex(String webappName, String priorityLang, String idField, String id, List<String> fieldnames) throws Exception {
         MapFieldSelector selector = new MapFieldSelector(fieldnames);
         final GeonetworkMultiReader reader;
         final SearchManager searchmanager;

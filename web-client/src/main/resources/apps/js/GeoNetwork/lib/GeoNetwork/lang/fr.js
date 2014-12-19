@@ -268,7 +268,7 @@ GeoNetwork.Lang.fr = {
 	'exportCsv' : 'Export (CSV)',
 	'exportZip' : 'Export (ZIP)',
 	'printSel' : 'Export (PDF)',
-	'printTT' : 'Imprimer. Ouvre une nouvelle page adaptée à l\'impression.',
+    'printTT': 'Export PDF',
 	'newOwner' : 'Associer un autre auteur',
 	'updateCategories' : 'Mettre à jour les catégories',
 	'updatePrivileges' : 'Mettre à jour les privilèges',

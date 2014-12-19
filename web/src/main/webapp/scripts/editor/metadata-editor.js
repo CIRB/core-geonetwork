@@ -561,54 +561,45 @@ function doEditorAlert(divId, imgId)
 
 
 // called when protocol select field changes in metadata form
-function checkForFileUpload(fref, pref) {
-	//protocol object
-	var protoSelect = $('s_'+pref); // the protocol <select>
-	var protoIn = $('_'+pref);        // the protocol input field to be submitted
-	//protocol value
-	var protocolSelect = protoSelect.value;
-	var protocolIn = protoIn.value;
-	//Can protocol be a file
-	var regex = new RegExp( '^WWW:DOWNLOAD-.*-http--download.*');
-	var protocolDownloadSelect = (regex.test(protocolSelect));
-	var protocolDownloadIn = (regex.test(protocolIn));
+function checkForFileUpload(fref, pref, protocolBeforeEdit)
+{
+    var fileName = $('_'+fref);     // the file name input field
+    var protoSelect = $('s_'+pref); // the protocol <select>
+    var protoIn = $('_'+pref);        // the protocol input field to be submitted
 
-	// This is just the input field that may contain the filename - it is not a guaranteed filename
-	// The input field is assumed to be one of 2 fields. 
-	//    If the gmd:name is used then it will be this input field
-	//    If the gmx:filename is used then it will be a hidden input field 
-	var possibleFileNameObj = $('_'+fref);     // the file name input field
-	var possibleFileUploaded = (possibleFileNameObj != null && possibleFileNameObj.value.length > 0);
+    var fileUploaded = protocolBeforeEdit.startsWith('WWW:DOWNLOAD'); // File name not displayed in editor if downloaded
+    var protocol = protoSelect.value;
+    var protocolDownload = (protocol.startsWith('WWW:DOWNLOAD') && protocol.indexOf('http')>0);
 
-	// don't let anyone change the protocol if a file has already been uploaded 
-	// unless the old and the new are downloadable.
-	if (possibleFileUploaded) {
-		if (protocolDownloadIn && !protocolDownloadSelect) {
-			alert(translate("errorChangeProtocol"));
-			// protocol change is not ok so reset the protocol value
-			protoSelect.value = protoIn.value; 
-		} else { 
-			// protocol change is ok so set the protocol value to that selected
-			protoIn.value = protoSelect.value;
-		}
-		return;
-	}
+    // don't let anyone change the protocol if a file has already been uploaded
+    // unless its between downloaddata and downloadother
+    if (fileUploaded) {
+        if (!protocolDownload ) {
+            alert(translate("errorChangeProtocol"));
+            // protocol change is not ok so reset the protocol value
+            protoSelect.value = protoIn.value;
+        } else {
+            // protocol change is ok so set the protocol value to that selected
+            protoIn.value = protoSelect.value;
+        }
+        return;
+    }
 
-	// now hide the conventional name field and show a file upload button or
-	// vice versa depending on protocol
-	finput = $('di_'+fref);
-	fbuttn = $('db_'+fref);
-    
-	if (protocolDownloadSelect) {
-		if (finput != null) finput.hide();
-		if (fbuttn != null) fbuttn.show();
-	} else {
-		if (finput != null) finput.show();
-		if (fbuttn != null) fbuttn.hide();
-	}
+    // now hide the conventional name field and show a file upload button or
+    // vice versa depending on protocol
+    finput = $('di_'+fref);
+    fbuttn = $('db_'+fref);
 
-	// protocol change is ok so set the protocol value to that selected
-	protoIn.value = protoSelect.value;
+    if (protocolDownload) {
+        if (finput != null) finput.hide();
+        if (fbuttn != null) fbuttn.show();
+    } else {
+        if (finput != null) finput.show();
+        if (fbuttn != null) fbuttn.hide();
+    }
+
+    // protocol change is ok so set the protocol value to that selected
+    protoIn.value = protoSelect.value;
 }
 
 // called by upload button in file field of metadata form

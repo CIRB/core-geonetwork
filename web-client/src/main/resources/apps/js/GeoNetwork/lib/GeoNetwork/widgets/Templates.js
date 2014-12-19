@@ -32,6 +32,8 @@ Ext.namespace('GeoNetwork');
  * 
  *   A template for harvester (experimental)
  */
+var lang = /hl=([a-z]{3})/.exec(location.href);
+GeoNetwork.Util.setLang(lang && lang[1], '..');
 GeoNetwork.Templates = Ext.extend(Ext.XTemplate, {
     compiled: false,
     disableFormats: false,

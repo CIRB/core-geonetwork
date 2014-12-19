@@ -37,7 +37,7 @@
 		<condition>Verplicht</condition>
 	    </element>
 	<element name="gmd:codeSpace" context="gmd:identifier">
-		<label>Code space</label>
+		<label>Codespace</label>
 		<description>Identificatie: Unieke identifier van de bron (Annex 1.6)</description>
 		<condition>Verplicht</condition>
 	</element>
@@ -48,7 +48,7 @@
 		<condition>Verplicht</condition>
 	  </element>
 	<element name="geobru:version" context="geobru:BXL_Distribution">
-		<label>Version</label>
+		<label>Versie</label>
 		<description>Informatie over de verspreiding: Version de référence UrbIS utilisée (Annexe 2.1)</description>
 		<condition>Verplicht</condition>
 	</element>
@@ -58,12 +58,12 @@
 		<condition>Verplicht</condition>
 	    </element>
 	<element name="gmd:codeSpace" context="gmd:referenceSystemIdentifier">
-		<label>Code space</label>
+		<label>Codespace</label>
 		<description>Informatie over de verspreiding: Gebruikt coördinatensysteem (Annex 2.2)</description>
 		<condition>Verplicht</condition>
 	</element>
 	<element name="geobru:format" context="geobru:BXL_Distribution">
-		<label>Nom du format</label>
+		<label>Naam van het formaat</label>
 		<description>Informatie over de verspreiding: Formaat van de gegevensset (Annexe 2.3)</description>
 		<help>Naam van het formaat van de gegevensset, bijvoorbeeld TIFF, ZIP, enz.</help>
 		<condition>Verplicht</condition>
@@ -158,22 +158,22 @@
 		<condition>Verplicht</condition>
 	    </element>
 	    <element name="geobru:quality" context="geobru:BXL_Lineage">
-		<label>Qualité</label>
+		<label>Kwaliteit</label>
 		<description>Kwaliteit en geldigheid: Algemene beschrijving herkomst (Algemene kwaliteit van de verzameling ruimtelijke gegevens) (Annex 7.4)</description>
 		<condition>Facultatief</condition>
 	    </element>
 	    <element name="geobru:validated" context="geobru:BXL_Lineage">
-		<label>Validée</label>
+		<label>Geldigheid</label>
 		<description>Kwaliteit en geldigheid: Algemene beschrijving herkomst (Is de verzameling gegevens gevalideerd of aan een kwaliteitscontrole onderworpen ?) (Annex 7.5)</description>
 		<condition>Facultatief</condition>
 	    </element>
 	    <element name="geobru:official" context="geobru:BXL_Lineage">
-		<label>Officielle</label>
+		<label>Officieel</label>
 		<description>Kwaliteit en geldigheid: Algemene beschrijving herkomst (Betreft het de officiële versie?) (Annex 7.6)</description>
 		<condition>Facultatief</condition>
 	    </element>
 	    <element name="geobru:legal" context="geobru:BXL_Lineage">
-		<label>Légale</label>
+		<label>Legaal</label>
 		<description>Kwaliteit en geldigheid: Algemene beschrijving herkomst (Is de verzameling gegevens rechtsgeldig ?) (Annex 7.7)</description>
 		<condition>Facultatief</condition>
 	    </element>
@@ -339,7 +339,7 @@
 		<condition>Verplicht</condition>
 	</element>
 	<element name="gmd:language" context="gmd:MD_Metadata" id="3.0">
-		<label>Langue</label>
+		<label>Taal</label>
 		<description>Métadonnées concernant les métadonnées: Taal van de metagegevens (Annexe 10.5)</description>
 		<help>Langue utilisée pour la documentation des métadonnées. La sélection s'opère dans la liste des langues ISO. Exemple : "fr" pour le français, "de" pour l'allemand, "en" pour l'anglais, "it" pour l'italien, "rm" pour le romanche, ...</help>
 		<condition>Verplicht</condition>
@@ -463,12 +463,6 @@
 		<description>Tekencodering</description>
 	</element>
 	<!-- ==================================================== -->
-<!--
-	<element name="gmd:codeSpace">
-		<label>codeSpace</label>
-		<description>codeSpace</description>
-	</element>
--->	<!-- ==================================================== -->
 	<element name="gmd:composedOf">
 		<label>bestaat uit</label>
 		<description>bestaat uit</description>
@@ -2866,7 +2860,7 @@
 	</element>
 	<!-- ==================================================== -->
 	<element name="gmd:topicCategory">
-		<label>Onderwerp</label>
+		<label>Thema</label>
 		<description>Belangrijkste themas van de dataset</description>
 	<condition>mandatory</condition>
 	</element>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<geonet>
+    <services package="org.fao.geonet">
+
+        <!-- OpenDescription document -->
+        <service name="atom.description">
+            <class name="org.fao.geonet.services.inspireatom.AtomServiceDescription" />
+            <output sheet="services/inspire-atom/opensearch.xsl" contentType="text/xml; charset=UTF-8"/>
+        </service>
+
+        <!-- Describe -->
+        <service name="atom">
+            <class name="org.fao.geonet.services.inspireatom.AtomDescribe" />
+            <output sheet="inspire-atom-feed.xsl" contentType="text/xml; charset=UTF-8"/>
+        </service>
+
+        <!-- GetData -->
+        <service name="atom.download">
+            <class name="org.fao.geonet.services.inspireatom.AtomGetData" />
+        </service>
+
+        <!-- Search -->
+        <service name="atom.search">
+            <class name="org.fao.geonet.services.inspireatom.AtomSearch" />
+        </service>
+    </services>
+</geonet>

@@ -16,6 +16,10 @@
 					<td><span id="filename_uploaded" title="{/root/response/fname}"><xsl:value-of select="/root/response/fname"/></span></td>
 				</tr>
 				<tr>
+					<th><xsl:value-of select="concat(/root/gui/strings/fileType,': ')"/></th>
+					<td align="right"><span id="filetype_uploaded" title="{/root/response/ftype}"><xsl:value-of select="/root/response/ftype"/></span></td>
+				</tr>
+				<tr>
 					<th><xsl:value-of select="concat(/root/gui/strings/sizeBytes,': ')"/></th>
 					<td align="right"><span id="filesize_uploaded" title="{/root/response/fsize}"><xsl:value-of select="/root/response/fsize"/></span></td>
 				</tr>

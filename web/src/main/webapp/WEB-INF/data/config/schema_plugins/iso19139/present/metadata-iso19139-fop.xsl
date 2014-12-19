@@ -778,14 +778,13 @@
 				</xsl:apply-templates>
 			</xsl:for-each>
 			
-			<!-- Categorieen -->
 			<xsl:for-each select="./gmd:identificationInfo/*/gmd:topicCategory">
 				<xsl:apply-templates mode="elementFop"
 					select=".">
 					<xsl:with-param name="schema" select="$schema" />
 				</xsl:apply-templates>
 			</xsl:for-each>
-			
+
 			<!-- Extent -->
 			<xsl:for-each select="./gmd:identificationInfo/*/*[local-name()='extent']">
 <!--
@@ -1251,7 +1250,12 @@
 					<xsl:variable name="nameOfFirstChild"><xsl:value-of select="name(*[1])"/></xsl:variable>
 					<xsl:variable name="label"><xsl:value-of select="/root/gui/schemas/*[name(.)='iso19139']/codelists/codelist[@name=$nameOfFirstChild]/entry[code=$codeList]/label"/></xsl:variable>
 					<xsl:variable name="description"><xsl:value-of select="/root/gui/schemas/*[name(.)='iso19139']/codelists/codelist[@name=$nameOfFirstChild]/entry[code=$codeList]/description"/></xsl:variable>
-					<xsl:value-of select="$label"/>: <xsl:value-of select="$description"/>
+					<xsl:if test="$label=''">
+						<xsl:value-of select="$codeList"/>
+					</xsl:if>
+					<xsl:if test="$label!=''">
+						<xsl:value-of select="$label"/>: <xsl:value-of select="$description"/>
+					</xsl:if>
 				</xsl:with-param>
 			</xsl:call-template>
 		</xsl:if>
@@ -1386,7 +1390,7 @@
 				<xsl:variable name="mappedBoolean">
 					<xsl:variable name="context" select="name(..)"/>
 					<xsl:variable name="value" select="."/>
-			 		<xsl:value-of select="/root/gui/schemas/*[name(.)=$schema or name(.)='iso19139']/codelists/codelist[@name=$context]/entry[code=$value]/label"/>
+			 		<xsl:value-of select="/root/gui/schemas/*[name(.)=$schema or name(.)='iso19139']/codelists/codelist[@name=$context]/entry[code=$value]/label[1]"/>
 				</xsl:variable>
 				<xsl:choose>
 					<xsl:when test="$mappedBoolean!=''">

@@ -565,6 +565,10 @@
       <allow service="metadata.formatter.xml"/>
       <allow service="metadata.formatter.resource"/>
       <allow service="metadata.formatter.list"/>
+      <allow service="atom.description"/>
+      <allow service="atom"/>
+      <allow service="atom.download"/>
+      <allow service="atom.search"/>
     </profile>
 
     <!-- users that have access to monitor services only.  The access is controlled by  -->

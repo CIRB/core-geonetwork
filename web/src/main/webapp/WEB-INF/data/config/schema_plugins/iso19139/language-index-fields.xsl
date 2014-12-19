@@ -38,6 +38,13 @@
 						<!-- not tokenized title for sorting -->
 						<Field name="_defaultTitle" string="{string($_defaultTitle)}" store="true" index="true"/>
 						<xsl:variable name="identification" select="/*[name(.)='gmd:MD_Metadata' or @gco:isoType='gmd:MD_Metadata']/gmd:identificationInfo/*[name(.)='gmd:MD_DataIdentification' or @gco:isoType='gmd:MD_DataIdentification' or name(.)='srv:SV_ServiceIdentification' or @gco:isoType='srv:SV_ServiceIdentification']"></xsl:variable>
+						<xsl:for-each select="$identification/gmd:citation/*/gmd:identifier/gmd:MD_Identifier/gmd:code/gco:CharacterString">
+							<Field name="identifier" string="{string(.)}" store="true" index="true"/>
+						</xsl:for-each>
+		
+		                <xsl:for-each select="$identification/gmd:citation/*/gmd:identifier/gmd:RS_Identifier/gmd:code/gco:CharacterString">
+		                	<Field name="identifier" string="{string(.)}" store="true" index="true"/>
+						</xsl:for-each>
 				        <xsl:variable name="title" select="$identification/gmd:citation/*/gmd:title//gmd:LocalisedCharacterString[@locale=$pound2LangId or @locale=$pound3LangId]"/>
 						<!-- not tokenized title for sorting -->
 						<Field name="_title" string="{string($title)}" store="true" index="true"/>
