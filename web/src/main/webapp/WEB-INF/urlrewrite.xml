@@ -129,7 +129,7 @@
           INSPIRE Atom OpenSearchDescription
         </note>
         <from>^/opensearch/(.*)/(.*)/OpenSearchDescription.xml$</from>
-        <to type="forward">/srv/$1/atom.description?fileIdentifier=$2</to>
+        <to type="forward">/srv/$1/atom.description?id=$2</to>
     </rule>
 
     <rule>
@@ -153,7 +153,7 @@
           INSPIRE Atom Describe (service)
         </note>
         <from>^/opensearch/(.*)/(.*)/describe?(.*)$</from>
-        <to type="forward">/srv/$1/atom.describe?fileIdentifier=$2</to>
+        <to type="forward">/srv/$1/atom?id=$2</to>
     </rule>
 
     <rule>
@@ -161,7 +161,7 @@
           INSPIRE Atom DescribeBy
         </note>
         <from>^/opensearch/(.*)/describe?(.*)$</from>
-        <to type="forward">/srv/$1/atom.describe</to>
+        <to type="forward">/srv/$1/atom</to>
     </rule>
 
 

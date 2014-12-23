@@ -2292,6 +2292,17 @@
     <xsl:template mode="iso19139" match="gmd:MD_DigitalTransferOptions">
         <xsl:param name="schema"/>
         <xsl:param name="edit"/>
+				<xsl:if test="$edit=true()">
+				    <xsl:variable name="transferOptionsElementName" select="'gmd:transferOptions'" />
+				    <xsl:variable name="followingTransferOptionsSiblingsCount" select="count(../following-sibling::*[name(.) = $transferOptionsElementName])" />
+			       	<xsl:if test="$followingTransferOptionsSiblingsCount=0">
+						<xsl:apply-templates mode="addElement" select="../../geonet:child[@name='transferOptions' and @prefix='gmd']">
+				            <xsl:with-param name="schema" select="$schema"/>
+				            <xsl:with-param name="edit"   select="$edit"/>
+				            <xsl:with-param name="visible" select="true()"/>
+						</xsl:apply-templates>
+					</xsl:if>
+				</xsl:if>
 		        <xsl:apply-templates mode="elementEP" select="gmd:unitsOfDistribution|geonet:child[string(@name)='unitsOfDistribution']">
 		            <xsl:with-param name="schema" select="$schema"/>
 		            <xsl:with-param name="edit"   select="$edit"/>
@@ -2415,7 +2426,8 @@
         </xsl:apply-templates>
       </xsl:when>
       <xsl:otherwise>
-      <xsl:if test="string($linkage)!=''">
+		<xsl:variable name="applicationProfileValue" select="gmd:applicationProfile/gco:CharacterString/text()"/>
+      	<xsl:if test="string($linkage)!=''">
 				<xsl:if test="name(../..)!='gmd:MD_DigitalTransferOptions'">
 			        <xsl:apply-templates mode="elementEP" select="gmd:applicationProfile|geonet:child[string(@name)='applicationProfile']">
 			            <xsl:with-param name="schema" select="$schema"/>
@@ -2425,7 +2437,6 @@
 				<xsl:if test="name(../..)='gmd:MD_DigitalTransferOptions'">
         		    <xsl:variable name="applicationProfileCount"   select="count(gmd:applicationProfile)"/>
 					<xsl:if test="$applicationProfileCount > 0">
-						<xsl:variable name="applicationProfileValue" select="gmd:applicationProfile/gco:CharacterString/text()"/>
 				        <xsl:call-template name="simpleElementGui">
 				            <xsl:with-param name="schema" select="$schema"/>
 				            <xsl:with-param name="edit" select="$edit"/>
@@ -2487,10 +2498,20 @@
           <xsl:with-param name="text"><xsl:value-of select="gmd:name"/></xsl:with-param>
         </xsl:apply-templates>
 -->
-        <xsl:apply-templates mode="simpleElement" select="gmd:description">
-          <xsl:with-param name="schema"  select="$schema"/>
-          <xsl:with-param name="text"><xsl:value-of select="gmd:description"/></xsl:with-param>
-        </xsl:apply-templates>
+      	<xsl:variable name="isDatasetAtomFeed" select="$applicationProfileValue='INSPIRE-Download-Atom' and //gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue='dataset'"/>
+		<xsl:if test="$isDatasetAtomFeed=true()">
+	       	<xsl:apply-templates mode="simpleElement" select="gmd:description/gco:CharacterString">
+	            <xsl:with-param name="schema" select="$schema"/>
+				<xsl:with-param name="edit"   select="$edit"/>
+	            <xsl:with-param name="title">Coordinate Reference System</xsl:with-param>
+			</xsl:apply-templates>
+		</xsl:if>
+      	<xsl:if test="$isDatasetAtomFeed=false()">
+	        <xsl:apply-templates mode="simpleElement" select="gmd:description/gco:CharacterString">
+				<xsl:with-param name="schema"  select="$schema"/>
+				<xsl:with-param name="edit"   select="$edit"/>
+	        </xsl:apply-templates>
+        </xsl:if>
       </xsl:if>
       </xsl:otherwise>
     </xsl:choose>
@@ -2531,6 +2552,7 @@
 	            <xsl:with-param name="edit"   select="$edit"/>
 	        </xsl:apply-templates>
 		</xsl:if>
+		<xsl:variable name="applicationProfileValue" select="gmd:applicationProfile/gco:CharacterString/text()"/>
 		<xsl:if test="name(../..)='gmd:MD_DigitalTransferOptions'">
             <xsl:variable name="applicationProfileCount"   select="count(gmd:applicationProfile)"/>
 			<xsl:if test="$edit=true()">
@@ -2541,7 +2563,6 @@
 				</xsl:apply-templates>
 			</xsl:if>
 			<xsl:if test="$applicationProfileCount > 0">
-				<xsl:variable name="applicationProfileValue" select="gmd:applicationProfile/gco:CharacterString/text()"/>
 		        <xsl:call-template name="simpleElementGui">
 		            <xsl:with-param name="schema" select="$schema"/>
 		            <xsl:with-param name="edit" select="$edit"/>
@@ -2616,11 +2637,20 @@
                 </xsl:apply-templates>
             </xsl:otherwise>
         </xsl:choose>
-        <xsl:apply-templates mode="elementEP" select="gmd:description|geonet:child[string(@name)='description']">
-          <xsl:with-param name="schema" select="$schema"/>
-          <xsl:with-param name="edit"   select="true()"/>
-        </xsl:apply-templates>
-        
+      	<xsl:variable name="isDatasetAtomFeed" select="$applicationProfileValue='INSPIRE-Download-Atom' and //gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue='dataset'"/>
+		<xsl:if test="$isDatasetAtomFeed=true()">
+	       	<xsl:apply-templates mode="simpleElement" select="gmd:description/gco:CharacterString">
+	            <xsl:with-param name="schema" select="$schema"/>
+	            <xsl:with-param name="edit"   select="$edit"/>
+	            <xsl:with-param name="title">CRS</xsl:with-param>
+			</xsl:apply-templates>
+		</xsl:if>
+      	<xsl:if test="$isDatasetAtomFeed=false()">
+	        <xsl:apply-templates mode="elementEP" select="gmd:description">
+				<xsl:with-param name="schema" select="$schema"/>
+				<xsl:with-param name="edit"   select="$edit"/>
+	        </xsl:apply-templates>
+        </xsl:if>
         <xsl:apply-templates mode="elementEP" select="gmd:function|geonet:child[string(@name)='function']">
           <xsl:with-param name="schema" select="$schema"/>
           <xsl:with-param name="edit"   select="true()"/>
@@ -3784,8 +3814,6 @@
     </xsl:choose>
     
   </xsl:template>
-
-
 
   <!--
     =====================================================================        

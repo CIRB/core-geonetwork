@@ -2126,20 +2126,34 @@
 		<xsl:variable name="elemId" select="@uuid"/>
 -->
 		<xsl:variable name="isXLinked" select="false()"/>
+		<xsl:variable name="isService" select="//gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue='service'"/>
+		<xsl:variable name="isDataset" select="//gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue='dataset'"/>
 		<xsl:variable name="text">
 			<xsl:variable name="options">
 				<options>
-				    <option name="{$name}">
-						<xsl:attribute name="selected">selected</xsl:attribute>
-						<xsl:call-template name="getTitle">
-							<xsl:with-param name="name" select="$name" />
-							<xsl:with-param name="schema" select="$schema"/>
-						</xsl:call-template>
-					</option>
+				    <xsl:choose>
+						<xsl:when test="$name='gmd:transferOptions'">
+							<xsl:if test="$isService=false()">
+								<option name="gmd:transferOptions;AtomDatasetFeed"><xsl:attribute name="selected">selected</xsl:attribute>INSPIRE Dataset Atom feed</option>
+							</xsl:if>
+							<xsl:if test="$isDataset=false()">
+								<option name="gmd:transferOptions;AtomServiceFeed">INSPIRE Download Service Atom feed</option>
+							</xsl:if>
+						</xsl:when>
+						<xsl:otherwise>
+						    <option name="{$name}">
+								<xsl:attribute name="selected">selected</xsl:attribute>
+								<xsl:call-template name="getTitle">
+									<xsl:with-param name="name" select="$name" />
+									<xsl:with-param name="schema" select="$schema"/>
+								</xsl:call-template>
+							</option>
+						</xsl:otherwise>
+					</xsl:choose>
 				</options>
 			</xsl:variable>
 			<select class="md" name="_{$parentName}_{$qname}_subtemplate" size="1">
-				<xsl:if test="count(exslt:node-set($options)//option)=1">
+				<xsl:if test="count(exslt:node-set($options)//option)=1 and $name!='gmd:transferOptions'">
 					<xsl:attribute name="style">visibility:hidden</xsl:attribute>
 				</xsl:if>
 				<xsl:for-each select="exslt:node-set($options)//option">

@@ -581,25 +581,37 @@ public class ServiceManager
 				warning("Response is null and there is no output page for : " +req.getService());
 			else
 			{
-				info("     -> writing xml for : " +req.getService());
+				String redirect = response.getAttributeValue("redirect");
+				String url = response.getAttributeValue("url");
+				String type = response.getAttributeValue("mime-type");
+				if (!StringUtils.isBlank(redirect) && redirect.equals("true") && !StringUtils.isBlank(url) && !StringUtils.isBlank(type)) {
+                    HttpServiceRequest req2 = (HttpServiceRequest) req;
 
-				//--- this logging is usefull for xml services that are called by javascript code
-                if(isDebug()) debug("Service xml is :\n"+Xml.getString(response));
+                    req2.getHttpServletResponse().setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
+                    req2.getHttpServletResponse().setHeader("Location", url);
+                    req2.getHttpServletResponse().setHeader("Content-Type", type);
+				} else {
 
-				InputMethod  in  = req.getInputMethod();
-				OutputMethod out = req.getOutputMethod();
-
-				if (in == InputMethod.SOAP || out == OutputMethod.SOAP)
-				{
-					req.beginStream("application/soap+xml; charset=UTF-8", cache);
-
-					if (!SOAPUtil.isEnvelope(response))
-						response = SOAPUtil.embed(response);
+					info("     -> writing xml for : " +req.getService());
+	
+					//--- this logging is usefull for xml services that are called by javascript code
+	                if(isDebug()) debug("Service xml is :\n"+Xml.getString(response));
+	
+					InputMethod  in  = req.getInputMethod();
+					OutputMethod out = req.getOutputMethod();
+	
+					if (in == InputMethod.SOAP || out == OutputMethod.SOAP)
+					{
+						req.beginStream("application/soap+xml; charset=UTF-8", cache);
+	
+						if (!SOAPUtil.isEnvelope(response))
+							response = SOAPUtil.embed(response);
+					}
+					else
+						req.beginStream("application/xml; charset=UTF-8", cache);
+	
+	                req.write(response);
 				}
-				else
-					req.beginStream("application/xml; charset=UTF-8", cache);
-
-                req.write(response);
 			}
 		}
 

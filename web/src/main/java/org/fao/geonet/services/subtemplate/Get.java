@@ -76,6 +76,7 @@ public class Get implements Service {
     	String uuid = null;
     	String root = null;
     	String child = null;
+    	String title = null;
     	Element param = params.getChild(Params.UUID);
     	if (param!=null) {
             uuid = param.getTextTrim();
@@ -83,6 +84,17 @@ public class Get implements Service {
     	param = params.getChild(Params.ROOT);
     	if (param!=null) {
     		root = param.getTextTrim();
+    		int iPos = root.indexOf(";");
+    		if (iPos>-1) {
+        		title = root.substring(iPos+1);
+        		if (title.equals("AtomServiceFeed")) {
+        			Element processEl = new Element(Params.PROCESS);
+        			params.addContent(processEl);
+        			processEl.setText("gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage/gmd:URL" + SEPARATOR +
+        					"http://localhost:8080/geonetwork/srv/fre/atom?id=" + uuid);
+        		}
+        		root = root.substring(0,iPos);
+    		}
         	param = params.getChild(Params.CHILD);
         	if (param!=null) {
         		child = param.getTextTrim();
@@ -96,13 +108,30 @@ public class Get implements Service {
             if (StringUtils.isNotBlank(child)) {
             	rec = dbms.select("SELECT data FROM metadata WHERE isTemplate = 's' AND root = ? AND data like ?", root, "%" + child + "%");
             } else {
-            	rec = dbms.select("SELECT data FROM metadata WHERE isTemplate = 's' AND root = ?", root);            	
+            	if (title!=null) {
+                	rec = dbms.select("SELECT data FROM metadata WHERE isTemplate = 's' AND root = ? AND title = ?", root, title);            	
+            	} else {
+                	rec = dbms.select("SELECT data FROM metadata WHERE isTemplate = 's' AND root = ?", root);            	
+            	}
             }
         } else {
         	rec = dbms.select("SELECT data FROM metadata WHERE isTemplate = 's' AND uuid = ?", uuid);
         }
-        
-        String xmlData = rec.getChild(Jeeves.Elem.RECORD).getChildText("data");
+        String xmlData = null;
+        List<Element> records = rec.getChildren(Jeeves.Elem.RECORD);
+        if (records.size() > 0) {
+            xmlData = records.get(0).getChildText("data");
+        }
+/*
+        if (records.size() > 1 && title!=null) {
+        	for (Element record : records) {
+        		if (record.getChildText("data").contains(searchText)) {
+                    xmlData = record.getChildText("data");
+                    break;
+        		}
+        	}
+        }
+*/
         rec = Xml.loadString(xmlData, false);
         Element tpl = (Element) rec.detach();
         

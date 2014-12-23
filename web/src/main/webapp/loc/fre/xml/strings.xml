@@ -1426,6 +1426,7 @@
 	<monitor>Monitor</monitor>
 	<applicationProfileChoice show="y" value=""></applicationProfileChoice>
 	<applicationProfileChoice show="y" value="INSPIRE-Download-Atom">INSPIRE-Download-Atom</applicationProfileChoice>
+	<mimetypeChoice show="y" value="application/atom+xml">INSPIRE Atom Service/Dataset feed</mimetypeChoice>
 	<mimetypeChoice show="y" value="application/x-shapefile">application/x-shapefile pour fichiers comprimés shape</mimetypeChoice>
 	<mimetypeChoice show="y" value="application/x-gmz">application/x-gmz pour fichiers comprimés gml</mimetypeChoice>
 	<mimetypeChoice show="y" value="text/xml">text/xml</mimetypeChoice>
