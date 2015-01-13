@@ -8,7 +8,8 @@
 										xmlns:gmx="http://www.isotc211.org/2005/gmx"
 										xmlns:java="java:org.fao.geonet.util.XslUtil"
 										xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-                                        xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+                                        xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+                                        xmlns:geobru="http://geobru.irisnet.be">
 
 	<xsl:include href="convert/functions.xsl"/>
 	<xsl:include href="../../../../../xsl/utils-fn.xsl"/>
@@ -342,13 +343,16 @@
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->		
 		<!-- === Distribution === -->		
 
-		<xsl:for-each select="gmd:distributionInfo/gmd:MD_Distribution">
+		<xsl:for-each select="gmd:distributionInfo/geobru:BXL_Distribution ">
 			<xsl:for-each select="gmd:distributionFormat/gmd:MD_Format/gmd:name/gco:CharacterString">
 				<Field name="format" string="{string(.)}" store="false" index="true"/>
 			</xsl:for-each>
 
 			<!-- index online protocol -->
 			
+			<xsl:if test="count(gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource[normalize-space(gmd:applicationProfile/gco:CharacterString)='INSPIRE-Download-Atom'])>0">
+				<Field name="has_atom" string="true" store="false" index="true"/>
+			</xsl:if>
 			<xsl:for-each select="gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource[gmd:linkage/gmd:URL!='']">
 				<xsl:variable name="download_check"><xsl:text>&amp;fname=&amp;access</xsl:text></xsl:variable>
 				<xsl:variable name="linkage" select="gmd:linkage/gmd:URL" /> 

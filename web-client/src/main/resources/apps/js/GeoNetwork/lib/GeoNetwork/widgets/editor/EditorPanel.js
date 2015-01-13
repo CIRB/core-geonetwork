@@ -209,13 +209,13 @@ GeoNetwork.editor.EditorPanel = Ext.extend(Ext.Panel, {
                     value: '' // FIXME
                 }, {
                     name: 'overwrite',
-                    fieldLabel: 'Overwrite',
+                    fieldLabel: OpenLayers.i18n('overwrite'),
                     checked: true,
                     xtype: 'checkbox'
                 }, {
                     xtype: 'fileuploadfield',
                     emptyText: OpenLayers.i18n('selectFile'),
-                    fieldLabel: 'File',
+                    fieldLabel: OpenLayers.i18n('file'),
                     allowBlank: false,
                     name: 'f_' + ref,
                     buttonText: '',
@@ -514,7 +514,7 @@ GeoNetwork.editor.EditorPanel = Ext.extend(Ext.Panel, {
      *  The window in which we can select linked metadata
      *
      */
-    showLinkedMetadataSelectionPanel: function(ref, name, mode){
+    showLinkedMetadataSelectionPanel: function(ref, name, mode, useUuid, otherRefs){
         // Add extra parameters according to selection panel
         var mode = mode || name;
         var single = ((mode === 'uuidref' || mode === 'iso19110' || mode === '') ? true : false);
@@ -528,8 +528,48 @@ GeoNetwork.editor.EditorPanel = Ext.extend(Ext.Panel, {
                 linkedmetadataselected: function(panel, metadata){
                     
                     if (single) {
+                    	var scope = this;
                         if (this.ref !== null) {
-                            Ext.get('_' + this.ref + (name !== '' ? '_' + name : '')).dom.value = metadata[0].data.uuid;
+                        	var uuidValue = metadata[0].data.uuid;
+                        	if (!(useUuid || this.mode=='iso19110')) {
+                            	panel.catalogue.getMdUuid(metadata[0].data.uuid, function(mduuid){
+                                	if (mduuid) {
+		                                Ext.get('_' + scope.ref + (name !== '' ? '_' + name : '')).dom.value = mduuid;
+                                	}
+                            	});
+                        	}
+                        	if (useUuid || this.mode=='iso19110' || otherRefs!=null) {
+                        		Ext.get('_' + this.ref + (name !== '' ? '_' + name : '')).dom.value = uuidValue;
+                        	}
+/*                        	if (otherRefs!=null) {
+                            	panel.catalogue.getMdAggegatedInfo(metadata[0].data.uuid, function(mdAggregatedInfo){
+                                	if (mdAggregatedInfo) {
+                                		var otherRefsArray = otherRefs.split(",");
+                                		for (var i = 0;i<otherRefsArray.length;i++) {
+                                			var otherRefsPropertyArray = otherRefsArray[i].split("=");
+                                			var xmlLocalName = otherRefsPropertyArray[0];
+                                			var cmpRef = '_' + otherRefsPropertyArray[1]; 
+                                			if (Ext.get(cmpRef)!=null && mdAggregatedInfo[xmlLocalName]!=null) {
+				                                Ext.get(cmpRef).dom.value = mdAggregatedInfo[xmlLocalName];
+                                			}
+                                		}
+                                	}
+                            	});
+                        	} else {*/
+	                            var xlinkHref = Ext.get('_' + this.ref + '_xlinkCOLONhref');
+	                            if (xlinkHref) {
+	                            	if (Ext.isEmpty(xlinkHref.dom.value)) {
+	                            		xlinkHref.dom.value = panel.catalogue.services.rootUrl + 'csw?service=CSW&amp;request=GetRecordById&amp;version=2.0.2&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;elementSetName=full&amp;id=' + uuidValue;
+	                            	} else {
+	                                	var parameters = GeoNetwork.Util.getParameters(xlinkHref.dom.value);
+	                                	var id = parameters["id"];
+	                                	if (Ext.isEmpty(id)) {
+	                                		id = parameters["ID"];
+	                                	}
+	                                	xlinkHref.dom.value = xlinkHref.dom.value.replace(id, uuidValue);
+	                            	}
+	                            }
+//                            }
                         } else {
                             // Create relation between current record and selected one
                             if (this.mode === 'iso19110') {
@@ -1357,11 +1397,11 @@ GeoNetwork.editor.EditorPanel = Ext.extend(Ext.Panel, {
      *
      * Load subtemplate with 'elementName' as root, add the resulting xml to e new element 'name' and add this to the element with reference ref
      */
-    retrieveSubTemplate: function(ref, name, elementName, ommitNameTag){
+    retrieveSubTemplate: function(ref, name, elementName, ommitNameTag, uuid){
         var self = this;
         var elementNameArray = elementName.split("|");
         Ext.Ajax.request({
-            url: self.catalogue.services.subTemplate + "?root=" + elementNameArray[0] + (elementNameArray.length==2 ? "&child=" + elementNameArray[1] : ""),
+            url: self.catalogue.services.subTemplate + "?root=" + elementNameArray[0] + (elementNameArray.length==2 ? "&child=" + elementNameArray[1] : "") + "&uuid=" + uuid,
             method: 'GET',
             scope: this,
             success: function(response){

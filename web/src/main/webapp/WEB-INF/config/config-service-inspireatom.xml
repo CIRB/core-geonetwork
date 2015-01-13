@@ -5,23 +5,25 @@
         <!-- OpenDescription document -->
         <service name="atom.description">
             <class name="org.fao.geonet.services.inspireatom.AtomServiceDescription" />
-            <output sheet="services/inspire-atom/opensearch.xsl" contentType="text/xml; charset=UTF-8"/>
+            <output sheet="services/inspire-atom/opensearch.xsl" contentType="application/opensearchdescription+xml; charset=UTF-8"/>
         </service>
 
         <!-- Describe -->
         <service name="atom">
             <class name="org.fao.geonet.services.inspireatom.AtomDescribe" />
-            <output sheet="inspire-atom-feed.xsl" contentType="text/xml; charset=UTF-8"/>
+            <output sheet="inspire-atom-feed.xsl" contentType="application/atom+xml; charset=UTF-8"/>
         </service>
 
         <!-- GetData -->
         <service name="atom.download">
             <class name="org.fao.geonet.services.inspireatom.AtomGetData" />
+			<output forward="atom" />
         </service>
 
         <!-- Search -->
         <service name="atom.search">
             <class name="org.fao.geonet.services.inspireatom.AtomSearch" />
+            <output sheet="inspire-atom-feed.xsl" contentType="application/atom+xml; charset=UTF-8"/>
         </service>
     </services>
 </geonet>

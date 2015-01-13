@@ -2133,11 +2133,9 @@
 				<options>
 				    <xsl:choose>
 						<xsl:when test="$name='gmd:transferOptions'">
-							<xsl:if test="$isService=false()">
-								<option name="gmd:transferOptions;AtomDatasetFeed"><xsl:attribute name="selected">selected</xsl:attribute>INSPIRE Dataset Atom feed</option>
-							</xsl:if>
-							<xsl:if test="$isDataset=false()">
-								<option name="gmd:transferOptions;AtomServiceFeed">INSPIRE Download Service Atom feed</option>
+							<xsl:if test="$isService=true()">
+								<option name="gmd:transferOptions;AtomServiceFeed:OpenSearchDescription.xml"><xsl:attribute name="selected">selected</xsl:attribute>OpenSearch Description</option>
+								<option name="gmd:transferOptions;AtomServiceFeed:describe">OpenSearch Describe</option>
 							</xsl:if>
 						</xsl:when>
 						<xsl:otherwise>
@@ -2167,7 +2165,7 @@
 				<xsl:when test="$name='gmd:applicationProfile'"><xsl:value-of select="concat('doNewElementAction(',$apos,'metadata.elem.add.new',$apos,',',$parentName,',',$apos,$name,$apos,',',$apos,'_',$parentName,'_',$name,'_subtemplate_row',$apos,',',$apos,'add',$apos,',',@max,');')"/></xsl:when>
 				<xsl:otherwise>
 					<xsl:variable name="function">Ext.getCmp('editorPanel').retrieveSubTemplate</xsl:variable>
-					<xsl:value-of select="concat('javascript:', $function, '(',$parentName,',',$apos,$name,$apos,',document.mainForm._',$parentName,'_',$qname,'_subtemplate.value,',$ommitNameTag,');')"/>
+					<xsl:value-of select="concat('javascript:', $function, '(',$parentName,',',$apos,$name,$apos,',document.mainForm._',$parentName,'_',$qname,'_subtemplate.value,',$ommitNameTag,',',$apos,//geonet:info/uuid,$apos,');')"/>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>

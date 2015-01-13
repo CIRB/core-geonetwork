@@ -304,7 +304,7 @@ public class BatchExtractSubtemplates implements Service
 				int iIndex = parent.indexOf(elem);
 				Element newElem = new Element(elem.getName(), elem.getNamespace());
 				newElem.setAttribute("uuidref", uuid);
-				newElem.setAttribute("href", dataMan.getSiteURL()+"/xml.metadata.get?uuid="+uuid, XLink.NAMESPACE_XLINK);
+				newElem.setAttribute("href", dataMan.getServiceUrl()+"/xml.metadata.get?uuid="+uuid, XLink.NAMESPACE_XLINK);
 				newElem.setAttribute("show", "replace", XLink.NAMESPACE_XLINK);
 				parent.removeContent(iIndex);
 				parent.addContent(iIndex,newElem);

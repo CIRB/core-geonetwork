@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gmd:onLine xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco">
+<gmd:onLine xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx">
 	<gmd:CI_OnlineResource>
 		<gmd:linkage>
 			<gmd:URL/>
@@ -8,7 +8,7 @@
 			<gco:CharacterString/>
 		</gmd:protocol>
 		<gmd:name>
-			<gco:CharacterString/>
+			<gmx:MimeFileType type=""/>
 		</gmd:name>
 		<gmd:description>
 			<gco:CharacterString/>

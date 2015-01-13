@@ -6,7 +6,7 @@ image/png								png
 image/gif								gif
 application/word						doc docx
 application/xls							xsl xslx
-application/zip							zip
+application/x-shapefile					zip
 application/pdf							pdf
 application/vnd.google-earth.kml+xml	kml
 application/vnd.google-earth.kmz		kmz

@@ -76,7 +76,7 @@ public class Add implements Service {
 		String filePath = tm.buildThesaurusFilePath(fname, type, dname);
 		
 		File rdfFile = new File(filePath);		
-		Thesaurus thesaurus = new Thesaurus(fname,type,dname,rdfFile,dm.getSiteURL());		
+		Thesaurus thesaurus = new Thesaurus(fname,type,dname,rdfFile,dm.getServiceUrl());		
 		tm.addThesaurus(thesaurus);
 
 		// Save activated status in the database

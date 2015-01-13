@@ -596,7 +596,7 @@
 		</xsl:choose>
 		<xsl:variable name="thesaurus_name" select="gmd:descriptiveKeywords/*/gmd:thesaurusName/*/gmd:title/*/text()"/>
 		<xsl:variable name="thesaurus_date" select="gmd:descriptiveKeywords/*/gmd:thesaurusName/*/gmd:date/*/gmd:date/*/text()"/>
-		<xsl:variable name="thesaurus_dateType" select="gmd:descriptiveKeywords/*/gmd:thesaurusName/*/gmd:date/*/gmd:dateType/*/@codeListValue/text()"/>
+		<xsl:variable name="thesaurus_dateType" select="gmd:descriptiveKeywords/*/gmd:thesaurusName/*/gmd:date/*/gmd:dateType/*/@codeListValue/normalize-space(.)"/>
 <!--		<xsl:variable name="keyword" select="gmd:descriptiveKeywords/*/gmd:keyword/gco:CharacterString"/>-->
         <xsl:variable name="keyword" select="gmd:descriptiveKeywords/*/gmd:keyword/gco:CharacterString|gmd:descriptiveKeywords/*/gmd:keyword/gmx:Anchor"/>
 		<xsl:variable name="inspire-theme-found" select="count($inspire-thesaurus//skos:Concept[skos:prefLabel = $keyword])"/>

@@ -62,7 +62,6 @@ import org.fao.geonet.GeonetContext;
 import org.fao.geonet.constants.Edit;
 import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.constants.Params;
-import org.fao.geonet.csw.common.Csw;
 import org.fao.geonet.exceptions.MetadataNotFoundEx;
 import org.fao.geonet.exceptions.NoSchemaMatchesException;
 import org.fao.geonet.exceptions.SchemaMatchConflictException;
@@ -793,12 +792,13 @@ public class DataManager {
 			Xml.validate(md);
 		} else {
 			// if schemaLocation use that
-			if (!schemaLoc.equals("")) { 
+/*			if (!schemaLoc.equals("")) { 
 				Xml.validate(md);
 			// otherwise use supplied schema name 
 			} else {
+*/
 				Xml.validate(getSchemaDir(schema) + Geonet.File.SCHEMA, md);
-			}
+//			}
 		}
 	}
 
@@ -823,7 +823,8 @@ public class DataManager {
 		} else {
 			// if schemaLocation use that
 			if (!schemaLoc.equals("")) { 
-				return Xml.validateInfo(md, eh);
+//				return Xml.validateInfo(md, eh);
+				return Xml.validateInfo(getSchemaDir(schema) + Geonet.File.SCHEMA, md, eh);
 			// otherwise use supplied schema name 
 			} else {
 				return Xml.validateInfo(getSchemaDir(schema) + Geonet.File.SCHEMA, md, eh);
@@ -1444,13 +1445,25 @@ public class DataManager {
      *
      * @return
      */
-	public String getSiteURL() {
+	public String getServiceUrl() {
         String protocol = settingMan.getValue(Geonet.Settings.SERVER_PROTOCOL);
 		String host    = settingMan.getValue(Geonet.Settings.SERVER_HOST);
 		String port    = settingMan.getValue(Geonet.Settings.SERVER_PORT);
 		String locServ = baseURL +"/"+ Jeeves.Prefix.SERVICE +"/en";
 
 		return protocol + "://" + host + (port.equals("80") ? "" : ":" + port) + locServ;
+	}
+
+    /**
+     * TODO javadoc.
+     *
+     * @return
+     */
+	public String getSiteUrl() {
+        String protocol = settingMan.getValue(Geonet.Settings.SERVER_PROTOCOL);
+		String host    = settingMan.getValue(Geonet.Settings.SERVER_HOST);
+		String port    = settingMan.getValue(Geonet.Settings.SERVER_PORT);
+		return protocol + "://" + host + (port.equals("80") ? "" : ":" + port);
 	}
 
     /**
@@ -1605,36 +1618,10 @@ public class DataManager {
 		    xml = updateFixedInfo(schema, Integer.toString(serial), uuid, xml, parentUuid, DataManager.UpdateDatestamp.yes, dbms, true);
 		}
 		
-		Attribute existingSchemaLocation = xml.getAttribute("schemaLocation", Csw.NAMESPACE_XSI);
-		if (existingSchemaLocation == null) {
-			Namespace gmdNs = xml.getNamespace("gmd");
-			// document has ISO root element and ISO namespace
-			if (gmdNs != null
-					&& gmdNs.getURI()
-							.equals("http://www.isotc211.org/2005/gmd")) {
-				String schemaLocation;
-				// if document has srv namespace then add srv schemaLocation
-				if (xml.getNamespace("srv") != null) {
-					schemaLocation = "http://www.isotc211.org/2005/gmx http://www.isotc211.org/2005/gmx/gmx.xsd http://www.isotc211.org/2005/srv http://schemas.opengis.net/iso/19139/20060504/srv/srv.xsd";
-				}
-				// otherwise add gmd schemaLocation
-				// (but not both! as that is invalid, the schemas describe
-				// partially the same schema types)
-				else {
-					schemaLocation = "http://www.isotc211.org/2005/gmx http://www.isotc211.org/2005/gmx/gmx.xsd http://www.isotc211.org/2005/gmd http://www.isotc211.org/2005/gmd/gmd.xsd";
-				}
-				Attribute schemaLocationA = new Attribute("schemaLocation",
-						schemaLocation, Csw.NAMESPACE_XSI);
-				xml.setAttribute(schemaLocationA);
-			}
-		} else {
-			String schemaLocationValue = existingSchemaLocation.getValue();
-			if (schemaLocationValue!=null && schemaLocationValue.contains("gmd.xsd") && !schemaLocationValue.contains("gmx.xsd")) {
-				xml.removeAttribute(existingSchemaLocation);
-				xml.setAttribute(new Attribute("schemaLocation", "http://www.isotc211.org/2005/gmx http://www.isotc211.org/2005/gmx/gmx.xsd " + schemaLocationValue, Csw.NAMESPACE_XSI));
-			}
-		}
-
+		GeonetContext gc = (GeonetContext) context
+				.getHandlerContext(Geonet.CONTEXT_NAME);
+		SchemaManager sm = gc.getSchemamanager();
+		sm.updateSchemaLocation(xml, context);
 		//--- store metadata
 		String id = xmlSerializer.insert(dbms, schema, xml, serial, source, uuid, null, null, isTemplate, null, owner, groupOwner, "", context);
 		copyDefaultPrivForGroup(context, dbms, id, groupOwner);
@@ -1777,6 +1764,9 @@ public class DataManager {
 			String schema = getMetadataSchema(dbms, id);
 			
 			if (withEditorValidationErrors) {
+				GeonetContext gc = (GeonetContext) srvContext.getHandlerContext(Geonet.CONTEXT_NAME);
+				SchemaManager sm = gc.getSchemamanager();
+//				sm.updateSchemaLocation(md, srvContext);
 			    version = doValidate(srvContext.getUserSession(), dbms, schema, id, md, srvContext.getLanguage(), forEditing).two();
 			}
             else {
@@ -2136,6 +2126,7 @@ public class DataManager {
 	    for (String type : i) {
 	        String query = "INSERT INTO Validation (metadataId, valType, status, tested, failed, valDate) VALUES (?,?,?,?,?,?)";
             Integer[] results = valTypeAndStatus.get(type);
+            System.out.println("Saving validation report for metadata with id='" + id + " with type " + type);
             dbms.execute(query, new Integer(id), type, results[0], results[1], results[2], date);
         }
         dbms.commit();
@@ -2820,7 +2811,7 @@ public class DataManager {
                 Element result = new Element("root");
                 result.addContent(md);
                 // add 'environment' to result
-                env.addContent(new Element("siteURL")   .setText(getSiteURL()));
+                env.addContent(new Element("siteURL")   .setText(getServiceUrl()));
                 Element system = settingMan.get("system", -1);
                 env.addContent(Xml.transform(system, appPath + Geonet.Path.STYLESHEETS+ "/xml/config.xsl"));
                 result.addContent(env);
@@ -3003,7 +2994,7 @@ public class DataManager {
 
 		Element env = new Element("update");
 		env.addContent(new Element("parentUuid").setText(parentUuid));
-		env.addContent(new Element("siteURL").setText(getSiteURL()));
+		env.addContent(new Element("siteURL").setText(getServiceUrl()));
 		env.addContent(new Element("parent").addContent(parent));
 
 		// Set of untreated children (out of privileges, different schemas)

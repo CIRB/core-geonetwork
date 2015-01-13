@@ -115,7 +115,7 @@ public class XslProcessing implements Service {
 		Element processedMetadata;
 		try {
 			processedMetadata = process(id, process, save, _appPath, params,
-				context, metadata, notFound, notOwner, notProcessFound, false, dataMan.getSiteURL());
+				context, metadata, notFound, notOwner, notProcessFound, false, dataMan.getServiceUrl());
 			if (processedMetadata == null) {
 				throw new BadParameterEx("Processing failed", 
 						"Not found:" + notFound.size() +

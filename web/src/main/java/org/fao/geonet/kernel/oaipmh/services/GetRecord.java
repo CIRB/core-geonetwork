@@ -23,16 +23,18 @@
 
 package org.fao.geonet.kernel.oaipmh.services;
 
+import java.util.List;
+
 import jeeves.resources.dbms.Dbms;
 import jeeves.server.context.ServiceContext;
 import jeeves.utils.Xml;
-import org.fao.geonet.constants.Geonet;
+
 import org.fao.geonet.GeonetContext;
-import org.fao.geonet.kernel.oaipmh.Lib;
-import org.fao.geonet.kernel.oaipmh.OaiPmhService;
+import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.kernel.DataManager;
 import org.fao.geonet.kernel.SchemaManager;
-import org.fao.oaipmh.OaiPmh;
+import org.fao.geonet.kernel.oaipmh.Lib;
+import org.fao.geonet.kernel.oaipmh.OaiPmhService;
 import org.fao.oaipmh.exceptions.CannotDisseminateFormatException;
 import org.fao.oaipmh.exceptions.IdDoesNotExistException;
 import org.fao.oaipmh.requests.AbstractRequest;
@@ -44,8 +46,6 @@ import org.fao.oaipmh.responses.Record;
 import org.fao.oaipmh.util.ISODate;
 import org.jdom.Attribute;
 import org.jdom.Element;
-
-import java.util.List;
 
 //=============================================================================
 
@@ -119,13 +119,14 @@ public class GetRecord implements OaiPmhService
 		} else {
 			String schemaDir = sm.getSchemaDir(schema);
 			if (Lib.existsConverter(schemaDir, prefix)) {
-				Element env = Lib.prepareTransformEnv(uuid, changeDate, context.getBaseUrl(), dm.getSiteURL(), gc.getSiteName());
+				Element env = Lib.prepareTransformEnv(uuid, changeDate, context.getBaseUrl(), dm.getServiceUrl(), gc.getSiteName());
 				md = Lib.transform(schemaDir, env, md, prefix+".xsl");
 			} else {
 				throw new CannotDisseminateFormatException("Unknown prefix : "+ prefix);
 			}
 		}
 
+		sm.updateSchemaLocation(md, context);
 		//--- build header and set some infos
 
 		Header h = new Header();

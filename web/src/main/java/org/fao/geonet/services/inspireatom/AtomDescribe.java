@@ -30,6 +30,8 @@ import jeeves.utils.Util;
 
 import org.apache.commons.lang.StringUtils;
 import org.fao.geonet.inspireatom.util.InspireAtomUtil;
+import org.fao.geonet.services.main.Result;
+import org.fao.geonet.services.main.Search;
 import org.jdom.Element;
 
 /**
@@ -39,8 +41,12 @@ import org.jdom.Element;
  */
 public class AtomDescribe implements Service {
 
-    public void init(String appPath, ServiceConfig params) throws Exception {
+    private Search search = new Search();
+    private Result result = new Result();
 
+    public void init(String appPath, ServiceConfig params) throws Exception {
+        search.init(appPath, params);
+        result.init(appPath, params);
     }
 
     //--------------------------------------------------------------------------
@@ -54,9 +60,15 @@ public class AtomDescribe implements Service {
         String fileIdentifier = Util.getParam(params, InspireAtomUtil.SERVICE_IDENTIFIER, "");
 
         if (StringUtils.isEmpty(fileIdentifier)) {
-            return InspireAtomUtil.getDatasetFeed(params, context);
+    		String datasetIdCode = Util.getParam(params, InspireAtomUtil.DATASET_IDENTIFIER_CODE_PARAM);
+    		String datasetIdNs = null;
+    		try {
+        		datasetIdNs = Util.getParam(params, InspireAtomUtil.DATASET_IDENTIFIER_NS_PARAM);
+    		} catch(Exception e) {
+    		}
+            return InspireAtomUtil.getDatasetFeed(params, context, datasetIdCode, datasetIdNs, search, result);
         } else {
-            return InspireAtomUtil.getServiceFeed(fileIdentifier, context);
+            return InspireAtomUtil.getServiceFeed(fileIdentifier, context, null);
         }
     }
 

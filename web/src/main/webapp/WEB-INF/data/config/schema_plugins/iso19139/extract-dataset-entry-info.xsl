@@ -10,10 +10,7 @@
 				<xsl:copy-of select="gmd:fileIdentifier"/>                
 				<xsl:copy-of select="gmd:language"/>                
 				<xsl:copy-of select="gmd:identificationInfo/gmd:MD_DataIdentification"/>                
-				<xsl:copy-of select="gmd:distributionInfo/*/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource"/>                
-<!--				<xsl:for-each select="gmd:distributionInfo/*/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource[upper-case(gmd:protocol/gco:CharacterString) = $protocol and gmd:applicationProfile/gco:CharacterString=$applicationProfile]/gmd:description">
-					<categoryTerm><xsl:value-of select="normalize-space(.)"/></categoryTerm>
-				</xsl:for-each>-->
+				<xsl:copy-of select="gmd:distributionInfo/*/gmd:transferOptions/gmd:MD_DigitalTransferOptions"/>                
 				<xsl:copy-of select="gmd:dateStamp/gco:DateTime"/>
 				<xsl:copy-of select="gmd:locale"/>
 				<xsl:copy-of select="gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent[1]/gmd:EX_Extent/gmd:geographicElement/gmd:EX_GeographicBoundingBox"/>

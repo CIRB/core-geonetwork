@@ -144,10 +144,18 @@
         <note>
           INSPIRE Atom search
         </note>
+        <from>^/opensearch/(.*)/(.*)/htmlsearch?(.*)$</from>
+        <to type="forward">/srv/$1/atom.search.html?fileIdentifier=$2</to>
+    </rule>
+<!--
+    <rule>
+        <note>
+          INSPIRE Atom search
+        </note>
         <from>^/opensearch/(.*)/search?(.*)$</from>
         <to type="forward">/srv/$1/atom.search</to>
     </rule>
-
+-->
     <rule>
         <note>
           INSPIRE Atom Describe (service)

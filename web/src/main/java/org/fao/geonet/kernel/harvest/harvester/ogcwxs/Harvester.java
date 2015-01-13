@@ -559,7 +559,7 @@ class Harvester
 				op.setAttribute("uuidref", StringUtils.isNotEmpty(layer.mduuid) ? layer.mduuid : "");
 
 				if (StringUtils.isNotEmpty(layer.uuid)) {
-					String hRefLink =  dataMan.getSiteURL() + "/csw?Service=CSW&amp;version=2.0.2&amp;Request=GetRecordById&amp;outputschema=http://www.isotc211.org/2005/gmd&amp;elementSetName=full&amp;id=" + layer.uuid;
+					String hRefLink =  dataMan.getServiceUrl() + "/csw?Service=CSW&amp;version=2.0.2&amp;Request=GetRecordById&amp;outputschema=http://www.isotc211.org/2005/gmd&amp;elementSetName=full&amp;id=" + layer.uuid;
 //					String hRefLink =  dataMan.getSiteURL() + "/csw?Service=CSW&version=2.0.2&Request=GetRecordById&outputschema=http://www.isotc211.org/2005/gmd&elementSetName=full&id=" + layer.uuid;
 					op.setAttribute("href", hRefLink, xlink);
 				}

@@ -2,46 +2,48 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:template match="/">
         <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/"
-                               xmlns:geo="http://a9.com/-/opensearch/extensions/geo/1.0/"
+                               xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
                                xmlns:inspire_dls="http://inspire.ec.europa.eu/schemas/inspire_dls/1.0">
 
 
             <!--URL of this document-->
             <xsl:choose>
                 <xsl:when test="string(/root/response/fileId)">
-                    <ShortName><xsl:value-of select="/root/response/title"/></ShortName>
-                    <Description><xsl:value-of select="/root/response/subtitle"/></Description>
-
+                    <ShortName>INSPIRE Download</ShortName>
+                    <LongName><xsl:value-of select="substring(/root/response/title,1,48)"/></LongName>
+<!--                    <Description><xsl:value-of select="concat(/root/response/title,'; ',concat(/root/response/subtitle)"/></Description>-->
+                    <Description><xsl:value-of select="/root/response/title"/>: <xsl:value-of select="/root/response/subtitle"/></Description>
                     <Url type="application/opensearchdescription+xml" rel="self" >
                         <xsl:attribute name="template">
-                            <xsl:value-of select="concat(//server/protocol,'://',//server/host,':',//server/port,/root/gui/url,'/opensearch/', /root/gui/language, '/', /root/response/fileId,'/OpenSearchDescription.xml')"/>
+                            <xsl:value-of select="concat(//server/protocol,'://',//server/host,/root/gui/url,'/opensearch/', /root/gui/language, '/', /root/response/fileId,'/OpenSearchDescription.xml')"/>
                         </xsl:attribute>
                     </Url>
 
                     <!--Generic URL template for browser integration-->
+<!--
                     <Url type="application/atom+xml" rel="results">
                         <xsl:attribute name="template">
-                            <xsl:value-of select="concat(//server/protocol,'://',//server/host,':',//server/port,/root/gui/url,'/opensearch/', /root/gui/language, '/', /root/response/fileId,'/describe')"/>
+                            <xsl:value-of select="concat(//server/protocol,'://',//server/host,/root/gui/url,'/opensearch/', /root/gui/language, '/', /root/response/fileId,'/describe')"/>
                         </xsl:attribute>
                     </Url>
-
+-->
 
                     <!--Generic URL template for browser integration-->
-                    <Url type="application/xml" rel="results">
+                    <Url type="text/html" rel="results">
                         <xsl:attribute name="template">
-                            <xsl:value-of select="concat(//server/protocol,'://',//server/host,':',//server/port,/root/gui/url,'/opensearch/', /root/gui/language, '/', /root/response/fileId,'/search?any={filter}')"/>
+                            <xsl:value-of select="concat(//server/protocol,'://',//server/host,/root/gui/url,'/opensearch/', /root/gui/language, '/', /root/response/fileId,'/htmlsearch?q={searchTerms?}')"/>
                         </xsl:attribute>
                     </Url>
                 </xsl:when>
                 <xsl:otherwise>
-                    <ShortName><xsl:value-of select="//site/name"/> (GeoNetwork)</ShortName>
-                    <LongName><xsl:value-of select="//site/organization"/> | GeoNetwork opensource</LongName>
+                    <ShortName>INSPIRE Download</ShortName>
+                    <LongName><xsl:value-of select="substring(//site/organization,1,24)"/> | GeoNetwork opensource</LongName>
                     <Description><xsl:value-of select="/root/gui/strings/opensearch"/></Description>
 
                     <!--Generic URL template for browser integration-->
                     <Url type="application/xml" rel="results">
                         <xsl:attribute name="template">
-                            <xsl:value-of select="concat(//server/protocol,'://',//server/host,':',//server/port,/root/gui/url,'/opensearch/', /root/gui/language, '/search?any={filter}')"/>
+                            <xsl:value-of select="concat(//server/protocol,'://',//server/host,/root/gui/url,'/opensearch/', /root/gui/language, '/search?q={searchTerms?}')"/>
                         </xsl:attribute>
                     </Url>
                 </xsl:otherwise>
@@ -61,12 +63,19 @@
                     Dataset-->
                 <Url type="application/atom+xml" rel="describedby">
                     <xsl:attribute name="template">
-                        <xsl:value-of select="concat(//server/protocol,'://',//server/host,':',//server/port,/root/gui/url,'/opensearch/', /root/gui/language, '/describe?spatial_dataset_identifier_code=', $codeVal, '&amp;spatial_dataset_identifier_namespace=', $namespaceVal, '&amp;language=', /root/response/lang)"/>
-                        <!--<xsl:value-of select="atom_url" />-->
+						<xsl:value-of select="concat(//server/protocol,'://',//server/host,/root/gui/url,'/opensearch/', /root/gui/language, '/describe?spatial_dataset_identifier_code={inspire_dls:spatial_dataset_identifier_code?}&amp;spatial_dataset_identifier_namespace={inspire_dls:spatial_dataset_identifier_namespace?}&amp;crs={inspire_dls:crs?}&amp;language={language?}&amp;q={searchTerms?}')"/>
                     </xsl:attribute>
                 </Url>
 
+				<xsl:variable name="url" select="concat(//server/protocol,'://',//server/host,/root/gui/url,'/opensearch/', /root/gui/language, '/download?spatial_dataset_identifier_code={inspire_dls:spatial_dataset_identifier_code?}&amp;spatial_dataset_identifier_namespace={inspire_dls:spatial_dataset_identifier_namespace?}&amp;crs={inspire_dls:crs?}&amp;language={language?}&amp;q={searchTerms?}')"/>
+                <Url type="application/x-shapefile" rel="results">
+                    <xsl:attribute name="template"><xsl:value-of select="$url"/></xsl:attribute>
+                </Url>
+                <Url type="application/x-gmz" rel="results">
+                    <xsl:attribute name="template"><xsl:value-of select="$url"/></xsl:attribute>
+                </Url>
                 <!-- Repeat for each below to download the file from a dataset -->
+<!-- 
                 <xsl:for-each select="file">
                     <Url rel="results">
                         <xsl:attribute name="type">
@@ -74,21 +83,18 @@
                         </xsl:attribute>
                         <xsl:attribute name="template">
                             <xsl:choose>
-                                <!-- Download for a CRS is in several formats, should return a feed with the options -->
                                 <xsl:when test="type = 'application/atom+xml'">
-                                    <xsl:value-of select="concat(//server/protocol,'://',//server/host,':',//server/port,/root/gui/url,'/opensearch/', /root/gui/language, '/download?spatial_dataset_identifier_code=', $codeVal, '&amp;spatial_dataset_identifier_namespace=', $namespaceVal,'&amp;crs=', crs,'&amp;language=', /root/response/lang)"/>
+                                    <xsl:value-of select="concat(//server/protocol,'://',//server/host,/root/gui/url,'/opensearch/', /root/gui/language, '/download?spatial_dataset_identifier_code=', $codeVal, '&amp;spatial_dataset_identifier_namespace=', $namespaceVal,'&amp;crs=', crs,'&amp;language=', /root/response/lang)"/>
                                 </xsl:when>
-                                <!-- Download for a CRS is in 1 format, download it -->
                                 <xsl:otherwise>
-                                    <xsl:value-of select="concat(//server/protocol,'://',//server/host,':',//server/port,/root/gui/url,'/opensearch/', /root/gui/language, '/download?spatial_dataset_identifier_code=', $codeVal, '&amp;spatial_dataset_identifier_namespace=', $namespaceVal,'&amp;crs=', crs,'&amp;language=', /root/response/lang)"/>
-
+                                    <xsl:value-of select="concat(//server/protocol,'://',//server/host,/root/gui/url,'/opensearch/', /root/gui/language, '/download?spatial_dataset_identifier_code=', $codeVal, '&amp;spatial_dataset_identifier_namespace=', $namespaceVal,'&amp;crs=', crs,'&amp;language=', /root/response/lang)"/>
                                 </xsl:otherwise>
                             </xsl:choose>
                         </xsl:attribute>
                     </Url>
-
                 </xsl:for-each>
-            </xsl:for-each>
+ -->
+ 			</xsl:for-each>
 
             <!-- Repeat the following for each data set, for each CRS of a dataset query example (regardless of the number of file formats -->
             <xsl:for-each select="/root/response/datasets/dataset">
@@ -98,7 +104,7 @@
                 <xsl:for-each select="file">
                     <Query role="example"
                            inspire_dls:spatial_dataset_identifier_namespace="{$namespaceVal}"
-                           inspire_dls:spatial_dataset_identifier_code="{$codeVal}" inspire_dls:crs="{crs}" language="{lang}" title="{title}" count="1"/>
+                           inspire_dls:spatial_dataset_identifier_code="{$codeVal}" inspire_dls:crs="{crs}" language="{lang}" title="{title}" count="{crsCount}"/>
                 </xsl:for-each>
 
             </xsl:for-each>
@@ -108,8 +114,6 @@
                     <!-- For each Service Feed the contact -->
                     <Contact><xsl:value-of select="/root/response/authorName" /></Contact>
                     <Tags><xsl:value-of select="/root/response/keywords" /></Tags>
-                    <LongName><xsl:value-of select="/root/response/subtitle"/></LongName>
-
                     <!-- per Atom Service feed / Service metadata record combinatie: -->
                     <Developer><xsl:value-of select="/root/response/authorName" /></Developer>
                     <!--Languages supported by the service. The first language is the default language-->
@@ -117,10 +121,8 @@
                     <Language><xsl:value-of select="/root/response/lang"/></Language>
                 </xsl:when>
                 <xsl:otherwise>
-                    <Tags>GeoNetwork Metadata ISO19115 ISO19139 DC FGDC</Tags>
                     <Contact><xsl:value-of select="//feedback/email"/></Contact>
-                    <LongName><xsl:value-of select="//site/organization"/> | GeoNetwork opensource</LongName>
-
+                    <Tags>GeoNetwork Metadata ISO19115 ISO19139 DC FGDC</Tags>
                     <Language><xsl:value-of select="/root/gui/language"/></Language>
                 </xsl:otherwise>
             </xsl:choose>

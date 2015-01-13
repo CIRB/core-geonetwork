@@ -158,7 +158,7 @@ public class BatchXslProcessing implements Service {
                 String id = dm.getMetadataId(dbms, uuid);
                 context.info("Processing metadata with id:" + id);
 
-                XslProcessing.process(id, process, true, appPath, params, context, metadata, notFound, notOwner, notProcessFound, true, dataMan.getSiteURL());
+                XslProcessing.process(id, process, true, appPath, params, context, metadata, notFound, notOwner, notProcessFound, true, dataMan.getServiceUrl());
             }
         }
 	}

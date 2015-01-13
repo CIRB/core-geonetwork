@@ -26,7 +26,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import jeeves.constants.Jeeves;
 import jeeves.interfaces.Service;
 import jeeves.resources.dbms.Dbms;
 import jeeves.server.ServiceConfig;
@@ -38,7 +37,6 @@ import org.apache.commons.lang.StringUtils;
 import org.fao.geonet.GeonetContext;
 import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.exceptions.MetadataNotFoundEx;
-import org.fao.geonet.guiservices.schemas.GetSchemaInfo;
 import org.fao.geonet.inspireatom.util.InspireAtomUtil;
 import org.fao.geonet.kernel.AccessManager;
 import org.fao.geonet.kernel.DataManager;
@@ -54,14 +52,9 @@ import com.google.common.base.Joiner;
  *
  * @author Jose García
  */
-public class AtomSearch implements Service
+public class AtomSearchForward implements Service
 {
-    private Search search = new Search();
-    private Result result = new Result();
-
     public void init(String appPath, ServiceConfig params) throws Exception {
-        search.init(appPath, params);
-        result.init(appPath, params);
     }
 
     //--------------------------------------------------------------------------
@@ -72,52 +65,11 @@ public class AtomSearch implements Service
 
     public Element exec(Element params, ServiceContext context) throws Exception
     {
-		GeonetContext gc = (GeonetContext) context.getHandlerContext(Geonet.CONTEXT_NAME);
-		DataManager   dm = gc.getDataManager();
-		Dbms dbms = (Dbms) context.getResourceManager().open(Geonet.Res.MAIN_DB);
-
+    	Element response = new Element("response");
         String fileIdentifier = params.getChildText("fileIdentifier");
-
-		// If fileIdentifier is provided search only in the related datasets
-        if (StringUtils.isNotEmpty(fileIdentifier)) {
-            String id = dm.getMetadataId(dbms, fileIdentifier);
-            if (id == null) throw new MetadataNotFoundEx("Metadata not found.");
-
-            Element md = dm.getMetadata(dbms, id);
-//            String schema = dm.getMetadataSchema(dbms, id);
-
-            // Check if allowed to the metadata
-            Lib.resource.checkPrivilege(context, id, AccessManager.OPER_VIEW);
-
-            // Retrieve the datasets related to the service metadata
-            List<String> datasetIdentifiers = InspireAtomUtil.extractRelatedDatasetIdentifiers(/*schema, */md, dm);
-            String values = Joiner.on(" or ").join(datasetIdentifiers);
-    		Element request = new Element("request");
-//    		request.addContent(new Element("serviceTypeVersion").setText(InspireAtomUtil.ATOM_SERVICE_TYPE_VERSION));
-    		request.addContent(new Element("serviceType").setText(InspireAtomUtil.ATOM_SERVICE_TYPE));
-    		request.addContent(new Element("fast").setText("true"));
-            request.addContent(new Element("identifier").setText(values));
-    		String searchTerms = null;
-    		try {
-    			searchTerms = Util.getParam(params,
-    					InspireAtomUtil.DATASET_Q_PARAM);
-    		} catch (Exception e) {
-    		}
-    		if (!StringUtils.isEmpty(searchTerms)) {
-    			request.addContent(new Element("any").setText(searchTerms));
-    		}
-            search.exec(request, context);
-    	    Element searchResult = result.exec(request, context);
-    	    List<String> selectedDatasetFileIdentifiers = new ArrayList<String>();
-    	    List<?> nodes = Xml.selectNodes(searchResult,
-    				"metadata/*/uuid");
-    		if (nodes != null) {
-    			for (Object node : nodes) {
-    				selectedDatasetFileIdentifiers.add(((Element)node).getText());
-    			}
-    		}
-        	return InspireAtomUtil.getServiceFeed(fileIdentifier, context, selectedDatasetFileIdentifiers);
-        }
-        throw new MetadataNotFoundEx("The fileIdentifier is required in the url");
+        return new Element("response")
+        .setAttribute("redirect", "true")
+        .setAttribute("url", context.getBaseUrl() + "/opensearch/" + context.getLanguage() + "/" + fileIdentifier + "/search")
+        .setAttribute("mime-type","text/html; charset=UTF-8");
     }
 }

@@ -300,6 +300,8 @@ GeoNetwork.Lang.fr = {
 	'large' : 'Grand',
 	'selectImage' : 'Sélectionner une image',
 	'selectFile' : 'Sélectionner un fichier',
+    'file': 'Fichier',
+    'overwrite': 'Remplacer',
 	'image' : 'Image',
 	'uploading' : 'Transfert en cours ...',
 	'upload' : 'Transférer',

@@ -36,7 +36,9 @@ import jeeves.utils.Xml;
 import org.apache.commons.lang.StringUtils;
 import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.inspireatom.util.InspireAtomUtil;
-import org.fao.geonet.kernel.search.LuceneSearcher;
+import org.fao.geonet.services.main.Result;
+import org.fao.geonet.services.main.Search;
+import org.jdom.Attribute;
 import org.jdom.Element;
 import org.jdom.Namespace;
 
@@ -48,8 +50,12 @@ import org.jdom.Namespace;
  */
 public class AtomServiceDescription implements Service
 {
-    public void init(String appPath, ServiceConfig params) throws Exception {
+    private Search search = new Search();
+    private Result result = new Result();
 
+    public void init(String appPath, ServiceConfig params) throws Exception {
+        search.init(appPath, params);
+        result.init(appPath, params);
     }
 
     //--------------------------------------------------------------------------
@@ -64,8 +70,8 @@ public class AtomServiceDescription implements Service
 		String webappName = baseURL.substring(1);
         String fileIdentifier = Util.getParam(params, InspireAtomUtil.SERVICE_IDENTIFIER, "");
         if (!StringUtils.isEmpty(fileIdentifier)) {
-            String keywords = LuceneSearcher.getMetadataFromIndex(webappName, context.getLanguage(), fileIdentifier, "keyword");
-        	Element service = InspireAtomUtil.getServiceFeed(fileIdentifier, context);
+            String keywords = InspireAtomUtil.getKeywordsByFileIdentifier(context, fileIdentifier, search, result);
+        	Element service = InspireAtomUtil.getServiceFeed(fileIdentifier, context, null);
             String styleSheet = context.getAppPath() + File.separator + Geonet.Path.STYLESHEETS + File.separator + "inspire-atom-feed.xsl";
             Element serviceAtomFeed = Xml.transform(new Element("root").addContent(service), styleSheet);
             Namespace ns = serviceAtomFeed.getNamespace();
@@ -87,7 +93,7 @@ public class AtomServiceDescription implements Service
 				Element dataset = datasets.next();
 				String datasetIdCode = dataset.getChildText("spatial_dataset_identifier_code", inspiredlsns);
 				String datasetIdNs = dataset.getChildText("spatial_dataset_identifier_namespace", inspiredlsns);
-	            Element datasetAtomFeed = Xml.transform(new Element("root").addContent(InspireAtomUtil.getDatasetFeed(datasetIdCode, datasetIdNs, context)), styleSheet);
+	            Element datasetAtomFeed = Xml.transform(new Element("root").addContent(InspireAtomUtil.getDatasetFeed(params, context, datasetIdCode, datasetIdNs, search, result)), styleSheet);
 				Element datasetEl = buildDatasetInfo(datasetIdCode,datasetIdNs);
 	            datasetEl.addContent(new Element("atom_url").setText(datasetAtomFeed.getChildText("id",ns)));
 				datasetsEl.addContent(datasetEl);
@@ -131,6 +137,7 @@ public class AtomServiceDescription implements Service
 		                    	}
 		                    }
 		                    downloadEl.addContent(new Element("crs").setText(term));
+		                    downloadEl.addContent(new Element("crsCount").setText("" + count));
 		                    datasetEl.addContent(downloadEl);
 	
 		                    // Remove from map to not process further downloads with same CRS,

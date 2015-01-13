@@ -743,9 +743,6 @@
     <protocolChoice show="-" value="OGC:SPS">OGC-SPS Sensor Planning Service</protocolChoice>
     <protocolChoice show="-" value="OGC:SAS">OGC-SAS Sensor Alert Service</protocolChoice>
     <protocolChoice show="-" value="OGC:WCS">OGC-WCS Web Coverage Service</protocolChoice>
-	<protocolChoice show="-" value="DB:ORACLE">ORACLE database table</protocolChoice>
-	<protocolChoice show="y" value="WWW:LINK-1.0-http--opendap">OPeNDAP URL</protocolChoice>
-	<protocolChoice show="y" value="RBNB:DATATURBINE">Data Turbine</protocolChoice>	
     <protocolChoice show="y" value="OGC:WCS-1.1.0-http-get-capabilities">OGC-WCS Web Coverage Service (ver 1.1.0)</protocolChoice>
     <protocolChoice show="-" value="OGC:WCTS">OGC-WCTS Web Coordinate Transformation Service</protocolChoice>
     <protocolChoice show="-" value="OGC:WFS">OGC-WFS Web Feature Service</protocolChoice>
@@ -771,15 +768,24 @@
     <protocolChoice show="-" value="OGC:WPS">OGC-WPS Web Processing Service</protocolChoice>
 	<protocolChoice show="-" value="WWW:DOWNLOAD-1.0-ftp--download">Fichier à télécharger (FTP)</protocolChoice>
 	<protocolChoice show="-" value="WWW:DOWNLOAD-1.0-http--download">Fichier à télécharger</protocolChoice>
-  <protocolChoice show="-" value="FILE:GEO">Fichier SIG</protocolChoice>
-  <protocolChoice show="-" value="FILE:RASTER">Fichier SIG RASTER</protocolChoice>
-  <protocolChoice show="-" value="DB:POSTGIS">Table PostGIS</protocolChoice>
-  <protocolChoice show="y" value="WWW:LINK-1.0-http--ical">iCalendar (URL)</protocolChoice>
+	<protocolChoice show="-" value="FILE:GEO">Fichier SIG</protocolChoice>
+	<protocolChoice show="-" value="FILE:RASTER">Fichier SIG RASTER</protocolChoice>
+	<protocolChoice show="-" value="DB:POSTGIS">Table PostGIS</protocolChoice>
+	<protocolChoice show="-" value="DB:ORACLE">ORACLE database table</protocolChoice>
+	<protocolChoice show="y" value="WWW:LINK-1.0-http--opendap">OPeNDAP URL</protocolChoice>
+	<protocolChoice show="y" value="RBNB:DATATURBINE">Data Turbine</protocolChoice>	
+	<protocolChoice show="y" value="WWW:LINK-1.0-http--ical">iCalendar (URL)</protocolChoice>
 	<protocolChoice show="y" value="WWW:LINK-1.0-http--link">Adresse Internet (URL)</protocolChoice>
 	<protocolChoice show="y" value="WWW:LINK-1.0-http--partners">Site web partenaire (URL)</protocolChoice>
 	<protocolChoice show="y" value="WWW:LINK-1.0-http--related">Adresse Internet associée (URL)</protocolChoice>
 	<protocolChoice show="y" value="WWW:LINK-1.0-http--rss">Fil RSS (URL)</protocolChoice>
 	<protocolChoice show="y" value="WWW:LINK-1.0-http--samples">Produit vitrine (URL)</protocolChoice>
+	<protocolChoice show="y" value="invoke">Invoke service</protocolChoice>
+	<protocolChoice show="y" value="discovery">Discovery service</protocolChoice>
+	<protocolChoice show="y" value="download">Download service</protocolChoice>
+	<protocolChoice show="y" value="other">Other service</protocolChoice> 
+	<protocolChoice show="y" value="transformation">Transformation service</protocolChoice>
+	<protocolChoice show="y" value="view">View service</protocolChoice>
     <protocolChoice show="-" value="UKST">Unknown Service Type</protocolChoice>
 	<pubdate>Date de publication</pubdate>
 	<publicationDate>Date de diffusion</publicationDate>

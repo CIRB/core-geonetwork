@@ -33,8 +33,10 @@ import jeeves.server.context.ServiceContext;
 import jeeves.utils.Xml;
 
 import org.apache.commons.lang.StringUtils;
+import org.fao.geonet.GeonetContext;
 import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.constants.Params;
+import org.fao.geonet.kernel.DataManager;
 import org.jdom.Attribute;
 import org.jdom.Element;
 import org.jdom.Namespace;
@@ -87,11 +89,19 @@ public class Get implements Service {
     		int iPos = root.indexOf(";");
     		if (iPos>-1) {
         		title = root.substring(iPos+1);
-        		if (title.equals("AtomServiceFeed")) {
+        		if (title.startsWith("AtomServiceFeed")) {
         			Element processEl = new Element(Params.PROCESS);
         			params.addContent(processEl);
+        			GeonetContext gc = (GeonetContext) context.getHandlerContext(Geonet.CONTEXT_NAME);
+        			DataManager     dm = gc.getDataManager();
+        		    String operationName = "";
+        		    int iPos2 = title.indexOf(":");
+        		    if (iPos2 > -1) {
+        		    	operationName = title.substring(iPos2+1);
+        		    	title = title.substring(0,iPos2);
+        		    }
         			processEl.setText("gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage/gmd:URL" + SEPARATOR +
-        					"http://localhost:8080/geonetwork/srv/fre/atom?id=" + uuid);
+        					dm.getSiteUrl() + context.getBaseUrl() + "/opensearch/" + context.getLanguage() + "/" + uuid + "/" + operationName);
         		}
         		root = root.substring(0,iPos);
     		}

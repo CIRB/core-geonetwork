@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gml="http://www.opengis.net/gml" xmlns:srv="http://www.isotc211.org/2005/srv" xmlns:java="java:org.fao.geonet.util.XslUtil" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:gmx="http://www.isotc211.org/2005/gmx">
+<xsl:stylesheet version="1.0" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gml="http://www.opengis.net/gml" xmlns:srv="http://www.isotc211.org/2005/srv" xmlns:java="java:org.fao.geonet.util.XslUtil" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:gmx="http://www.isotc211.org/2005/gmx " xmlns:geobru="http://geobru.irisnet.be">
 	<!-- This file defines what parts of the metadata are indexed by Lucene
 	     Searches can be conducted on indexes defined here.
 	     The Field@name attribute defines the name of the search variable.
@@ -277,10 +277,13 @@
 		</xsl:for-each>
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 		<!-- === Distribution === -->
-		<xsl:for-each select="gmd:distributionInfo/gmd:MD_Distribution">
+		<xsl:for-each select="gmd:distributionInfo/geobru:BXL_Distribution">
 			<xsl:for-each select="gmd:distributionFormat/gmd:MD_Format/gmd:name//gmd:LocalisedCharacterString[@locale=$pound2LangId or @locale=$pound3LangId]">
 				<Field name="format" string="{string(.)}" store="true" index="true"/>
 			</xsl:for-each>
+			<xsl:if test="count(gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource[normalize-space(gmd:applicationProfile/gco:CharacterString)='INSPIRE-Download-Atom'])>0">
+				<Field name="has_atom" string="true" store="false" index="true"/>
+			</xsl:if>
 			<!-- index online protocol -->
 			<xsl:for-each select="gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:protocol//gmd:LocalisedCharacterString[@locale=$pound2LangId or @locale=$pound3LangId]">
 				<Field name="protocol" string="{string(.)}" store="true" index="true"/>

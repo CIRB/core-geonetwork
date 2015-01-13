@@ -61,7 +61,7 @@ public class AddThesaurusMessageHandler implements MessageHandler {
                 GeonetContext gc = (GeonetContext) context.getHandlerContext(Geonet.CONTEXT_NAME);
 
                 Thesaurus gst = new Thesaurus(addThesaurusMessage.getFname(), addThesaurusMessage.getType(),
-                        addThesaurusMessage.getDir(), new File(addThesaurusMessage.getThesaurusFile()), gc.getDataManager().getSiteURL());
+                        addThesaurusMessage.getDir(), new File(addThesaurusMessage.getThesaurusFile()), gc.getDataManager().getServiceUrl());
                 gc.getThesaurusManager().addThesaurusWithoutSendingTopic(gst);
             }
             catch(Exception x) {

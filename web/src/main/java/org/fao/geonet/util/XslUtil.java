@@ -15,6 +15,7 @@ import jeeves.utils.Log;
 import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.kernel.search.LuceneSearcher;
 import org.fao.geonet.languages.IsoLanguagesMapper;
+
 //import java.util.Calendar;
 
 /**
@@ -278,6 +279,22 @@ public final class XslUtil
             Log.error(Geonet.GEONETWORK, "Failed to format number: " + e.getMessage());
 		}
 		return nf.format(dNumber);
+	}
+
+	public static String multiply(String sNumber1, String sNumber2) {
+		double dNumber1 = 0.0;
+		double dNumber2 = 0.0;
+		try {
+			dNumber1 = Double.parseDouble(sNumber1);
+		} catch (Exception e) {
+            Log.error(Geonet.GEONETWORK, "Failed to format number: " + e.getMessage());
+		}
+		try {
+			dNumber2 = Double.parseDouble(sNumber2);
+		} catch (Exception e) {
+            Log.error(Geonet.GEONETWORK, "Failed to format number: " + e.getMessage());
+		}
+		return Long.toString(Math.round(dNumber1 * dNumber2));
 	}
 
 }

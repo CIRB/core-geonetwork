@@ -562,36 +562,35 @@ public class ServiceManager
 		//------------------------------------------------------------------------
 		//--- check if the output page is a foward
 
-		if (outPage != null)
-		{
-			String sForward = outPage.getForward();
+		String redirect = response.getAttributeValue("redirect");
+		String url = response.getAttributeValue("url");
+		String type = response.getAttributeValue("mime-type");
+		if (!StringUtils.isBlank(redirect) && redirect.equals("true") && !StringUtils.isBlank(url) && !StringUtils.isBlank(type)) {
+            HttpServiceRequest req2 = (HttpServiceRequest) req;
 
-			if (sForward != null)
-				return sForward;
-		}
-
-		//------------------------------------------------------------------------
-		//--- write result to output page
-
-		if (outPage == null)
-		{
-			//--- if there is no output page we output the xml result (if any)
-
-			if	(response == null)
-				warning("Response is null and there is no output page for : " +req.getService());
-			else
+            req2.getHttpServletResponse().setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
+            req2.getHttpServletResponse().setHeader("Location", url);
+            req2.getHttpServletResponse().setHeader("Content-Type", type);
+		} else {
+			if (outPage != null)
 			{
-				String redirect = response.getAttributeValue("redirect");
-				String url = response.getAttributeValue("url");
-				String type = response.getAttributeValue("mime-type");
-				if (!StringUtils.isBlank(redirect) && redirect.equals("true") && !StringUtils.isBlank(url) && !StringUtils.isBlank(type)) {
-                    HttpServiceRequest req2 = (HttpServiceRequest) req;
-
-                    req2.getHttpServletResponse().setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
-                    req2.getHttpServletResponse().setHeader("Location", url);
-                    req2.getHttpServletResponse().setHeader("Content-Type", type);
-				} else {
-
+				String sForward = outPage.getForward();
+	
+				if (sForward != null)
+					return sForward;
+			}
+	
+			//------------------------------------------------------------------------
+			//--- write result to output page
+	
+			if (outPage == null)
+			{
+				//--- if there is no output page we output the xml result (if any)
+	
+				if	(response == null)
+					warning("Response is null and there is no output page for : " +req.getService());
+				else
+				{
 					info("     -> writing xml for : " +req.getService());
 	
 					//--- this logging is usefull for xml services that are called by javascript code
@@ -613,204 +612,203 @@ public class ServiceManager
 	                req.write(response);
 				}
 			}
-		}
-
-		//--- FILE output
-
-		else if (outPage.isFile())
-		{
-			// PDF Output
-			if (outPage.getContentType().equals("application/pdf") && !outPage.getStyleSheet().equals("")) {
-
-				//--- build the xml data for the XSL/FO translation
-				String styleSheet = outPage.getStyleSheet();
-                Element guiElem;
-                TimerContext guiServicesTimerContext = context.getMonitorManager().getTimer(ServiceManagerGuiServicesTimer.class).time();
-                try {
-				    guiElem = outPage.invokeGuiServices(context, response, vDefaultGui);
-                } finally {
-                    guiServicesTimerContext.stop();
-                }
-
-				addPrefixes(guiElem, context.getLanguage(), req.getService());
-
+	
+			//--- FILE output
+	
+			else if (outPage.isFile())
+			{
+				// PDF Output
+				if (outPage.getContentType().equals("application/pdf") && !outPage.getStyleSheet().equals("")) {
+	
+					//--- build the xml data for the XSL/FO translation
+					String styleSheet = outPage.getStyleSheet();
+	                Element guiElem;
+	                TimerContext guiServicesTimerContext = context.getMonitorManager().getTimer(ServiceManagerGuiServicesTimer.class).time();
+	                try {
+					    guiElem = outPage.invokeGuiServices(context, response, vDefaultGui);
+	                } finally {
+	                    guiServicesTimerContext.stop();
+	                }
+	
+					addPrefixes(guiElem, context.getLanguage(), req.getService());
+	
+					Element rootElem = new Element(Jeeves.Elem.ROOT)
+													.addContent(guiElem)
+													.addContent(response);
+	
+					Element reqElem = (Element) req.getParams().clone();
+					reqElem.setName(Jeeves.Elem.REQUEST);
+	
+					rootElem.addContent(reqElem);
+	
+					//--- do an XSL transformation
+	
+					styleSheet = appPath + Jeeves.Path.XSL + styleSheet;
+	
+					if (!new File(styleSheet).exists())
+						error(" -> stylesheet not found on disk, aborting : " +styleSheet);
+					else
+					{
+						info(" -> transforming with stylesheet : " +styleSheet);
+	
+						try
+						{
+	                        TimerContext timerContext = context.getMonitorManager().getTimer(ServiceManagerXslOutputTransformTimer.class).time();
+	                        String file;
+	                        try {
+	                            //--- first we do the transformation
+	                            file = Xml.transformFOP(uploadDir, rootElem, styleSheet);
+	                        } finally {
+	                            timerContext.stop();
+	                        }
+	                        String uuid = rootElem.getChild("request").getChildText("uuid");
+							response = BinaryFile.encode(200, file, (StringUtils.isNotBlank(uuid) ? uuid : ("export-summary-" + String.valueOf(Calendar.getInstance().getTimeInMillis()))) + ".pdf", true);
+	                    }
+						catch(Exception e)
+						{
+							error(" -> exception during XSL/FO transformation for : " +req.getService());
+							error(" -> (C) stylesheet : "+ styleSheet);
+							error(" -> (C) message : "+ e.getMessage());
+							error(" -> (C) exception : "+ e.getClass().getSimpleName());
+	
+							throw e;
+						}
+	
+						info(" -> end transformation for : " +req.getService());
+					}
+	
+					
+				} 
+				String contentType = BinaryFile.getContentType(response);
+	
+				if (contentType == null)
+					contentType = "application/octet-stream";
+	
+				String contentDisposition = BinaryFile.getContentDisposition(response);
+				String contentLength      = BinaryFile.getContentLength(response);
+	
+				if(contentLength == null) {
+				    //This means the response is not a pointer to the file, but the file itself to download
+				    XMLOutputter outp = new XMLOutputter();
+				    String s = outp.outputString(response);
+	                byte[] bytes = s.getBytes("UTF-8");
+				    
+	                req.beginStream(contentType, bytes.length, contentDisposition, cache);
+	                outp.output(response, req.getOutputStream());
+	                req.endStream();
+				} else {
+	    			int cl = (contentLength == null) ? -1 : Integer.parseInt(contentLength);
+	    
+	    			req.beginStream(contentType, cl, context.getService().equals("resources.get") ? null : contentDisposition, cache);
+	    			BinaryFile.write(response, req.getOutputStream());
+	    			req.endStream();
+	    			BinaryFile.removeIfTheCase(response);
+	    		}
+			}
+	
+			//--- BLOB output
+	
+			else if (outPage.isBLOB())
+			{
+				String contentType = BLOB.getContentType(response);
+	
+				if (contentType == null)
+					contentType = "application/octet-stream";
+	
+				String contentDisposition = BLOB.getContentDisposition(response);
+				String contentLength      = BLOB.getContentLength(response);
+	
+				int cl = (contentLength == null) ? -1 : Integer.parseInt(contentLength);
+	
+				req.beginStream(contentType, cl, contentDisposition, cache);
+				BLOB.write(response, req.getOutputStream());
+				req.endStream();
+			}
+	
+			//--- HTML/XML output
+	
+			else
+			{
+				//--- build the xml data for the XSL translation
+	
+				String  styleSheet = outPage.getStyleSheet();
+				Element guiElem;
+	            TimerContext guiServicesTimerContext = monitorManager.getTimer(ServiceManagerGuiServicesTimer.class).time();
+	            try {
+	                guiElem = outPage.invokeGuiServices(context, response, vDefaultGui);
+	            } finally {
+	                guiServicesTimerContext.stop();
+	            }
+	
+	            addPrefixes(guiElem, context.getLanguage(), req.getService());
+	
 				Element rootElem = new Element(Jeeves.Elem.ROOT)
 												.addContent(guiElem)
 												.addContent(response);
-
+	
 				Element reqElem = (Element) req.getParams().clone();
 				reqElem.setName(Jeeves.Elem.REQUEST);
-
+	
 				rootElem.addContent(reqElem);
-
-				//--- do an XSL transformation
-
-				styleSheet = appPath + Jeeves.Path.XSL + styleSheet;
-
-				if (!new File(styleSheet).exists())
-					error(" -> stylesheet not found on disk, aborting : " +styleSheet);
-				else
+	
+				//--- do an XSL translation or send xml data to a debug routine
+	
+				if (req.hasDebug())
 				{
-					info(" -> transforming with stylesheet : " +styleSheet);
-
-					try
-					{
-                        TimerContext timerContext = context.getMonitorManager().getTimer(ServiceManagerXslOutputTransformTimer.class).time();
-                        String file;
-                        try {
-                            //--- first we do the transformation
-                            file = Xml.transformFOP(uploadDir, rootElem, styleSheet);
-                        } finally {
-                            timerContext.stop();
-                        }
-                        String uuid = rootElem.getChild("request").getChildText("uuid");
-						response = BinaryFile.encode(200, file, (StringUtils.isNotBlank(uuid) ? uuid : ("export-summary-" + String.valueOf(Calendar.getInstance().getTimeInMillis()))) + ".pdf", true);
-                    }
-					catch(Exception e)
-					{
-						error(" -> exception during XSL/FO transformation for : " +req.getService());
-						error(" -> (C) stylesheet : "+ styleSheet);
-						error(" -> (C) message : "+ e.getMessage());
-						error(" -> (C) exception : "+ e.getClass().getSimpleName());
-
-						throw e;
-					}
-
-					info(" -> end transformation for : " +req.getService());
+					req.beginStream("application/xml; charset=UTF-8", cache);
+					req.write(rootElem);
 				}
-
-				
-			} 
-			String contentType = BinaryFile.getContentType(response);
-
-			if (contentType == null)
-				contentType = "application/octet-stream";
-
-			String contentDisposition = BinaryFile.getContentDisposition(response);
-			String contentLength      = BinaryFile.getContentLength(response);
-
-			if(contentLength == null) {
-			    //This means the response is not a pointer to the file, but the file itself to download
-			    XMLOutputter outp = new XMLOutputter();
-			    String s = outp.outputString(response);
-                byte[] bytes = s.getBytes("UTF-8");
-			    
-                req.beginStream(contentType, bytes.length, contentDisposition, cache);
-                outp.output(response, req.getOutputStream());
-                req.endStream();
-			} else {
-    			int cl = (contentLength == null) ? -1 : Integer.parseInt(contentLength);
-    
-    			req.beginStream(contentType, cl, context.getService().equals("resources.get") ? null : contentDisposition, cache);
-    			BinaryFile.write(response, req.getOutputStream());
-    			req.endStream();
-    			BinaryFile.removeIfTheCase(response);
-    		}
-		}
-
-		//--- BLOB output
-
-		else if (outPage.isBLOB())
-		{
-			String contentType = BLOB.getContentType(response);
-
-			if (contentType == null)
-				contentType = "application/octet-stream";
-
-			String contentDisposition = BLOB.getContentDisposition(response);
-			String contentLength      = BLOB.getContentLength(response);
-
-			int cl = (contentLength == null) ? -1 : Integer.parseInt(contentLength);
-
-			req.beginStream(contentType, cl, contentDisposition, cache);
-			BLOB.write(response, req.getOutputStream());
-			req.endStream();
-		}
-
-		//--- HTML/XML output
-
-		else
-		{
-			//--- build the xml data for the XSL translation
-
-			String  styleSheet = outPage.getStyleSheet();
-			Element guiElem;
-            TimerContext guiServicesTimerContext = monitorManager.getTimer(ServiceManagerGuiServicesTimer.class).time();
-            try {
-                guiElem = outPage.invokeGuiServices(context, response, vDefaultGui);
-            } finally {
-                guiServicesTimerContext.stop();
-            }
-
-            addPrefixes(guiElem, context.getLanguage(), req.getService());
-
-			Element rootElem = new Element(Jeeves.Elem.ROOT)
-											.addContent(guiElem)
-											.addContent(response);
-
-			Element reqElem = (Element) req.getParams().clone();
-			reqElem.setName(Jeeves.Elem.REQUEST);
-
-			rootElem.addContent(reqElem);
-
-			//--- do an XSL translation or send xml data to a debug routine
-
-			if (req.hasDebug())
-			{
-				req.beginStream("application/xml; charset=UTF-8", cache);
-				req.write(rootElem);
-			}
-			else
-			{
-				//--- do an XSL transformation
-
-				styleSheet = appPath + Jeeves.Path.XSL + styleSheet;
-
-				if (!new File(styleSheet).exists())
-					error("     -> stylesheet not found on disk, aborting : " +styleSheet);
 				else
 				{
-					info("     -> transforming with stylesheet : " +styleSheet);
-
-					ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-					try
+					//--- do an XSL transformation
+	
+					styleSheet = appPath + Jeeves.Path.XSL + styleSheet;
+	
+					if (!new File(styleSheet).exists())
+						error("     -> stylesheet not found on disk, aborting : " +styleSheet);
+					else
 					{
-                        TimerContext timerContext = context.getMonitorManager().getTimer(ServiceManagerXslOutputTransformTimer.class).time();
-                        try {
-                            //--- first we do the transformation
-                            Xml.transform(rootElem, styleSheet, baos);
-                        } finally {
-                            timerContext.stop();
-                        }
-						//--- then we set the content-type and output the result
-
-                        if (context.getService().equals("csv.present")) {
-                        	req.beginStream(outPage.getContentType(), -1, "attachment; filename=" + "export-summary-" + String.valueOf(Calendar.getInstance().getTimeInMillis()) + ".txt", cache);
-                        } else if (context.getService().equals("xml_iso19139_save") || context.getService().equals("xml_iso19110_save")) {
-                            String uuid = rootElem.getChild("request").getChildText("uuid");
-    						req.beginStream(outPage.getContentType(), -1, "attachment; filename=" + (StringUtils.isNotBlank(uuid) ? uuid : "metadata") + ".xml", cache);
-                        } else {
-    						req.beginStream(outPage.getContentType(), cache);                        	
-                        }
-						req.getOutputStream().write(baos.toByteArray());
-						req.endStream();
+						info("     -> transforming with stylesheet : " +styleSheet);
+	
+						ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	
+						try
+						{
+	                        TimerContext timerContext = context.getMonitorManager().getTimer(ServiceManagerXslOutputTransformTimer.class).time();
+	                        try {
+	                            //--- first we do the transformation
+	                            Xml.transform(rootElem, styleSheet, baos);
+	                        } finally {
+	                            timerContext.stop();
+	                        }
+							//--- then we set the content-type and output the result
+	
+	                        if (context.getService().equals("csv.present")) {
+	                        	req.beginStream(outPage.getContentType(), -1, "attachment; filename=" + "export-summary-" + String.valueOf(Calendar.getInstance().getTimeInMillis()) + ".txt", cache);
+	                        } else if (context.getService().equals("xml_iso19139_save") || context.getService().equals("xml_iso19110_save")) {
+	                            String uuid = rootElem.getChild("request").getChildText("uuid");
+	    						req.beginStream(outPage.getContentType(), -1, "attachment; filename=" + (StringUtils.isNotBlank(uuid) ? uuid : "metadata") + ".xml", cache);
+	                        } else {
+	    						req.beginStream(outPage.getContentType(), cache);                        	
+	                        }
+							req.getOutputStream().write(baos.toByteArray());
+							req.endStream();
+						}
+						catch(Exception e)
+						{
+							error("   -> exception during transformation for : " +req.getService());
+							error("   ->  (C) stylesheet : "+ styleSheet);
+							error("   ->  (C) message    : "+ e.getMessage());
+							error("   ->  (C) exception  : "+ e.getClass().getSimpleName());
+	
+							throw e;
+						}
+	
+						info("     -> end transformation for : " +req.getService());
 					}
-					catch(Exception e)
-					{
-						error("   -> exception during transformation for : " +req.getService());
-						error("   ->  (C) stylesheet : "+ styleSheet);
-						error("   ->  (C) message    : "+ e.getMessage());
-						error("   ->  (C) exception  : "+ e.getClass().getSimpleName());
-
-						throw e;
-					}
-
-					info("     -> end transformation for : " +req.getService());
 				}
 			}
 		}
-
 		//------------------------------------------------------------------------
 		//--- end data stream
 

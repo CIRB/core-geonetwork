@@ -68,7 +68,7 @@ public class AddElement implements Service
 		String child = params.getChildText(Params.CHILD);
 
 		Element elResp = null;
-    	Element rec = dbms.select("SELECT data FROM metadata WHERE isTemplate = 's' AND root = ?", name);
+    	Element rec = dbms.select("SELECT data FROM metadata WHERE isTemplate = 's' AND root = ? AND title = ''", name);
     	if (rec!=null  && rec.getContentSize()==1) {
     		String xmlData = rec.getChild(Jeeves.Elem.RECORD).getChildText("data");
     		rec = Xml.loadString(xmlData, false);

@@ -280,6 +280,8 @@ GeoNetwork.Lang.nl = {
     'large': "Groot",
     'selectImage': "Selecteer een afbeelding",
     'selectFile': "Selecteer een bestand",
+    'file': 'Bestand',
+    'overwrite': 'Overschrijven',
     'image': "Beeld",
     'uploading': "Opladen...",
     'upload': "Opladen",

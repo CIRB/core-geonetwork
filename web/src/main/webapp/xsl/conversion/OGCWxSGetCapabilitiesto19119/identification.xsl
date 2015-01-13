@@ -604,7 +604,7 @@
 										<xsl:variable name="urls">
 											<xsl:choose>
 												<xsl:when test="$ows='true'"><xsl:value-of select=".//ows:Get[1]/@xlink:href"/></xsl:when>
-												<xsl:otherwise><xsl:value-of select=".//OnlineResource[1]/@xlink:href|.//wms:OnlineResource[1]/@xlink:href"/></xsl:otherwise>
+												<xsl:otherwise><xsl:value-of select=".//Get/OnlineResource[1]/@xlink:href|.//wms:Get/wms:OnlineResource[1]/@xlink:href"/></xsl:otherwise>
 											</xsl:choose>
 										</xsl:variable>
 										<xsl:if test="normalize-space($urls[1])=''">

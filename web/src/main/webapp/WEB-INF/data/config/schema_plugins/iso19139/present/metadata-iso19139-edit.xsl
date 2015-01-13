@@ -210,9 +210,9 @@
           <xsl:variable name="ref" select="geonet:element/@ref"/>
           <xsl:variable name="typeOfLink" select="if (local-name(.)='featureCatalogueCitation') then 'iso19110' else 'uuidref'"/>
           <input type="text" name="_{$ref}_uuidref" id="_{$ref}_uuidref" value="{./@uuidref}" size="20"
-            onfocus="javascript:Ext.getCmp('editorPanel').showLinkedMetadataSelectionPanel('{$ref}', 'uuidref', '{$typeOfLink}');"/>
+            onfocus="javascript:Ext.getCmp('editorPanel').showLinkedMetadataSelectionPanel('{$ref}', 'uuidref', '{$typeOfLink}', false);"/>
           <img src="../../images/find.png" alt="{/root/gui/strings/search}" title="{/root/gui/strings/search}"
-            onclick="javascript:Ext.getCmp('editorPanel').showLinkedMetadataSelectionPanel('{$ref}', 'uuidref', '{$typeOfLink}');" 
+            onclick="javascript:Ext.getCmp('editorPanel').showLinkedMetadataSelectionPanel('{$ref}', 'uuidref', '{$typeOfLink}', false);" 
             onmouseover="this.style.cursor='pointer';"/>
         </xsl:when>
         <xsl:otherwise>
@@ -2292,7 +2292,7 @@
     <xsl:template mode="iso19139" match="gmd:MD_DigitalTransferOptions">
         <xsl:param name="schema"/>
         <xsl:param name="edit"/>
-				<xsl:if test="$edit=true()">
+				<xsl:if test="$edit=true() and //gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue='service'">
 				    <xsl:variable name="transferOptionsElementName" select="'gmd:transferOptions'" />
 				    <xsl:variable name="followingTransferOptionsSiblingsCount" select="count(../following-sibling::*[name(.) = $transferOptionsElementName])" />
 			       	<xsl:if test="$followingTransferOptionsSiblingsCount=0">
@@ -3614,10 +3614,10 @@
                 <xsl:variable name="text">
                     <xsl:variable name="ref"
                         select="gco:CharacterString/geonet:element/@ref" />
-                    <input onfocus="javascript:Ext.getCmp('editorPanel').showLinkedMetadataSelectionPanel('{$ref}', '');"
+                    <input onfocus="javascript:Ext.getCmp('editorPanel').showLinkedMetadataSelectionPanel('{$ref}', '', '', true);"
                         class="md" type="text" name="_{$ref}" id="_{$ref}" value="{gco:CharacterString/text()}" size="20" />
                     <img src="../../images/find.png" alt="{/root/gui/strings/parentSearch}" title="{/root/gui/strings/parentSearch}"
-                      onclick="javascript:Ext.getCmp('editorPanel').showLinkedMetadataSelectionPanel('{$ref}', '');"/>
+                      onclick="javascript:Ext.getCmp('editorPanel').showLinkedMetadataSelectionPanel('{$ref}', '', '', true);"/>
                 </xsl:variable>
 
                 <xsl:apply-templates mode="simpleElement"

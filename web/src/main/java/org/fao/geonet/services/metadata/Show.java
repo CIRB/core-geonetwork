@@ -144,7 +144,9 @@ public class Show implements Service
 				if (mdInfo.schemaId.equals("iso19139")) {
 					// if document has srv namespace then add srv schemaLocation
 					if (elMd.getNamespace("srv") != null) {
-						schemaLocAtt = new Attribute("schemaLocation", "http://www.isotc211.org/2005/srv http://schemas.opengis.net/iso/19139/20060504/srv/srv.xsd", Csw.NAMESPACE_XSI);
+						schemaLocAtt = new Attribute("schemaLocation", "http://www.isotc211.org/2005/gmx http://schemas.opengis.net/iso/19139/20060504/gmx/gmx.xsd http://www.isotc211.org/2005/srv http://schemas.opengis.net/iso/19139/20060504/srv/srv.xsd", Csw.NAMESPACE_XSI);
+					} else {
+						schemaLocAtt = new Attribute("schemaLocation", "http://www.isotc211.org/2005/gmx http://www.isotc211.org/2005/gmx/gmx.xsd http://www.isotc211.org/2005/gmd http://www.isotc211.org/2005/gmd/gmd.xsd", Csw.NAMESPACE_XSI);
 					}
 				}
 				elMd.setAttribute(schemaLocAtt);
@@ -154,7 +156,7 @@ public class Show implements Service
 				// remove it first (does nothing if not there) then add it
 			}
 		}
-
+		sm.updateSchemaLocation(elMd, context);
 		//--- increase metadata popularity
 		if (!skipPopularity)
 			dm.increasePopularity(context, id);

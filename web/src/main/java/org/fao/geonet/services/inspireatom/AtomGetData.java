@@ -35,6 +35,8 @@ import jeeves.utils.Xml;
 
 import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.inspireatom.util.InspireAtomUtil;
+import org.fao.geonet.services.main.Result;
+import org.fao.geonet.services.main.Search;
 import org.jdom.Element;
 import org.jdom.Namespace;
 
@@ -48,8 +50,14 @@ import org.jdom.Namespace;
  */
 public class AtomGetData implements Service {
 
-    public void init(String appPath, ServiceConfig params) throws Exception {
+    private AtomDescribe atomDescribe = new AtomDescribe();
+    private Search search = new Search();
+    private Result result = new Result();
 
+    public void init(String appPath, ServiceConfig params) throws Exception {
+    	atomDescribe.init(appPath, params);
+        search.init(appPath, params);
+        result.init(appPath, params);
     }
 
     //--------------------------------------------------------------------------
@@ -64,11 +72,11 @@ public class AtomGetData implements Service {
         String datasetIdNs = Util.getParam(params, InspireAtomUtil.DATASET_IDENTIFIER_NS_PARAM);
         String datasetCrs = Util.getParam(params, InspireAtomUtil.DATASET_CRS_PARAM);
         String styleSheet = context.getAppPath() + File.separator + Geonet.Path.STYLESHEETS + File.separator + "inspire-atom-feed.xsl";
-        Element datasetAtomFeed = Xml.transform(new Element("root").addContent(InspireAtomUtil.getDatasetFeed(datasetIdCode, datasetIdNs, context)), styleSheet);
+        Element datasetAtomFeed = Xml.transform(new Element("root").addContent(InspireAtomUtil.getDatasetFeed(params, context, datasetIdCode, datasetIdNs, search, result)), styleSheet);
         Namespace ns = datasetAtomFeed.getNamespace();
-        Map<Integer, Element> result = countDatasetsForCrs(datasetAtomFeed, datasetCrs, ns);
-        int downloadCount = result.keySet().iterator().next();
-        Element selectedEntry = result.get(downloadCount);
+        Map<Integer, Element> crsCounts = countDatasetsForCrs(datasetAtomFeed, datasetCrs, ns);
+        int downloadCount = crsCounts.keySet().iterator().next();
+        Element selectedEntry = crsCounts.get(downloadCount);
 
         // No download  for the CRS specified
         if (downloadCount == 0) {
@@ -87,14 +95,13 @@ public class AtomGetData implements Service {
                     .setAttribute("redirect", "true")
                     .setAttribute("url", selectedEntry.getChildText("id",ns))
                     .setAttribute("mime-type",type);
-
         // Otherwise, return a feed with the downloads for the specified CRS
         } else {
             // Retrieve the dataset feed
             // Filter the dataset feed by CRS code.
-            InspireAtomUtil.filterDatasetFeedByCrs(datasetAtomFeed, datasetCrs, ns);
-
-            return datasetAtomFeed;
+//        	return atomDescribe.exec(params, context);
+        	return params;
+//            return InspireAtomUtil.getDatasetFeed(params, context, datasetIdCode, datasetIdNs, search, result);
         }
     }
 

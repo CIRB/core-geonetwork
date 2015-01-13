@@ -16,10 +16,10 @@
 	<xsl:variable name="protocol">WWW:DOWNLOAD-1.0-HTTP--DOWNLOAD</xsl:variable>
 	<xsl:variable name="applicationProfile">INSPIRE-Download-Atom</xsl:variable>
 	<xsl:variable name="guiLang" select="/root/gui/language"/>
-    <xsl:variable name="baseUrl" select="concat('http://',/root/gui/env/server/host,':',/root/gui/env/server/port,/root/gui/url)"/>
+    <xsl:variable name="baseUrl" select="concat('http://',/root/gui/env/server/host,/root/gui/url)"/>
 
 	<xsl:template match="/root">
-		<atom:feed xsi:schemaLocation="http://www.w3.org/2005/Atom http://inspire-geoportal.ec.europa.eu/schemas/inspire/atom/1.0/atom.xsd" xml:lang="en" xml:base="http://inspire-geoportal.ec.europa.eu/demos/ccm/">
+		<atom:feed xsi:schemaLocation="http://www.w3.org/2005/Atom http://inspire-geoportal.ec.europa.eu/schemas/inspire/atom/1.0/atom.xsd" xml:lang="en">
 			<xsl:apply-templates mode="service" select="service/gmd:MD_Metadata"/>
 			<xsl:apply-templates mode="dataset" select="dataset/gmd:MD_Metadata">
 				<xsl:with-param name="isServiceEntry" select="false()"/>
@@ -30,7 +30,6 @@
     <xsl:template mode="service" match="gmd:MD_Metadata">
 
         <!-- Get first element. TODO: Check if can be several -->
-        <xsl:variable name="baseUrl" select="concat('http://',/root/gui/env/server/host,':',/root/gui/env/server/port,/root/gui/url)"/>
 		<xsl:variable name="fileIdentifier" select="gmd:fileIdentifier/gco:CharacterString"/>
 		<xsl:variable name="docLang" select="gmd:language/gmd:LanguageCode/@codeListValue"/>
 		<xsl:variable name="titleNode" select="gmd:identificationInfo/srv:SV_ServiceIdentification/gmd:citation/gmd:CI_Citation/gmd:title"/>
@@ -82,7 +81,7 @@
 			</xsl:call-template>
    		</atom:id>
    		<atom:rights><xsl:apply-templates mode="translated-rights" select="gmd:identificationInfo/srv:SV_ServiceIdentification"/></atom:rights>
-		<atom:updated><xsl:value-of select="$updated"/></atom:updated>
+		<atom:updated><xsl:value-of select="$updated"/>Z</atom:updated>
 		<atom:author>
 			<atom:name><xsl:value-of select="gmd:identificationInfo/srv:SV_ServiceIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:organisationName/gco:CharacterString"/></atom:name>
 			<atom:email><xsl:value-of select="gmd:identificationInfo/srv:SV_ServiceIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/*[name(.)='gmd:CI_Address' or @gco:isoType='CI_Address_Type']/gmd:electronicMailAddress/gco:CharacterString"/></atom:email>
@@ -112,20 +111,12 @@
 	       	<atom:subtitle><xsl:call-template name="translated-description"><xsl:with-param name="lang" select="$guiLang"/><xsl:with-param name="type" select="3"/></xsl:call-template><xsl:text> </xsl:text><xsl:apply-templates mode="get-translation" select="gmd:MD_DataIdentification/gmd:abstract"><xsl:with-param name="lang" select="$guiLang"/></xsl:apply-templates></atom:subtitle>
 		</xsl:if>
 		<xsl:if test="$isServiceEntry">
-			<xsl:for-each select="gmd:CI_OnlineResource[upper-case(gmd:protocol/gco:CharacterString) = $protocol and gmd:applicationProfile/gco:CharacterString=$applicationProfile]/gmd:description">
+			<xsl:for-each select="gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource[upper-case(gmd:protocol/gco:CharacterString) = $protocol and gmd:applicationProfile/gco:CharacterString=$applicationProfile]/gmd:description">
 				<xsl:variable name="crs" select="normalize-space(.)"/>
 				<xsl:variable name="crsLabel" select="/root/gui/schemas/iso19139/labels/element[@name = 'gmd:description']/helper/option[@value=$crs]"/>
 					<atom:category term="{$crs}" label="{$crsLabel}"/>
 			</xsl:for-each>
 		</xsl:if>
-   		<atom:id>
-			<xsl:call-template name="atom-link-href">
-				<xsl:with-param name="lang"><xsl:value-of select="$guiLang"/></xsl:with-param>
-				<xsl:with-param name="baseUrl"><xsl:value-of select="$baseUrl"/></xsl:with-param>
-				<xsl:with-param name="identifier"><xsl:value-of select="$identifierCode"/></xsl:with-param>
-				<xsl:with-param name="codeSpace"><xsl:value-of select="$identifierCodeSpace"/></xsl:with-param>
-			</xsl:call-template>
-   		</atom:id>
        	<xsl:call-template name="csw-link">
 			<xsl:with-param name="lang" select="$guiLang"/>
 			<xsl:with-param name="baseUrl" select="$baseUrl"/>
@@ -163,12 +154,32 @@
 				</xsl:call-template>
 			</xsl:if>
 		</xsl:if>
+		<xsl:variable name="serviceIdentifier" select="normalize-space(../serviceIdentifier)"/>
+		<xsl:if test="$serviceIdentifier">
+			<atom:link title="The parent service feed" rel="up" type="application/atom+xml" hreflang="{$guiLang}">
+				<xsl:attribute name="href">
+					<xsl:call-template name="atom-link-href">
+						<xsl:with-param name="lang"><xsl:value-of select="$guiLang"/></xsl:with-param>
+						<xsl:with-param name="baseUrl"><xsl:value-of select="$baseUrl"/></xsl:with-param>
+						<xsl:with-param name="fileIdentifier"><xsl:value-of select="$serviceIdentifier"/></xsl:with-param>
+					</xsl:call-template>
+				</xsl:attribute>
+			</atom:link>
+		</xsl:if>
+   		<atom:id>
+			<xsl:call-template name="atom-link-href">
+				<xsl:with-param name="lang"><xsl:value-of select="$guiLang"/></xsl:with-param>
+				<xsl:with-param name="baseUrl"><xsl:value-of select="$baseUrl"/></xsl:with-param>
+				<xsl:with-param name="identifier"><xsl:value-of select="$identifierCode"/></xsl:with-param>
+				<xsl:with-param name="codeSpace"><xsl:value-of select="$identifierCodeSpace"/></xsl:with-param>
+			</xsl:call-template>
+   		</atom:id>
    		<atom:rights><xsl:apply-templates mode="translated-rights" select="gmd:MD_DataIdentification"/></atom:rights>
 		<xsl:if test="$isServiceEntry">
 	       	<atom:summary><xsl:apply-templates mode="get-translation" select="gmd:MD_DataIdentification/gmd:abstract"><xsl:with-param name="lang" select="$guiLang"/></xsl:apply-templates></atom:summary>
 	       	<atom:title><xsl:call-template name="translated-description"><xsl:with-param name="lang" select="$guiLang"/><xsl:with-param name="type" select="3"/></xsl:call-template><xsl:text> </xsl:text><xsl:value-of select="$datasetTitle"/></atom:title>
 		</xsl:if>
-		<atom:updated><xsl:value-of select="$updated"/></atom:updated>
+		<atom:updated><xsl:value-of select="$updated"/>Z</atom:updated>
 		<xsl:variable name="w" select="normalize-space(gmd:EX_GeographicBoundingBox/gmd:westBoundLongitude/gco:Decimal/text())"/>
 		<xsl:variable name="e" select="normalize-space(gmd:EX_GeographicBoundingBox/gmd:eastBoundLongitude/gco:Decimal/text())"/>
 		<xsl:variable name="s" select="normalize-space(gmd:EX_GeographicBoundingBox/gmd:southBoundLatitude/gco:Decimal/text())"/>
@@ -183,29 +194,34 @@
 			</xsl:if>
 		</xsl:if>
 		<xsl:if test="not($isServiceEntry)">
+			<xsl:variable name="requestedCRS" select="normalize-space(../crs)"/>
 			<atom:author>
 				<atom:name><xsl:value-of select="gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:organisationName/gco:CharacterString"/></atom:name>
 				<atom:email><xsl:value-of select="gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/*[name(.)='gmd:CI_Address' or @gco:isoType='CI_Address_Type']/gmd:electronicMailAddress/gco:CharacterString"/></atom:email>
 			</atom:author>
-			<xsl:for-each select="gmd:CI_OnlineResource[upper-case(gmd:protocol/gco:CharacterString) = $protocol and gmd:applicationProfile/gco:CharacterString=$applicationProfile]">
-				<atom:entry>				
-					<xsl:variable name="crs" select="normalize-space(gmd:description)"/>
-					<xsl:variable name="crsLabel" select="/root/gui/schemas/iso19139/labels/element[@name = 'gmd:description']/helper/option[@value=$crs]"/>
-					<xsl:variable name="mimeFileType" select="normalize-space(gmd:name/gmx:MimeFileType/@type)"/>
-					<xsl:variable name="entryTitle" select="concat($datasetTitle,' in ', $crsLabel, ' - ', /root/gui/strings/mimetypeChoice[@value=$mimeFileType])"/>
-					<inspire_dls:spatial_dataset_identifier_code><xsl:value-of select="$identifierCode"/></inspire_dls:spatial_dataset_identifier_code>
-					<inspire_dls:spatial_dataset_identifier_namespace><xsl:value-of select="$identifierCodeSpace"/></inspire_dls:spatial_dataset_identifier_namespace>
-					<xsl:variable name="crs" select="normalize-space(gmd:description)"/>
-					<atom:category term="{$crs}" label="{$crsLabel}"/>
-					<atom:id><xsl:value-of select="gmd:linkage/gmd:URL"/></atom:id>
-					<atom:link title="{$entryTitle}" rel="alternate">
-						<xsl:attribute name="type"><xsl:value-of select="normalize-space(gmd:name/gmx:MimeFileType/@type)"/></xsl:attribute>
-						<xsl:attribute name="href"><xsl:value-of select="gmd:linkage/gmd:URL"/></xsl:attribute>
-					</atom:link>
-					<atom:title><xsl:value-of select="$entryTitle"/></atom:title>
-					<atom:updated><xsl:value-of select="$updated"/></atom:updated>
-					<georss:polygon><xsl:value-of select="concat($fs,' ',$fw,' ',$fn,' ',$fw,' ',$fn,' ',$fe,' ',$fs,' ',$fe,' ',$fs,' ',$fw)"/></georss:polygon>
-				</atom:entry>
+			<xsl:for-each select="gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource[upper-case(gmd:protocol/gco:CharacterString) = $protocol and gmd:applicationProfile/gco:CharacterString=$applicationProfile]">
+				<xsl:variable name="crs" select="normalize-space(gmd:description)"/>
+				<xsl:if test="$requestedCRS='' or $requestedCRS=$crs">
+					<atom:entry>				
+						<xsl:variable name="crsLabel" select="/root/gui/schemas/iso19139/labels/element[@name = 'gmd:description']/helper/option[@value=$crs]"/>
+						<xsl:variable name="mimeFileType" select="normalize-space(gmd:name/gmx:MimeFileType/@type)"/>
+						<xsl:variable name="entryTitle" select="concat($datasetTitle,' in ', $crsLabel, ' - ', /root/gui/strings/mimetypeChoice[@value=$mimeFileType])"/>
+						<inspire_dls:spatial_dataset_identifier_code><xsl:value-of select="$identifierCode"/></inspire_dls:spatial_dataset_identifier_code>
+						<inspire_dls:spatial_dataset_identifier_namespace><xsl:value-of select="$identifierCodeSpace"/></inspire_dls:spatial_dataset_identifier_namespace>
+						<xsl:variable name="crs" select="normalize-space(gmd:description)"/>
+						<atom:category term="{$crs}" label="{$crsLabel}"/>
+						<atom:id><xsl:value-of select="gmd:linkage/gmd:URL"/></atom:id>
+						<atom:link title="{$entryTitle}" rel="alternate">
+							<xsl:attribute name="type"><xsl:value-of select="normalize-space(gmd:name/gmx:MimeFileType/@type)"/></xsl:attribute>
+							<xsl:attribute name="href"><xsl:value-of select="gmd:linkage/gmd:URL"/></xsl:attribute>
+							<xsl:attribute name="length"><xsl:value-of select="java:multiply(../../gmd:transferSize/gco:Real,'1000000')"/></xsl:attribute>
+			   				<xsl:attribute name="hreflang" select="$guiLang"/>
+						</atom:link>
+						<atom:title><xsl:value-of select="$entryTitle"/></atom:title>
+						<atom:updated><xsl:value-of select="$updated"/>Z</atom:updated>
+						<georss:polygon><xsl:value-of select="concat($fs,' ',$fw,' ',$fn,' ',$fw,' ',$fn,' ',$fe,' ',$fs,' ',$fe,' ',$fs,' ',$fw)"/></georss:polygon>
+					</atom:entry>
+				</xsl:if>
 			</xsl:for-each>
 		</xsl:if>
     </xsl:template>
@@ -257,7 +273,7 @@
 		<xsl:param name="lang"/>
 		<xsl:param name="baseUrl"/>
 		<xsl:param name="fileIdentifier"/>
-		<atom:link rel="describedby" type="application/vnd.iso.19139+xml">
+		<atom:link rel="describedby" type="application/xml">
 			<xsl:attribute name="href" select="concat($baseUrl,'/srv/',$lang,'/csw?service=CSW&amp;version=2.0.2&amp;request=GetRecordById&amp;outputschema=http://www.isotc211.org/2005/gmd&amp;elementSetName=full&amp;id=',$fileIdentifier)"/>
        	</atom:link>
 	</xsl:template>
@@ -297,8 +313,8 @@
 		<xsl:param name="fileIdentifier"/>
 		<xsl:param name="identifier"/>
 		<xsl:param name="codeSpace"/>
-		<xsl:if test="$fileIdentifier!=''"><xsl:value-of select="concat($baseUrl,'/srv/',$lang,'/atom?id=',$fileIdentifier)"/></xsl:if>
-		<xsl:if test="$identifier!=''"><xsl:value-of select="concat($baseUrl,'/srv/',$lang,'/atom?spatial_dataset_identifier_code=',$identifier,'&amp;spatial_dataset_identifier_namespace=',$codeSpace)"/></xsl:if>
+		<xsl:if test="$fileIdentifier!=''"><xsl:value-of select="concat($baseUrl,'/opensearch/',$lang,'/',$fileIdentifier,'/describe')"/></xsl:if>
+		<xsl:if test="$identifier!=''"><xsl:value-of select="concat($baseUrl,'/opensearch/',$lang,'/describe?spatial_dataset_identifier_code=',$identifier,'&amp;spatial_dataset_identifier_namespace=',$codeSpace)"/></xsl:if>
 	</xsl:template>
 
 	<xsl:template mode="get-translation" match="*|@*">

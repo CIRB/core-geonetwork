@@ -291,6 +291,8 @@ GeoNetwork.lang.en = {
     'large': 'Large',
     'selectImage': 'Select an image',
     'selectFile': 'Select a file',
+    'file': 'File',
+    'overwrite': 'Overwrite',
     'image': 'Image',
     'uploading': 'Uploading ...',
     'upload': 'Upload',

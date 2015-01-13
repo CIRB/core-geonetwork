@@ -268,6 +268,7 @@ GeoNetwork.Catalogue = Ext.extend(Ext.util.Observable, {
             mdMEF: serviceUrl + 'mef.export',
             mdXMLGet: serviceUrl + 'xml.metadata.get',
             mdXMLGet19139: serviceUrl + 'xml_iso19139',
+            mdXMLGetMdUuid: serviceUrl + 'xml_md_uuid',
             mdXMLGetDC: serviceUrl + 'xml_dublin-core',
             mdXMLGetFGDC: serviceUrl + 'xml_fgdc-std',
             mdXMLGet19115: serviceUrl + 'xml_iso19115to19139',
@@ -1311,6 +1312,30 @@ GeoNetwork.Catalogue = Ext.extend(Ext.util.Observable, {
     metadataPrepareDownload: function(id){
         var url = this.services.prepareDownload + "?id=" + id;
         this.modalAction(OpenLayers.i18n('prepareDownload'), url);
+    },
+
+    getMdUuid: function(uuid,successCb){
+    	var mduuid
+    	OpenLayers.Request.GET({
+	        url: this.services.mdXMLGetMdUuid,
+	        params: {
+	            uuid: uuid
+	        },
+	        success: function(response){
+	            var mduuidNode = response.responseXML.childNodes[0];
+	            if (mduuidNode && mduuidNode.childNodes[0]) {
+	            	mduuid = mduuidNode.childNodes[0].nodeValue
+	                if (successCb) {
+	                    successCb(mduuid);
+	                }
+	            } else {
+		            Ext.Msg.alert('Error','No metadata identificatoruuid for record with uuid ', uuid);
+	            } 
+	        },
+	        failure: function(response){
+	            Ext.Msg.alert('Error','No metadata record found with uuid ', uuid);
+	        }
+	    });
     }
 });
 
