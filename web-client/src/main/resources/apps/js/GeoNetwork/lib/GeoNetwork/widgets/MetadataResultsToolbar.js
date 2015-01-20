@@ -95,7 +95,7 @@ GeoNetwork.MetadataResultsToolbar = Ext.extend(Ext.Toolbar, {
     
     updateStatusAction: undefined,
     
-    updateVersionAction: undefined,
+//    updateVersionAction: undefined,
     
     createMetadataAction: undefined,
     
@@ -249,6 +249,7 @@ GeoNetwork.MetadataResultsToolbar = Ext.extend(Ext.Toolbar, {
             scope: this,
             hidden: hide
         });
+/*
         this.updateVersionAction = new Ext.menu.Item({
             text: OpenLayers.i18n('updateVersion'),
             id: 'updateVersionAction',
@@ -259,15 +260,16 @@ GeoNetwork.MetadataResultsToolbar = Ext.extend(Ext.Toolbar, {
             scope: this,
             hidden: hide
         });
+*/
         this.selectionActions.push(this.deleteAction, this.ownerAction, this.updateCategoriesAction, 
-                this.updatePrivilegesAction, this.updateStatusAction, this.updateVersionAction);
+                this.updatePrivilegesAction, this.updateStatusAction/*, this.updateVersionAction*/);
         
         this.actionMenu.addItem(this.deleteAction);
         this.actionMenu.addItem(this.ownerAction);
         this.actionMenu.addItem(this.updateCategoriesAction);
         this.actionMenu.addItem(this.updatePrivilegesAction);
         this.actionMenu.addItem(this.updateStatusAction);
-        this.actionMenu.addItem(this.updateVersionAction);
+//        this.actionMenu.addItem(this.updateVersionAction);
     },
     /** private: method[createAdminMenu] 
      *  Create quick admin action menu to not require to go to
@@ -509,7 +511,7 @@ GeoNetwork.MetadataResultsToolbar = Ext.extend(Ext.Toolbar, {
     updatePrivileges: function(catalogue, user){
         // TODO : this.ownerAction visible to userAdmin only #781
         var actions = [this.deleteAction, this.ownerAction, this.updateCategoriesAction, 
-                        this.updatePrivilegesAction, this.updateStatusAction, this.updateVersionAction, this.createMetadataAction, this.mdImportAction,
+                        this.updatePrivilegesAction, this.updateStatusAction, /*this.updateVersionAction, */this.createMetadataAction, this.mdImportAction,
                         this.mdImportAction, this.adminAction, this.otherItem];
         Ext.each(actions, function(){
             this.setVisible(user);

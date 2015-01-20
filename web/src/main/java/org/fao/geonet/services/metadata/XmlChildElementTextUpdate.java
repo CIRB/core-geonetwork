@@ -104,7 +104,6 @@ public class XmlChildElementTextUpdate implements Service
                     List<Namespace> nss = new ArrayList<Namespace>();
                     nss.addAll(md.getAdditionalNamespaces());
                     nss.add(md.getNamespace());
-            		System.out.println("Processing record with uuid " + uuid);
                     Object o = Xml.selectSingle(md, xpathExpression, nss);
                     if (o!=null && o instanceof Element) {
                     	String oldChildTextValue = ((Element)o).getText(); 

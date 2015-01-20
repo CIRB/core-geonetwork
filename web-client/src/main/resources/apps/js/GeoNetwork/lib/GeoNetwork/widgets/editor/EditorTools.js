@@ -901,6 +901,15 @@ function showLocalInput(nodes, ref, focus){
     }
 }
 
+function updateLocalInput(inputIds, value){
+    for (var i=0;i<inputIds.length;i++) {
+        var input = Ext.getDom(inputIds[i]);
+        if (input.style != null && input.style.display != "none") {
+        	input.value = value;
+        }
+    }
+}
+
 /**
  * Remove suggestion div content. Call by multilingual widget.
  * Suggestion should be improved in such case (see #325).

@@ -1650,6 +1650,11 @@
         <description>Other restrictions and legal prerequisites for accessing and using the
             resource</description>
         <condition>conditional</condition>
+	    <helper>
+			<option lang="FRE" value="Pas de restriction d’accès public selon INSPIRE.">Pas de restriction d’accès public selon INSPIRE.</option>
+			<option lang="ENG" value="No public access constraints by INSPIRE.">No public access constraints by INSPIRE.</option>
+			<option lang="DUT" value="Geen publieke toegangsrestricties volgens INSPIRE.">Geen publieke toegangsrestricties volgens INSPIRE.</option>
+	    </helper>
     </element>
     <element name="gmd:page" id="406.0">
         <label>Page</label>

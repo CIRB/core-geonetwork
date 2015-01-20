@@ -917,33 +917,32 @@
 	<codelist name="gmd:MD_KeywordTypeCode">
 		<entry>
 			<code>discipline</code>
-			<label>discipline</label>
-			<description>keyword identifies a branch of instruction or specialized
-			learning</description>
+			<label>Discipline</label>
+			<description>Trefwoord dat een welbepaalde discipline identificeert.</description>
 		</entry>
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - -->
 		<entry>
 			<code>place</code>
-			<label>place</label>
-			<description>keyword identifies a location</description>
+			<label>Plaats</label>
+			<description>Trefwoord dat een plaats identificeert.</description>
 		</entry>
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - -->
 		<entry>
 			<code>stratum</code>
-			<label>stratum</label>
-			<description>keyword identifies the layer(s) of any deposited substance</description>
+			<label>Stratum</label>
+			<description>Trefwoord dat de geologische laag of lagen identificeert.</description>
 		</entry>
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - -->
 		<entry>
 			<code>temporal</code>
-			<label>temporal</label>
-			<description>keyword identifies a time period related to the dataset</description>
+			<label>Temporeel</label>
+			<description>Trefwoord dat een tijdperiode gerelateerd aan de dataset identificeert.</description>
 		</entry>
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - -->
 		<entry>
 			<code>theme</code>
-			<label>theme</label>
-			<description>keyword identifies a particular subject or topic</description>
+			<label>Thema</label>
+			<description>Trefwoord dat een welbepaald onderwerp identificeert.</description>
 		</entry>
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - -->
 	</codelist>

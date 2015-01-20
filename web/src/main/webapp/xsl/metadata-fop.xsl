@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="2.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:exslt="http://exslt.org/common"
-	exclude-result-prefixes="exslt" xmlns:gco="http://www.isotc211.org/2005/gco"
-	xmlns:geonet="http://www.fao.org/geonetwork" xmlns:fo="http://www.w3.org/1999/XSL/Format">
+	exclude-result-prefixes="exslt" xmlns:srv="http://www.isotc211.org/2005/srv" 
+	xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:geonet="http://www.fao.org/geonetwork"
+	xmlns:fo="http://www.w3.org/1999/XSL/Format">
 
 
 	<xsl:import href="metadata-fop-variables.xsl"/>
@@ -475,7 +476,12 @@
 						<fo:table-cell color="{$font-color}" padding-top="4pt"
 							padding-bottom="4pt" padding-right="4pt" padding-left="4pt">
  							<fo:block linefeed-treatment="preserve">
-								<xsl:value-of select="$value" />
+								<xsl:if test="starts-with(normalize-space($value),'http')">
+									<fo:basic-link text-decoration="underline" color="blue" external-destination="url('{replace($value,'amp;','')}')"><xsl:value-of select="replace($value,'=','=&#x200b;')"/></fo:basic-link>
+								</xsl:if>
+								<xsl:if test="not(starts-with(normalize-space($value),'http'))">
+									<xsl:value-of select="$value" />
+								</xsl:if>
 								<xsl:copy-of select="$content" />
 							</fo:block>
 						</fo:table-cell>

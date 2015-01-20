@@ -1709,6 +1709,11 @@
 	<element name="gmd:otherConstraints">
 		<label>Overige beperkingen</label>
 		<description>Andere restricties of beperkingen die niet in andere velden kunnen worden ondergebracht, bijvoorbeeld de naam van de copyrighthouder.</description>
+	    <helper>
+			<option lang="FRE" value="Pas de restriction d’accès public selon INSPIRE.">Pas de restriction d’accès public selon INSPIRE.</option>
+			<option lang="ENG" value="No public access constraints by INSPIRE.">No public access constraints by INSPIRE.</option>
+			<option lang="DUT" value="Geen publieke toegangsrestricties volgens INSPIRE.">Geen publieke toegangsrestricties volgens INSPIRE.</option>
+	    </helper>
 	<condition>conditional</condition>
 	</element>
 	<!-- ==================================================== -->

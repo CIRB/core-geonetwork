@@ -2677,7 +2677,10 @@
     <help>Autres restrictions et conditions préalables de nature juridique concernant l'accès et l'utilisation de la ressource ou des métadonnées. Ce champ doit être complété dès lors que l'un des deux champs précédents (accessConstraints, useConstraints) porte la mention "Autres restrictions".</help>
     <condition>Condition</condition>
     <helper>
-      <option value="Pas de restriction d’accès public selon INSPIRE">Pas de restriction d’accès public selon INSPIRE</option>
+		<option lang="FRE" value="Pas de restriction d’accès public selon INSPIRE.">Pas de restriction d’accès public selon INSPIRE.</option>
+		<option lang="ENG" value="No public access constraints by INSPIRE.">No public access constraints by INSPIRE.</option>
+		<option lang="DUT" value="Geen publieke toegangsrestricties volgens INSPIRE.">Geen publieke toegangsrestricties volgens INSPIRE.</option>
+<!--
       <option value="L124-4-I-1 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.a)">L124-4-I-1 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.a)</option>
       <option value="L124-5-II-1 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.b)">L124-5-II-1 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.b)</option>
       <option value="L124-5-II-2 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.c)">L124-5-II-2 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.c)</option>
@@ -2687,6 +2690,7 @@
       <option value="L124-4-I-3 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.g)">L124-4-I-3 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.g)</option>
       <option value="L124-4-I-2 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.h)">L124-4-I-2 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.h)</option>
       <option value="L127-8-IV du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 17.7)">L127-8-IV du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 17.7)</option>
+-->
     </helper>
   </element>
   <element name="gmd:page" id="406.0">

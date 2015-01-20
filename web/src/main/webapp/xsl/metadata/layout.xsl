@@ -1006,6 +1006,7 @@
 	This related element is updated with the title value of the selected option.
 	-->
   <xsl:template name="helper">
+	<xsl:param name="relatedLanguageFieldIds"/>
     <xsl:param name="schema"/>
     <xsl:param name="attribute"/>
 
@@ -1109,7 +1110,7 @@
       
       <xsl:text> </xsl:text> (<xsl:value-of select="/root/gui/strings/helperList"/>
       <select
-        onchange="Ext.getDom('_{$refId}').value=this.options[this.selectedIndex].value; if (Ext.getDom('_{$refId}').onkeyup) Ext.getDom('_{$refId}').onkeyup(); {$relatedElementAction} {$relatedAttributeAction}"
+        onchange="{if (not($relatedLanguageFieldIds)) then concat('Ext.getDom(',$apos,'_',$refId,$apos,').value = this.options[this.selectedIndex].value;') else concat($relatedLanguageFieldIds/script,'updateLocalInput(_',$refId, '_LanguageFieldMapping,this.options[this.selectedIndex].value);')} if (Ext.getDom('_{$refId}').onkeyup) Ext.getDom('_{$refId}').onkeyup(); {$relatedElementAction} {$relatedAttributeAction}"
         class="md">
         <option/>
         <!-- This assume that helper list is already sort in alphabetical order in loc file. -->
@@ -1727,6 +1728,7 @@
     to create a textarea -->
     <xsl:param name="class"/>
     <xsl:param name="langId"/>
+    <xsl:param name="relatedLanguageFieldIds"/>
     <xsl:param name="visible" select="true()"/>
     <!-- Add javascript validator function. By default, if element 
       is mandatory a non empty validator is defined. -->
@@ -1944,6 +1946,7 @@
           <xsl:value-of select="text()"/>
         </textarea>
         <xsl:call-template name="helper">
+		  <xsl:with-param name="relatedLanguageFieldIds" select="$relatedLanguageFieldIds"/>
           <xsl:with-param name="schema" select="$schema"/>
           <xsl:with-param name="attribute" select="false()"/>
         </xsl:call-template>

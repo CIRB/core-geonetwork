@@ -66,10 +66,12 @@ GeoNetwork.app = function() {
 	 */
 	function initMap() {
 		iMap = new GeoNetwork.mapApp();
+/*
 		iMap.init(GeoNetwork.map.BACKGROUND_LAYERS,
 				GeoNetwork.map.MAIN_MAP_OPTIONS);
 		metadataResultsView.addMap(iMap.getMap());
 		visualizationModeInitialized = true;
+*/
 		return iMap;
 	}
 
@@ -165,7 +167,7 @@ GeoNetwork.app = function() {
 		});
 		map.setOptions(GeoNetwork.map.MAP_OPTIONS);
 		map.addLayers(GeoNetwork.map.BACKGROUND_LAYERS);
-		map.zoomToMaxExtent();
+//		map.zoomToMaxExtent();
 
 		var mapPanel = new GeoExt.MapPanel({
 			id : "resultsMap",

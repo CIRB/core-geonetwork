@@ -1051,11 +1051,9 @@
   <xsl:template mode="iso19139GetAttributeText" match="@*">
     <xsl:param name="schema"/>
     <xsl:param name="edit"/>
-    
     <xsl:variable name="name"     select="local-name(..)"/>
     <xsl:variable name="qname"    select="name(..)"/>
     <xsl:variable name="value"    select="../@codeListValue"/>
-    
     <xsl:choose>
       <xsl:when test="$qname='gmd:LanguageCode'">
         <xsl:apply-templates mode="iso19139" select="..">
@@ -1088,7 +1086,6 @@
             </xsl:otherwise>
           </xsl:choose>
         </xsl:variable>
-        
         <xsl:variable name="codelist" select="exslt:node-set($codelistCore)" />
         <xsl:variable name="isXLinked" select="count(ancestor-or-self::node()[@xlink:href]) > 0" />
 
@@ -1247,23 +1244,75 @@
     
         <xsl:variable name="content">
           <xsl:for-each select="gmd:MD_Keywords">
-            <!-- FIXME : layout should move to metadata.xsl -->
-            <col>
-                      <xsl:apply-templates mode="elementEP" select="gmd:keyword|geonet:child[string(@name)='keyword']">
-                        <xsl:with-param name="schema" select="$schema"/>
-                        <xsl:with-param name="edit"   select="$edit"/>
-                      </xsl:apply-templates>
-                      <xsl:apply-templates mode="elementEP" select="gmd:type|geonet:child[string(@name)='type']">
-                        <xsl:with-param name="schema" select="$schema"/>
-                        <xsl:with-param name="edit"   select="$edit"/>
-                      </xsl:apply-templates>
-            </col>
-            <col>                    
-                      <xsl:apply-templates mode="elementEP" select="gmd:thesaurusName|geonet:child[string(@name)='thesaurusName']">
-                        <xsl:with-param name="schema" select="$schema"/>
-                        <xsl:with-param name="edit"   select="$edit"/>
-                      </xsl:apply-templates>
-            </col>
+			<xsl:variable name="fromThesaurus"   select="gmd:thesaurusName/gmd:CI_Citation/gmd:title/gco:CharacterString!=''"/>
+				<xsl:if test="$fromThesaurus">
+					<col>
+						<xsl:for-each select="gmd:keyword">
+							<xsl:apply-templates mode="simpleElement" select=".">
+								<xsl:with-param name="schema" select="$schema" />
+								<xsl:with-param name="title">
+									<xsl:call-template name="getTitle">
+										<xsl:with-param name="name" select="name(.)" />
+										<xsl:with-param name="schema" select="$schema" />
+									</xsl:call-template>
+								</xsl:with-param>
+								<xsl:with-param name="text">
+									<xsl:variable name="value">
+										<xsl:choose>
+											<xsl:when test="gmx:Anchor">
+												<a href="{gmx:Anchor/@xlink:href}">
+													<xsl:value-of
+														select="if (gmx:Anchor/text()) then gmx:Anchor/text() else gmx:Anchor/@xlink:href" />
+												</a>
+											</xsl:when>
+											<xsl:otherwise>
+												<xsl:call-template name="translatedString">
+													<xsl:with-param name="schema" select="$schema" />
+													<xsl:with-param name="langId"
+														select="concat('#',upper-case(/root/gui/language))" />
+												</xsl:call-template>
+											</xsl:otherwise>
+										</xsl:choose>
+									</xsl:variable>
+									<xsl:copy-of select="$value" />
+								</xsl:with-param>
+							</xsl:apply-templates>
+						</xsl:for-each>
+						<xsl:apply-templates mode="iso19139"
+							select="gmd:type">
+							<xsl:with-param name="schema" select="$schema" />
+							<xsl:with-param name="edit" select="false()" />
+						</xsl:apply-templates>
+					</col>
+					<col>
+						<xsl:apply-templates mode="iso19139"
+							select="gmd:thesaurusName|geonet:child[string(@name)='thesaurusName']">
+							<xsl:with-param name="schema" select="$schema" />
+							<xsl:with-param name="edit" select="false()" />
+						</xsl:apply-templates>
+					</col>
+				</xsl:if>
+				<xsl:if test="not($fromThesaurus)">
+					<col>
+						<xsl:apply-templates mode="elementEP"
+							select="gmd:keyword|geonet:child[string(@name)='keyword']">
+							<xsl:with-param name="schema" select="$schema" />
+							<xsl:with-param name="edit" select="$edit and not($fromThesaurus)" />
+						</xsl:apply-templates>
+						<xsl:apply-templates mode="elementEP"
+							select="gmd:type|geonet:child[string(@name)='type']">
+							<xsl:with-param name="schema" select="$schema" />
+							<xsl:with-param name="edit" select="$edit and not($fromThesaurus)" />
+						</xsl:apply-templates>
+					</col>
+					<col>
+						<xsl:apply-templates mode="elementEP"
+							select="gmd:thesaurusName|geonet:child[string(@name)='thesaurusName']">
+							<xsl:with-param name="schema" select="$schema" />
+							<xsl:with-param name="edit" select="$edit and not($fromThesaurus)" />
+						</xsl:apply-templates>
+					</col>
+				</xsl:if>
           </xsl:for-each>
         </xsl:variable>
         
@@ -1303,23 +1352,7 @@
 
                 <xsl:call-template name="translatedString">
                   <xsl:with-param name="schema" select="$schema"/>
-                  <xsl:with-param name="langId">
-				      <xsl:if test="$edit=true()">
-                        <xsl:call-template name="getLangId">
-                              <xsl:with-param name="langGui" select="/root/gui/language"/>
-                              <xsl:with-param name="md" select="ancestor-or-self::*[name(.)='gmd:MD_Metadata' or @gco:isoType='gmd:MD_Metadata']" />
-                          </xsl:call-template>
-				      </xsl:if>
-				      <xsl:if test="not($edit=true())">
-				            <xsl:value-of select="concat('#',upper-case(/root/gui/language))"/>
-				      </xsl:if>
-<!--
-                        <xsl:call-template name="getLangId">
-                              <xsl:with-param name="langGui" select="/root/gui/language"/>
-                              <xsl:with-param name="md" select="ancestor-or-self::*[name(.)='gmd:MD_Metadata' or @gco:isoType='gmd:MD_Metadata']" />
-                          </xsl:call-template>
--->
-                    </xsl:with-param>
+                  <xsl:with-param name="langId" select="concat('#',upper-case(/root/gui/language))"/>
                   </xsl:call-template>
 
 										</xsl:otherwise>
@@ -4026,13 +4059,32 @@
           </xsl:call-template>
         </xsl:variable>
 
+        <xsl:variable name="mainLanguageRef">
+          <xsl:choose>
+              <xsl:when test="gco:CharacterString/geonet:element/@ref" >
+                  <xsl:value-of select="concat('_', gco:CharacterString/geonet:element/@ref)"/>
+              </xsl:when>
+              <xsl:otherwise>
+                  <xsl:value-of select="concat('_',
+                          gmd:PT_FreeText/gmd:textGroup/gmd:LocalisedCharacterString[@locale=$mainLangId]/geonet:element/@ref)"/>
+              </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
         <span>
           <!-- Match gco:CharacterString element which is in default language or
             process a PT_FreeText with a reference to the main metadata language. -->
+                  <xsl:variable name="relatedLanguageFieldIds">
+           				<xsl:call-template name="getHashScript">
+			                <xsl:with-param name="ptFreeTextTree" select="$ptFreeTextTree"/>
+			                <xsl:with-param name="mainLangId" select="$mainLangId"/>
+			                <xsl:with-param name="mainLanguageRef" select="$mainLanguageRef"/>
+						</xsl:call-template>
+				  </xsl:variable>                  
           <xsl:choose>
             <xsl:when test="gco:*">
               <xsl:for-each select="gco:*">
                 <xsl:call-template name="getElementText">
+                  <xsl:with-param name="relatedLanguageFieldIds" select="$relatedLanguageFieldIds"/>
                   <xsl:with-param name="schema" select="$schema" />
                   <xsl:with-param name="edit" select="true()" />
                   <xsl:with-param name="class" select="$class" />
@@ -4042,6 +4094,7 @@
             <xsl:when test="gmd:PT_FreeText/gmd:textGroup/gmd:LocalisedCharacterString[@locale=$mainLangId]">
               <xsl:for-each select="gmd:PT_FreeText/gmd:textGroup/gmd:LocalisedCharacterString[@locale=$mainLangId]">
                 <xsl:call-template name="getElementText">
+                  <xsl:with-param name="relatedLanguageFieldIds" select="$relatedLanguageFieldIds"/>
                   <xsl:with-param name="schema" select="$schema" />
                   <xsl:with-param name="edit" select="true()" />
                   <xsl:with-param name="class" select="$class" />
@@ -4051,6 +4104,7 @@
             <xsl:otherwise>
               <xsl:for-each select="$ptFreeTextTree//gmd:LocalisedCharacterString[@locale=$mainLangId]">
                 <xsl:call-template name="getElementText">
+                  <xsl:with-param name="relatedLanguageFieldIds" select="$relatedLanguageFieldIds"/>
                   <xsl:with-param name="schema" select="$schema" />
                   <xsl:with-param name="edit" select="true()" />
                   <xsl:with-param name="class" select="$class" />
@@ -4073,18 +4127,6 @@
               <xsl:when test="$ptFreeTextTree//gmd:LocalisedCharacterString">                
                 <!-- Create combo to select language.
                 On change, the input with selected language is displayed. Others hidden. -->
-
-                <xsl:variable name="mainLanguageRef">
-                  <xsl:choose>
-                      <xsl:when test="gco:CharacterString/geonet:element/@ref" >
-                          <xsl:value-of select="concat('_', gco:CharacterString/geonet:element/@ref)"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                          <xsl:value-of select="concat('_',
-                                  gmd:PT_FreeText/gmd:textGroup/gmd:LocalisedCharacterString[@locale=$mainLangId]/geonet:element/@ref)"/>
-                      </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:variable>
 
                 <xsl:variable name="suggestionDiv" select="concat('suggestion', $mainLanguageRef)"/>
                 
@@ -4169,8 +4211,12 @@
       <xsl:with-param name="class" select="$class" />
     </xsl:call-template>
   </xsl:template>
-  
-  
+  <xsl:template name="getHashScript">
+  	<xsl:param name="ptFreeTextTree"/>
+  	<xsl:param name="mainLangId"/>
+	<xsl:param name="mainLanguageRef" />
+	<script><xsl:value-of select="concat('var ', $mainLanguageRef, '_LanguageFieldMapping = new Array(')"/><xsl:for-each select="$ptFreeTextTree//gmd:LocalisedCharacterString[@locale!=$mainLangId]"><xsl:value-of select="concat($apos,'_',geonet:element/@ref,$apos,',')"/></xsl:for-each><xsl:value-of select="concat($apos,$mainLanguageRef,$apos,');')"/></script>
+  </xsl:template>  
   <!-- 
     Create a PT_FreeText_Tree for multilingual editing.
     

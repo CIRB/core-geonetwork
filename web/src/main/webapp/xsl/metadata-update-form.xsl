@@ -43,6 +43,18 @@
 				                </select>
 				            </td>
 				        </tr>
+				        <tr id="gn.stylesheet">
+				            <th class="padded">
+				                <xsl:value-of select="/root/gui/strings/xpathExpression"/>
+				            </th>
+				            <td class="padded">
+				                <input class="content" type="text" style="width:400px" id="xpathExpression" name="xpathExpression" />
+				            </td>
+				        </tr>
+				        <tr id="gn.stylesheet">
+				            <th class="padded">For example</th>
+				            <td class="padded">gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords/gmd:MD_Keywords/gmd:keyword/gco:CharacterString</td>
+				        </tr>
 			        </table>
                     <table id="gn.result" style="display:none;">
 	                    <tr>

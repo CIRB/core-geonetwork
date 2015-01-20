@@ -89,7 +89,7 @@ GeoNetwork.map.ExtentMap = function(){
     var wgsProjCode = "EPSG:4326";
     var wgsProj = new OpenLayers.Projection(wgsProjCode);
     var mainProj = null;
-    var units = 'm'; //degrees
+    var units = 'dd'; //degrees
     var alternateProj = null;
     
     
@@ -120,15 +120,16 @@ GeoNetwork.map.ExtentMap = function(){
                 projection: mainProjCode,
                 theme: null
             },
-            map = new OpenLayers.Map(options);
+            map = new OpenLayers.Map(/*options*/GeoNetwork.map.EXTENT_MAP_OPTIONS);
         
         
         
         // Disable mouse wheel and navigation toolbar in view mode.
         // User can still pan the map.
+        var navigationControl = map.getControlsByClass('OpenLayers.Control.Navigation')[0];
+//        navigationControl.disableZoomWheel();
+        navigationControl.deactivate();
         if (!edit) {
-            var navigationControl = map.getControlsByClass('OpenLayers.Control.Navigation')[0];
-            navigationControl.disableZoomWheel();
             map.removeControl(map.getControlsByClass('OpenLayers.Control.PanZoom')[0]);
         }
         
@@ -160,6 +161,7 @@ GeoNetwork.map.ExtentMap = function(){
         
         maps[eltRef] = map;
         vectorLayers[eltRef] = vectorLayer;
+//        map.zoomToExtent(map.maxExtent);
         return map;
     }
     
@@ -400,7 +402,8 @@ GeoNetwork.map.ExtentMap = function(){
         vectorLayer.addFeatures(feature);
         // optionally, zoom on the layer features extent
         if (options.zoomToFeatures) {
-            zoomToFeatures(map, vectorLayer);
+            //zoomToFeatures(map, vectorLayer);
+            map.zoomToExtent(map.maxExtent);
         }
         return true;
     }
@@ -443,6 +446,7 @@ GeoNetwork.map.ExtentMap = function(){
     
     
     function createRegionMenu(cb){
+
         var store = GeoNetwork.data.RegionStore(catalogue.services.getRegions); // FIXME : global var
         var combo = new Ext.form.ComboBox({
             store: store,
@@ -473,13 +477,17 @@ GeoNetwork.map.ExtentMap = function(){
     function zoomToFeatures(map, vectorLayer){
         var extent = vectorLayer.getDataExtent();
         if (extent && !isNaN(extent.left)) {
-            var width = extent.getWidth() / 2;
-            var height = extent.getHeight() / 2;
+        	var width = extent.getWidth();
+            var height = extent.getHeight();
+        	var zoom = map.getZoomForExtent(extent);
+        	map.setCenter(new OpenLayers.LonLat(extent.left + width/2, extent.bottom + height/2), zoom);
+/*
             extent.left -= width;
             extent.right += width;
             extent.bottom -= height;
             extent.top += height;
             map.zoomToExtent(extent);
+*/
         } else {
             map.zoomToMaxExtent();
         }
@@ -542,9 +550,8 @@ GeoNetwork.map.ExtentMap = function(){
                 // Creates map component
                 var id;
                 id = Ext.id(viewer);
-                
-                var map = createMap();
-                
+                viewer.hidden = true;
+                var map = createMap();                
                 // Create toolbar with:
                 // * polygon control
                 // * bbox control
@@ -784,6 +791,7 @@ GeoNetwork.map.ExtentMap = function(){
                     watchRadios(watchedBbox, eltRef);
                     watchBbox(vectorLayers[eltRef], watchedBbox, eltRef, maps[eltRef]);
                 }
+                viewer.hidden = false;
             }
         }
     };

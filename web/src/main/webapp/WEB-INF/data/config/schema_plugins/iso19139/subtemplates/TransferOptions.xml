@@ -14,8 +14,12 @@
 					<gmd:URL />
 				</gmd:linkage>
 				<gmd:protocol>
-					<gco:CharacterString />
+					<gco:CharacterString>WWW:DOWNLOAD-1.0-http--download
+					</gco:CharacterString>
 				</gmd:protocol>
+				<gmd:applicationProfile>
+					<gco:CharacterString>INSPIRE-Download-Atom</gco:CharacterString>
+				</gmd:applicationProfile>
 				<gmd:name>
 					<gmx:MimeFileType type="" />
 				</gmd:name>
