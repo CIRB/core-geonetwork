@@ -1322,14 +1322,17 @@ GeoNetwork.Catalogue = Ext.extend(Ext.util.Observable, {
 	            uuid: uuid
 	        },
 	        success: function(response){
-	            var mduuidNode = response.responseXML.childNodes[0];
+	            var mduuidNode = response.responseXML.getElementsByTagName("mduuid")[0];
 	            if (mduuidNode && mduuidNode.childNodes[0]) {
 	            	mduuid = mduuidNode.childNodes[0].nodeValue
 	                if (successCb) {
 	                    successCb(mduuid);
 	                }
 	            } else {
-		            Ext.Msg.alert('Error','No metadata identificatoruuid for record with uuid ', uuid);
+	                if (successCb) {
+	                    successCb("");
+	                }
+	                Ext.Msg.alert('Error','No metadata identificatoruuid for record with uuid ', uuid);
 	            } 
 	        },
 	        failure: function(response){

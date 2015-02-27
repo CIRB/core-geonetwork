@@ -552,146 +552,157 @@
                                 wps:ProcessOfferings/*|
                                 wps1:ProcessOfferings/*">
 			<!-- Some services provide information about ows:ExtendedCapabilities TODO ? -->
-			<srv:containsOperations>
-				<srv:SV_OperationMetadata>
-					<xsl:variable name="operationName">
-							<xsl:choose>
-								<xsl:when test="name(.)='wps:Process'">WPS Process: <xsl:value-of select="ows:Title|ows11:Title"/></xsl:when>
-                                <xsl:when test="$ows='true'"><xsl:value-of select="@name"/></xsl:when>
-								<xsl:otherwise><xsl:value-of select="name(.)"/></xsl:otherwise>
-							</xsl:choose>
-					</xsl:variable>
-					<srv:operationName>
-						<gco:CharacterString><xsl:value-of select="$operationName"/></gco:CharacterString>
-					</srv:operationName>
-					<!--  CHECKME : DCPType/SOAP ? -->
-					<xsl:for-each select="DCPType/HTTP/*|wfs:DCPType/wfs:HTTP/*|wms:DCPType/wms:HTTP/*|
-							wcs:DCPType/wcs:HTTP/*|ows:DCP/ows:HTTP/*|ows11:DCP/ows11:HTTP/*">
-						<srv:DCP>
-							<srv:DCPList codeList="./resources/codeList.xml#DCPList">
-								<xsl:variable name="dcp">
-									<xsl:choose>
-										<xsl:when test="name(.)='Get' or name(.)='wfs:Get' or name(.)='wms:Get' or name(.)='wcs:Get' or name(.)='ows:Get' or name(.)='ows11:Get'">HTTP-GET</xsl:when>
-										<xsl:when test="name(.)='Post' or name(.)='wfs:Post' or name(.)='wms:Post' or name(.)='wcs:Post' or name(.)='ows:Post' or name(.)='ows11:Post'">HTTP-POST</xsl:when>
-										<xsl:otherwise>WebServices</xsl:otherwise>
-									</xsl:choose>
-								</xsl:variable>
-								<xsl:attribute name="codeListValue">
-									<xsl:value-of select="$dcp"/>
-								</xsl:attribute>
-							</srv:DCPList>
+			<xsl:variable name="operationName">
+					<xsl:choose>
+						<xsl:when test="name(.)='wps:Process'">WPS Process: <xsl:value-of select="ows:Title|ows11:Title"/></xsl:when>
+                              <xsl:when test="$ows='true'"><xsl:value-of select="@name"/></xsl:when>
+						<xsl:otherwise><xsl:value-of select="name(.)"/></xsl:otherwise>
+					</xsl:choose>
+			</xsl:variable>
+			<xsl:variable name="isSupportedOperation"><xsl:call-template name="is-supported-operation"><xsl:with-param name="ows" select="$ows"/><xsl:with-param name="operationName" select="$operationName"/></xsl:call-template></xsl:variable>
+			<xsl:if test="$isSupportedOperation='true'">
+				<xsl:message select="concat('Operation ', $operationName, ' is supported.')"/>
+				<srv:containsOperations>
+					<srv:SV_OperationMetadata>
+						<srv:operationName>
+							<gco:CharacterString><xsl:value-of select="$operationName"/></gco:CharacterString>
+						</srv:operationName>
+						<!--  CHECKME : DCPType/SOAP ? -->
+<!--
+						<xsl:for-each select="DCPType/HTTP/*|wfs:DCPType/wfs:HTTP/*|wms:DCPType/wms:HTTP/*|
+								wcs:DCPType/wcs:HTTP/*|ows:DCP/ows:HTTP/*|ows11:DCP/ows11:HTTP/*">
+							<srv:DCP>
+								<srv:DCPList codeList="./resources/codeList.xml#DCPList">
+									<xsl:variable name="dcp">
+										<xsl:choose>
+											<xsl:when test="name(.)='Get' or name(.)='wfs:Get' or name(.)='wms:Get' or name(.)='wcs:Get' or name(.)='ows:Get' or name(.)='ows11:Get'">HTTP-GET</xsl:when>
+											<xsl:when test="name(.)='Post' or name(.)='wfs:Post' or name(.)='wms:Post' or name(.)='wcs:Post' or name(.)='ows:Post' or name(.)='ows11:Post'">HTTP-POST</xsl:when>
+											<xsl:otherwise>WebServices</xsl:otherwise>
+										</xsl:choose>
+									</xsl:variable>
+									<xsl:attribute name="codeListValue">
+										<xsl:value-of select="$dcp"/>
+									</xsl:attribute>
+								</srv:DCPList>
+							</srv:DCP>
+						</xsl:for-each>
+-->          
+						<srv:DCP gco:nilReason="missing">
+							<srv:DCPList codeList="http://www.isotc211.org/2005/iso19119/resources/Codelist/gmxCodelists.xml#DCPList" codeListValue=""/>
 						</srv:DCP>
-					</xsl:for-each>
-          
-                    <xsl:if test="name(.)='wps:Process' or name(.)='wps11:ProcessOfferings'">
-                      <srv:operationDescription>
-                          <gco:CharacterString><xsl:value-of select="ows:Abstract|ows11:Title"/></gco:CharacterString> 
-                      </srv:operationDescription> 
-                      <srv:invocationName>
-                          <gco:CharacterString><xsl:value-of select="ows:Identifier|ows11:Identifier"/></gco:CharacterString> 
-                      </srv:invocationName> 
-                    </xsl:if>
-                    <xsl:variable name="formats">
-                    	<xsl:choose>
-                    		<xsl:when test="$operationName='GetGmlObject'"><xsl:value-of select="../ows:Operation[@name='GetFeature']/ows:Parameter[@name='AcceptFormats' or @name='outputFormat']/ows:Value[contains(upper-case(.),'GML')]"/></xsl:when>
-                    		<xsl:otherwise><xsl:value-of select="Format|wms:Format|ows:Parameter[@name='AcceptFormats' or @name='outputFormat']/ows:Value"/></xsl:otherwise>
-                   		</xsl:choose> 
-                    </xsl:variable>
-                    <xsl:if test="count($formats)>0">
-						<srv:connectPoint>
-							<CI_OnlineResource>
-								<linkage>
-										<xsl:variable name="urls">
+	                    <xsl:if test="name(.)='wps:Process' or name(.)='wps11:ProcessOfferings'">
+	                      <srv:operationDescription>
+	                          <gco:CharacterString><xsl:value-of select="ows:Abstract|ows11:Title"/></gco:CharacterString> 
+	                      </srv:operationDescription> 
+	                      <srv:invocationName>
+	                          <gco:CharacterString><xsl:value-of select="ows:Identifier|ows11:Identifier"/></gco:CharacterString> 
+	                      </srv:invocationName> 
+	                    </xsl:if>
+	                    <xsl:variable name="formats">
+	                    	<xsl:choose>
+	                    		<xsl:when test="$operationName='GetGmlObject'"><xsl:value-of select="../ows:Operation[@name='GetFeature']/ows:Parameter[@name='AcceptFormats' or @name='outputFormat']/ows:Value[contains(upper-case(.),'GML')]"/></xsl:when>
+	                    		<xsl:otherwise><xsl:value-of select="Format|wms:Format|ows:Parameter[@name='AcceptFormats' or @name='outputFormat']/ows:Value"/></xsl:otherwise>
+	                   		</xsl:choose> 
+	                    </xsl:variable>
+	                    <xsl:if test="count($formats)>0">
+							<srv:connectPoint>
+								<CI_OnlineResource>
+									<linkage>
+											<xsl:variable name="urls">
+												<xsl:choose>
+													<xsl:when test="$ows='true'"><xsl:value-of select=".//ows:Get[1]/@xlink:href"/></xsl:when>
+													<xsl:otherwise><xsl:value-of select=".//Get/OnlineResource[1]/@xlink:href|.//wms:Get/wms:OnlineResource[1]/@xlink:href"/></xsl:otherwise>
+												</xsl:choose>
+											</xsl:variable>
+											<xsl:if test="normalize-space($urls[1])=''">
+												<xsl:attribute name="gco:nilReason" select="'missing'"/>
+											</xsl:if>
+											<URL>
+												<xsl:value-of select="$urls[1]"/><xsl:if test="not(contains($urls[1],'?'))">?</xsl:if>
+											</URL>
+									</linkage>
+									<protocol>
+										<gco:CharacterString>
 											<xsl:choose>
-												<xsl:when test="$ows='true'"><xsl:value-of select=".//ows:Get[1]/@xlink:href"/></xsl:when>
-												<xsl:otherwise><xsl:value-of select=".//Get/OnlineResource[1]/@xlink:href|.//wms:Get/wms:OnlineResource[1]/@xlink:href"/></xsl:otherwise>
+												<xsl:when test="$operationName='GetCapabilities' or $operationName='GetMap' or $operationName='GetFeatureInfo'">
+													<xsl:call-template name="get-protocol-by-operation">
+														<xsl:with-param name="operationName" select="$operationName"/>
+														<xsl:with-param name="ogctype" select="$ogctype"/>
+													</xsl:call-template>
+												</xsl:when>
+												<xsl:when test="$ows='true'">
+													<xsl:choose>
+														<xsl:when test="$operationName='GetCapabilities' or $operationName='DescribeFeatureType' or $operationName='GetFeature' or $operationName='GetGmlObject'">
+															<xsl:call-template name="get-protocol-by-operation">
+																<xsl:with-param name="operationName" select="$operationName"/>
+																<xsl:with-param name="ogctype" select="$ogctype"/>
+															</xsl:call-template>
+														</xsl:when>
+														<xsl:otherwise><xsl:value-of select="$formats[1]"/></xsl:otherwise>
+													</xsl:choose>												
+												</xsl:when>
+												<xsl:otherwise>
+													<xsl:value-of select="$formats[1]"/>
+												</xsl:otherwise>
 											</xsl:choose>
-										</xsl:variable>
+										</gco:CharacterString>
+									</protocol>
+									<name>
+	                                    <gco:CharacterString/>
+	                                </name>
+									<description>
+	                                    <gco:CharacterString>Formats : <xsl:value-of select="string-join($formats,', ')"/>
+	                                    </gco:CharacterString>
+	                                </description>
+<!-- 
+									<function>
+										<CI_OnLineFunctionCode codeList="./resources/codeList.xml#CI_OnLineFunctionCode" codeListValue="information"/>
+									</function>
+-->
+								</CI_OnlineResource>
+							</srv:connectPoint>
+						</xsl:if>
+								
+						<!-- Some Operations in WFS 1.0.0 have no ResultFormat no CI_OnlineResource created 
+								WCS has no output format
+						-->
+	                    <xsl:variable name="wfsformats" select="wfs:ResultFormat/*"/>
+	                    <xsl:if test="count($wfsformats)>0">
+							<srv:connectPoint>
+								<CI_OnlineResource>
+									<linkage>
+										<xsl:variable name="urls" select="..//wfs:Get[1]/@onlineResource"/>
 										<xsl:if test="normalize-space($urls[1])=''">
 											<xsl:attribute name="gco:nilReason" select="'missing'"/>
 										</xsl:if>
 										<URL>
-											<xsl:value-of select="$urls[1]"/>
+											<xsl:value-of select="$urls[1]"/><xsl:if test="not(contains($urls[1],'?'))">?</xsl:if>
 										</URL>
-								</linkage>
-								<protocol>
-									<gco:CharacterString>
-										<xsl:choose>
-											<xsl:when test="$operationName='GetCapabilities' or $operationName='GetMap' or $operationName='GetFeatureInfo'">
-												<xsl:call-template name="get-protocol-by-operation">
-													<xsl:with-param name="operationName" select="$operationName"/>
-													<xsl:with-param name="ogctype" select="$ogctype"/>
-												</xsl:call-template>
-											</xsl:when>
-											<xsl:when test="$ows='true'">
-												<xsl:choose>
-													<xsl:when test="$operationName='GetCapabilities' or $operationName='DescribeFeatureType' or $operationName='GetFeature' or $operationName='GetGmlObject'">
-														<xsl:call-template name="get-protocol-by-operation">
-															<xsl:with-param name="operationName" select="$operationName"/>
-															<xsl:with-param name="ogctype" select="$ogctype"/>
-														</xsl:call-template>
-													</xsl:when>
-													<xsl:otherwise><xsl:value-of select="$formats[1]"/></xsl:otherwise>
-												</xsl:choose>												
-											</xsl:when>
-											<xsl:otherwise>
-												<xsl:value-of select="$formats[1]"/>
-											</xsl:otherwise>
-										</xsl:choose>
-									</gco:CharacterString>
-								</protocol>
-								<name>
-                                    <gco:CharacterString/>
-                                </name>
-								<description>
-                                    <gco:CharacterString>Formats : <xsl:value-of select="string-join($formats,', ')"/>
-                                    </gco:CharacterString>
-                                </description>
-<!-- 
-								<function>
-									<CI_OnLineFunctionCode codeList="./resources/codeList.xml#CI_OnLineFunctionCode" codeListValue="information"/>
-								</function>
--->
-							</CI_OnlineResource>
-						</srv:connectPoint>
-					</xsl:if>
-							
-					<!-- Some Operations in WFS 1.0.0 have no ResultFormat no CI_OnlineResource created 
-							WCS has no output format
-					-->
-                    <xsl:variable name="wfsformats" select="wfs:ResultFormat/*"/>
-                    <xsl:if test="count($wfsformats)>0">
-						<srv:connectPoint>
-							<CI_OnlineResource>
-								<linkage>
-									<xsl:variable name="urls" select="..//wfs:Get[1]/@onlineResource"/>
-									<xsl:if test="normalize-space($urls[1])=''">
-										<xsl:attribute name="gco:nilReason" select="'missing'"/>
-									</xsl:if>
-									<URL>
-										<xsl:value-of select="$urls[1]"/>
-									</URL>
-								</linkage>
-								<protocol>
-									<gco:CharacterString><xsl:value-of select="name($wfsformats[1])"/></gco:CharacterString>
-								</protocol>
-								<name>
-                                    <gco:CharacterString/>
-                                </name>
-								<description>
-                                    <gco:CharacterString>Format(s) : <xsl:value-of select="string-join($wfsformats,', ')"/>
-                                    </gco:CharacterString>
-                                </description>
+									</linkage>
+									<protocol>
+										<gco:CharacterString><xsl:value-of select="name($wfsformats[1])"/></gco:CharacterString>
+									</protocol>
+									<name>
+	                                    <gco:CharacterString/>
+	                                </name>
+									<description>
+	                                    <gco:CharacterString>Format(s) : <xsl:value-of select="string-join($wfsformats,', ')"/>
+	                                    </gco:CharacterString>
+	                                </description>
 <!--
-								<function>
-									<CI_OnLineFunctionCode codeList="./resources/codeList.xml#CI_OnLineFunctionCode" codeListValue="information"/>
-								</function>
+									<function>
+										<CI_OnLineFunctionCode codeList="./resources/codeList.xml#CI_OnLineFunctionCode" codeListValue="information"/>
+									</function>
 -->								
-							</CI_OnlineResource>
-						</srv:connectPoint>
-					</xsl:if>
-				</srv:SV_OperationMetadata>
-			</srv:containsOperations>
+								</CI_OnlineResource>
+							</srv:connectPoint>
+						</xsl:if>
+					</srv:SV_OperationMetadata>
+				</srv:containsOperations>
+			</xsl:if>
+			<xsl:if test="$isSupportedOperation!='true'">
+				<xsl:message select="concat('Operation ', $operationName, ' is not taken into account for the service metadata.')"/>
+			</xsl:if>
 		</xsl:for-each>
 		
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -1027,8 +1038,8 @@
 			</xsl:when>
 			<xsl:when test="$operationName='GetFeatureInfo'">
                	<xsl:choose>
-               		<xsl:when test="$ogctype='WMS1.1.1'">OGC:WMS-1.1.1-http-get-map</xsl:when>
-               		<xsl:when test="$ogctype='WMS1.3.0'">OGC:WMS-1.3.0-http-get-map</xsl:when>
+               		<xsl:when test="$ogctype='WMS1.1.1'">OGC:WMS-1.1.1-http-get-featureinfo</xsl:when>
+               		<xsl:when test="$ogctype='WMS1.3.0'">OGC:WMS-1.3.0-http-get-featureinfo</xsl:when>
 					<xsl:otherwise>WWW:LINK-1.0-http--link</xsl:otherwise>
                	</xsl:choose>
 			</xsl:when>
@@ -1097,13 +1108,10 @@
 									ows11:ServiceIdentification/ows11:Abstract"/>
 			</xsl:when>
 			<xsl:when test="name(.)='WFS_Capabilities'">
-				<xsl:value-of select="wfs:Service/wfs:Abstract"/>
+				<xsl:value-of select="wfs:Service/wfs:Abstract|Service/Abstract"/>
 			</xsl:when>
-			<xsl:when test="name(.)='WMS_Capabilities'">
-				<xsl:value-of select="wms:Service/wms:Abstract"/>
-			</xsl:when>
-			<xsl:when test="name(.)='WMT_MS_Capabilities'">
-				<xsl:value-of select="Service/Abstract"/>
+			<xsl:when test="name(.)='WMS_Capabilities' or name(.)='WMT_MS_Capabilities'">
+				<xsl:value-of select="wms:Service/wms:Abstract|Service/Abstract"/>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="wcs:Service/wcs:description"/>
@@ -1119,25 +1127,42 @@
 									ows11:ServiceIdentification/ows11:Title"/>
 			</xsl:when>
 			<xsl:when test="name(.)='WFS_Capabilities'">
-				<xsl:choose>
-					<xsl:when test="wfs:Service/wfs:Title">
-						<xsl:value-of select="wfs:Service/wfs:Title"/>
-					</xsl:when>
-					<xsl:when test="Service/Title">
-						<xsl:value-of select="Service/Title"/>
-					</xsl:when>
-					<xsl:otherwise></xsl:otherwise>
-				</xsl:choose>
+				<xsl:value-of select="wfs:Service/wfs:Title|Service/Title"/>
 			</xsl:when>
-			<xsl:when test="name(.)='WMS_Capabilities'">
-				<xsl:value-of select="wms:Service/wms:Title"/>
-			</xsl:when>
-			<xsl:when test="name(.)='WMT_MS_Capabilities'">
-				<xsl:value-of select="Service/Title"/>
+			<xsl:when test="name(.)='WMS_Capabilities' or name(.)='WMT_MS_Capabilities'">
+				<xsl:value-of select="wms:Service/wms:Title|Service/Title"/>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="wcs:Service/wcs:label"/>
 			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="get-name">
+		<xsl:param name="ows"/>
+		<xsl:choose>
+			<xsl:when test="$ows='true'">
+				<xsl:value-of select="ows:ServiceIdentification/ows:Name|
+									ows11:ServiceIdentification/ows11:Name"/>
+			</xsl:when>
+			<xsl:when test="name(.)='WFS_Capabilities'">
+				<xsl:value-of select="wfs:Service/wfs:Name|Service/Name"/>
+			</xsl:when>
+			<xsl:when test="name(.)='WMS_Capabilities' or name(.)='WMT_MS_Capabilities'">
+				<xsl:value-of select="wms:Service/wms:Name|Service/Name"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="wcs:Service/wcs:label"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="is-supported-operation">
+		<xsl:param name="ows"/>
+		<xsl:param name="operationName" />
+		<xsl:choose>
+			<xsl:when test="$operationName='GetCapabilities' or $operationName='GetMap' or $operationName='GetFeatureInfo' or $operationName='DescribeFeatureType' or $operationName='GetFeature' or $operationName='GetGmlObject'">true</xsl:when>
+			<xsl:otherwise>false</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 </xsl:stylesheet>

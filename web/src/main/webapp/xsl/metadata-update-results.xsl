@@ -17,7 +17,7 @@
           <tr>
             <td align="left">
               <xsl:choose>
-                <xsl:when test="/root/response/modified">
+                <xsl:when test="count(/root/response/modified/uuid) + count(/root/response/unchanged/uuid) + count(/root/unchangedbyerror/uuid) > 0">
                 	<b>UUID's of modified records:</b><br/>
                 	<xsl:for-each select="/root/response/modified/uuid">
 						<xsl:value-of select="."/><br/>

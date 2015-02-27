@@ -450,22 +450,30 @@
 		</xsl:choose>
 	</xsl:template>
 
+<!-- 
     <xsl:template name="getUuidRelatedMetadata">
-       	<xsl:param name="mduuidValue" />
 		<xsl:param name="idParamValue" />
 		<xsl:choose>
-			<xsl:when test="contains($idParamValue,';')"><xsl:value-of select="substring(substring-before($idParamValue,';'),1,string-length(substring-before($idParamValue,';'))-4)"/></xsl:when>
 			<xsl:when test="contains($idParamValue,'&amp;')"><xsl:value-of select="substring-before($idParamValue,'&amp;')"/></xsl:when>
+			<xsl:when test="contains($idParamValue,'&amp;amp;')"><xsl:value-of select="substring-before($idParamValue,'&amp;amp;')"/></xsl:when>
 			<xsl:otherwise><xsl:value-of select="$idParamValue"/></xsl:otherwise>
 		</xsl:choose>
     </xsl:template>
-
+-->
     <xsl:template name="getIdFromCorrespondingOperatesOn">
        	<xsl:param name="mduuidValue" />
-		<xsl:variable name="idParamValue" select="substring-after(../../../srv:operatesOn[@xlink:href!='' and @uuidref=$mduuidValue][1]/@xlink:href,';id=')"/>
-		<xsl:call-template name="getUuidRelatedMetadata">
-			<xsl:with-param name="mduuidValue" select="$mduuidValue"/>
-			<xsl:with-param name="idParamValue" select="$idParamValue"/>
-		</xsl:call-template>
+		<xsl:variable name="hrefValue" select="../../../srv:operatesOn[@xlink:href!='' and @uuidref=$mduuidValue][1]/@xlink:href"/>
+		<xsl:call-template name="getParamFromUrl"><xsl:with-param name="url" select="$hrefValue"/><xsl:with-param name="paramName" select="'id'"/></xsl:call-template>
+    </xsl:template>
+
+    <xsl:template name="getParamFromUrl">
+       	<xsl:param name="url" />
+		<xsl:param name="paramName" />
+		<xsl:variable name="paramValue"><xsl:choose><xsl:when test="contains($url,concat('&amp;amp;',$paramName,'='))"><xsl:value-of select="substring-after($url,concat('&amp;amp;',$paramName,'='))"/></xsl:when><xsl:when test="contains($url,concat('&amp;',$paramName,'='))"><xsl:value-of select="substring-after($url,concat('&amp;',$paramName,'='))"/></xsl:when></xsl:choose></xsl:variable>
+		<xsl:choose>
+			<xsl:when test="contains($paramValue,'&amp;')"><xsl:value-of select="substring-before($paramValue,'&amp;')"/></xsl:when>
+			<xsl:when test="contains($paramValue,'&amp;amp;')"><xsl:value-of select="substring-before($paramValue,'&amp;amp;')"/></xsl:when>
+			<xsl:otherwise><xsl:value-of select="$paramValue"/></xsl:otherwise>
+		</xsl:choose>
     </xsl:template>
 </xsl:stylesheet>

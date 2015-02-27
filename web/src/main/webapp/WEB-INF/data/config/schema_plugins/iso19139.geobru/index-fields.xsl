@@ -3,6 +3,7 @@
 										xmlns:gco="http://www.isotc211.org/2005/gco"
 										xmlns:gml="http://www.opengis.net/gml"
 										xmlns:srv="http://www.isotc211.org/2005/srv"
+									    xmlns:xlink="http://www.w3.org/1999/xlink"
 										xmlns:geonet="http://www.fao.org/geonetwork"
 										xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 										xmlns:gmx="http://www.isotc211.org/2005/gmx"
@@ -302,8 +303,18 @@
 				<Field  name="operation" string="{string(.)}" store="false" index="true"/>
 			</xsl:for-each>
 			
-			<xsl:for-each select="srv:operatesOn/@uuidref">
-                <Field  name="operatesOn" string="{string(.)}" store="false" index="true"/>
+			<xsl:for-each select="srv:operatesOn">
+				<xsl:variable name="uuid">
+			       	<xsl:variable name="url" select="./@xlink:href"/>
+					<xsl:variable name="paramName" select="'id'"/>
+					<xsl:variable name="paramValue"><xsl:choose><xsl:when test="contains($url,concat('&amp;amp;',$paramName,'='))"><xsl:value-of select="substring-after($url,concat('&amp;amp;',$paramName,'='))"/></xsl:when><xsl:when test="contains($url,concat('&amp;',$paramName,'='))"><xsl:value-of select="substring-after($url,concat('&amp;',$paramName,'='))"/></xsl:when></xsl:choose></xsl:variable>
+					<xsl:choose>
+						<xsl:when test="contains($paramValue,'&amp;')"><xsl:value-of select="substring-before($paramValue,'&amp;')"/></xsl:when>
+						<xsl:when test="contains($paramValue,'&amp;amp;')"><xsl:value-of select="substring-before($paramValue,'&amp;amp;')"/></xsl:when>
+						<xsl:otherwise><xsl:value-of select="$paramValue"/></xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
+                <Field  name="operatesOn" string="{string($uuid)}" store="false" index="true"/>
             </xsl:for-each>
 			
 			<xsl:for-each select="srv:coupledResource">

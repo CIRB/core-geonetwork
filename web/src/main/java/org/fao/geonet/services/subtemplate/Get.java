@@ -102,6 +102,18 @@ public class Get implements Service {
         		    }
         			processEl.setText("gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage/gmd:URL" + SEPARATOR +
         					dm.getSiteUrl() + context.getBaseUrl() + "/opensearch/" + context.getLanguage() + "/" + uuid + "/" + operationName);
+        		} else if (title.startsWith("ATOMOperation")) {
+        			Element processEl = new Element(Params.PROCESS);
+        			params.addContent(processEl);
+        			GeonetContext gc = (GeonetContext) context.getHandlerContext(Geonet.CONTEXT_NAME);
+        			DataManager     dm = gc.getDataManager();
+        		    String operationName = "";
+        		    int iPos2 = title.indexOf(":");
+        		    if (iPos2 > -1) {
+        		    	operationName = title.substring(iPos2+1);
+        		    	title = title.substring(0,iPos2);
+        		    }
+        			processEl.setText("srv:SV_CoupledResource/srv:operationName/gco:CharacterString" + SEPARATOR + operationName);
         		}
         		root = root.substring(0,iPos);
     		}

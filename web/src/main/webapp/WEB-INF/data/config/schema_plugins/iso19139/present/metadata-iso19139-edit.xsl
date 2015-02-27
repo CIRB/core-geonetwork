@@ -103,7 +103,7 @@
               gmd:dataQualityInfo|gmd:contentInfo|gmd:distributionFormat|
               gmd:referenceSystemInfo|gmd:spatialResolution|gmd:offLine|gmd:projection|gmd:ellipsoid|gmd:extent[name(..)!='gmd:EX_TemporalExtent']|gmd:attributes|gmd:verticalCRS|
               gmd:geographicBox|gmd:EX_TemporalExtent|gmd:MD_Distributor|
-              srv:containsOperations|srv:SV_CoupledResource|gmd:onLine|
+              srv:containsOperations|srv:coupledResource|gmd:onLine|
               gmd:metadataConstraints">
     <xsl:param name="schema"/>
     <xsl:param name="edit"/>
@@ -235,19 +235,17 @@
 	<xsl:template mode="iso19139" match="srv:operatesOn|gmd:featureCatalogueCitation" priority="99">
         <xsl:param name="schema"/>
         <xsl:param name="edit"/>
-		<xsl:variable name="mduuidValue" select="./@uuidref"/>
-		<xsl:variable name="idParamValue" select="substring-after(./@xlink:href,';id=')"/>
 		<xsl:variable name="uuid">
 			<xsl:if test="name(.)='gmd:featureCatalogueCitation'">
 				<xsl:value-of select="@uuidref" />
 			</xsl:if>
 			<xsl:if test="not(name(.)='gmd:featureCatalogueCitation')">
-				<xsl:call-template name="getUuidRelatedMetadata">
-					<xsl:with-param name="mduuidValue" select="$mduuidValue"/>
-					<xsl:with-param name="idParamValue" select="$idParamValue"/>
+           		<xsl:call-template name="getParamFromUrl">
+			       	<xsl:with-param name="url" select="./@xlink:href"/>
+					<xsl:with-param name="paramName" select="'id'"/>
 				</xsl:call-template>
 			</xsl:if>
-		</xsl:variable>                    	
+		</xsl:variable>        
         <xsl:variable name="text">
             <xsl:choose>
                 <xsl:when test="$edit=true()">
@@ -410,11 +408,10 @@
                                 <option></option>
                                 <xsl:for-each select="../../../srv:operatesOn[@xlink:href!='' and @uuidref!='']">
 									<xsl:variable name="mduuidValue" select="@uuidref"/>
-									<xsl:variable name="idParamValue" select="substring-after(@xlink:href,';id=')"/>
 			                    	<xsl:variable name="uuid">
-			                    		<xsl:call-template name="getUuidRelatedMetadata">
-									       	<xsl:with-param name="mduuidValue" select="$mduuidValue"/>
-											<xsl:with-param name="idParamValue" select="$idParamValue"/>
+			                    		<xsl:call-template name="getParamFromUrl">
+									       	<xsl:with-param name="url" select="@xlink:href"/>
+											<xsl:with-param name="paramName" select="'id'"/>
 										</xsl:call-template>
 			                   		</xsl:variable>                    	
                                     <option value="{$mduuidValue}">
@@ -2361,6 +2358,34 @@
 		        </xsl:apply-templates>
 	</xsl:template>
 
+    <xsl:template mode="iso19139" match="srv:coupledResource/srv:SV_CoupledResource">
+        <xsl:param name="schema"/>
+        <xsl:param name="edit"/>
+				<xsl:if test="$edit=true()">
+				    <xsl:variable name="coupledResourceElementName" select="'srv:coupledResource'" />
+				    <xsl:variable name="followingCoupledResourceSiblingsCount" select="count(../following-sibling::*[name(.) = $coupledResourceElementName])" />
+			       	<xsl:if test="$followingCoupledResourceSiblingsCount=0">
+						<xsl:apply-templates mode="addElement" select="../../geonet:child[@name='coupledResource' and @prefix='srv']">
+				            <xsl:with-param name="schema" select="$schema"/>
+				            <xsl:with-param name="edit"   select="$edit"/>
+				            <xsl:with-param name="visible" select="true()"/>
+						</xsl:apply-templates>
+					</xsl:if>
+				</xsl:if>
+		        <xsl:apply-templates mode="elementEP" select="srv:operationName">
+		            <xsl:with-param name="schema" select="$schema"/>
+		            <xsl:with-param name="edit"   select="$edit"/>
+		        </xsl:apply-templates>
+		        <xsl:apply-templates mode="elementEP" select="srv:identifier">
+		            <xsl:with-param name="schema" select="$schema"/>
+		            <xsl:with-param name="edit"   select="$edit"/>
+		        </xsl:apply-templates>
+		        <xsl:apply-templates mode="elementEP" select="gco:ScopedName">
+		            <xsl:with-param name="schema" select="$schema"/>
+		            <xsl:with-param name="edit"   select="$edit"/>
+		        </xsl:apply-templates>
+	</xsl:template>
+
   <!-- ============================================================================= 
   Custom element layout
   -->
@@ -2444,6 +2469,7 @@
         </xsl:call-template>
       </xsl:for-each>
     </xsl:variable>
+<!--    
     <xsl:variable name="description">
       <xsl:for-each select="gmd:description">
         <xsl:call-template name="localised">
@@ -2451,7 +2477,7 @@
         </xsl:call-template>
       </xsl:for-each>
     </xsl:variable>
-    
+-->    
     <xsl:choose>
       <xsl:when test="$edit=true()">
         <xsl:apply-templates mode="iso19139EditOnlineRes" select=".">
@@ -2543,6 +2569,12 @@
 	        <xsl:apply-templates mode="simpleElement" select="gmd:description/gco:CharacterString">
 				<xsl:with-param name="schema"  select="$schema"/>
 				<xsl:with-param name="edit"   select="$edit"/>
+	            <xsl:with-param name="title">
+	                <xsl:call-template name="getTitle">
+	                    <xsl:with-param name="name"   select="name(gmd:description)"/>
+	                    <xsl:with-param name="schema" select="$schema"/>
+	                </xsl:call-template>
+	            </xsl:with-param>
 	        </xsl:apply-templates>
         </xsl:if>
       </xsl:if>

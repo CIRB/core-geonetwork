@@ -2135,6 +2135,12 @@
 			<xsl:variable name="options">
 				<options>
 				    <xsl:choose>
+						<xsl:when test="$name='srv:coupledResource'">
+							<xsl:if test="$isService=true()">
+								<option name="srv:coupledResource;ATOMOperation:GetServiceATOMFeed"><xsl:attribute name="selected">selected</xsl:attribute>GetServiceATOMFeed operation</option>
+								<option name="srv:coupledResource;ATOMOperation:GetDatasetATOMFeed">GetDatasetATOMFeed operation</option>
+							</xsl:if>
+						</xsl:when>
 						<xsl:when test="$name='gmd:transferOptions'">
 							<xsl:if test="$isService=true()">
 								<option name="gmd:transferOptions;AtomServiceFeed:OpenSearchDescription.xml"><xsl:attribute name="selected">selected</xsl:attribute>OpenSearch Description</option>
@@ -2159,7 +2165,7 @@
 				</xsl:if>
 				<xsl:for-each select="exslt:node-set($options)//option">
 					<xsl:sort select="."/>
-					<option value="{@name}"><xsl:value-of select="."/></option>
+					<option value="{@name}"><xsl:if test="@selected='selected'"><xsl:attribute name="selected">selected</xsl:attribute></xsl:if><xsl:value-of select="."/></option>
 				</xsl:for-each>
 			</select>
 		</xsl:variable>

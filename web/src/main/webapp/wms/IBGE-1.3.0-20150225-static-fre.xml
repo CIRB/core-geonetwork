@@ -1,0 +1,858 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WMS_Capabilities xmlns="http://www.opengis.net/wms" xmlns:sld="http://www.opengis.net/sld" xmlns:ms="http://mapserver.gis.umn.edu/mapserver" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.3.0" xsi:schemaLocation="http://inspire.ec.europa.eu/schemas/inspire_vs/1.0 http://inspire.ec.europa.eu/schemas/inspire_vs/1.0/inspire_vs.xsd">
+	<!-- MapServer version 6.0.1 OUTPUT=GIF OUTPUT=PNG OUTPUT=JPEG OUTPUT=KML SUPPORTS=PROJ SUPPORTS=AGG SUPPORTS=CAIRO SUPPORTS=FREETYPE SUPPORTS=ICONV SUPPORTS=FRIBIDI SUPPORTS=WMS_SERVER SUPPORTS=WMS_CLIENT SUPPORTS=WFS_SERVER SUPPORTS=WFS_CLIENT SUPPORTS=WCS_SERVER SUPPORTS=SOS_SERVER SUPPORTS=FASTCGI SUPPORTS=THREADS SUPPORTS=GEOS INPUT=JPEG INPUT=POSTGIS INPUT=OGR INPUT=GDAL INPUT=SHAPEFILE -->
+	<Service>
+		<Name>WMS</Name>
+		<Title>Bruenvi / Service de visualisation Inspire</Title>
+		<Abstract>Service de visualisation de données cartographique de Bruxelles Environnement pour la directive INSPIRE</Abstract>
+		<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://wms.ibgebim.be/inspirefr" xlink:type="simple"/>
+		<ContactInformation>
+			<ContactPersonPrimary>
+				<ContactPerson> Geodata at bruxelles dot environnement dot be</ContactPerson>
+				<ContactOrganization>Bruxelles Environnement / Leefmilieu Brussel</ContactOrganization>
+			</ContactPersonPrimary>
+			<ContactPosition>pointOfContact</ContactPosition>
+			<ContactAddress>
+				<AddressType>mailing address</AddressType>
+				<Address>Gulledelle 100</Address>
+				<City>Brussels</City>
+				<StateOrProvince>Region de Bruxelles-Capitale</StateOrProvince>
+				<PostCode>1200</PostCode>
+				<Country>Belgium</Country>
+			</ContactAddress>
+			<ContactElectronicMailAddress>geodata@environnement.irisnet.be</ContactElectronicMailAddress>
+		</ContactInformation>
+		<Fees>no conditions apply</Fees>
+		<MaxWidth>2048</MaxWidth>
+		<MaxHeight>2048</MaxHeight>
+	</Service>
+	<Capability>
+		<Request>
+			<GetCapabilities>
+				<Format>text/xml</Format>
+				<DCPType>
+					<HTTP>
+						<Get>
+							<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.geo.irisnetlab.be/geonetwork/wms/IBGE-1.3.0-20150225-static-fre.xml"/>
+						</Get>
+						<Post>
+							<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.geo.irisnetlab.be/geonetwork/wms/IBGE-1.3.0-20150225-static-fre.xml"/>
+						</Post>
+					</HTTP>
+				</DCPType>
+			</GetCapabilities>
+			<GetMap>
+				<Format>image/png</Format>
+				<Format>image/jpeg</Format>
+				<Format>image/gif</Format>
+				<Format>image/png; mode=8bit</Format>
+				<Format>application/x-pdf</Format>
+				<Format>image/svg+xml</Format>
+				<Format>image/tiff</Format>
+				<Format>application/vnd.google-earth.kml+xml</Format>
+				<Format>application/vnd.google-earth.kmz</Format>
+				<DCPType>
+					<HTTP>
+						<Get>
+							<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://wms.ibgebim.be/inspirefr?" xlink:type="simple"/>
+						</Get>
+						<Post>
+							<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://wms.ibgebim.be/inspirefr?" xlink:type="simple"/>
+						</Post>
+					</HTTP>
+				</DCPType>
+			</GetMap>
+			<GetFeatureInfo>
+				<Format>text/plain</Format>
+				<Format>application/vnd.ogc.gml</Format>
+				<DCPType>
+					<HTTP>
+						<Get>
+							<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://wms.ibgebim.be/inspirefr?" xlink:type="simple"/>
+						</Get>
+						<Post>
+							<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://wms.ibgebim.be/inspirefr?" xlink:type="simple"/>
+						</Post>
+					</HTTP>
+				</DCPType>
+			</GetFeatureInfo>
+		</Request>
+		<Exception>
+			<Format>XML</Format>
+			<Format>INIMAGE</Format>
+			<Format>BLANK</Format>
+		</Exception>
+		<inspire_vs:ExtendedCapabilities xmlns:inspire_vs="http://inspire.ec.europa.eu/schemas/inspire_vs/1.0">
+			<inspire_common:ResourceLocator xmlns:inspire_common="http://inspire.ec.europa.eu/schemas/common/1.0">
+				<inspire_common:URL>http://www.geo.irisnetlab.be/geonetwork/wms/IBGE-1.3.0-20150225-static-fre.xml</inspire_common:URL>
+				<inspire_common:MediaType>application/vnd.ogc.wms_xml</inspire_common:MediaType>
+			</inspire_common:ResourceLocator>
+			<inspire_common:ResourceType xmlns:inspire_common="http://inspire.ec.europa.eu/schemas/common/1.0">service</inspire_common:ResourceType>
+			<inspire_common:TemporalReference xmlns:inspire_common="http://inspire.ec.europa.eu/schemas/common/1.0">
+				<inspire_common:DateOfLastRevision>2015-02-25</inspire_common:DateOfLastRevision>
+			</inspire_common:TemporalReference>
+			<inspire_common:Conformity xmlns:inspire_common="http://inspire.ec.europa.eu/schemas/common/1.0">
+				<inspire_common:Specification xsi:type="inspire_common:citationInspireInteroperabilityRegulation_fre">
+					<inspire_common:Title>RÈGLEMENT (UE) N o 1089/2010 DE LA COMMISSION du 23 novembre 2010 portant modalités d'application de la directive 2007/2/CE du Parlement européen et du Conseil en ce qui concerne l'interopérabilité des séries et des services de données géographiques</inspire_common:Title>
+					<inspire_common:DateOfPublication>2010-12-08</inspire_common:DateOfPublication>
+					<inspire_common:URI>OJ:L:2010:323:0011:0102:FR:PDF</inspire_common:URI>
+					<inspire_common:ResourceLocator>
+						<inspire_common:URL>
+									http://eur-lex.europa.eu/LexUriServ/LexUriServ.do?uri=OJ:L:2010:323:0011:0102:FR:PDF
+								</inspire_common:URL>
+						<inspire_common:MediaType>application/pdf</inspire_common:MediaType>
+					</inspire_common:ResourceLocator>
+				</inspire_common:Specification>
+				<inspire_common:Degree>notEvaluated</inspire_common:Degree>
+			</inspire_common:Conformity>
+			<inspire_common:MetadataPointOfContact xmlns:inspire_common="http://inspire.ec.europa.eu/schemas/common/1.0">
+				<inspire_common:OrganisationName>Bruxelles Environnement / Leefmilieu Brussel</inspire_common:OrganisationName>
+				<inspire_common:EmailAddress>geodata@environnement.irisnet.be</inspire_common:EmailAddress>
+			</inspire_common:MetadataPointOfContact>
+			<inspire_common:MetadataDate xmlns:inspire_common="http://inspire.ec.europa.eu/schemas/common/1.0">2015-02-25</inspire_common:MetadataDate>
+			<inspire_common:SpatialDataServiceType xmlns:inspire_common="http://inspire.ec.europa.eu/schemas/common/1.0">view</inspire_common:SpatialDataServiceType>
+			<inspire_common:MandatoryKeyword xmlns:inspire_common="http://inspire.ec.europa.eu/schemas/common/1.0" xsi:type="inspire_common:classificationOfSpatialDataService">
+				<inspire_common:KeywordValue>infoMapAccessService</inspire_common:KeywordValue>
+			</inspire_common:MandatoryKeyword>
+			<inspire_common:SupportedLanguages xmlns:inspire_common="http://inspire.ec.europa.eu/schemas/common/1.0" xsi:type="inspire_common:supportedLanguagesType">
+				<inspire_common:DefaultLanguage>
+					<inspire_common:Language>fre</inspire_common:Language>
+				</inspire_common:DefaultLanguage>
+			</inspire_common:SupportedLanguages>
+			<inspire_common:ResponseLanguage xmlns:inspire_common="http://inspire.ec.europa.eu/schemas/common/1.0">
+				<inspire_common:Language>fre</inspire_common:Language>
+			</inspire_common:ResponseLanguage>
+			<inspire_common:MetadataUrl xmlns:inspire_common="http://inspire.ec.europa.eu/schemas/common/1.0" xsi:type="inspire_common:resourceLocatorType">
+				<inspire_common:URL>http://www.geo.irisnetlab.be/geonetwork/srv/fr/csw?service=CSW&amp;Request=GetRecordById&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=8916478c-45ba-d860-390f-d20f-c29e-e4bb-3b9fd2b5&amp;version=2.0.2</inspire_common:URL>
+				<inspire_common:MediaType>application/vnd.iso.19139+xml</inspire_common:MediaType>
+			</inspire_common:MetadataUrl>
+		</inspire_vs:ExtendedCapabilities>
+		<Layer queryable="0" opaque="0" noSubsets="0">
+			<!-- WARNING: The layer name 'Bruxelles Environnement / Leefmilieu Brussel' might contain spaces or invalid characters or may start with a number. This could lead to potential problems. -->
+			<Name>Bruxelles Environnement / Leefmilieu Brussel</Name>
+			<Title>Bruenvi / Service de visualisation Inspire</Title>
+			<Abstract>Service de visualisation de données cartographique de Bruxelles Environnement pour la directive INSPIRE</Abstract>
+			<CRS>EPSG:31370</CRS>
+			<CRS>EPSG:4326</CRS>
+			<CRS>EPSG:3812</CRS>
+			<EX_GeographicBoundingBox>
+				<westBoundLongitude>4.17949</westBoundLongitude>
+				<eastBoundLongitude>4.54347</eastBoundLongitude>
+				<southBoundLatitude>50.7595</southBoundLatitude>
+				<northBoundLatitude>50.9172</northBoundLatitude>
+			</EX_GeographicBoundingBox>
+			<BoundingBox CRS="EPSG:31370" minx="136869" miny="161076" maxx="162465" maxy="178604"/>
+			<BoundingBox CRS="EPSG:4326" minx="50.7595" miny="4.17949" maxx="50.9172" maxy="4.54347"/>
+			<BoundingBox CRS="EPSG:3812" minx="636779" miny="661136" maxx="662376" maxy="678667"/>
+			<MinScaleDenominator>100</MinScaleDenominator>
+			<MaxScaleDenominator>255000</MaxScaleDenominator>
+			<Layer queryable="1" opaque="0" cascaded="0" noSubsets="0">
+				<Name>bruenvi_public_green_area</Name>
+				<Title>Espaces verts publics</Title>
+				<Abstract>Espaces verts les plus importants de la Région (parcs, bois, sites ou réserves naturelles...)</Abstract>
+				<KeywordList>
+					<Keyword>	Land use</Keyword>
+					<Keyword> land occupation </Keyword>
+					<Keyword> landscape management </Keyword>
+					<Keyword> land use classification </Keyword>
+					<Keyword> urban management </Keyword>
+					<Keyword>urban environment</Keyword>
+					<Keyword> urban stress</Keyword>
+				</KeywordList>
+				<CRS>EPSG:31370</CRS>
+				<EX_GeographicBoundingBox>
+					<westBoundLongitude>4.17948</westBoundLongitude>
+					<eastBoundLongitude>4.54347</eastBoundLongitude>
+					<southBoundLatitude>50.7595</southBoundLatitude>
+					<northBoundLatitude>50.9172</northBoundLatitude>
+				</EX_GeographicBoundingBox>
+				<BoundingBox CRS="EPSG:31370" minx="136868" miny="161075" maxx="162465" maxy="178604"/>
+				<BoundingBox CRS="EPSG:4326" minx="50.7595" miny="4.17948" maxx="50.9172" maxy="4.54347"/>
+				<BoundingBox CRS="EPSG:3812" minx="636778" miny="661135" maxx="662376" maxy="678666"/>
+				<MetadataURL type="ISO19115:2003">
+					<Format>text/xml</Format>
+					<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=espaces_verts_region_bruxelloise.xml"/>
+				</MetadataURL>
+				<Style>
+					<Name>default</Name>
+					<Title>default</Title>
+					<LegendURL width="161" height="21">
+						<Format>image/png</Format>
+						<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.ibgebim.be/inspirefr?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=bruenvi_public_green_area&amp;format=image/png&amp;STYLE=default"/>
+					</LegendURL>
+				</Style>
+			</Layer>
+			<Layer queryable="1" opaque="0" cascaded="0" noSubsets="0">
+				<Name>bruenvi_natural_reserve</Name>
+				<Title>Reserves naturelles et forestières</Title>
+				<Abstract>Les 14 réserves naturelles de la Région de Bruxelles-Capitale ont été constituées pour protéger la biodiversité propre à des milieux plutôt rares à Bruxelles</Abstract>
+				<KeywordList>
+					<Keyword>reserves naturelles</Keyword>
+					<Keyword> reserves forestières</Keyword>
+				</KeywordList>
+				<CRS>EPSG:31370</CRS>
+				<EX_GeographicBoundingBox>
+					<westBoundLongitude>4.17948</westBoundLongitude>
+					<eastBoundLongitude>4.54347</eastBoundLongitude>
+					<southBoundLatitude>50.7595</southBoundLatitude>
+					<northBoundLatitude>50.9172</northBoundLatitude>
+				</EX_GeographicBoundingBox>
+				<BoundingBox CRS="EPSG:31370" minx="136868" miny="161075" maxx="162465" maxy="178604"/>
+				<BoundingBox CRS="EPSG:4326" minx="50.7595" miny="4.17948" maxx="50.9172" maxy="4.54347"/>
+				<BoundingBox CRS="EPSG:3812" minx="636778" miny="661135" maxx="662376" maxy="678666"/>
+				<MetadataURL type="ISO19115:2003">
+					<Format>text/xml</Format>
+					<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=fd03abe0-6cfc-4b75-a8cd-36e2c961421e"/>
+				</MetadataURL>
+				<Style>
+					<Name>default</Name>
+					<Title>default</Title>
+					<LegendURL width="155" height="37">
+						<Format>image/png</Format>
+						<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.ibgebim.be/inspirefr?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=bruenvi_natural_reserve&amp;format=image/png&amp;STYLE=default"/>
+					</LegendURL>
+				</Style>
+			</Layer>
+			<Layer queryable="1" opaque="0" cascaded="0" noSubsets="0">
+				<Name>bruenvi_seveso_area</Name>
+				<Title>Sites Seveso</Title>
+				<Abstract>Les sites « SEVESO » (5 en 2006) sont spécifiquement surveillés quant à leur exploitation et au stockage de produits </Abstract>
+				<KeywordList>
+					<Keyword>Seveso</Keyword>
+				</KeywordList>
+				<CRS>EPSG:31370</CRS>
+				<EX_GeographicBoundingBox>
+					<westBoundLongitude>4.17949</westBoundLongitude>
+					<eastBoundLongitude>4.54347</eastBoundLongitude>
+					<southBoundLatitude>50.7595</southBoundLatitude>
+					<northBoundLatitude>50.9172</northBoundLatitude>
+				</EX_GeographicBoundingBox>
+				<BoundingBox CRS="EPSG:31370" minx="136869" miny="161076" maxx="162465" maxy="178604"/>
+				<BoundingBox CRS="EPSG:4326" minx="50.7595" miny="4.17949" maxx="50.9172" maxy="4.54347"/>
+				<BoundingBox CRS="EPSG:3812" minx="636779" miny="661136" maxx="662376" maxy="678667"/>
+				<MetadataURL type="ISO19115:2003">
+					<Format>text/xml</Format>
+					<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=0bacf5ca-c51d-42d2-8a5a-7519cae09564"/>
+				</MetadataURL>
+				<Style>
+					<Name>default</Name>
+					<Title>default</Title>
+					<LegendURL width="107" height="21">
+						<Format>image/png</Format>
+						<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.ibgebim.be/inspirefr?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=bruenvi_seveso_area&amp;format=image/png&amp;STYLE=default"/>
+					</LegendURL>
+				</Style>
+			</Layer>
+			<Layer queryable="1" opaque="0" cascaded="0" noSubsets="0">
+				<Name>bruenvi_natura_2000_habitat</Name>
+				<Title>Habitats Natura 2000</Title>
+				<Abstract>La directive «Habitats» met en place le réseau Natura 2000. Ce réseau est le plus grand réseau écologique du monde </Abstract>
+				<KeywordList>
+					<Keyword>Habitats</Keyword>
+					<Keyword> biotopes</Keyword>
+					<Keyword>biology</Keyword>
+				</KeywordList>
+				<CRS>EPSG:31370</CRS>
+				<EX_GeographicBoundingBox>
+					<westBoundLongitude>4.17949</westBoundLongitude>
+					<eastBoundLongitude>4.54347</eastBoundLongitude>
+					<southBoundLatitude>50.7595</southBoundLatitude>
+					<northBoundLatitude>50.9172</northBoundLatitude>
+				</EX_GeographicBoundingBox>
+				<BoundingBox CRS="EPSG:31370" minx="136869" miny="161076" maxx="162465" maxy="178604"/>
+				<BoundingBox CRS="EPSG:4326" minx="50.7595" miny="4.17949" maxx="50.9172" maxy="4.54347"/>
+				<BoundingBox CRS="EPSG:3812" minx="636779" miny="661136" maxx="662376" maxy="678667"/>
+				<MetadataURL type="ISO19115:2003">
+					<Format>text/xml</Format>
+					<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=natura_2000_habitats.xml"/>
+				</MetadataURL>
+				<Style>
+					<Name>default</Name>
+					<Title>default</Title>
+					<LegendURL width="509" height="293">
+						<Format>image/png</Format>
+						<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.ibgebim.be/inspirefr?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=bruenvi_natura_2000_habitat&amp;format=image/png&amp;STYLE=default"/>
+					</LegendURL>
+				</Style>
+			</Layer>
+			<Layer queryable="1" opaque="0" cascaded="0" noSubsets="0">
+				<Name>bruenvi_natura_2000_station</Name>
+				<Title>Sites Natura 2000</Title>
+				<Abstract>Les périmètres des sites Natura2000 ont fait l'objet de décisions du Gouvernement. Chaque site fait l'objet d'inventaires biologiques et d'une cartographie.</Abstract>
+				<KeywordList>
+					<Keyword>zones naturelles</Keyword>
+					<Keyword> paysages</Keyword>
+					<Keyword> écosystèmes</Keyword>
+					<Keyword>Sites proteges</Keyword>
+				</KeywordList>
+				<CRS>EPSG:31370</CRS>
+				<EX_GeographicBoundingBox>
+					<westBoundLongitude>-34.0363</westBoundLongitude>
+					<eastBoundLongitude>-34.0363</eastBoundLongitude>
+					<southBoundLatitude>-89.999</southBoundLatitude>
+					<northBoundLatitude>-89.999</northBoundLatitude>
+				</EX_GeographicBoundingBox>
+				<BoundingBox CRS="EPSG:31370" minx="-3.40282e+038" miny="-3.40282e+038" maxx="3.40282e+038" maxy="3.40282e+038"/>
+				<BoundingBox CRS="EPSG:4326" minx="-89.999" miny="-34.0363" maxx="-89.999" maxy="-34.0363"/>
+				<BoundingBox CRS="EPSG:3812" minx="499937" miny="500050" maxx="499937" maxy="500050"/>
+				<MetadataURL type="ISO19115:2003">
+					<Format>text/xml</Format>
+					<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=natura_2000_stations.xml"/>
+				</MetadataURL>
+				<Style>
+					<Name>default</Name>
+					<Title>default</Title>
+					<LegendURL width="635" height="53">
+						<Format>image/png</Format>
+						<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.ibgebim.be/inspirefr?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=bruenvi_natura_2000_station&amp;format=image/png&amp;STYLE=default"/>
+					</LegendURL>
+				</Style>
+			</Layer>
+			<Layer queryable="1" opaque="0" cascaded="0" noSubsets="0">
+				<Name>bruenvi_water_singel_object</Name>
+				<Title>Réseau hydrographique</Title>
+				<Abstract>La Région de Bruxelles-Capitale se situe en majorité dans le bassin hydrographique de la Senne</Abstract>
+				<KeywordList>
+					<Keyword>Hydrography</Keyword>
+				</KeywordList>
+				<CRS>EPSG:31370</CRS>
+				<EX_GeographicBoundingBox>
+					<westBoundLongitude>4.17949</westBoundLongitude>
+					<eastBoundLongitude>4.54347</eastBoundLongitude>
+					<southBoundLatitude>50.7595</southBoundLatitude>
+					<northBoundLatitude>50.9172</northBoundLatitude>
+				</EX_GeographicBoundingBox>
+				<BoundingBox CRS="EPSG:31370" minx="136869" miny="161076" maxx="162465" maxy="178604"/>
+				<BoundingBox CRS="EPSG:4326" minx="50.7595" miny="4.17949" maxx="50.9172" maxy="4.54347"/>
+				<BoundingBox CRS="EPSG:3812" minx="636779" miny="661136" maxx="662376" maxy="678667"/>
+				<MetadataURL type="ISO19115:2003">
+					<Format>text/xml</Format>
+					<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=49220e81-638b-4876-a259-dd87f0b270b1"/>
+				</MetadataURL>
+				<Style>
+					<Name>default</Name>
+					<Title>default</Title>
+					<LegendURL width="155" height="37">
+						<Format>image/png</Format>
+						<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.ibgebim.be/inspirefr?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=bruenvi_water_singel_object&amp;format=image/png&amp;STYLE=default"/>
+					</LegendURL>
+				</Style>
+			</Layer>
+			<Layer queryable="1" opaque="0" cascaded="0" noSubsets="0">
+				<Name>bruenvi_water_monitoring_groundwater_quality</Name>
+				<Title>Réseau de surveillance de la qualité des eaux souterraines</Title>
+				<Abstract>La Région bruxelloise dispose d'une réseau de surveillance ou de mesure de l’état qualitatif ou quantitatif de ses eaux souterraines.</Abstract>
+				<KeywordList>
+					<Keyword>water monitoring</Keyword>
+					<Keyword> groundwater quality</Keyword>
+					<Keyword> groundwater</Keyword>
+					<Keyword> water quality management</Keyword>
+					<Keyword> aquifer</Keyword>
+					<Keyword> groundwater pollution</Keyword>
+				</KeywordList>
+				<CRS>EPSG:31370</CRS>
+				<EX_GeographicBoundingBox>
+					<westBoundLongitude>4.17949</westBoundLongitude>
+					<eastBoundLongitude>4.54347</eastBoundLongitude>
+					<southBoundLatitude>50.7595</southBoundLatitude>
+					<northBoundLatitude>50.9172</northBoundLatitude>
+				</EX_GeographicBoundingBox>
+				<BoundingBox CRS="EPSG:31370" minx="136869" miny="161076" maxx="162465" maxy="178604"/>
+				<BoundingBox CRS="EPSG:4326" minx="50.7595" miny="4.17949" maxx="50.9172" maxy="4.54347"/>
+				<BoundingBox CRS="EPSG:3812" minx="636779" miny="661136" maxx="662376" maxy="678667"/>
+				<MetadataURL type="ISO19115:2003">
+					<Format>text/xml</Format>
+					<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=reseau_surv_piezo_art8.xml"/>
+				</MetadataURL>
+				<Style>
+					<Name>default</Name>
+					<Title>default</Title>
+					<LegendURL width="383" height="21">
+						<Format>image/png</Format>
+						<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.ibgebim.be/inspirefr?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=bruenvi_water_monitoring_groundwater_quality&amp;format=image/png&amp;STYLE=default"/>
+					</LegendURL>
+				</Style>
+			</Layer>
+			<Layer queryable="1" opaque="0" cascaded="0" noSubsets="0">
+				<Name>bruenvi_water_protectedsite_drinking_water_gallery</Name>
+				<Title>Zone 1 de protection de captage</Title>
+				<Abstract>Galerie drainante (ou filtrante), creusée au cœur de la nappe aquifère et longue de plusieurs centaines de mètres, dans le Bois de la Cambre et la Forêt de Soignes</Abstract>
+				<KeywordList>
+					<Keyword>zone de captage d eau potable</Keyword>
+					<Keyword> zone protegee de captage d eau</Keyword>
+				</KeywordList>
+				<CRS>EPSG:31370</CRS>
+				<EX_GeographicBoundingBox>
+					<westBoundLongitude>4.17948</westBoundLongitude>
+					<eastBoundLongitude>4.54347</eastBoundLongitude>
+					<southBoundLatitude>50.7595</southBoundLatitude>
+					<northBoundLatitude>50.9172</northBoundLatitude>
+				</EX_GeographicBoundingBox>
+				<BoundingBox CRS="EPSG:31370" minx="136868" miny="161075" maxx="162465" maxy="178604"/>
+				<BoundingBox CRS="EPSG:4326" minx="50.7595" miny="4.17948" maxx="50.9172" maxy="4.54347"/>
+				<BoundingBox CRS="EPSG:3812" minx="636778" miny="661135" maxx="662376" maxy="678666"/>
+				<MetadataURL type="ISO19115:2003">
+					<Format>text/xml</Format>
+					<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=Zone1_protection_captage_galerie.xml"/>
+				</MetadataURL>
+				<Style>
+					<Name>default</Name>
+					<Title>default</Title>
+					<LegendURL width="137" height="21">
+						<Format>image/png</Format>
+						<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.ibgebim.be/inspirefr?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=bruenvi_water_protectedsite_drinking_water_gallery&amp;format=image/png&amp;STYLE=default"/>
+					</LegendURL>
+				</Style>
+			</Layer>
+			<Layer queryable="1" opaque="0" cascaded="0" noSubsets="0">
+				<Name>bruenvi_water_protectedsite_drinking_water</Name>
+				<Title>Zones 2 et 3 de protection de captage - galerie drainante et puits captants</Title>
+				<Abstract>Zone  de puits de captage, dans le Bois de la Cambre</Abstract>
+				<KeywordList>
+					<Keyword>zone de captage d eau potable</Keyword>
+					<Keyword> zone protegee de captage d eau</Keyword>
+				</KeywordList>
+				<CRS>EPSG:31370</CRS>
+				<EX_GeographicBoundingBox>
+					<westBoundLongitude>4.17948</westBoundLongitude>
+					<eastBoundLongitude>4.54347</eastBoundLongitude>
+					<southBoundLatitude>50.7595</southBoundLatitude>
+					<northBoundLatitude>50.9172</northBoundLatitude>
+				</EX_GeographicBoundingBox>
+				<BoundingBox CRS="EPSG:31370" minx="136868" miny="161075" maxx="162465" maxy="178604"/>
+				<BoundingBox CRS="EPSG:4326" minx="50.7595" miny="4.17948" maxx="50.9172" maxy="4.54347"/>
+				<BoundingBox CRS="EPSG:3812" minx="636778" miny="661135" maxx="662376" maxy="678666"/>
+				<MetadataURL type="ISO19115:2003">
+					<Format>text/xml</Format>
+					<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=Zones2_et3_protection_captage_Pg.xml"/>
+				</MetadataURL>
+				<Style>
+					<Name>default</Name>
+					<Title>default</Title>
+					<LegendURL width="245" height="37">
+						<Format>image/png</Format>
+						<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.ibgebim.be/inspirefr?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=bruenvi_water_protectedsite_drinking_water&amp;format=image/png&amp;STYLE=default"/>
+					</LegendURL>
+				</Style>
+			</Layer>
+			<Layer queryable="1" opaque="0" cascaded="0" noSubsets="0">
+				<Name>bruenvi_water_groundwaterbody</Name>
+				<Title>Masses d'eau souterraines</Title>
+				<Abstract>  Les eaux souterraines et plus précisément les 5 masses d'eau souterraines...</Abstract>
+				<KeywordList>
+					<Keyword>water distribution system </Keyword>
+					<Keyword> water collection</Keyword>
+					<Keyword> groundwater extraction</Keyword>
+					<Keyword> drinking water protection area. </Keyword>
+				</KeywordList>
+				<CRS>EPSG:31370</CRS>
+				<EX_GeographicBoundingBox>
+					<westBoundLongitude>4.17949</westBoundLongitude>
+					<eastBoundLongitude>4.54347</eastBoundLongitude>
+					<southBoundLatitude>50.7595</southBoundLatitude>
+					<northBoundLatitude>50.9172</northBoundLatitude>
+				</EX_GeographicBoundingBox>
+				<BoundingBox CRS="EPSG:31370" minx="136869" miny="161076" maxx="162465" maxy="178604"/>
+				<BoundingBox CRS="EPSG:4326" minx="50.7595" miny="4.17949" maxx="50.9172" maxy="4.54347"/>
+				<BoundingBox CRS="EPSG:3812" minx="636779" miny="661136" maxx="662376" maxy="678667"/>
+				<MetadataURL type="ISO19115:2003">
+					<Format>text/xml</Format>
+					<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=gwb.xml"/>
+				</MetadataURL>
+				<Style>
+					<Name>default</Name>
+					<Title>default</Title>
+					<LegendURL width="95" height="85">
+						<Format>image/png</Format>
+						<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.ibgebim.be/inspirefr?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=bruenvi_water_groundwaterbody&amp;format=image/png&amp;STYLE=default"/>
+					</LegendURL>
+				</Style>
+			</Layer>
+			<Layer queryable="1" opaque="0" cascaded="0" noSubsets="0">
+				<Name>bruenvi_water_monitoring_river_quality_phch</Name>
+				<Title>Réseau de surveillance de la qualité chimique et physico-chimique des eaux de surface</Title>
+				<Abstract>Réseau ayant pour objectif de surveiller les paramètres physico-chimiques liés au bilan d’oxygène, la température, le pH…Il surveille également la présence de substances dangereuses  à l’entrée et à la sortie des principales voies d’eau bruxelloises.  </Abstract>
+				<KeywordList>
+					<Keyword> pollution</Keyword>
+					<Keyword> water </Keyword>
+				</KeywordList>
+				<CRS>EPSG:31370</CRS>
+				<EX_GeographicBoundingBox>
+					<westBoundLongitude>4.17949</westBoundLongitude>
+					<eastBoundLongitude>4.54347</eastBoundLongitude>
+					<southBoundLatitude>50.7595</southBoundLatitude>
+					<northBoundLatitude>50.9172</northBoundLatitude>
+				</EX_GeographicBoundingBox>
+				<BoundingBox CRS="EPSG:31370" minx="136869" miny="161076" maxx="162465" maxy="178604"/>
+				<BoundingBox CRS="EPSG:4326" minx="50.7595" miny="4.17949" maxx="50.9172" maxy="4.54347"/>
+				<BoundingBox CRS="EPSG:3812" minx="636779" miny="661136" maxx="662376" maxy="678667"/>
+				<MetadataURL type="ISO19115:2003">
+					<Format>text/xml</Format>
+					<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=stationsSW_qualite_phisique_chimique.xml"/>
+				</MetadataURL>
+				<Style>
+					<Name>default</Name>
+					<Title>default</Title>
+					<LegendURL width="545" height="21">
+						<Format>image/png</Format>
+						<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.ibgebim.be/inspirefr?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=bruenvi_water_monitoring_river_quality_phch&amp;format=image/png&amp;STYLE=default"/>
+					</LegendURL>
+				</Style>
+			</Layer>
+			<Layer queryable="1" opaque="0" cascaded="0" noSubsets="0">
+				<Name>bruenvi_water_monitoring_river_fish</Name>
+				<Title>Réseau de surveillance de la qualite des eaux piscicoles</Title>
+				<Abstract> 7 points de mesure, ce réseau permet de contrôler la qualité et la conformité des eaux des cours d’eau classés comme piscicoles </Abstract>
+				<KeywordList>
+					<Keyword> pollution</Keyword>
+					<Keyword> water </Keyword>
+				</KeywordList>
+				<CRS>EPSG:31370</CRS>
+				<EX_GeographicBoundingBox>
+					<westBoundLongitude>4.17948</westBoundLongitude>
+					<eastBoundLongitude>4.54347</eastBoundLongitude>
+					<southBoundLatitude>50.7595</southBoundLatitude>
+					<northBoundLatitude>50.9172</northBoundLatitude>
+				</EX_GeographicBoundingBox>
+				<BoundingBox CRS="EPSG:31370" minx="136868" miny="161075" maxx="162465" maxy="178604"/>
+				<BoundingBox CRS="EPSG:4326" minx="50.7595" miny="4.17948" maxx="50.9172" maxy="4.54347"/>
+				<BoundingBox CRS="EPSG:3812" minx="636778" miny="661135" maxx="662376" maxy="678666"/>
+				<MetadataURL type="ISO19115:2003">
+					<Format>text/xml</Format>
+					<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=stationsSW_cyprinicole.xml"/>
+				</MetadataURL>
+				<Style>
+					<Name>default</Name>
+					<Title>default</Title>
+					<LegendURL width="371" height="21">
+						<Format>image/png</Format>
+						<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.ibgebim.be/inspirefr?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=bruenvi_water_monitoring_river_fish&amp;format=image/png&amp;STYLE=default"/>
+					</LegendURL>
+				</Style>
+			</Layer>
+			<Layer queryable="1" opaque="0" cascaded="0" noSubsets="0">
+				<Name>bruenvi_water_watershed</Name>
+				<Title>Sous bassins versants</Title>
+				<Abstract>Délimitation par des lignes de partage des eaux, à l'intérieur de laquelle toutes les eaux tombées alimentent un même exutoire </Abstract>
+				<KeywordList>
+					<Keyword>Hydrographie </Keyword>
+					<Keyword> water </Keyword>
+				</KeywordList>
+				<CRS>EPSG:31370</CRS>
+				<EX_GeographicBoundingBox>
+					<westBoundLongitude>4.17948</westBoundLongitude>
+					<eastBoundLongitude>4.54347</eastBoundLongitude>
+					<southBoundLatitude>50.7595</southBoundLatitude>
+					<northBoundLatitude>50.9172</northBoundLatitude>
+				</EX_GeographicBoundingBox>
+				<BoundingBox CRS="EPSG:31370" minx="136868" miny="161075" maxx="162465" maxy="178604"/>
+				<BoundingBox CRS="EPSG:4326" minx="50.7595" miny="4.17948" maxx="50.9172" maxy="4.54347"/>
+				<BoundingBox CRS="EPSG:3812" minx="636778" miny="661135" maxx="662376" maxy="678666"/>
+				<MetadataURL type="ISO19115:2003">
+					<Format>text/xml</Format>
+					<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=Sous_bassin_hydro.xml"/>
+				</MetadataURL>
+				<Style>
+					<Name>default</Name>
+					<Title>default</Title>
+					<LegendURL width="101" height="53">
+						<Format>image/png</Format>
+						<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.ibgebim.be/inspirefr?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=bruenvi_water_watershed&amp;format=image/png&amp;STYLE=default"/>
+					</LegendURL>
+				</Style>
+			</Layer>
+			<Layer queryable="1" opaque="0" cascaded="0" noSubsets="0">
+				<Name>bruenvi_european_protected_areas</Name>
+				<Title>Zones protégées au niveau européen</Title>
+				<Abstract>Registre des Zones Protégées </Abstract>
+				<KeywordList>
+					<Keyword>Zones protegees</Keyword>
+				</KeywordList>
+				<CRS>EPSG:31370</CRS>
+				<EX_GeographicBoundingBox>
+					<westBoundLongitude>4.17948</westBoundLongitude>
+					<eastBoundLongitude>4.54347</eastBoundLongitude>
+					<southBoundLatitude>50.7595</southBoundLatitude>
+					<northBoundLatitude>50.9172</northBoundLatitude>
+				</EX_GeographicBoundingBox>
+				<BoundingBox CRS="EPSG:31370" minx="136868" miny="161075" maxx="162465" maxy="178604"/>
+				<BoundingBox CRS="EPSG:4326" minx="50.7595" miny="4.17948" maxx="50.9172" maxy="4.54347"/>
+				<BoundingBox CRS="EPSG:3812" minx="636778" miny="661135" maxx="662376" maxy="678666"/>
+				<MetadataURL type="ISO19115:2003">
+					<Format>text/xml</Format>
+					<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=rpa.xml"/>
+				</MetadataURL>
+				<Style>
+					<Name>default</Name>
+					<Title>default</Title>
+					<LegendURL width="635" height="101">
+						<Format>image/png</Format>
+						<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.ibgebim.be/inspirefr?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=bruenvi_european_protected_areas&amp;format=image/png&amp;STYLE=default"/>
+					</LegendURL>
+				</Style>
+			</Layer>
+			<Layer queryable="1" opaque="0" cascaded="0" noSubsets="0">
+				<Name>bruenvi_areas_limitation_aircraft_noise</Name>
+				<Title>Zones de limitation du bruit des avions</Title>
+				<Abstract>Trois zones d’intervention, où des valeurs limites au niveau sonore maximal admissible que peuvent subir les populations survolée et qui ne peuvent être dépassées dans des périodes déterminées </Abstract>
+				<KeywordList>
+					<Keyword>bruit</Keyword>
+					<Keyword>avion</Keyword>
+					<Keyword> Zones Protégées</Keyword>
+				</KeywordList>
+				<CRS>EPSG:31370</CRS>
+				<EX_GeographicBoundingBox>
+					<westBoundLongitude>4.23438</westBoundLongitude>
+					<eastBoundLongitude>4.53121</eastBoundLongitude>
+					<southBoundLatitude>50.7425</southBoundLatitude>
+					<northBoundLatitude>50.9003</northBoundLatitude>
+				</EX_GeographicBoundingBox>
+				<BoundingBox CRS="EPSG:31370" minx="140725" miny="159179" maxx="161607" maxy="176720"/>
+				<BoundingBox CRS="EPSG:4326" minx="50.7425" miny="4.23438" maxx="50.9003" maxy="4.53121"/>
+				<BoundingBox CRS="EPSG:3812" minx="640635" miny="659239" maxx="661518" maxy="676782"/>
+				<MetadataURL type="ISO19115:2003">
+					<Format>text/xml</Format>
+					<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=a7bcb16d-bbfb-42b9-939b-351211ef75e8"/>
+				</MetadataURL>
+				<Style>
+					<Name>default</Name>
+					<Title>default</Title>
+					<LegendURL width="119" height="53">
+						<Format>image/png</Format>
+						<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.ibgebim.be/inspirefr?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=bruenvi_areas_limitation_aircraft_noise&amp;format=image/png&amp;STYLE=default"/>
+					</LegendURL>
+				</Style>
+			</Layer>
+			<Layer queryable="1" opaque="0" cascaded="0" noSubsets="0">
+				<Name>bruenvi_protection_area_sonian_forest</Name>
+				<Title>Zone de protection de la forêt de Soignes</Title>
+				<Abstract>Parcelles de plantation ou de régénération vulnérables, zones refuges pour la faune, zones fragilisées en voie de recolonisation</Abstract>
+				<KeywordList>
+					<Keyword>zones refuges</Keyword>
+					<Keyword>Forêt de Soignes </Keyword>
+				</KeywordList>
+				<CRS>EPSG:31370</CRS>
+				<EX_GeographicBoundingBox>
+					<westBoundLongitude>4.23438</westBoundLongitude>
+					<eastBoundLongitude>4.53121</eastBoundLongitude>
+					<southBoundLatitude>50.7425</southBoundLatitude>
+					<northBoundLatitude>50.9003</northBoundLatitude>
+				</EX_GeographicBoundingBox>
+				<BoundingBox CRS="EPSG:31370" minx="140725" miny="159179" maxx="161607" maxy="176720"/>
+				<BoundingBox CRS="EPSG:4326" minx="50.7425" miny="4.23438" maxx="50.9003" maxy="4.53121"/>
+				<BoundingBox CRS="EPSG:3812" minx="640635" miny="659239" maxx="661518" maxy="676782"/>
+				<MetadataURL type="ISO19115:2003">
+					<Format>text/xml</Format>
+					<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=95cb54b3-6e5f-4697-ba6d-7b2dc2f3c5c5"/>
+				</MetadataURL>
+				<Style>
+					<Name>default</Name>
+					<Title>default</Title>
+					<LegendURL width="275" height="21">
+						<Format>image/png</Format>
+						<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.ibgebim.be/inspirefr?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=bruenvi_protection_area_sonian_forest&amp;format=image/png&amp;STYLE=default"/>
+					</LegendURL>
+				</Style>
+			</Layer>
+			<Layer queryable="1" opaque="0" cascaded="0" noSubsets="0">
+				<Name>bruenvi_water_sewage_treatment</Name>
+				<Title>Stations d'épuration</Title>
+				<Abstract>Station d'épuration traitant les eaux usées en provenance de la Région de Bruxelles-Capitale et du bassin flamand de la Woluwe</Abstract>
+				<KeywordList>
+					<Keyword>épuration</Keyword>
+					<Keyword>eaux usées </Keyword>
+				</KeywordList>
+				<CRS>EPSG:31370</CRS>
+				<EX_GeographicBoundingBox>
+					<westBoundLongitude>4.13297</westBoundLongitude>
+					<eastBoundLongitude>4.62765</eastBoundLongitude>
+					<southBoundLatitude>50.7377</southBoundLatitude>
+					<northBoundLatitude>50.9038</northBoundLatitude>
+				</EX_GeographicBoundingBox>
+				<BoundingBox CRS="EPSG:31370" minx="133593" miny="158669" maxx="168390" maxy="177114"/>
+				<BoundingBox CRS="EPSG:4326" minx="50.7377" miny="4.13297" maxx="50.9038" maxy="4.62765"/>
+				<BoundingBox CRS="EPSG:3812" minx="633503" miny="658729" maxx="668301" maxy="677177"/>
+				<MetadataURL type="ISO19115:2003">
+					<Format>text/xml</Format>
+					<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=2f2ab1f0-19a2-43fe-940b-8d906ac19cc7"/>
+				</MetadataURL>
+				<Style>
+					<Name>default</Name>
+					<Title>default</Title>
+					<LegendURL width="149" height="21">
+						<Format>image/png</Format>
+						<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.ibgebim.be/inspirefr?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=bruenvi_water_sewage_treatment&amp;format=image/png&amp;STYLE=default"/>
+					</LegendURL>
+				</Style>
+			</Layer>
+			<Layer queryable="1" opaque="0" cascaded="0" noSubsets="0">
+				<Name>bruenvi_water_bodies_surface</Name>
+				<Title>Masses d'eau de surface</Title>
+				<Abstract>La Région de Bruxelles-Capitale comporte 3 masses d’eau de surface, 2 sont fortement modifiées, la Senne et la Woluwe et une est artificielle, le Canal</Abstract>
+				<KeywordList>
+					<Keyword>Eau de surface</Keyword>
+					<Keyword>Senne</Keyword>
+					<Keyword> Canal</Keyword>
+					<Keyword> Woluwe</Keyword>
+				</KeywordList>
+				<CRS>EPSG:31370</CRS>
+				<EX_GeographicBoundingBox>
+					<westBoundLongitude>4.23438</westBoundLongitude>
+					<eastBoundLongitude>4.53121</eastBoundLongitude>
+					<southBoundLatitude>50.7425</southBoundLatitude>
+					<northBoundLatitude>50.9003</northBoundLatitude>
+				</EX_GeographicBoundingBox>
+				<BoundingBox CRS="EPSG:31370" minx="140725" miny="159179" maxx="161607" maxy="176720"/>
+				<BoundingBox CRS="EPSG:4326" minx="50.7425" miny="4.23438" maxx="50.9003" maxy="4.53121"/>
+				<BoundingBox CRS="EPSG:3812" minx="640635" miny="659239" maxx="661518" maxy="676782"/>
+				<MetadataURL type="ISO19115:2003">
+					<Format>text/xml</Format>
+					<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id="/>
+				</MetadataURL>
+				<Style>
+					<Name>default</Name>
+					<Title>default</Title>
+					<LegendURL width="71" height="53">
+						<Format>image/png</Format>
+						<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.ibgebim.be/inspirefr?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=bruenvi_water_bodies_surface&amp;format=image/png&amp;STYLE=default"/>
+					</LegendURL>
+				</Style>
+			</Layer>
+			<Layer queryable="1" opaque="0" cascaded="0" noSubsets="0">
+				<Name>bruenvi_water_protectedsite_drinking_water_wells</Name>
+				<Title>Zone 1 de protection de captage (Puits)</Title>
+				<Abstract> localisation des puits de captage d'eau potable de Bruxelles exploitée par VIVAQUA. Classés comme zone 1 de protection de captage (ainsi que la galerie drainante)</Abstract>
+				<KeywordList>
+					<Keyword>environnement</Keyword>
+					<Keyword> zone de captage d'eau potable</Keyword>
+					<Keyword> protection de zone de captage de l'eau</Keyword>
+					<Keyword> zone protégée de captage d'eau</Keyword>
+					<Keyword> captage d'eau</Keyword>
+					<Keyword> alimentation en eau de la ville</Keyword>
+					<Keyword> approvisionnement en eau potable</Keyword>
+				</KeywordList>
+				<EX_GeographicBoundingBox>
+					<westBoundLongitude>4.23825</westBoundLongitude>
+					<eastBoundLongitude>4.49891</eastBoundLongitude>
+					<southBoundLatitude>50.7645</southBoundLatitude>
+					<northBoundLatitude>50.9066</northBoundLatitude>
+				</EX_GeographicBoundingBox>
+				<BoundingBox CRS="EPSG:31370" minx="140999" miny="161624" maxx="159333" maxy="177424"/>
+				<BoundingBox CRS="EPSG:4326" minx="50.7645" miny="4.23825" maxx="50.9066" maxy="4.49891"/>
+				<BoundingBox CRS="EPSG:3812" minx="640909" miny="661684" maxx="659244" maxy="677486"/>
+				<MetadataURL type="ISO19115:2003">
+					<Format>text/xml</Format>
+					<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=dd374aec-3802-4da1-8bad-59004e17460f"/>
+				</MetadataURL>
+				<Style>
+					<Name>default</Name>
+					<Title>default</Title>
+					<LegendURL width="119" height="21">
+						<Format>image/png</Format>
+						<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.ibgebim.be/inspirefr?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=bruenvi_water_protectedsite_drinking_water_wells&amp;format=image/png&amp;STYLE=default"/>
+					</LegendURL>
+				</Style>
+			</Layer>
+			<Layer queryable="1" opaque="0" cascaded="0" noSubsets="0">
+				<Name>bruenvi_water_monitoring_groundwater_level</Name>
+				<Title>Réseau de surveillance du niveau des eaux souterraines - reporting EU</Title>
+				<Abstract> localisation des stations de mesure du niveau (ou stations piézométriques) des eaux souterraines gérées par Bruxelles Environnement (IBGE)</Abstract>
+				<KeywordList>
+					<Keyword>environnement</Keyword>
+					<Keyword> surveillance de l'eau</Keyword>
+					<Keyword> réseau de mesure</Keyword>
+					<Keyword> eaux souterraines</Keyword>
+					<Keyword> qualité des eaux souterraines</Keyword>
+					<Keyword> pollution de l'eau </Keyword>
+				</KeywordList>
+				<EX_GeographicBoundingBox>
+					<westBoundLongitude>4.23825</westBoundLongitude>
+					<eastBoundLongitude>4.49891</eastBoundLongitude>
+					<southBoundLatitude>50.7645</southBoundLatitude>
+					<northBoundLatitude>50.9066</northBoundLatitude>
+				</EX_GeographicBoundingBox>
+				<BoundingBox CRS="EPSG:31370" minx="140999" miny="161624" maxx="159333" maxy="177424"/>
+				<BoundingBox CRS="EPSG:4326" minx="50.7645" miny="4.23825" maxx="50.9066" maxy="4.49891"/>
+				<BoundingBox CRS="EPSG:3812" minx="640909" miny="661684" maxx="659244" maxy="677486"/>
+				<MetadataURL type="ISO19115:2003">
+					<Format>text/xml</Format>
+					<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=stationsGW_controles_2007.xml"/>
+				</MetadataURL>
+				<Style>
+					<Name>default</Name>
+					<Title>default</Title>
+					<LegendURL width="95" height="85">
+						<Format>image/png</Format>
+						<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.ibgebim.be/inspirefr?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=bruenvi_water_monitoring_groundwater_level&amp;format=image/png&amp;STYLE=default"/>
+					</LegendURL>
+				</Style>
+			</Layer>
+			<Layer queryable="1" opaque="0" cascaded="0" noSubsets="0">
+				<Name>bruenvi_air_monitoring_stations</Name>
+				<Title>Réseau de surveillance de la qualité de l'air</Title>
+				<Abstract> localisation des différentes stations de mesure de la qualité de l'air gérées par Bruxelles Environnement (IBGE).</Abstract>
+				<KeywordList>
+					<Keyword> air</Keyword>
+					<Keyword> contrôle de la qualité de l'air</Keyword>
+					<Keyword> qualité de l'air</Keyword>
+					<Keyword> environnement (theme). </Keyword>
+				</KeywordList>
+				<EX_GeographicBoundingBox>
+					<westBoundLongitude>4.17499</westBoundLongitude>
+					<eastBoundLongitude>4.53903</eastBoundLongitude>
+					<southBoundLatitude>50.794</southBoundLatitude>
+					<northBoundLatitude>50.8976</northBoundLatitude>
+				</EX_GeographicBoundingBox>
+				<BoundingBox CRS="EPSG:31370" minx="136546" miny="164914" maxx="162158" maxy="176416"/>
+				<BoundingBox CRS="EPSG:4326" minx="50.794" miny="4.17499" maxx="50.8976" maxy="4.53903"/>
+				<BoundingBox CRS="EPSG:3812" minx="636279" miny="664916" maxx="661890" maxy="676420"/>
+				<MetadataURL type="ISO19115:2003">
+					<Format>text/xml</Format>
+					<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=96a8626e-0910-421b-8404-0b83d1740f24"/>
+				</MetadataURL>
+				<Style>
+					<Name>default</Name>
+					<Title>default</Title>
+					<LegendURL width="305" height="21">
+						<Format>image/png</Format>
+						<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.ibgebim.be/inspirefr?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=bruenvi_air_monitoring_stations&amp;format=image/png&amp;STYLE=default"/>
+					</LegendURL>
+				</Style>
+			</Layer>
+			<Layer queryable="1" opaque="0" cascaded="0" noSubsets="0">
+				<Name>bruenvi_noise_monitoring_stations</Name>
+				<Title>Réseau de mesure du bruit</Title>
+				<Abstract> localisation des différentes stations de mesures des niveaux sonores, gérées par Bruxelles Environnement (IBGE)</Abstract>
+				<KeywordList>
+					<Keyword>bruit</Keyword>
+					<Keyword> bruit ambiant</Keyword>
+					<Keyword> bruit aérien</Keyword>
+					<Keyword> bruit routier</Keyword>
+					<Keyword> suveillance du bruit</Keyword>
+					<Keyword> environnement (theme) </Keyword>
+				</KeywordList>
+				<EX_GeographicBoundingBox>
+					<westBoundLongitude>4.24078</westBoundLongitude>
+					<eastBoundLongitude>4.50145</eastBoundLongitude>
+					<southBoundLatitude>50.765</southBoundLatitude>
+					<northBoundLatitude>50.9072</northBoundLatitude>
+				</EX_GeographicBoundingBox>
+				<BoundingBox CRS="EPSG:31370" minx="141176" miny="161681" maxx="159512" maxy="177483"/>
+				<BoundingBox CRS="EPSG:4326" minx="50.765" miny="4.24078" maxx="50.9072" maxy="4.50145"/>
+				<BoundingBox CRS="EPSG:3812" minx="640909" miny="661684" maxx="659244" maxy="677486"/>
+				<MetadataURL type="ISO19115:2003">
+					<Format>text/xml</Format>
+					<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=dfcb6396-9c89-4f2f-b125-6695a557a959"/>
+				</MetadataURL>
+				<Style>
+					<Name>default</Name>
+					<Title>default</Title>
+					<LegendURL width="143" height="69">
+						<Format>image/png</Format>
+						<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://wms.ibgebim.be/inspirefr?version=1.3.0&amp;service=WMS&amp;request=GetLegendGraphic&amp;sld_version=1.1.0&amp;layer=bruenvi_noise_monitoring_stations&amp;format=image/png&amp;STYLE=default"/>
+					</LegendURL>
+				</Style>
+			</Layer>
+		</Layer>
+	</Capability>
+</WMS_Capabilities>

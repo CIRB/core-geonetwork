@@ -106,7 +106,7 @@ public class XmlChildElementTextUpdate implements Service
                     nss.add(md.getNamespace());
                     Object o = Xml.selectSingle(md, xpathExpression, nss);
                     if (o!=null && o instanceof Element) {
-                    	String oldChildTextValue = ((Element)o).getText(); 
+                    	String oldChildTextValue = ((Element)o).getText();
                     	((Element)o).setText(childTextValue);
                     	if (!childTextValue.equals(oldChildTextValue)) {
         	                dm.getXmlSerializer().update(dbms, id, md, null, false, context);
@@ -151,7 +151,7 @@ public class XmlChildElementTextUpdate implements Service
 				for(Element group : userGroups) {
 					groupIdList.add(group.getText());
 				}
-				whereClause += " and id in (select metadataid from operationallowed where groupid in (" + StringUtils.join(groupIdList, "','") + ") and operationid = '2')"; 
+				whereClause += " and id in (select metadataid from operationallowed where groupid in (" + StringUtils.join(groupIdList, ",") + ") and operationid = '2')";
 				break;
 			case 3:
 				break;

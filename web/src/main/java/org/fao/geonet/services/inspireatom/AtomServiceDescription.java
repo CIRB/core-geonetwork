@@ -38,7 +38,6 @@ import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.inspireatom.util.InspireAtomUtil;
 import org.fao.geonet.services.main.Result;
 import org.fao.geonet.services.main.Search;
-import org.jdom.Attribute;
 import org.jdom.Element;
 import org.jdom.Namespace;
 
@@ -84,6 +83,7 @@ public class AtomServiceDescription implements Service
             	response.addContent(new Element("keywords").setText(keywords));
             }
             response.addContent(new Element("authorName").setText(serviceAtomFeed.getChild("author",ns).getChildText("name",ns)));
+            response.addContent(new Element("authorEmail").setText(serviceAtomFeed.getChild("author",ns).getChildText("email",ns)));
             response.addContent(new Element("url").setText(serviceAtomFeed.getChildText("id",ns)));
             Element datasetsEl = new Element("datasets");
             response.addContent(datasetsEl);

@@ -563,29 +563,38 @@
 								</xsl:call-template>
 							</fo:block>						
 						</fo:table-cell>
+						<xsl:variable name="fileName" select="normalize-space(gmd:MD_BrowseGraphic/gmd:fileName)"/>
 						<fo:table-cell color="{$font-color}" padding-top="4pt"
 							padding-bottom="4pt" padding-right="4pt" padding-left="4pt">
 	 						<fo:block linefeed-treatment="preserve">
 					            <fo:external-graphic content-width="4.6cm">
-					              <xsl:variable name="urlTemp" select="/root/gui/imageLinks/link[starts-with(@url,normalize-space(./gmd:MD_BrowseGraphic/gmd:fileName))]"/>
+					              <xsl:variable name="urlTemp" select="/root/gui/imageLinks/link[starts-with(@url,$fileName)]/text()"/>
 					              <xsl:variable name="url">
 									<xsl:choose>
 										<xsl:when test="not($urlTemp) or $urlTemp=''">
-											<xsl:value-of select="./gmd:MD_BrowseGraphic/gmd:fileName" />
+											<xsl:value-of select="$fileName" />
 										</xsl:when>
 										<xsl:otherwise>
 											<xsl:value-of select="$urlTemp" />
 										</xsl:otherwise>
 									</xsl:choose>
 					              </xsl:variable>
-								  
 					              <xsl:attribute name="src">
 					                <xsl:text>url('</xsl:text>
-					               		<xsl:value-of select="$url" disable-output-escaping="yes"/> 
+					               		<xsl:value-of select="replace($url,'amp;','')" disable-output-escaping="yes"/> 
 					                <xsl:text>')"</xsl:text>
 					              </xsl:attribute>
 								</fo:external-graphic>
-<!--								<xsl:value-of select="./gmd:MD_BrowseGraphic/gmd:fileName" />-->
+							</fo:block>
+							<fo:block>
+<!--
+								<xsl:if test="starts-with(normalize-space($fileName),'http')">
+									<fo:basic-link external-destination="url('{replace($fileName,'amp;','')}')"><xsl:value-of select="replace($fileName,'=','=&#x200b;')"/></fo:basic-link>
+								</xsl:if>
+								<xsl:if test="not(starts-with(normalize-space($fileName),'http'))">
+									<xsl:value-of select="replace($fileName,'amp;','')" />
+								</xsl:if>
+-->
 							</fo:block>
 						</fo:table-cell>
 						</fo:table-row>
@@ -937,18 +946,15 @@
 								</xsl:choose>
 							</xsl:with-param>
 							<xsl:with-param name="value">
-								<xsl:variable name="idParamValue" select="substring-after(./@xlink:href,';id=')"/>
 								<xsl:variable name="uuid">
-									<xsl:call-template name="getUuidRelatedMetadata">
-										<xsl:with-param name="mduuidValue" select="./@xlink:href"/>
-										<xsl:with-param name="idParamValue" select="$idParamValue"/>
+		                    		<xsl:call-template name="getParamFromUrl">
+								       	<xsl:with-param name="url" select="./@xlink:href"/>
+										<xsl:with-param name="paramName" select="'id'"/>
 									</xsl:call-template>
 								</xsl:variable>
-								
 								<xsl:call-template name="getMetadataTitle">
 									<xsl:with-param name="uuid" select="$uuid"/>
 								</xsl:call-template>
-									
 							</xsl:with-param>
 						</xsl:call-template>
 						<xsl:apply-templates mode="elementFop" select="./@uuidref">
@@ -960,7 +966,6 @@
 					</xsl:with-param>
 				</xsl:call-template>
 			</xsl:for-each>
-			
 
 			<xsl:apply-templates mode="elementFop"
 				select="./gmd:identificationInfo/*/gmd:supplementalInformation">

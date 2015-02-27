@@ -10,6 +10,7 @@
 			<gmd:transferOptions/>
 			<gmd:MD_DigitalTransferOptions/>
 			<gmd:onLine/>
+			<srv:coupledResource xmlns:srv="http://www.isotc211.org/2005/srv" />
 		</elements>
 	</autodetect>
 </schema>

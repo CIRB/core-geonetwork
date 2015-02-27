@@ -24,6 +24,12 @@
 		<suggest name="srv:SV_CoupledResource"/>
 	</field>
 	
+	<field name="srv:SV_CoupledResource">
+		<suggest name="srv:operationName"/>
+		<suggest name="srv:identifier"/>
+		<suggest name="gco:ScopedName"/>
+	</field>
+	
 	<field name="srv:parameters">
 		<suggest name="srv:SV_Parameter"/>
 	</field>

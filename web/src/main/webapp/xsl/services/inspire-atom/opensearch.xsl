@@ -112,7 +112,7 @@
             <xsl:choose>
                 <xsl:when test="string(/root/response/fileId)">
                     <!-- For each Service Feed the contact -->
-                    <Contact><xsl:value-of select="/root/response/authorName" /></Contact>
+                    <Contact><xsl:value-of select="/root/response/authorEmail" /></Contact>
                     <Tags><xsl:value-of select="/root/response/keywords" /></Tags>
                     <!-- per Atom Service feed / Service metadata record combinatie: -->
                     <Developer><xsl:value-of select="/root/response/authorName" /></Developer>

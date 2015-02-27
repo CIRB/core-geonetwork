@@ -294,8 +294,8 @@ public class Importer {
 								.setAttribute("name", "dynamic"));
 						privileges.addContent(new Element("operation")
 								.setAttribute("name", "featured"));
-						uuid = dm.extractUUID(schema, md.get(index));						
 					}
+					uuid = dm.extractUUID(schema, md.get(index));						
 
 					validate = Util.getParam(params, Params.VALIDATE, "off").equals("on");
 

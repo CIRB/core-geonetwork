@@ -25,6 +25,7 @@ package org.fao.geonet.services.config;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import jeeves.constants.Jeeves;
 import jeeves.exceptions.BadInputEx;
@@ -35,6 +36,7 @@ import jeeves.resources.dbms.Dbms;
 import jeeves.server.ServiceConfig;
 import jeeves.server.context.ServiceContext;
 
+import org.apache.commons.lang.StringUtils;
 import org.fao.geonet.GeonetContext;
 import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.kernel.setting.SettingManager;
@@ -45,7 +47,7 @@ import org.jdom.Element;
 
 /**
  * TODO javadoc.
- * 
+ *
  */
 public class Set implements Service
 {
@@ -84,17 +86,22 @@ public class Set implements Service
 		for (ConfigEntry ce : entries)
 			ce.eval(values, params);
 
+		String newUuid = (String)values.get("system/site/siteId");
+
+        if (!currentUuid.equals(newUuid)) {
+            if(StringUtils.isNotEmpty(newUuid) && newUuid.equals("CHANGEME") || StringUtils.isEmpty(newUuid)) {
+            	newUuid = UUID.randomUUID().toString();
+            	values.put("system/site/siteId",newUuid);
+            }
+			dbms.execute("UPDATE Metadata SET source=? WHERE isHarvested='n'", newUuid);
+			dbms.execute("UPDATE Workspace SET source=? WHERE isHarvested='n'", newUuid);
+			dbms.execute("UPDATE Sources  SET uuid=? WHERE uuid=?", newUuid, currentUuid);
+        }
 		if (!sm.setValues(dbms, values))
 			throw new OperationAbortedEx("Cannot set all values");
 
         // Update inspire property in SearchManager
         gc.getSearchmanager().setInspireEnabled(new Boolean((String) values.get("system/inspire/enable"))); 
-		String newUuid = (String)values.get("system/site/siteId");
-
-        if (!currentUuid.equals(newUuid)) {
-			dbms.execute("UPDATE Metadata SET source=? WHERE isHarvested='n'", newUuid);
-			dbms.execute("UPDATE Sources  SET uuid=? WHERE uuid=?", newUuid, currentUuid);
-        }
         
 		return new Element(Jeeves.Elem.RESPONSE).setText("ok");
 	}
@@ -134,7 +141,7 @@ public class Set implements Service
 
 		new ConfigEntry(ConfigEntry.Type.BOOL,   true,  "z3950/enable",             "system/z3950/enable"),
 		new ConfigEntry(ConfigEntry.Type.INT,    false, "z3950/port",               "system/z3950/port"),
-		
+
 		new ConfigEntry(ConfigEntry.Type.INT,    true, "oai/mdmode",                "system/oai/mdmode"),
 		new ConfigEntry(ConfigEntry.Type.INT,    true, "oai/tokentimeout",          "system/oai/tokentimeout"),
 		new ConfigEntry(ConfigEntry.Type.INT,    true, "oai/cachesize",             "system/oai/cachesize"),
@@ -149,7 +156,7 @@ public class Set implements Service
         new ConfigEntry(ConfigEntry.Type.BOOL,   false, "downloadservice/simple",             "system/downloadservice/simple"),
 		new ConfigEntry(ConfigEntry.Type.BOOL,   false, "downloadservice/withdisclaimer",     "system/downloadservice/withdisclaimer"),
 		new ConfigEntry(ConfigEntry.Type.BOOL,   false,  "downloadservice/leave",             "system/downloadservice/leave"),
-		
+
 		new ConfigEntry(ConfigEntry.Type.BOOL,   true,  "csw/enable",               "system/csw/enable"),
 		new ConfigEntry(ConfigEntry.Type.INT,    false, "csw/contactId",                               "system/csw/contactId"),
 		new ConfigEntry(ConfigEntry.Type.STRING, false, "csw/individualName",                          "system/csw/individualName"),
@@ -172,7 +179,7 @@ public class Set implements Service
         new ConfigEntry(ConfigEntry.Type.STRING, false, "csw/metadataPublic",                          "system/csw/metadataPublic"),
 
 		new ConfigEntry(ConfigEntry.Type.BOOL,   true,  "clickablehyperlinks/enable", "system/clickablehyperlinks/enable"),
-		
+
 		new ConfigEntry(ConfigEntry.Type.BOOL,   true,  "localrating/enable", "system/localrating/enable"),
         new ConfigEntry(ConfigEntry.Type.BOOL,   true,  "autofixing/enable", "system/autofixing/enable"),
         new ConfigEntry(ConfigEntry.Type.BOOL,   true,  "inspire/enable", "system/inspire/enable"),
@@ -183,9 +190,9 @@ public class Set implements Service
         new ConfigEntry(ConfigEntry.Type.BOOL,   true,  "metadata/enableInspireView", "system/metadata/enableInspireView"),
         new ConfigEntry(ConfigEntry.Type.BOOL,   true,  "metadata/enableXmlView", "system/metadata/enableXmlView"),
         new ConfigEntry(ConfigEntry.Type.STRING, true,  "metadata/defaultView", "system/metadata/defaultView"),
-        
+
         new ConfigEntry(ConfigEntry.Type.BOOL,   true,  "metadataprivs/usergrouponly", "system/metadataprivs/usergrouponly"),
-        
+
         new ConfigEntry(ConfigEntry.Type.BOOL,   true,  "harvester/enableEditing", "system/harvester/enableEditing"),
 
 		new ConfigEntry(ConfigEntry.Type.BOOL,   true,  "proxy/use",                "system/proxy/use"),
@@ -204,7 +211,7 @@ public class Set implements Service
 		new ConfigEntry(ConfigEntry.Type.STRING, false, "ldap/host",                    "system/ldap/host"),
 		new ConfigEntry(ConfigEntry.Type.INT,    false, "ldap/port",                    "system/ldap/port"),
 		new ConfigEntry(ConfigEntry.Type.STRING, true,  "ldap/defaultProfile",          "system/ldap/defaultProfile"),
-        new ConfigEntry(ConfigEntry.Type.STRING, true,  "ldap/uidAttr",                 "system/ldap/uidAttr"),        
+        new ConfigEntry(ConfigEntry.Type.STRING, true,  "ldap/uidAttr",                 "system/ldap/uidAttr"),
 		new ConfigEntry(ConfigEntry.Type.STRING, true,  "ldap/distinguishedNames/base", "system/ldap/distinguishedNames/base"),
 		new ConfigEntry(ConfigEntry.Type.STRING, true,  "ldap/distinguishedNames/users","system/ldap/distinguishedNames/users"),
 		new ConfigEntry(ConfigEntry.Type.STRING, true,  "ldap/userAttribs/name",        "system/ldap/userAttribs/name"),
