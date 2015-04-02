@@ -30,6 +30,7 @@ import jeeves.constants.Jeeves;
 import jeeves.interfaces.Service;
 import jeeves.resources.dbms.Dbms;
 import jeeves.server.ServiceConfig;
+import jeeves.server.UserSession;
 import jeeves.server.context.ServiceContext;
 import jeeves.utils.Util;
 import jeeves.utils.Xml;
@@ -89,6 +90,18 @@ public class XmlChildElementTextUpdate implements Service
 	        Dbms dbms = (Dbms) context.getResourceManager().open(Geonet.Res.MAIN_DB);
 	        List<String> uuidList = new ArrayList<String>();
 	        String whereClause = getWhereClause(uuidList, filterChoice, uuids, userGroups);
+			UserSession us = context.getUserSession();
+			if (!"Administrator".equals(us.getProfile())) {
+				if (userGroups!=null && userGroups.size()>0) {
+					List<String> groupIdList = new ArrayList<String>();
+					for(Element group : userGroups) {
+						groupIdList.add(group.getText());
+					}
+					whereClause += " and id in (select metadataid from operationallowed where groupid in (" + StringUtils.join(groupIdList, ",") + ") and operationid = '2')";				
+				} else {
+					throw new IllegalArgumentException("Update not allowed for user without usergroups");
+				}
+			}
             Element result = dbms.select("SELECT id, schemaid, uuid FROM metadata " + whereClause + " ORDER BY id ASC");
             for(int i = 0; i < result.getContentSize(); i++) {
                 Element record = (Element) result.getContent(i);

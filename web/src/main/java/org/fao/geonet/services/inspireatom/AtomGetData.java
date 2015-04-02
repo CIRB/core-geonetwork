@@ -25,6 +25,7 @@ package org.fao.geonet.services.inspireatom;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import jeeves.interfaces.Service;
@@ -69,13 +70,30 @@ public class AtomGetData implements Service {
     public Element exec(Element params, ServiceContext context) throws Exception
     {
         String datasetIdCode = Util.getParam(params, InspireAtomUtil.DATASET_IDENTIFIER_CODE_PARAM);
-        String datasetIdNs = Util.getParam(params, InspireAtomUtil.DATASET_IDENTIFIER_NS_PARAM);
-        String datasetCrs = Util.getParam(params, InspireAtomUtil.DATASET_CRS_PARAM);
+		String datasetIdNs = null;
+		try {
+    		datasetIdNs = Util.getParam(params, InspireAtomUtil.DATASET_IDENTIFIER_NS_PARAM);
+		} catch(Exception e) {
+		}
+		String datasetCrs = null;
+		try {
+			datasetCrs = Util.getParam(params,
+					InspireAtomUtil.DATASET_CRS_PARAM);
+		} catch (Exception e) {
+		}
         String styleSheet = context.getAppPath() + File.separator + Geonet.Path.STYLESHEETS + File.separator + "inspire-atom-feed.xsl";
         Element datasetAtomFeed = Xml.transform(new Element("root").addContent(InspireAtomUtil.getDatasetFeed(params, context, datasetIdCode, datasetIdNs, search, result)), styleSheet);
         Namespace ns = datasetAtomFeed.getNamespace();
-        Map<Integer, Element> crsCounts = countDatasetsForCrs(datasetAtomFeed, datasetCrs, ns);
-        int downloadCount = crsCounts.keySet().iterator().next();
+        Map<Integer, Element> crsCounts = new HashMap<Integer, Element>();;
+        if (datasetCrs!=null) {
+            crsCounts = countDatasetsForCrs(datasetAtomFeed, datasetCrs, ns);        	
+        } else {
+            List<Element> entries = (datasetAtomFeed.getChildren("entry", ns));
+            if (entries.size()==1) {
+                crsCounts.put(1, entries.get(0));
+            }
+        }
+        int downloadCount = crsCounts.size()>0 ? crsCounts.keySet().iterator().next() : 0;
         Element selectedEntry = crsCounts.get(downloadCount);
 
         // No download  for the CRS specified

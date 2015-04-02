@@ -405,6 +405,7 @@
 	<tooltipOr>ou</tooltipOr>
 	<isMandatory>Les champs suivants sont obligatoire</isMandatory>
 	<updateAllMetadata>Êtes-vous sûr d'appliquer le changement sur toutes les métadonnées?</updateAllMetadata>
+	<updateAllMetadataOfGroups>Êtes-vous sûr d'appliquer le changement sur toutes les métadonnées des groups selectionnés?</updateAllMetadataOfGroups>
 	<checkusername>Vérification</checkusername>
 	<choose>- Choisir -</choose>
 	<chooseFile>Choisir le fichier à télécharger</chooseFile>
@@ -1433,19 +1434,31 @@
 	<applicationProfileChoice show="y" value=""></applicationProfileChoice>
 	<applicationProfileChoice show="y" value="INSPIRE-Download-Atom">INSPIRE-Download-Atom</applicationProfileChoice>
 	<mimetypeChoice show="y" value="application/atom+xml">INSPIRE Atom Service/Dataset feed</mimetypeChoice>
-	<mimetypeChoice show="y" value="application/x-shapefile">application/x-shapefile pour fichiers comprimés shape</mimetypeChoice>
-	<mimetypeChoice show="y" value="application/x-gmz">application/x-gmz pour fichiers comprimés gml</mimetypeChoice>
-	<mimetypeChoice show="y" value="text/xml">text/xml</mimetypeChoice>
-	<mimetypeChoice show="y" value="text/plain">text/plain</mimetypeChoice>
-	<mimetypeChoice show="y" value="text/html">text/html</mimetypeChoice>
-	<mimetypeChoice show="y" value="text/xml">text/xml</mimetypeChoice>
-	<mimetypeChoice show="y" value="image/jpeg">image/jpeg</mimetypeChoice>
-	<mimetypeChoice show="y" value="image/png">image/png</mimetypeChoice>
-	<mimetypeChoice show="y" value="image/gif">image/gif</mimetypeChoice>
-	<mimetypeChoice show="y" value="application/word">application/word</mimetypeChoice>
-	<mimetypeChoice show="y" value="application/xls">application/xls</mimetypeChoice>
-	<mimetypeChoice show="y" value="application/zip">application/zip</mimetypeChoice>
-	<mimetypeChoice show="y" value="application/pdf">application/pdf</mimetypeChoice>
-	<mimetypeChoice show="y" value="application/vnd.google-earth.kml+xml">application/vnd.google-earth.kml+xml</mimetypeChoice>
-	<mimetypeChoice show="y" value="application/vnd.google-earth.kmz">application/vnd.google-earth.kmz</mimetypeChoice>
+	<mimetypeChoice show="y" value="application/gml+xml">Fichiers GML</mimetypeChoice>
+	<mimetypeChoice show="y" value="application/pdf">Fichiers PDF</mimetypeChoice>
+	<mimetypeChoice show="y" value="application/vnd.google-earth.kml+xml">Fichiers KML</mimetypeChoice>
+	<mimetypeChoice show="y" value="application/vnd.google-earth.kmz">Fichiers KMZ</mimetypeChoice>
+	<mimetypeChoice show="y" value="application/word">Fichiers Word</mimetypeChoice>
+	<mimetypeChoice show="y" value="application/x-ascii-grid">Fichiers ASCII GRID</mimetypeChoice>
+	<mimetypeChoice show="y" value="application/x-ecw">Fichiers Enhanced Compressed Wavelet (ECW)</mimetypeChoice>
+	<mimetypeChoice show="y" value="application/x-filegdb">Fichier Esri geodatabases</mimetypeChoice>
+	<mimetypeChoice show="y" value="application/x-gmz">Fichiers comprimés GML</mimetypeChoice>
+	<mimetypeChoice show="y" value="application/x-las">Format fichier LASer (LAS)</mimetypeChoice>
+	<mimetypeChoice show="y" value="application/x-laz">Fichiers comprimés LAS</mimetypeChoice>
+	<mimetypeChoice show="y" value="application/xls">Fichiers Excel</mimetypeChoice>
+	<mimetypeChoice show="y" value="application/x-oracledump">Dumps Oracle</mimetypeChoice>
+	<mimetypeChoice show="y" value="application/x-shapefile">Fichiers comprimés shape</mimetypeChoice>
+	<mimetypeChoice show="y" value="application/x-tab">Format MapInfo TAB</mimetypeChoice>
+	<mimetypeChoice show="y" value="application/x-tab-raster">Format MapInfo Raster TAB</mimetypeChoice>
+	<mimetypeChoice show="y" value="application/x-worldfile">Fichiers monde</mimetypeChoice>
+	<mimetypeChoice show="y" value="application/zip">Fichiers comprimés</mimetypeChoice>
+	<mimetypeChoice show="y" value="image/gif">Fichiers GIF</mimetypeChoice>
+	<mimetypeChoice show="y" value="image/jp2">Fichiers JPEG 2000</mimetypeChoice>
+	<mimetypeChoice show="y" value="image/jpeg">Fichiers JPG</mimetypeChoice>
+	<mimetypeChoice show="y" value="image/png">Fichiers PNG</mimetypeChoice>
+	<mimetypeChoice show="y" value="image/tiff">Fichiers TIFF/GeoTIFF</mimetypeChoice>
+	<mimetypeChoice show="y" value="text/csv">Fichiers CSV</mimetypeChoice>
+	<mimetypeChoice show="y" value="text/html">Fichiers HTML</mimetypeChoice>
+	<mimetypeChoice show="y" value="text/plain">Fichiers texte</mimetypeChoice>
+	<mimetypeChoice show="y" value="text/xml">Fichiers XML</mimetypeChoice>
 </strings>

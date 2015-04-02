@@ -2492,7 +2492,9 @@ beschikbaar zijn. Voor dataservices is het dus verplicht. Dit element geeft info
 		<helper>
 			<option value="GetDatasetATOMFeed">GetDatasetATOMFeed</option>
 			<option value="GetServiceATOMFeed">GetServiceATOMFeed</option>
-			<option value="GetServiceOpensearchDescription">GetServiceOpensearchDescription</option>
+			<option value="GetOpenSearchDescription">GetOpenSearchDescription</option>
+			<option value="DescribeSpatialDataset">DescribeSpatialDataset</option>
+			<option value="GetSpatialDataset">GetSpatialDataset </option>
 			<option value="GetCapabilities">GetCapabilities</option>
 			<option value="GetMap">GetMap</option>
 			<option value="GetFeatureInfo">GetFeatureInfo</option>

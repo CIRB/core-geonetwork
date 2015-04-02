@@ -3,12 +3,14 @@
 
 	<xsl:include href="main.xsl"/>
     
+	<xsl:variable name="profile"  select="/root/gui/session/profile"/>
 	<!-- ================================================================================ -->
 	<!-- page content	-->
 	<!-- ================================================================================ -->
 
 	<xsl:template mode="script" match="/">
 		<script type="text/javascript" language="JavaScript">
+			var userProfile = "<xsl:value-of select="$profile"/>";
 			function init() {
 				onFilterChanged();
 			}
@@ -39,14 +41,16 @@
 				} 
 				if (value=="2") {
 					document.getElementById("groups").disabled = false;
-				} 
+				}
 				if (value!="1") {
 					document.getElementById("uuids").value = "";
 					document.getElementById("uuids").disabled = true; 
 				}
-				if (value!="2") {
-					document.getElementById("groups").value = "";
-					document.getElementById("groups").disabled = true; 
+				if (value!="2" &amp;&amp; userProfile=="Administrator") {
+					var groupsElem = document.getElementById("groups") 
+					groupsElem.value = "";
+					groupsElem.selectedIndex = -1;
+					groupsElem.disabled = true; 
 				}
 			}
 			function submitForm() {
@@ -71,6 +75,11 @@
 					default:
 						break;
 				}
+				if (userProfile!="Administrator") {
+					if (groups==null || groups.trim()=="") {
+						message = "<xsl:value-of select="/root/gui/strings/usergroups"/>";
+					}
+				}
 				if (xpathExpression==null || xpathExpression.trim()=="") {
 					message += (message.length > 0 ? "\n" : "") + "<xsl:value-of select="/root/gui/strings/xpathExpression"/>";
 				}
@@ -81,7 +90,7 @@
 					alert("<xsl:value-of select="/root/gui/strings/isMandatory"/>" + "\n\n" + message);
 				}
 				if (value==3) {
-					var r = confirm("<xsl:value-of select="/root/gui/strings/updateAllMetadata"/>");
+					var r = confirm(userProfile=="Administrator" ? "<xsl:value-of select="/root/gui/strings/updateAllMetadata"/>" : "<xsl:value-of select="/root/gui/strings/updateAllMetadataOfGroups"/>");
 					if (r == false) {
 					    bProceed = false;
 					}
@@ -153,13 +162,28 @@
 				        <tr id="gn.stylesheet">
 				            <td class="padded" colspan="2">
 				            	<xsl:for-each select="/root/gui/strings/filterChoice">
-					                <input class="content" type="radio" name="filterChoice" onchange="onFilterChanged()">
-						                <xsl:attribute name="value"><xsl:value-of select="./@value" /></xsl:attribute>
-										<xsl:if test="./@value='1'">
-											<xsl:attribute name="checked"/>
-										</xsl:if>
-						                <xsl:value-of select="." />
-					                </input>
+				            		<xsl:choose>
+										<xsl:when test="$profile = 'Administrator'">
+							                <input class="content" type="radio" name="filterChoice" onchange="onFilterChanged()">
+								                <xsl:attribute name="value"><xsl:value-of select="./@value" /></xsl:attribute>
+												<xsl:if test="./@value='1'">
+													<xsl:attribute name="checked"/>
+												</xsl:if>
+								                <xsl:value-of select="." />
+							                </input>
+						                </xsl:when>
+										<xsl:otherwise>
+											<xsl:if test="./@value!='2'">
+								                <input class="content" type="radio" name="filterChoice" onchange="onFilterChanged()">
+									                <xsl:attribute name="value"><xsl:value-of select="./@value" /></xsl:attribute>
+													<xsl:if test="./@value='1'">
+														<xsl:attribute name="checked"/>
+													</xsl:if>
+									                <xsl:value-of select="." />
+								                </input>
+							                </xsl:if>
+						                </xsl:otherwise>
+				            		</xsl:choose>
 				            	</xsl:for-each>
 				            </td>
 				        </tr>
@@ -174,12 +198,29 @@
 				        <tr id="gn.stylesheet">
 							<th class="padded"><xsl:value-of select="/root/gui/strings/usergroups"/></th>
 							<td class="padded">
-								<select class="content" size="7" name="groups" multiple="" id="groups" disabled="disabled">
-									<xsl:for-each select="/root/gui/groups/record">
+								<select class="content" size="7" name="groups" multiple="" id="groups">
+									<xsl:choose>
+										<xsl:when test="$profile = 'Administrator'">
+											<xsl:attribute name="disabled">disabled</xsl:attribute>
+										</xsl:when>
+										<xsl:otherwise>
+										</xsl:otherwise>
+									</xsl:choose>
+ 									<xsl:for-each select="/root/gui/groups/record">
 										<xsl:sort select="name"/>
-										<option value="{id}">
-											<xsl:value-of select="label/child::*[name() = $lang]"/>
-										</option>
+										<xsl:choose>
+											<xsl:when test="$profile = 'Administrator'">
+												<option value="{id}">
+													<xsl:value-of select="label/child::*[name() = $lang]"/>
+												</option>
+											</xsl:when>
+											<xsl:otherwise>
+												<option value="{id}">
+													<xsl:attribute name="selected">selected</xsl:attribute>
+													<xsl:value-of select="label/child::*[name() = $lang]"/>
+												</option>
+											</xsl:otherwise>
+										</xsl:choose>
 									</xsl:for-each>
 								</select>
 							</td>

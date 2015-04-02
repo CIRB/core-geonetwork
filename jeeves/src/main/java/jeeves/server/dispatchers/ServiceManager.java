@@ -565,12 +565,14 @@ public class ServiceManager
 		String redirect = response.getAttributeValue("redirect");
 		String url = response.getAttributeValue("url");
 		String type = response.getAttributeValue("mime-type");
-		if (!StringUtils.isBlank(redirect) && redirect.equals("true") && !StringUtils.isBlank(url) && !StringUtils.isBlank(type)) {
+		if (!StringUtils.isBlank(redirect) && redirect.equals("true") && !StringUtils.isBlank(url)) {
             HttpServiceRequest req2 = (HttpServiceRequest) req;
 
             req2.getHttpServletResponse().setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
             req2.getHttpServletResponse().setHeader("Location", url);
-            req2.getHttpServletResponse().setHeader("Content-Type", type);
+            if (!StringUtils.isBlank(type)) {
+                req2.getHttpServletResponse().setHeader("Content-Type", type);
+            }
 		} else {
 			if (outPage != null)
 			{

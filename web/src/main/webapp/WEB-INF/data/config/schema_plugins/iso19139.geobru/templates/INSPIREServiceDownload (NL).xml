@@ -297,6 +297,23 @@
       <srv:containsOperations>
         <srv:SV_OperationMetadata>
           <srv:operationName>
+            <gco:CharacterString>GetOpenSearchDescription</gco:CharacterString>
+          </srv:operationName>
+          <srv:DCP>
+            <srv:DCPList codeList="http://www.isotc211.org/2005/iso19119/resources/codelist/gmxCodelists.xml#DCPList" codeListValue="WebServices"/>
+          </srv:DCP>
+          <srv:connectPoint>
+            <gmd:CI_OnlineResource>
+              <gmd:linkage>
+                <gmd:URL>http://www.geo.irisnetlab.be/geonetwork/opensearch/fre/513cdac1-1588-41b8-a453-33820e012faf/OpenSearchDescription.xml</gmd:URL>
+              </gmd:linkage>
+            </gmd:CI_OnlineResource>
+          </srv:connectPoint>
+        </srv:SV_OperationMetadata>
+      </srv:containsOperations>
+      <srv:containsOperations>
+        <srv:SV_OperationMetadata>
+          <srv:operationName>
             <gco:CharacterString>GetServiceATOMFeed</gco:CharacterString>
           </srv:operationName>
           <srv:DCP>
@@ -305,7 +322,41 @@
           <srv:connectPoint>
             <gmd:CI_OnlineResource>
               <gmd:linkage>
-                <gmd:URL>http://www.geo.irisnetlab.be/geonetwork/opensearch/dut/513cdac1-1588-41b8-a453-33820e012faf/describe</gmd:URL>
+                <gmd:URL>http://www.geo.irisnetlab.be/geonetwork/opensearch/fre/513cdac1-1588-41b8-a453-33820e012faf/describe</gmd:URL>
+              </gmd:linkage>
+            </gmd:CI_OnlineResource>
+          </srv:connectPoint>
+        </srv:SV_OperationMetadata>
+      </srv:containsOperations>
+      <srv:containsOperations>
+        <srv:SV_OperationMetadata>
+          <srv:operationName>
+            <gco:CharacterString>DescribeSpatialDataset</gco:CharacterString>
+          </srv:operationName>
+          <srv:DCP>
+            <srv:DCPList codeList="http://www.isotc211.org/2005/iso19119/resources/codelist/gmxCodelists.xml#DCPList" codeListValue="WebServices"/>
+          </srv:DCP>
+          <srv:connectPoint>
+            <gmd:CI_OnlineResource>
+              <gmd:linkage>
+                <gmd:URL>http://www.geo.irisnetlab.be/geonetwork/opensearch/fre/describe?spatial_dataset_identifier_code={inspire_dls:spatial_dataset_identifier_code?}&amp;spatial_dataset_identifier_namespace={inspire_dls:spatial_dataset_identifier_namespace?}&amp;crs={inspire_dls:crs?}&amp;language={language?}&amp;q={searchTerms?}</gmd:URL>
+              </gmd:linkage>
+            </gmd:CI_OnlineResource>
+          </srv:connectPoint>
+        </srv:SV_OperationMetadata>
+      </srv:containsOperations>
+      <srv:containsOperations>
+        <srv:SV_OperationMetadata>
+          <srv:operationName>
+            <gco:CharacterString>GetSpatialDataset</gco:CharacterString>
+          </srv:operationName>
+          <srv:DCP>
+            <srv:DCPList codeList="http://www.isotc211.org/2005/iso19119/resources/codelist/gmxCodelists.xml#DCPList" codeListValue="WebServices"/>
+          </srv:DCP>
+          <srv:connectPoint>
+            <gmd:CI_OnlineResource>
+              <gmd:linkage>
+                <gmd:URL>http://www.geo.irisnetlab.be/geonetwork/opensearch/fre/download?spatial_dataset_identifier_code={inspire_dls:spatial_dataset_identifier_code?}&amp;spatial_dataset_identifier_namespace={inspire_dls:spatial_dataset_identifier_namespace?}&amp;crs={inspire_dls:crs?}&amp;language={language?}&amp;q={searchTerms?}</gmd:URL>
               </gmd:linkage>
             </gmd:CI_OnlineResource>
           </srv:connectPoint>
@@ -321,7 +372,21 @@
           <gmd:onLine>
             <gmd:CI_OnlineResource>
               <gmd:linkage>
-                <gmd:URL>http://www.geo.irisnet.be/geonetwork/opensearch/dut/513cdac1-1588-41b8-a453-33820e012faf/describe</gmd:URL>
+                <gmd:URL>http://www.geo.irisnetlab.be/geonetwork/opensearch/dut/513cdac1-1588-41b8-a453-33820e012faf/OpenSearchDescription.xml</gmd:URL>
+              </gmd:linkage>
+              <gmd:protocol>
+                <gco:CharacterString>download</gco:CharacterString>
+              </gmd:protocol>
+            </gmd:CI_OnlineResource>
+          </gmd:onLine>
+        </gmd:MD_DigitalTransferOptions>
+      </gmd:transferOptions>
+      <gmd:transferOptions>
+        <gmd:MD_DigitalTransferOptions>
+          <gmd:onLine>
+            <gmd:CI_OnlineResource>
+              <gmd:linkage>
+                <gmd:URL>http://www.geo.irisnetlab.be/geonetwork/opensearch/dut/513cdac1-1588-41b8-a453-33820e012faf/describe</gmd:URL>
               </gmd:linkage>
               <gmd:protocol>
                 <gco:CharacterString>download</gco:CharacterString>

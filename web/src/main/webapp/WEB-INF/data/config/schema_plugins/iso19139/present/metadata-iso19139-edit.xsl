@@ -2319,6 +2319,34 @@
     </xsl:apply-templates>
   </xsl:template>
   
+    <xsl:template mode="iso19139" match="srv:SV_OperationMetadata">
+        <xsl:param name="schema"/>
+        <xsl:param name="edit"/>
+				<xsl:if test="$edit=true()">
+				    <xsl:variable name="containsOperationsElementName" select="'srv:containsOperations'" />
+				    <xsl:variable name="followingContainsOperationsSiblingsCount" select="count(../following-sibling::*[name(.) = $containsOperationsElementName])" />
+			       	<xsl:if test="$followingContainsOperationsSiblingsCount=0">
+						<xsl:apply-templates mode="addElement" select="../../geonet:child[@name='containsOperations' and @prefix='srv']">
+				            <xsl:with-param name="schema" select="$schema"/>
+				            <xsl:with-param name="edit"   select="$edit"/>
+				            <xsl:with-param name="visible" select="true()"/>
+						</xsl:apply-templates>
+					</xsl:if>
+				</xsl:if>
+		        <xsl:apply-templates mode="elementEP" select="srv:operationName|geonet:child[string(@name)='operationName']">
+		            <xsl:with-param name="schema" select="$schema"/>
+		            <xsl:with-param name="edit"   select="$edit"/>
+		        </xsl:apply-templates>
+		        <xsl:apply-templates mode="elementEP" select="srv:DCP">
+		            <xsl:with-param name="schema" select="$schema"/>
+		            <xsl:with-param name="edit"   select="$edit"/>
+		        </xsl:apply-templates>
+ 		        <xsl:apply-templates mode="complexElement" select="srv:connectPoint">
+		            <xsl:with-param name="schema" select="$schema"/>
+		            <xsl:with-param name="edit"   select="$edit"/>
+		        </xsl:apply-templates>
+	</xsl:template>
+
     <xsl:template mode="iso19139" match="gmd:MD_DigitalTransferOptions">
         <xsl:param name="schema"/>
         <xsl:param name="edit"/>

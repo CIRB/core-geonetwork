@@ -31,6 +31,9 @@
 						<xsl:value-of select="."/><br/>
                 	</xsl:for-each>
                 </xsl:when>
+                <xsl:when test="count(/root/response/exceptions/exception)=0">
+                	<b>No records found to modify</b><br/>
+                </xsl:when>
                 <xsl:otherwise>
                   <xsl:variable name="errors" select="count(/root/response/exceptions/exception)"/>
                   <br/>

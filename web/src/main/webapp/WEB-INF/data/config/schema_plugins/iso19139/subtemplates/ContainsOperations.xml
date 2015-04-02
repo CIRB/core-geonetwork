@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<srv:containsOperations xmlns:srv="http://www.isotc211.org/2005/srv" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco">
+	<srv:SV_OperationMetadata>
+		<srv:operationName>
+			<gco:CharacterString/>
+		</srv:operationName>
+		<srv:DCP>
+			<srv:DCPList codeList="http://www.isotc211.org/2005/iso19119/resources/codelist/gmxCodelists.xml#DCPList" codeListValue="WebServices"/>
+		</srv:DCP>
+		<srv:connectPoint>
+			<gmd:CI_OnlineResource>
+				<gmd:linkage>
+					<gmd:URL/>
+				</gmd:linkage>
+			</gmd:CI_OnlineResource>
+		</srv:connectPoint>
+	</srv:SV_OperationMetadata>
+</srv:containsOperations>
+

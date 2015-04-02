@@ -89,6 +89,30 @@ public class Get implements Service {
     		int iPos = root.indexOf(";");
     		if (iPos>-1) {
         		title = root.substring(iPos+1);
+        		root = root.substring(0,iPos);
+        		if (title.startsWith("OperationName")) {
+        			Element processEl = new Element(Params.PROCESS);
+        			params.addContent(processEl);
+        		    String operationName = "";
+        		    int iPos2 = title.indexOf(":");
+        		    if (iPos2 > -1) {
+        		    	operationName = title.substring(iPos2+1);
+        		    	title = title.substring(0,iPos2);
+        		    }
+        		    if (root.equals("gmd:transferOptions")) {
+            			processEl.setText("gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage/gmd:URL" + SEPARATOR +
+            					getUrl(context, uuid, operationName));
+        		    } else if (root.equals("srv:coupledResource")) {
+            			processEl.setText("srv:SV_CoupledResource/srv:operationName/gco:CharacterString" + SEPARATOR + operationName);
+	    		    } else if (root.equals("srv:containsOperations")) {
+	        			processEl.setText("srv:SV_OperationMetadata/srv:operationName/gco:CharacterString" + SEPARATOR + operationName);
+	        			processEl = new Element(Params.PROCESS);
+	        			params.addContent(processEl);
+	        			processEl.setText("srv:SV_OperationMetadata/srv:connectPoint/gmd:CI_OnlineResource/gmd:linkage/gmd:URL" + SEPARATOR +
+            					getUrl(context, uuid, operationName));
+	    		    } 
+        		}
+/*
         		if (title.startsWith("AtomServiceFeed")) {
         			Element processEl = new Element(Params.PROCESS);
         			params.addContent(processEl);
@@ -116,6 +140,7 @@ public class Get implements Service {
         			processEl.setText("srv:SV_CoupledResource/srv:operationName/gco:CharacterString" + SEPARATOR + operationName);
         		}
         		root = root.substring(0,iPos);
+*/
     		}
         	param = params.getChild(Params.CHILD);
         	if (param!=null) {
@@ -186,4 +211,23 @@ public class Get implements Service {
         
         return tpl;
     }
+
+	private String getUrl(ServiceContext context, String uuid, String operationName) {
+		String url = "";
+		GeonetContext gc = (GeonetContext) context.getHandlerContext(Geonet.CONTEXT_NAME);
+		DataManager     dm = gc.getDataManager();
+		if (operationName.equals("GetOpenSearchDescription")) {
+			url = "/opensearch/" + context.getLanguage() + "/" + uuid + "/OpenSearchDescription.xml";
+		} else if (operationName.equals("GetServiceATOMFeed") || operationName.equals("GetDatasetATOMFeed")) {
+			url = "/opensearch/" + context.getLanguage() + "/" + uuid + "/describe";
+		} else if (operationName.equals("DescribeSpatialDataset")) {
+			url = "/opensearch/" + context.getLanguage() + "/describe?spatial_dataset_identifier_code={inspire_dls:spatial_dataset_identifier_code?}&spatial_dataset_identifier_namespace={inspire_dls:spatial_dataset_identifier_namespace?}&crs={inspire_dls:crs?}&language={language?}&q={searchTerms?}";
+		} else if (operationName.equals("GetSpatialDataset")) {
+			url = "/opensearch/" + context.getLanguage() + "/download?spatial_dataset_identifier_code={inspire_dls:spatial_dataset_identifier_code?}&spatial_dataset_identifier_namespace={inspire_dls:spatial_dataset_identifier_namespace?}&crs={inspire_dls:crs?}&language={language?}&q={searchTerms?}";
+		}
+		if (url.length()>0) {
+			url = dm.getSiteUrl() + context.getBaseUrl() + url;
+		}
+		return url;
+	}
 }

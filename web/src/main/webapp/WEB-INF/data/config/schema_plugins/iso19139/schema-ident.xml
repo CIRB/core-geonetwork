@@ -8,9 +8,11 @@
 		<elements type="root">
 			<gmd:MD_Metadata/>
 			<gmd:transferOptions/>
+			<gmd:distributionFormat/>
 			<gmd:MD_DigitalTransferOptions/>
 			<gmd:onLine/>
 			<srv:coupledResource xmlns:srv="http://www.isotc211.org/2005/srv" />
+			<srv:containsOperations xmlns:srv="http://www.isotc211.org/2005/srv" />
 		</elements>
 	</autodetect>
 </schema>

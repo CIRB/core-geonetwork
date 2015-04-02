@@ -824,7 +824,8 @@ function validateNonEmpty(input){
  * input - {Object} Form element
  */
 function validateEmail(input){
-    if (!Ext.form.VTypes.email(input.value)) {
+	var email = /^(\w+)([-+.][\w]+)*@(\w[-\w]*\.){1,5}([A-Za-z])+$/;
+    if (!email.test(input.value)) {
         Ext.get(input).addClass('error');
         return false;
     } else {

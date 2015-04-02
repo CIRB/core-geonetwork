@@ -14,8 +14,7 @@
 					<gmd:URL />
 				</gmd:linkage>
 				<gmd:protocol>
-					<gco:CharacterString>WWW:DOWNLOAD-1.0-http--download
-					</gco:CharacterString>
+					<gco:CharacterString>WWW:DOWNLOAD-1.0-http--download</gco:CharacterString>
 				</gmd:protocol>
 				<gmd:applicationProfile>
 					<gco:CharacterString>INSPIRE-Download-Atom</gco:CharacterString>

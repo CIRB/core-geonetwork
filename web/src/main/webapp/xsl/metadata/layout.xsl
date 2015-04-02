@@ -2135,16 +2135,61 @@
 			<xsl:variable name="options">
 				<options>
 				    <xsl:choose>
+				    
+						<xsl:when test="$name='srv:containsOperations'">
+							<xsl:if test="$isService=true()">
+								<option name="srv:containsOperations;OperationName:GetOpenSearchDescription"><xsl:attribute name="selected">selected</xsl:attribute>GetOpenSearchDescription</option>
+								<option name="srv:containsOperations;OperationName:GetServiceATOMFeed">GetServiceATOMFeed</option>
+								<option name="srv:containsOperations;OperationName:DescribeSpatialDataset">DescribeSpatialDataset</option>
+								<option name="srv:containsOperations;OperationName:GetSpatialDataset">GetSpatialDataset</option>
+								<option name="srv:containsOperations;OperationName:GetCapabilities">GetCapabilities</option>
+								<option name="srv:containsOperations;OperationName:GetMap">GetMap</option>
+								<option name="srv:containsOperations;OperationName:GetFeatureInfo">GetFeatureInfo</option>
+								<option name="srv:containsOperations;OperationName:GetFeature">GetFeature</option>
+								<option name="srv:containsOperations;OperationName:DescribeFeatureType">DescribeFeatureType</option>
+								<option name="srv:containsOperations;OperationName:GetGmlObject">GetGmlObject</option>
+							</xsl:if>
+						</xsl:when>
 						<xsl:when test="$name='srv:coupledResource'">
 							<xsl:if test="$isService=true()">
-								<option name="srv:coupledResource;ATOMOperation:GetServiceATOMFeed"><xsl:attribute name="selected">selected</xsl:attribute>GetServiceATOMFeed operation</option>
-								<option name="srv:coupledResource;ATOMOperation:GetDatasetATOMFeed">GetDatasetATOMFeed operation</option>
+								<option name="srv:coupledResource;OperationName:GetOpenSearchDescription"><xsl:attribute name="selected">selected</xsl:attribute>GetOpenSearchDescription</option>
+								<option name="srv:coupledResource;OperationName:GetServiceATOMFeed">GetServiceATOMFeed</option>
+								<option name="srv:coupledResource;OperationName:DescribeSpatialDataset">DescribeSpatialDataset</option>
+								<option name="srv:coupledResource;OperationName:GetSpatialDataset">GetSpatialDataset</option>
+								<option name="srv:coupledResource;OperationName:GetCapabilities">GetCapabilities</option>
+								<option name="srv:coupledResource;OperationName:GetMap">GetMap</option>
+								<option name="srv:coupledResource;OperationName:GetFeatureInfo">GetFeatureInfo</option>
+								<option name="srv:coupledResource;OperationName:GetFeature">GetFeature</option>
+								<option name="srv:coupledResource;OperationName:DescribeFeatureType">DescribeFeatureType</option>
+								<option name="srv:coupledResource;OperationName:GetGmlObject">GetGmlObject</option>
 							</xsl:if>
 						</xsl:when>
 						<xsl:when test="$name='gmd:transferOptions'">
 							<xsl:if test="$isService=true()">
-								<option name="gmd:transferOptions;AtomServiceFeed:OpenSearchDescription.xml"><xsl:attribute name="selected">selected</xsl:attribute>OpenSearch Description</option>
-								<option name="gmd:transferOptions;AtomServiceFeed:describe">OpenSearch Describe</option>
+								<option name="gmd:transferOptions;OperationName:GetOpenSearchDescription"><xsl:attribute name="selected">selected</xsl:attribute>GetOpenSearchDescription</option>
+								<option name="gmd:transferOptions;OperationName:GetServiceATOMFeed">GetServiceATOMFeed</option>
+								<option name="gmd:transferOptions;OperationName:DescribeSpatialDataset">DescribeSpatialDataset</option>
+								<option name="gmd:transferOptions;OperationName:GetSpatialDataset">GetSpatialDataset</option>
+<!--
+								<option name="gmd:transferOptions;OperationName:GetCapabilities">GetCapabilities</option>
+								<option name="gmd:transferOptions;OperationName:GetMap">GetMap</option>
+								<option name="gmd:transferOptions;OperationName:GetFeatureInfo">GetFeatureInfo</option>
+								<option name="gmd:transferOptions;OperationName:GetFeature">GetFeature</option>
+								<option name="gmd:transferOptions;OperationName:DescribeFeatureType">DescribeFeatureType</option>
+								<option name="gmd:transferOptions;OperationName:GetGmlObject">GetGmlObject</option>
+-->
+							</xsl:if>
+							<xsl:if test="$isService=false()">
+								<option name="gmd:transferOptions;OperationName:GetDatasetATOMFeed"><xsl:attribute name="selected">selected</xsl:attribute>GetDatasetATOMFeed</option>
+								<option name="gmd:transferOptions;OperationName:DescribeSpatialDataset">DescribeSpatialDataset</option>
+								<option name="gmd:transferOptions;OperationName:GetSpatialDataset">GetSpatialDataset</option>
+<!--
+								<option name="gmd:transferOptions;OperationName:GetMap">GetMap</option>
+								<option name="gmd:transferOptions;OperationName:GetFeatureInfo">GetFeatureInfo</option>
+								<option name="gmd:transferOptions;OperationName:GetFeature">GetFeature</option>
+								<option name="gmd:transferOptions;OperationName:DescribeFeatureType">DescribeFeatureType</option>
+								<option name="gmd:transferOptions;OperationName:GetGmlObject">GetGmlObject</option>
+-->
 							</xsl:if>
 						</xsl:when>
 						<xsl:otherwise>
