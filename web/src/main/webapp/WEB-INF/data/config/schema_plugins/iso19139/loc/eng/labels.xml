@@ -822,7 +822,7 @@
         <label>Delivery point</label>
         <description>Address line for the location (as described in ISO 11180, annex A)</description>
 		<helper rel="gmd:postalCode">
-			<option value="80 boîte 1 rue du Progrès" title="1035">80 boîte 1 rue du Progrès (Bruxelles Développement Urbain / Brussel Stedelijke Ontwikkeling)</option>
+			<option value="80 boîte 1 rue du Progrès" title="1035">80 boîte 1 rue du Progrès (Bruxelles Développement urbain / Brussel Stedelijke Ontwikkeling)</option>
 			<option value="2-4 rue Royale" title="1000">2-4 rue Royale (ADT / ATO)</option>
 			<option value="100 Gulledelle" title="1200">100 Gulledelle (Bruxelles Environnement / Leefmilieu Brussel)</option>
 			<option value="80 boîte 1 rue du Progrès" title="1035">80 boîte 1 rue du Progrès (Bruxelles Mobilité / Mobiel Brussel)</option>
@@ -1616,7 +1616,7 @@
         <description>Name of the responsible organization</description>
         <condition>conditional</condition>
         <helper>
-            <option value="Bruxelles Développement Urbain / Brussel Stedelijke Ontwikkeling">Bruxelles Développement Urbain / Brussel Stedelijke Ontwikkeling</option>    
+            <option value="Bruxelles Développement urbain / Brussel Stedelijke Ontwikkeling">Bruxelles Développement urbain / Brussel Stedelijke Ontwikkeling</option>    
             <option value="ADT / ATO">ADT / ATO</option>    
             <option value="Bruxelles Mobilité / Mobiel Brussel">Bruxelles Mobilité / Mobiel Brussel</option>    
             <option value="Bruxelles Environnement / Leefmilieu Brussel">Bruxelles Environnement / Leefmilieu Brussel</option>    
@@ -1651,9 +1651,9 @@
             resource</description>
         <condition>conditional</condition>
 	    <helper>
-			<option lang="FRE" value="Pas de restriction d’accès public selon INSPIRE.">Pas de restriction d’accès public selon INSPIRE.</option>
-			<option lang="ENG" value="No public access constraints by INSPIRE.">No public access constraints by INSPIRE.</option>
-			<option lang="DUT" value="Geen publieke toegangsrestricties volgens INSPIRE.">Geen publieke toegangsrestricties volgens INSPIRE.</option>
+			<option lang="FRE" value="Pas de restrictions d’accès public selon INSPIRE.">Pas de restrictions d’accès public selon INSPIRE</option>
+			<option lang="ENG" value="No public access constraints by INSPIRE.">No public access constraints by INSPIRE</option>
+			<option lang="DUT" value="Geen publieke toegangsrestricties volgens INSPIRE.">Geen publieke toegangsrestricties volgens INSPIRE</option>
 	    </helper>
     </element>
     <element name="gmd:page" id="406.0">
@@ -2089,6 +2089,11 @@
         <label>Use limitation</label>
         <description>Limitation affecting the fitness for use of the resource. Example, _not to be
             used for navigation_</description>
+	    <helper>
+			<option lang="FRE" value="Aucune condition ne s’applique. Utilisation libre sous réserve de mentionner la source et la date de la dernière mise à jour.">Aucune condition ne s’applique</option>
+			<option lang="ENG" value="No condition applies. Free use under the condition that the source and the latest revision date are mentioned.">No condition applies</option>
+			<option lang="DUT" value="Geen voorwaarde van toepassing. Vrij gebruik onder voorbehoud van vermelding van de bron en de datum van de laatste wijziging.">Geen voorwaarde van toepassing</option>
+	    </helper>
     </element>
     <element name="gmd:userContactInfo" id="66.0">
         <label>User contact info</label>

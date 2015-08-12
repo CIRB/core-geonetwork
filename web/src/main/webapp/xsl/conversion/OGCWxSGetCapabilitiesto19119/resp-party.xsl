@@ -189,7 +189,7 @@
 			<xsl:when test="$organisationName='Bruxelles Environnement-IBGE' or $organisationName='Brussels Hoofdstedelijk Gewest-BIM'">Bruxelles Environnement / Leefmilieu Brussel</xsl:when>
 			<xsl:when test="$organisationName='STIB/MIVB' or $organisationName='STIB' or $organisationName='MIVB'">STIB / MIVB</xsl:when>
 			<xsl:when test="$organisationName='DGSEI - RN, Monitoring des quartiers - IBSA' or $organisationName='ADSEI - Rijksregister, Wijkmonitoring - BISA'">IBSA / BISA</xsl:when>
-			<xsl:when test="$organisationName='BruGIS team - DAF - BDU'">Bruxelles Développement Urbain / Brussel Stedelijke Ontwikkeling</xsl:when>
+			<xsl:when test="$organisationName='BruGIS team - DAF - BDU'">Bruxelles Développement urbain / Brussel Stedelijke Ontwikkeling</xsl:when>
 			<xsl:otherwise><xsl:value-of select="$organisationName"/></xsl:otherwise>
 		</xsl:choose>	
 	</xsl:template>

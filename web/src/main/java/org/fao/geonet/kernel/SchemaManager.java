@@ -1531,9 +1531,9 @@ public class SchemaManager {
 
 							if (isMatchingElementInMetadata(kid, md, false)) {
 								match = true;
+								break;
 							} else {
 								match = false;
-								break;
 							}
 						// --- try and find the kid in the md (kid + value)
 						} else if (mode==MODE_NEEDLEWITHVALUE) {

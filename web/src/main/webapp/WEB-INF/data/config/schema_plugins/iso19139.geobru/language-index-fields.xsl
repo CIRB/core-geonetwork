@@ -252,7 +252,7 @@
 			<!--  Fields use to search on Service -->
 			<xsl:for-each select="srv:serviceType/gco:LocalName">
 				<Field name="serviceType" string="{string(.)}" store="true" index="true"/>
-				<Field name="type" string="service-{string(.)}" store="true" index="true"/>
+<!-- 				<Field name="type" string="service-{string(.)}" store="true" index="true"/>-->
 			</xsl:for-each>
 			<xsl:for-each select="srv:serviceTypeVersion/gco:CharacterString">
 				<Field name="serviceTypeVersion" string="{string(.)}" store="true" index="true"/>
@@ -320,6 +320,11 @@
 			<xsl:otherwise>
 				<Field name="type" string="dataset" store="true" index="true"/>
 			</xsl:otherwise>
+		</xsl:choose>
+	    <xsl:choose>
+	     <xsl:when test="gmd:identificationInfo/srv:SV_ServiceIdentification">
+	     	<Field name="type" string="service" store="false" index="true"/>
+	     </xsl:when>
 		</xsl:choose>
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 		<xsl:for-each select="gmd:hierarchyLevelName//gmd:LocalisedCharacterString[@locale=$pound2LangId or @locale=$pound3LangId]">

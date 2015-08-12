@@ -1,0 +1,202 @@
+<!DOCTYPE html SYSTEM "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>GeoNetwork</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<!--    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />-->
+	<meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1"/>
+    <link rel="stylesheet" type="text/css" href="../js/ext/resources/css/ext-all.css"/>
+    <link rel="stylesheet" type="text/css" href="../js/ext/resources/css/xtheme-gray.css"/>
+    <link rel="stylesheet" type="text/css" href="../js/ext-ux/Rating/rating.css"/>
+    <link rel="stylesheet" type="text/css" href="../js/ext-ux/SuperBoxSelect/superboxselect.css" />
+    <link rel="stylesheet" type="text/css" href="../js/ext-ux/LightBox/lightbox.css"/>
+    <link rel="stylesheet" type="text/css" href="../js/ext-ux/FileUploadField/file-upload.css"/>
+    <link rel="stylesheet" type="text/css" href="../js/ext-ux/MultiselectItemSelector-3.0/Multiselect.css"/>
+    <script type="text/javascript" src="../js/ext/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="../js/ext/ext-all.js"></script>
+	<script type="text/javascript">
+	Ext.onReady(function() {
+	var navHandler = function(direction){
+		var activeItem   = card.layout.activeItem;
+		var index        = card.items.indexOf(activeItem);
+		var numItems     = card.items.getCount();
+		var newIndex = index + direction;
+		if (newIndex >= 0 && newIndex <= numItems - 1) {
+			card.layout.setActiveItem(newIndex);
+		}
+		var prevId = 'move-prev';
+		var nextId = 'move-next';
+		switch (newIndex) {
+			case 0:
+				Ext.getCmp(prevId).setDisabled(true);
+				Ext.getCmp(nextId).setDisabled(false);
+				break;
+			case numItems - 1:		  
+				Ext.getCmp(prevId).setDisabled(false);
+				Ext.getCmp(nextId).setDisabled(true);
+				break;
+			default:
+				Ext.getCmp(prevId).setDisabled(false);
+				Ext.getCmp(nextId).setDisabled(false);
+				break;
+		}
+		card.setTitle("Wizard: Step " + (newIndex + 1) + " of " + numItems);
+	};
+
+	var card = new Ext.Panel({
+	    title: 'Wizard: Step 1 of 3',
+	    layout:'card',
+	    applyTo: 'wizard',
+	    activeItem: 0, // make sure the active item is set on the container config!
+	    bodyStyle: 'padding:15px',
+	    defaults: {
+	        // applied to each contained panel
+	        border:false
+	    },
+	    // just an example of one possible navigation scheme, using buttons
+	    bbar: [
+	        {
+	            id: 'move-prev',
+	            text: 'Back',
+	            handler: navHandler.createDelegate(this, [-1]),
+	            disabled: true
+	        },
+	        '->', // greedy spacer so that the buttons are aligned to each side
+	        {
+	            id: 'move-next',
+	            text: 'Next',
+	            handler: navHandler.createDelegate(this, [1])
+	        }
+	    ],
+	    // the panels (or "cards") within the layout
+	    items: [{
+	        id: 'card-0',
+	        html: '<div id="xml-form"></div>'
+	    },{
+	        id: 'card-1',
+	        html: '<p>Step 2 of 3</p>'
+	    },{
+	        id: 'card-2',
+	        html: '<p>Step 3 of 3</p>'
+	    }]
+	});
+
+	Ext.QuickTips.init();
+
+	// turn on validation errors beside the field globally
+	Ext.form.Field.prototype.msgTarget = 'side';
+
+	var fs = new Ext.FormPanel({
+	    frame: true,
+	    title:'XML Form',
+	    labelAlign: 'right',
+	    labelWidth: 85,
+	    width:340,
+	    waitMsgTarget: true,
+
+	    // configure how to read the XML Data
+	    reader : new Ext.data.XmlReader({
+	        record : 'Capability/Layer',
+	        success: '@success'
+	    }, [
+	        {name: 'layerName', mapping:'Name'}, // custom mapping
+	        {name: 'layerTitle', mapping:'Title'},
+	        {name: 'layerAbstract', mapping:'Abstract'},
+	        {name: 'creationDate', type:'date', dateFormat:'m/d/Y'} // custom data types
+	    ]),
+
+	    // reusable eror reader class defined at the end of this file
+//	    errorReader: new Ext.form.XmlErrorReader(),
+
+	    items: [
+	        new Ext.form.FieldSet({
+	            title: 'Contact Information',
+	            autoHeight: true,
+	            defaultType: 'textfield',
+	            items: [{
+	                    fieldLabel: 'Layer name',
+	                    emptyText: 'Type name',
+	                    name: 'layerName',
+	                    width:190
+	                }, {
+	                    fieldLabel: 'Layer title',
+	                    emptyText: 'Type title',
+	                    name: 'layerTitle',
+	                    width:190
+	                }, {
+	                    fieldLabel: 'Layer abstract',
+	                    name: 'layerAbstract',
+	                    width:190
+	                },
+
+	                new Ext.form.ComboBox({
+	                    fieldLabel: 'CRS',
+	                    hiddenName:'state',
+	                    store: new Ext.data.ArrayStore({
+	                        fields: ['abbr', 'state'],
+	                        //data : Ext.exampledata.states // from states.js
+	                    }),
+	                    valueField:'abbr',
+	                    displayField:'state',
+	                    typeAhead: true,
+	                    mode: 'local',
+	                    triggerAction: 'all',
+	                    emptyText:'Select a state...',
+	                    selectOnFocus:true,
+	                    width:190
+	                }),
+
+	                new Ext.form.DateField({
+	                    fieldLabel: 'Date of creation',
+	                    name: 'dateOfCreation',
+	                    width:190,
+	                    allowBlank:false
+	                })
+	            ]
+	        })
+	    ]
+	});
+
+	// simple button add
+	fs.addButton('Load', function(){
+	    fs.getForm().load({url:'STIB-MIVB.xml', waitMsg:'Loading'});
+	});
+
+	// explicit add
+	var submit = fs.addButton({
+	    text: 'Submit',
+	    disabled:true,
+	    handler: function(){
+	        fs.getForm().submit({url:'xml-errors.xml', waitMsg:'Saving Data...', submitEmptyText: false});
+	    }
+	});
+
+	fs.render('xml-form');
+
+	fs.on({
+	    actioncomplete: function(form, action){
+	        if(action.type == 'load'){
+	            submit.enable();
+	        }
+	    }
+	});
+
+	// A reusable error reader class for XML forms
+	Ext.form.XmlErrorReader = function(){
+	    Ext.form.XmlErrorReader.superclass.constructor.call(this, {
+	            record : 'field',
+	            success: '@success'
+	        }, [
+	            'id', 'msg'
+	        ]
+	    );
+	};
+	Ext.extend(Ext.form.XmlErrorReader, Ext.data.XmlReader);
+	});
+	</script>
+</head>
+<body>
+	<div id="wizard"></div>
+</body>
+</html>

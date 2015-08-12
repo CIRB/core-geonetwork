@@ -1413,7 +1413,7 @@
     <help>Nom de la rue</help>
     <condition/>
 		<helper rel="gmd:postalCode">
-			<option value="80 boîte 1 rue du Progrès" title="1035">80 boîte 1 rue du Progrès (Bruxelles Développement Urbain / Brussel Stedelijke Ontwikkeling)</option>
+			<option value="80 boîte 1 rue du Progrès" title="1035">80 boîte 1 rue du Progrès (Bruxelles Développement urbain / Brussel Stedelijke Ontwikkeling)</option>
 			<option value="2-4 rue Royale" title="1000">2-4 rue Royale (ADT / ATO)</option>
 			<option value="100 Gulledelle" title="1200">100 Gulledelle (Bruxelles Environnement / Leefmilieu Brussel)</option>
 			<option value="80 boîte 1 rue du Progrès" title="1035">80 boîte 1 rue du Progrès (Bruxelles Mobilité / Mobiel Brussel)</option>
@@ -2635,7 +2635,7 @@
     <help>Nom de l'organisation responsable, s'il s'agit d'une personne isolée ou nom de l'organisation au sein de laquelle cette personne est employée. Ces informations sont du type PT_FreeText et sont gérées dans la classe du même nom.</help>
     <condition>Condition</condition>
         <helper>
-            <option value="Bruxelles Développement Urbain / Brussel Stedelijke Ontwikkeling">Bruxelles Développement Urbain / Brussel Stedelijke Ontwikkeling</option>    
+            <option value="Bruxelles Développement urbain / Brussel Stedelijke Ontwikkeling">Bruxelles Développement urbain / Brussel Stedelijke Ontwikkeling</option>    
             <option value="ADT / ATO">ADT / ATO</option>    
             <option value="Bruxelles Mobilité / Mobiel Brussel">Bruxelles Mobilité / Mobiel Brussel</option>    
             <option value="Bruxelles Environnement / Leefmilieu Brussel">Bruxelles Environnement / Leefmilieu Brussel</option>    
@@ -2677,9 +2677,9 @@
     <help>Autres restrictions et conditions préalables de nature juridique concernant l'accès et l'utilisation de la ressource ou des métadonnées. Ce champ doit être complété dès lors que l'un des deux champs précédents (accessConstraints, useConstraints) porte la mention "Autres restrictions".</help>
     <condition>Condition</condition>
     <helper>
-		<option lang="FRE" value="Pas de restriction d’accès public selon INSPIRE.">Pas de restriction d’accès public selon INSPIRE.</option>
-		<option lang="ENG" value="No public access constraints by INSPIRE.">No public access constraints by INSPIRE.</option>
-		<option lang="DUT" value="Geen publieke toegangsrestricties volgens INSPIRE.">Geen publieke toegangsrestricties volgens INSPIRE.</option>
+		<option lang="FRE" value="Pas de restrictions d’accès public selon INSPIRE.">Pas de restrictions d’accès public selon INSPIRE</option>
+		<option lang="ENG" value="No public access constraints by INSPIRE.">No public access constraints by INSPIRE</option>
+		<option lang="DUT" value="Geen publieke toegangsrestricties volgens INSPIRE.">Geen publieke toegangsrestricties volgens INSPIRE</option>
 <!--
       <option value="L124-4-I-1 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.a)">L124-4-I-1 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.a)</option>
       <option value="L124-5-II-1 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.b)">L124-5-II-1 du code de l’environnement (Directive 2007/2/CE (INSPIRE), Article 13.1.b)</option>
@@ -3546,8 +3546,9 @@
     ]]></help>
     <condition/>
     <helper>
-      <option value="Aucune condition ne s’applique">Aucune condition ne s’applique</option>
-      <option value="Conditions inconnues">Conditions inconnues</option>
+		<option lang="FRE" value="Aucune condition ne s’applique. Utilisation libre sous réserve de mentionner la source et la date de la dernière mise à jour.">Aucune condition ne s’applique</option>
+		<option lang="ENG" value="No condition applies. Free use under the condition that the source and the latest revision date are mentioned.">No condition applies</option>
+		<option lang="DUT" value="Geen voorwaarde van toepassing. Vrij gebruik onder voorbehoud van vermelding van de bron en de datum van de laatste wijziging.">Geen voorwaarde van toepassing</option>
     </helper>
   </element>
   <element name="gmd:userContactInfo" id="66.0">

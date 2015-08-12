@@ -49,6 +49,12 @@
 			<xsl:with-param name="fileIdentifier" select="$fileIdentifier"/>
 			<xsl:with-param name="rel">self</xsl:with-param>
 		</xsl:call-template>
+		<xsl:for-each select="gmd:identificationInfo/srv:SV_ServiceIdentification/srv:containsOperations/srv:SV_OperationMetadata[srv:operationName/gco:CharacterString='GetCapabilities']">
+			<xsl:variable name="capabalitiesURL" select="normalize-space(srv:connectPoint/gmd:CI_OnlineResource/gmd:linkage/gmd:URL)"/>
+			<xsl:if test="$capabalitiesURL!=''">
+				<atom:link href="{$capabalitiesURL}" rel="related" type="application/xml" title="Service implementing Direct Access operations"/>
+			</xsl:if>
+		</xsl:for-each>
        	<atom:link rel="search" type="application/opensearchdescription+xml">
        		<xsl:attribute name="title"><xsl:call-template name="translated-description"><xsl:with-param name="lang" select="$guiLang"/><xsl:with-param name="type" select="1"/></xsl:call-template><xsl:text> </xsl:text><xsl:value-of select="$title"/></xsl:attribute>
        		<xsl:attribute name="href" select="concat($baseUrl,'/opensearch/',$guiLang,'/',$fileIdentifier,'/OpenSearchDescription.xml')"/>

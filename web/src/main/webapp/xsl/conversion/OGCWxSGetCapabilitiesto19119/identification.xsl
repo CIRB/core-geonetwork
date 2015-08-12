@@ -1093,7 +1093,7 @@
 					<xsl:choose>
 						<xsl:when test="$accessConstraintLang='dut'">Geen publieke toegangsrestricties volgens INSPIRE.</xsl:when>
 						<xsl:when test="$accessConstraintLang='eng'">No public access constraints by INSPIRE.</xsl:when>
-						<xsl:otherwise>Pas de restriction d’accès public selon INSPIRE.</xsl:otherwise>
+						<xsl:otherwise>Pas de restrictions d’accès public selon INSPIRE.</xsl:otherwise>
 					</xsl:choose>
 				</xsl:if>
 			</xsl:otherwise>
