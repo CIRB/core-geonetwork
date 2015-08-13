@@ -14,7 +14,6 @@ xsi:schemaLocation="http://geonetwork-opensource.org/schemas/schema-ident http:/
 	<autodetect>
 <!--	   <namespaces xmlns:geobru="http://geobru.irisnet.be"/>-->
 		<elements type="search">
-            <geobru:BXL_Address xmlns:geobru="http://www.geo.irisnet.be"/>
             <geobru:BXL_Address xmlns:geobru="http://geobru.irisnet.be"/>
 <!--
             <geobru:BXL_Distribution />

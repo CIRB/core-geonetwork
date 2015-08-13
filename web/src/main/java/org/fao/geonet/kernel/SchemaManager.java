@@ -1736,7 +1736,7 @@ public class SchemaManager {
 				// if document has srv namespace then add srv schemaLocation
 				if (md.getNamespace("srv") != null) {
 					if (md.getNamespace("geobru") != null) {
-						schemaLocation = "http://www.isotc211.org/2005/gmx http://schemas.opengis.net/iso/19139/20060504/gmx/gmx.xsd http://www.isotc211.org/2005/srv http://schemas.opengis.net/iso/19139/20060504/srv/srv.xsd http://geobru.irisnet.be " + contextUrl + "/schemas/19139.geobru/20150109/geobru/geobruServices.xsd";					
+						schemaLocation = "http://www.isotc211.org/2005/gmx http://schemas.opengis.net/iso/19139/20060504/gmx/gmx.xsd http://www.isotc211.org/2005/srv http://schemas.opengis.net/iso/19139/20060504/srv/srv.xsd " + Csw.NAMESPACE_GEOBRU.getURI() + " " + contextUrl + "/schemas/19139.geobru/20150109/geobru/geobruServices.xsd";					
 					} else {
 						schemaLocation = "http://www.isotc211.org/2005/gmx http://schemas.opengis.net/iso/19139/20060504/gmx/gmx.xsd http://www.isotc211.org/2005/srv http://schemas.opengis.net/iso/19139/20060504/srv/srv.xsd";					
 					}
@@ -1746,7 +1746,7 @@ public class SchemaManager {
 				// partially the same schema types)
 				else {
 					if (md.getNamespace("geobru") != null) {
-						schemaLocation = "http://www.isotc211.org/2005/gmx http://schemas.opengis.net/iso/19139/20060504/gmx/gmx.xsd http://geobru.irisnet.be " + contextUrl + "/schemas/19139.geobru/20150109/geobru/geobru.xsd";					
+						schemaLocation = "http://www.isotc211.org/2005/gmx http://schemas.opengis.net/iso/19139/20060504/gmx/gmx.xsd " + Csw.NAMESPACE_GEOBRU.getURI() + " " + contextUrl + "/schemas/19139.geobru/20150109/geobru/geobru.xsd";					
 					} else {
 						schemaLocation = "http://www.isotc211.org/2005/gmx http://www.isotc211.org/2005/gmx/gmx.xsd http://www.isotc211.org/2005/gmd http://www.isotc211.org/2005/gmd/gmd.xsd";
 					}
@@ -1761,13 +1761,13 @@ public class SchemaManager {
 				md.removeAttribute(existingSchemaLocation);
 				if (md.getNamespace("srv") != null) {
 					if (md.getNamespace("geobru") != null) {
-						schemaLocation = "http://www.isotc211.org/2005/gmx http://schemas.opengis.net/iso/19139/20060504/gmx/gmx.xsd http://www.isotc211.org/2005/srv http://schemas.opengis.net/iso/19139/20060504/srv/srv.xsd http://geobru.irisnet.be " + contextUrl + "/schemas/19139.geobru/20150109/geobru/geobruServices.xsd";					
+						schemaLocation = "http://www.isotc211.org/2005/gmx http://schemas.opengis.net/iso/19139/20060504/gmx/gmx.xsd http://www.isotc211.org/2005/srv http://schemas.opengis.net/iso/19139/20060504/srv/srv.xsd " + Csw.NAMESPACE_GEOBRU.getURI() + " " + contextUrl + "/schemas/19139.geobru/20150109/geobru/geobruServices.xsd";					
 					} else {
 						schemaLocation = "http://www.isotc211.org/2005/gmx http://schemas.opengis.net/iso/19139/20060504/gmx/gmx.xsd http://www.isotc211.org/2005/srv http://schemas.opengis.net/iso/19139/20060504/srv/srv.xsd";					
 					}
 				} else {
 					if (md.getNamespace("geobru") != null) {
-						schemaLocation = "http://www.isotc211.org/2005/gmx http://schemas.opengis.net/iso/19139/20060504/gmx/gmx.xsd http://geobru.irisnet.be " + contextUrl + "/schemas/19139.geobru/20150109/geobru/geobru.xsd";					
+						schemaLocation = "http://www.isotc211.org/2005/gmx http://schemas.opengis.net/iso/19139/20060504/gmx/gmx.xsd " + Csw.NAMESPACE_GEOBRU.getURI() + " " + contextUrl + "/schemas/19139.geobru/20150109/geobru/geobru.xsd";					
 					} else {
 						schemaLocation = "http://www.isotc211.org/2005/gmx http://www.isotc211.org/2005/gmx/gmx.xsd http://www.isotc211.org/2005/gmd http://www.isotc211.org/2005/gmd/gmd.xsd";
 					}
@@ -1777,9 +1777,9 @@ public class SchemaManager {
 				md.removeAttribute(existingSchemaLocation);
 				if (md.getNamespace("srv") != null) {
 					md.setAttribute(new Attribute("schemaLocation", "http://www.isotc211.org/2005/gmx http://schemas.opengis.net/iso/19139/20060504/gmx/gmx.xsd " + schemaLocation, Csw.NAMESPACE_XSI));
-					schemaLocation = "http://www.isotc211.org/2005/gmx http://schemas.opengis.net/iso/19139/20060504/gmx/gmx.xsd http://www.isotc211.org/2005/srv http://schemas.opengis.net/iso/19139/20060504/srv/srv.xsd http://geobru.irisnet.be " + contextUrl + "/schemas/19139.geobru/20150109/geobru/geobruServices.xsd";					
+					schemaLocation = "http://www.isotc211.org/2005/gmx http://schemas.opengis.net/iso/19139/20060504/gmx/gmx.xsd http://www.isotc211.org/2005/srv http://schemas.opengis.net/iso/19139/20060504/srv/srv.xsd " + Csw.NAMESPACE_GEOBRU.getURI() + " " + contextUrl + "/schemas/19139.geobru/20150109/geobru/geobruServices.xsd";					
 				} else {
-					schemaLocation = "http://www.isotc211.org/2005/gmx http://schemas.opengis.net/iso/19139/20060504/gmx/gmx.xsd http://geobru.irisnet.be " + contextUrl + "/schemas/19139.geobru/20150109/geobru/geobru.xsd";					
+					schemaLocation = "http://www.isotc211.org/2005/gmx http://schemas.opengis.net/iso/19139/20060504/gmx/gmx.xsd " + Csw.NAMESPACE_GEOBRU.getURI() + " " + contextUrl + "/schemas/19139.geobru/20150109/geobru/geobru.xsd";					
 				}
 				md.setAttribute(new Attribute("schemaLocation", schemaLocation, Csw.NAMESPACE_XSI));
 			}
