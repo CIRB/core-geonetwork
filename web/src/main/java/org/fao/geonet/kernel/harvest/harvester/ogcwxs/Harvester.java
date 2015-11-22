@@ -676,12 +676,12 @@ class Harvester
 						log.warning("===MetadataUrl for layer " + reg.name + " contains " + searchString + " in url, must be srv/eng/csw?Request=GetRecordById&Service=CSW&Version=2.0.2&elementSetName=full&outputSchema=http://www.isotc211.org/2005/gmd&id and is replaced automaticly");
 					}
 					searchString = "geonetwork.geobru.irisnet";
-					if (mdXml.indexOf("searchString")>-1) {
+					if (mdXml.indexOf(searchString)>-1) {
 						mdXml = mdXml.replaceAll(searchString, "www.geo.irisnet");
 						log.warning("===MetadataUrl for layer " + reg.name + " contains " + searchString + " in url, must be www.geo.irisnet and is replaced automaticly");
 					}
 					searchString = "geobru.irisnet";
-					if (mdXml.indexOf("searchString")>-1) {
+					if (mdXml.indexOf(searchString)>-1) {
 						mdXml = mdXml.replaceAll(searchString, "www.geo.irisnet");
 						log.warning("===MetadataUrl for layer " + reg.name + " contains " + searchString + " in url, must be www.geo.irisnet and is replaced automaticly");
 					}
@@ -859,7 +859,7 @@ class Harvester
 		    if (bIsWMS) {
 		    	mdUrl = XPath.newInstance ("./" + dummyNsPrefix + "MetadataURL[(@type='TC211' or @type='FGDC' or @type='ISO19115:2005' or @type='ISO19115:2003') and " + dummyNsPrefix + "Format='" + format + "']/" + dummyNsPrefix + "OnlineResource");
 		    } else if (bIsWFS) {
-		    	mdUrl = XPath.newInstance ("./" + dummyNsPrefix + "MetadataURL[(@type='TC211' or @type='FGDC' or @type='19115' or @type='19139') and " + dummyNsPrefix + "Format='" + format + "']");
+		    	mdUrl = XPath.newInstance ("./" + dummyNsPrefix + "MetadataURL[(@type='TC211' or @type='FGDC' or @type='19115' or @type='19139') and @format='" + format + "']");
 		    }
 		    if (addNsPrefix) mdUrl.addNamespace("x", layer.getNamespace().getURI());
 		    onLineSrc = (Element) mdUrl.selectSingleNode (layer);

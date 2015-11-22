@@ -314,31 +314,6 @@
 																			   count(//ows11:Operation[@name='GetGmlObject']) +
 																			   count(//wfs:GetGmlObject) +
 																			   count(//GetGmlObject)" />
-							<xsl:variable name="urls">
-								<xsl:choose>
-									<xsl:when test="$ows='true'">
-										<xsl:value-of
-											select="//ows:Operation[@name='GetCapabilities']/ows:DCP/ows:HTTP/ows:Get/@xlink:href|//ows11:Operation[@name='GetCapabilities']/ows11:DCP/ows11:HTTP/ows11:Get/@xlink:href" />
-									</xsl:when>
-									<xsl:when test="name(.)='WMS_Capabilities'">
-										<xsl:value-of
-											select="//wms:GetCapabilities/wms:DCPType/wms:HTTP/wms:Get/wms:OnlineResource/@xlink:href" />
-									</xsl:when>
-									<xsl:when test="name(.)='WFS_Capabilities'">
-										<xsl:value-of
-											select="//wfs:GetCapabilities/wfs:DCPType/wfs:HTTP/wfs:Get/@onlineResource" />
-									</xsl:when>
-									<xsl:when test="name(.)='WMT_MS_Capabilities'">
-										<xsl:value-of
-											select="//GetCapabilities/DCPType/HTTP/Get/OnlineResource[1]/@xlink:href" />
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:value-of
-											select="//wcs:GetCapabilities//wcs:OnlineResource[1]/@xlink:href" />
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:variable>
-							<xsl:variable name="url"><xsl:value-of select="normalize-space($urls[1])" /><xsl:if test="not(contains($urls[1],'?'))">?</xsl:if></xsl:variable>
 							<xsl:variable name="service">
 								<xsl:choose>
 									<xsl:when test="$ogctype='WMTS1.0.0'">WMTS</xsl:when>
@@ -358,61 +333,77 @@
 									<xsl:otherwise>1.0.0</xsl:otherwise>
 								</xsl:choose>
 							</xsl:variable>
-                        	<xsl:call-template name="get-onlines">
-								<xsl:with-param name="ows" select="$ows"/>
-								<xsl:with-param name="url" select="$url"/>
-								<xsl:with-param name="service" select="$service"/>
-                        	</xsl:call-template>
-							<xsl:if test="$url!='?'">
-								<xsl:if test="$GetCapabilities>0">
+							<xsl:if test="$GetCapabilities>0">
+								<xsl:variable name="getCapabilitiesUrl"><xsl:call-template name="get-online-url-by-operation"><xsl:with-param name="operationName">GetCapabilities</xsl:with-param><xsl:with-param name="ows" select="$ows"/></xsl:call-template></xsl:variable>						   
+								<xsl:if test="$getCapabilitiesUrl!='?'">
 		                        	<xsl:call-template name="get-onlines">
 										<xsl:with-param name="ows" select="$ows"/>
-										<xsl:with-param name="url" select="$url"/>
+										<xsl:with-param name="url" select="$getCapabilitiesUrl"/>
+										<xsl:with-param name="service" select="$service"/>
+		                        	</xsl:call-template>
+		                        	<xsl:call-template name="get-onlines">
+										<xsl:with-param name="ows" select="$ows"/>
+										<xsl:with-param name="url" select="$getCapabilitiesUrl"/>
 										<xsl:with-param name="service" select="$service"/>
 										<xsl:with-param name="version" select="$version"/>
 										<xsl:with-param name="request" select="'GetCapabilities'"/>
 		                        	</xsl:call-template>
-								</xsl:if>
-								<xsl:if test="$GetMap>0">
+	                        	</xsl:if>
+							</xsl:if>
+							<xsl:if test="$GetMap>0">
+								<xsl:variable name="getMapUrl"><xsl:call-template name="get-online-url-by-operation"><xsl:with-param name="operationName">GetMap</xsl:with-param><xsl:with-param name="ows" select="$ows"/></xsl:call-template></xsl:variable>						   
+								<xsl:if test="$getMapUrl!='?'">
 		                        	<xsl:call-template name="get-onlines">
 										<xsl:with-param name="ows" select="$ows"/>
-										<xsl:with-param name="url" select="$url"/>
+										<xsl:with-param name="url" select="$getMapUrl"/>
 										<xsl:with-param name="service" select="$service"/>
 										<xsl:with-param name="version" select="$version"/>
 										<xsl:with-param name="request" select="'GetMap'"/>
 		                        	</xsl:call-template>
 								</xsl:if>
-								<xsl:if test="$GetFeatureInfo>0">
+							</xsl:if>
+							<xsl:if test="$GetFeatureInfo>0">
+								<xsl:variable name="getFeatureInfoUrl"><xsl:call-template name="get-online-url-by-operation"><xsl:with-param name="operationName">GetFeatureInfo</xsl:with-param><xsl:with-param name="ows" select="$ows"/></xsl:call-template></xsl:variable>						   
+								<xsl:if test="$getFeatureInfoUrl!='?'">
 		                        	<xsl:call-template name="get-onlines">
 										<xsl:with-param name="ows" select="$ows"/>
-										<xsl:with-param name="url" select="$url"/>
+										<xsl:with-param name="url" select="$getFeatureInfoUrl"/>
 										<xsl:with-param name="service" select="$service"/>
 										<xsl:with-param name="version" select="$version"/>
 										<xsl:with-param name="request" select="'GetFeatureInfo'"/>
 		                        	</xsl:call-template>
 								</xsl:if>
-								<xsl:if test="$DescribeFeatureType>0">
+							</xsl:if>
+							<xsl:if test="$DescribeFeatureType>0">
+								<xsl:variable name="describeFeatureTypeUrl"><xsl:call-template name="get-online-url-by-operation"><xsl:with-param name="operationName">DescribeFeatureType</xsl:with-param><xsl:with-param name="ows" select="$ows"/></xsl:call-template></xsl:variable>						   
+								<xsl:if test="$describeFeatureTypeUrl!='?'">
 		                        	<xsl:call-template name="get-onlines">
 										<xsl:with-param name="ows" select="$ows"/>
-										<xsl:with-param name="url" select="$url"/>
+										<xsl:with-param name="url" select="$describeFeatureTypeUrl"/>
 										<xsl:with-param name="service" select="$service"/>
 										<xsl:with-param name="version" select="$version"/>
 										<xsl:with-param name="request" select="'DescribeFeatureType'"/>
 		                        	</xsl:call-template>
 								</xsl:if>
-								<xsl:if test="$GetFeature>0">
+							</xsl:if>
+							<xsl:if test="$GetFeature>0">
+								<xsl:variable name="getFeatureUrl"><xsl:call-template name="get-online-url-by-operation"><xsl:with-param name="operationName">GetFeature</xsl:with-param><xsl:with-param name="ows" select="$ows"/></xsl:call-template></xsl:variable>						   
+								<xsl:if test="$getFeatureUrl!='?'">
 		                        	<xsl:call-template name="get-onlines">
 										<xsl:with-param name="ows" select="$ows"/>
-										<xsl:with-param name="url" select="$url"/>
+										<xsl:with-param name="url" select="$getFeatureUrl"/>
 										<xsl:with-param name="service" select="$service"/>
 										<xsl:with-param name="version" select="$version"/>
 										<xsl:with-param name="request" select="'GetFeature'"/>
 		                        	</xsl:call-template>
 								</xsl:if>
-								<xsl:if test="$GetGmlObject>0">
+							</xsl:if>
+							<xsl:if test="$GetGmlObject>0">
+								<xsl:variable name="getGmlObjectUrl"><xsl:call-template name="get-online-url-by-operation"><xsl:with-param name="operationName">GetGmlObject</xsl:with-param><xsl:with-param name="ows" select="$ows"/></xsl:call-template></xsl:variable>						   
+								<xsl:if test="$getGmlObjectUrl!='?'">
 		                        	<xsl:call-template name="get-onlines">
 										<xsl:with-param name="ows" select="$ows"/>
-										<xsl:with-param name="url" select="$url"/>
+										<xsl:with-param name="url" select="$getGmlObjectUrl"/>
 										<xsl:with-param name="service" select="$service"/>
 										<xsl:with-param name="version" select="$version"/>
 										<xsl:with-param name="request" select="'GetGmlObject'"/>
@@ -520,13 +511,114 @@
 		</MD_Metadata>
 	</xsl:template>
 
+	<xsl:template name="get-online-url-by-operation">
+		<xsl:param name="operationName">GetCapabilities</xsl:param>
+		<xsl:param name="ows"/>
+		<xsl:variable name="urls">
+			<xsl:choose>
+				<xsl:when test="$ows='true'">
+					<xsl:value-of
+						select="//ows:Operation[@name=$operationName]/ows:DCP/ows:HTTP/ows:Get/@xlink:href|//ows11:Operation[@name=$operationName]/ows11:DCP/ows11:HTTP/ows11:Get/@xlink:href" />
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:choose>
+						<xsl:when test="$operationName='GetCapabilities'">
+							<xsl:choose>
+								<xsl:when test="name(.)='WMS_Capabilities'">
+									<xsl:value-of
+										select="//wms:GetCapabilities/wms:DCPType/wms:HTTP/wms:Get/wms:OnlineResource/@xlink:href" />
+								</xsl:when>
+								<xsl:when test="name(.)='WFS_Capabilities'">
+									<xsl:value-of
+										select="//wfs:GetCapabilities/wfs:DCPType/wfs:HTTP/wfs:Get/@onlineResource" />
+								</xsl:when>
+								<xsl:when test="name(.)='WMT_MS_Capabilities'">
+									<xsl:value-of
+										select="//GetCapabilities/DCPType/HTTP/Get/OnlineResource[1]/@xlink:href" />
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of
+										select="//wcs:GetCapabilities//wcs:OnlineResource[1]/@xlink:href" />
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:when>
+						<xsl:when test="$operationName='GetMap'">
+							<xsl:choose>
+								<xsl:when test="name(.)='WMS_Capabilities'">
+									<xsl:value-of
+										select="//wms:GetMap/wms:DCPType/wms:HTTP/wms:Get/wms:OnlineResource/@xlink:href" />
+								</xsl:when>
+								<xsl:when test="name(.)='WMT_MS_Capabilities'">
+									<xsl:value-of
+										select="//GetMap/DCPType/HTTP/Get/OnlineResource[1]/@xlink:href" />
+								</xsl:when>
+								<xsl:otherwise/>
+							</xsl:choose>
+						</xsl:when>
+						<xsl:when test="$operationName='GetFeatureInfo'">
+							<xsl:choose>
+								<xsl:when test="name(.)='WMS_Capabilities'">
+									<xsl:value-of
+										select="//wms:GetFeatureInfo/wms:DCPType/wms:HTTP/wms:Get/wms:OnlineResource/@xlink:href" />
+								</xsl:when>
+								<xsl:when test="name(.)='WMT_MS_Capabilities'">
+									<xsl:value-of
+										select="//GetFeatureInfo/DCPType/HTTP/Get/OnlineResource[1]/@xlink:href" />
+								</xsl:when>
+								<xsl:otherwise/>
+							</xsl:choose>
+						</xsl:when>
+						<xsl:when test="$operationName='DescribeFeatureType'">
+							<xsl:choose>
+								<xsl:when test="name(.)='WFS_Capabilities'">
+									<xsl:value-of
+										select="//wfs:DescribeFeatureType/wfs:DCPType/wfs:HTTP/wfs:Get/wfs:OnlineResource/@xlink:href" />
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of
+										select="//DescribeFeatureType/DCPType/HTTP/Get/OnlineResource[1]/@xlink:href" />
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:when>
+						<xsl:when test="$operationName='GetFeature'">
+							<xsl:choose>
+								<xsl:when test="name(.)='WFS_Capabilities'">
+									<xsl:value-of
+										select="//wfs:GetFeature/wfs:DCPType/wfs:HTTP/wfs:Get/wfs:OnlineResource/@xlink:href" />
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of
+										select="//GetFeature/DCPType/HTTP/Get/OnlineResource[1]/@xlink:href" />
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:when>
+						<xsl:when test="$operationName='GetGmlObject'">
+							<xsl:choose>
+								<xsl:when test="name(.)='WFS_Capabilities'">
+									<xsl:value-of
+										select="//wfs:GetGmlObject/wfs:DCPType/wfs:HTTP/wfs:Get/wfs:OnlineResource/@xlink:href" />
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of
+										select="//GetGmlObject/DCPType/HTTP/Get/OnlineResource[1]/@xlink:href" />
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:when>
+						<xsl:otherwise/>
+					</xsl:choose>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:value-of select="normalize-space($urls[1])" /><xsl:if test="not(contains($urls[1],'?'))">?</xsl:if>
+	</xsl:template>
+	
 	<xsl:template name="get-onlines">
 		<xsl:param name="ows"/>
 		<xsl:param name="url"/>
 		<xsl:param name="service"/>
 		<xsl:param name="version"/>
 		<xsl:param name="request"/>
-		<xsl:variable name="linkage"><xsl:choose><xsl:when test="$request!=''"><xsl:value-of select="concat($url,'service=',$service,'&amp;version=',$version,'&amp;request=',$request)" /></xsl:when><xsl:otherwise><xsl:value-of select="$url"/></xsl:otherwise></xsl:choose></xsl:variable>
+		<xsl:variable name="linkage"><xsl:choose><xsl:when test="$request!=''"><xsl:value-of select="$url"/><xsl:if test="not(contains(lower-case($url),'service='))">service=<xsl:value-of select="$service"/>&amp;</xsl:if><xsl:if test="not(contains(lower-case($url),'version='))">version=<xsl:value-of select="$version"/>&amp;</xsl:if><xsl:if test="not(contains(lower-case($url),'request='))">request=<xsl:value-of select="$request"/></xsl:if></xsl:when><xsl:otherwise><xsl:value-of select="$url"/></xsl:otherwise></xsl:choose></xsl:variable>
 		<onLine>
 			<CI_OnlineResource>
 				<linkage>
