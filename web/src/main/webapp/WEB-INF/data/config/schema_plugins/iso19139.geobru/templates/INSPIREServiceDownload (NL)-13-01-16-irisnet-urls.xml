@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gmd:MD_Metadata xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:geobru="http://geobru.irisnet.be" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gml="http://www.opengis.net/gml" xmlns:srv="http://www.isotc211.org/2005/srv" xmlns:geonet="http://www.fao.org/geonetwork" xsi:schemaLocation="http://geobru.irisnet.be schema.xsd">
+  <gmd:fileIdentifier>
+    <gco:CharacterString>513cdac1-1588-41b8-a453-33820e012faf</gco:CharacterString>
+  </gmd:fileIdentifier>
+  <gmd:language>
+    <gmd:LanguageCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#gmd:LanguageCode" codeListValue="dut" />
+  </gmd:language>
+  <gmd:parentIdentifier gco:nilReason="missing">
+    <gco:CharacterString />
+  </gmd:parentIdentifier>
+  <gmd:hierarchyLevel>
+    <gmd:MD_ScopeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_ScopeCode" codeListValue="service" />
+  </gmd:hierarchyLevel>
+  <gmd:hierarchyLevelName>
+    <gco:CharacterString>Service</gco:CharacterString>
+  </gmd:hierarchyLevelName>
+  <gmd:contact>
+    <gmd:CI_ResponsibleParty>
+      <gmd:individualName>
+        <gco:CharacterString>Naam van een contactpersoon voor de metagegevens</gco:CharacterString>
+      </gmd:individualName>
+      <gmd:organisationName gco:nilReason="missing">
+        <gco:CharacterString />
+      </gmd:organisationName>
+      <gmd:positionName>
+        <gco:CharacterString>Rol van de persoon</gco:CharacterString>
+      </gmd:positionName>
+      <gmd:contactInfo>
+        <gmd:CI_Contact>
+          <gmd:phone>
+            <gmd:CI_Telephone>
+              <gmd:voice>
+                <gco:CharacterString>Telefoonnummer van de verantwoordelijke voor de metagegevens</gco:CharacterString>
+              </gmd:voice>
+              <gmd:facsimile>
+                <gco:CharacterString>Faxnummer van de verantwoordelijke voor de metagegevens</gco:CharacterString>
+              </gmd:facsimile>
+            </gmd:CI_Telephone>
+          </gmd:phone>
+          <gmd:address>
+            <geobru:BXL_Address gco:isoType="CI_Address_Type">
+              <gmd:deliveryPoint>
+                <gco:CharacterString>Postadres (straat, postcode, stad, land)  van de verantwoordelijke voor de metagegevens - straat, huisnummer</gco:CharacterString>
+              </gmd:deliveryPoint>
+              <gmd:city>
+                <gco:CharacterString>Brussel</gco:CharacterString>
+              </gmd:city>
+              <gmd:postalCode>
+                <gco:CharacterString>Postadres - verantwoordelijke metagegevens - postcode</gco:CharacterString>
+              </gmd:postalCode>
+              <gmd:country>
+                <gco:CharacterString>Postadres - verantwoordelijke metagegevens - land</gco:CharacterString>
+              </gmd:country>
+              <gmd:electronicMailAddress>
+                <gco:CharacterString>E-mailadres van de verantwoordelijke organisatie voor de metagegevens</gco:CharacterString>
+              </gmd:electronicMailAddress>
+              <geobru:individualElectronicMailAddress>
+                <gco:CharacterString>E-mailadres van de contactpersoon van verantwoordelijke voor de metagegevens</gco:CharacterString>
+              </geobru:individualElectronicMailAddress>
+            </geobru:BXL_Address>
+          </gmd:address>
+        </gmd:CI_Contact>
+      </gmd:contactInfo>
+      <gmd:role>
+        <gmd:CI_RoleCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_RoleCode" codeListValue="pointOfContact" />
+      </gmd:role>
+    </gmd:CI_ResponsibleParty>
+  </gmd:contact>
+  <gmd:dateStamp>
+    <gco:DateTime>2015-01-07T23:45:46</gco:DateTime>
+  </gmd:dateStamp>
+  <gmd:locale>
+    <gmd:PT_Locale id="FRE">
+      <gmd:languageCode>
+        <gmd:LanguageCode codeList="" codeListValue="fre" />
+      </gmd:languageCode>
+      <gmd:characterEncoding />
+    </gmd:PT_Locale>
+  </gmd:locale>
+  <gmd:locale>
+    <gmd:PT_Locale id="ENG">
+      <gmd:languageCode>
+        <gmd:LanguageCode codeList="" codeListValue="eng" />
+      </gmd:languageCode>
+      <gmd:characterEncoding />
+    </gmd:PT_Locale>
+  </gmd:locale>
+  <gmd:referenceSystemInfo>
+    <gmd:MD_ReferenceSystem>
+      <gmd:referenceSystemIdentifier>
+        <gmd:RS_Identifier>
+          <gmd:code>
+            <gco:CharacterString>31370</gco:CharacterString>
+          </gmd:code>
+          <gmd:codeSpace>
+            <gco:CharacterString>EPSG</gco:CharacterString>
+          </gmd:codeSpace>
+        </gmd:RS_Identifier>
+      </gmd:referenceSystemIdentifier>
+    </gmd:MD_ReferenceSystem>
+  </gmd:referenceSystemInfo>
+  <gmd:identificationInfo>
+    <srv:SV_ServiceIdentification>
+      <gmd:citation>
+        <gmd:CI_Citation>
+          <gmd:title xsi:type="gmd:PT_FreeText_PropertyType">
+            <gco:CharacterString>INSPIRE Download Service (NL) - 13-01-2016</gco:CharacterString>
+          </gmd:title>
+          <gmd:date>
+            <gmd:CI_Date>
+              <gmd:date>
+                <gco:Date>2010-06-01</gco:Date>
+              </gmd:date>
+              <gmd:dateType>
+                <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="creation" />
+              </gmd:dateType>
+            </gmd:CI_Date>
+          </gmd:date>
+          <gmd:date>
+            <gmd:CI_Date>
+              <gmd:date>
+                <gco:Date>2010-07-01</gco:Date>
+              </gmd:date>
+              <gmd:dateType>
+                <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="revision" />
+              </gmd:dateType>
+            </gmd:CI_Date>
+          </gmd:date>
+          <gmd:date>
+            <gmd:CI_Date>
+              <gmd:date>
+                <gco:Date>2010-07-02</gco:Date>
+              </gmd:date>
+              <gmd:dateType>
+                <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication" />
+              </gmd:dateType>
+            </gmd:CI_Date>
+          </gmd:date>
+          <gmd:identifier>
+            <gmd:RS_Identifier>
+              <gmd:code>
+                <gco:CharacterString>cf940794-a232-4a91-8fa4-74665fb6e732</gco:CharacterString>
+              </gmd:code>
+              <gmd:codeSpace gco:nilReason="missing">
+                <gco:CharacterString />
+              </gmd:codeSpace>
+            </gmd:RS_Identifier>
+          </gmd:identifier>
+        </gmd:CI_Citation>
+      </gmd:citation>
+      <gmd:abstract>
+        <gco:CharacterString>Samenvatting van de bron</gco:CharacterString>
+      </gmd:abstract>
+      <gmd:pointOfContact>
+        <gmd:CI_ResponsibleParty>
+          <gmd:individualName>
+            <gco:CharacterString>Naam van een contactpersoon</gco:CharacterString>
+          </gmd:individualName>
+          <gmd:organisationName gco:nilReason="missing">
+            <gco:CharacterString />
+          </gmd:organisationName>
+          <gmd:positionName>
+            <gco:CharacterString>Rol van de persoon</gco:CharacterString>
+          </gmd:positionName>
+          <gmd:contactInfo>
+            <gmd:CI_Contact>
+              <gmd:phone>
+                <gmd:CI_Telephone>
+                  <gmd:voice>
+                    <gco:CharacterString>Telefoonnummer</gco:CharacterString>
+                  </gmd:voice>
+                  <gmd:facsimile>
+                    <gco:CharacterString>Faxnummer</gco:CharacterString>
+                  </gmd:facsimile>
+                </gmd:CI_Telephone>
+              </gmd:phone>
+              <gmd:address>
+                <geobru:BXL_Address gco:isoType="CI_Address_Type">
+                  <gmd:deliveryPoint>
+                    <gco:CharacterString>Postadres (straatnaam,/Nummer)</gco:CharacterString>
+                  </gmd:deliveryPoint>
+                  <gmd:city>
+                    <gco:CharacterString>Brussel</gco:CharacterString>
+                  </gmd:city>
+                  <gmd:postalCode>
+                    <gco:CharacterString>Postadres - Postcode</gco:CharacterString>
+                  </gmd:postalCode>
+                  <gmd:country>
+                    <gco:CharacterString>Postadres - Land</gco:CharacterString>
+                  </gmd:country>
+                  <gmd:electronicMailAddress>
+                    <gco:CharacterString>E-mailadres van de organisatie</gco:CharacterString>
+                  </gmd:electronicMailAddress>
+                  <geobru:individualElectronicMailAddress>
+                    <gco:CharacterString>E-mailadres van de contactpersoon</gco:CharacterString>
+                  </geobru:individualElectronicMailAddress>
+                </geobru:BXL_Address>
+              </gmd:address>
+            </gmd:CI_Contact>
+          </gmd:contactInfo>
+          <gmd:role>
+            <gmd:CI_RoleCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_RoleCode" codeListValue="custodian" />
+          </gmd:role>
+        </gmd:CI_ResponsibleParty>
+      </gmd:pointOfContact>
+      <gmd:resourceMaintenance>
+        <gmd:MD_MaintenanceInformation>
+          <gmd:maintenanceAndUpdateFrequency>
+            <gmd:MD_MaintenanceFrequencyCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_MaintenanceFrequencyCode" codeListValue="monthly" />
+          </gmd:maintenanceAndUpdateFrequency>
+        </gmd:MD_MaintenanceInformation>
+      </gmd:resourceMaintenance>
+      <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:keyword>
+            <gco:CharacterString>infoFeatureAccessService</gco:CharacterString>
+          </gmd:keyword>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+      <gmd:resourceConstraints>
+        <gmd:MD_Constraints>
+          <gmd:useLimitation xsi:type="gmd:PT_FreeText_PropertyType">
+            <gco:CharacterString>Geen voorwaarde van toepassing. Vrij gebruik onder voorbehoud van vermelding van de bron en de datum van de laatste wijziging.</gco:CharacterString>
+            <gmd:PT_FreeText>
+              <gmd:textGroup>
+                <gmd:LocalisedCharacterString locale="#FRE">Aucune condition ne s’applique. Utilisation libre sous réserve de mentionner la source et la date de la dernière mise à jour.</gmd:LocalisedCharacterString>
+              </gmd:textGroup>
+              <gmd:textGroup>
+                <gmd:LocalisedCharacterString locale="#ENG">No condition applies. Free use under the condition that the source and the latest revision date are mentioned.</gmd:LocalisedCharacterString>
+              </gmd:textGroup>
+            </gmd:PT_FreeText>
+          </gmd:useLimitation>
+        </gmd:MD_Constraints>
+      </gmd:resourceConstraints>
+      <gmd:resourceConstraints>
+        <gmd:MD_LegalConstraints>
+          <gmd:accessConstraints>
+            <gmd:MD_RestrictionCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_RestrictionCode" codeListValue="otherRestrictions" />
+          </gmd:accessConstraints>
+          <gmd:otherConstraints xsi:type="gmd:PT_FreeText_PropertyType">
+            <gco:CharacterString>Geen publieke toegangsrestricties volgens INSPIRE.</gco:CharacterString>
+            <gmd:PT_FreeText>
+              <gmd:textGroup>
+                <gmd:LocalisedCharacterString locale="#FRE">Pas de restrictions d’accès public selon INSPIRE.</gmd:LocalisedCharacterString>
+              </gmd:textGroup>
+              <gmd:textGroup>
+                <gmd:LocalisedCharacterString locale="#ENG">No public access constraints by INSPIRE.</gmd:LocalisedCharacterString>
+              </gmd:textGroup>
+            </gmd:PT_FreeText>
+          </gmd:otherConstraints>
+        </gmd:MD_LegalConstraints>
+      </gmd:resourceConstraints>
+      <srv:serviceType>
+        <gco:LocalName>download</gco:LocalName>
+      </srv:serviceType>
+      <srv:serviceTypeVersion>
+        <gco:CharacterString>INSPIRE ATOM V3.1</gco:CharacterString>
+      </srv:serviceTypeVersion>
+      <srv:extent>
+        <gmd:EX_Extent>
+          <gmd:geographicElement>
+            <gmd:EX_GeographicBoundingBox>
+              <gmd:westBoundLongitude>
+                <gco:Decimal>3.98</gco:Decimal>
+              </gmd:westBoundLongitude>
+              <gmd:eastBoundLongitude>
+                <gco:Decimal>4.77</gco:Decimal>
+              </gmd:eastBoundLongitude>
+              <gmd:southBoundLatitude>
+                <gco:Decimal>50.65</gco:Decimal>
+              </gmd:southBoundLatitude>
+              <gmd:northBoundLatitude>
+                <gco:Decimal>51.07</gco:Decimal>
+              </gmd:northBoundLatitude>
+            </gmd:EX_GeographicBoundingBox>
+          </gmd:geographicElement>
+        </gmd:EX_Extent>
+      </srv:extent>
+      <srv:extent>
+        <gmd:EX_Extent>
+          <gmd:temporalElement>
+            <gmd:EX_TemporalExtent>
+              <gmd:extent>
+                <gml:TimePeriod gml:id="T1">
+                  <gml:beginPosition />
+                  <gml:endPosition />
+                </gml:TimePeriod>
+              </gmd:extent>
+            </gmd:EX_TemporalExtent>
+          </gmd:temporalElement>
+        </gmd:EX_Extent>
+      </srv:extent>
+      <srv:coupledResource>
+        <srv:SV_CoupledResource>
+          <srv:operationName>
+            <gco:CharacterString />
+          </srv:operationName>
+          <srv:identifier>
+            <gco:CharacterString />
+          </srv:identifier>
+          <gco:ScopedName />
+        </srv:SV_CoupledResource>
+      </srv:coupledResource>
+      <srv:couplingType>
+        <srv:SV_CouplingType codeList="http://www.isotc211.org/2005/iso19119/resources/codelist/gmxCodelists.xml#SV_CouplingType" codeListValue="tight" />
+      </srv:couplingType>
+      <srv:containsOperations>
+        <srv:SV_OperationMetadata>
+          <srv:operationName>
+            <gco:CharacterString>GetOpenSearchDescription</gco:CharacterString>
+          </srv:operationName>
+          <srv:DCP>
+            <srv:DCPList codeList="http://www.isotc211.org/2005/iso19119/resources/codelist/gmxCodelists.xml#DCPList" codeListValue="WebServices" />
+          </srv:DCP>
+          <srv:connectPoint>
+            <gmd:CI_OnlineResource>
+              <gmd:linkage>
+                <gmd:URL>http://www.geo.irisnet.be/geonetwork/opensearch/fre/513cdac1-1588-41b8-a453-33820e012faf/OpenSearchDescription.xml</gmd:URL>
+              </gmd:linkage>
+            </gmd:CI_OnlineResource>
+          </srv:connectPoint>
+        </srv:SV_OperationMetadata>
+      </srv:containsOperations>
+      <srv:containsOperations>
+        <srv:SV_OperationMetadata>
+          <srv:operationName>
+            <gco:CharacterString>GetServiceATOMFeed</gco:CharacterString>
+          </srv:operationName>
+          <srv:DCP>
+            <srv:DCPList codeList="http://www.isotc211.org/2005/iso19119/resources/codelist/gmxCodelists.xml#DCPList" codeListValue="WebServices" />
+          </srv:DCP>
+          <srv:connectPoint>
+            <gmd:CI_OnlineResource>
+              <gmd:linkage>
+                <gmd:URL>http://www.geo.irisnet.be/geonetwork/opensearch/fre/513cdac1-1588-41b8-a453-33820e012faf/describe</gmd:URL>
+              </gmd:linkage>
+            </gmd:CI_OnlineResource>
+          </srv:connectPoint>
+        </srv:SV_OperationMetadata>
+      </srv:containsOperations>
+      <srv:containsOperations>
+        <srv:SV_OperationMetadata>
+          <srv:operationName>
+            <gco:CharacterString>DescribeSpatialDataset</gco:CharacterString>
+          </srv:operationName>
+          <srv:DCP>
+            <srv:DCPList codeList="http://www.isotc211.org/2005/iso19119/resources/codelist/gmxCodelists.xml#DCPList" codeListValue="WebServices" />
+          </srv:DCP>
+          <srv:connectPoint>
+            <gmd:CI_OnlineResource>
+              <gmd:linkage>
+                <gmd:URL>http://www.geo.irisnet.be/geonetwork/opensearch/fre/describe?spatial_dataset_identifier_code={inspire_dls:spatial_dataset_identifier_code?}&amp;spatial_dataset_identifier_namespace={inspire_dls:spatial_dataset_identifier_namespace?}&amp;crs={inspire_dls:crs?}&amp;language={language?}&amp;q={searchTerms?}</gmd:URL>
+              </gmd:linkage>
+            </gmd:CI_OnlineResource>
+          </srv:connectPoint>
+        </srv:SV_OperationMetadata>
+      </srv:containsOperations>
+      <srv:containsOperations>
+        <srv:SV_OperationMetadata>
+          <srv:operationName>
+            <gco:CharacterString>GetSpatialDataset</gco:CharacterString>
+          </srv:operationName>
+          <srv:DCP>
+            <srv:DCPList codeList="http://www.isotc211.org/2005/iso19119/resources/codelist/gmxCodelists.xml#DCPList" codeListValue="WebServices" />
+          </srv:DCP>
+          <srv:connectPoint>
+            <gmd:CI_OnlineResource>
+              <gmd:linkage>
+                <gmd:URL>http://www.geo.irisnet.be/geonetwork/opensearch/fre/download?spatial_dataset_identifier_code={inspire_dls:spatial_dataset_identifier_code?}&amp;spatial_dataset_identifier_namespace={inspire_dls:spatial_dataset_identifier_namespace?}&amp;crs={inspire_dls:crs?}&amp;language={language?}&amp;q={searchTerms?}</gmd:URL>
+              </gmd:linkage>
+            </gmd:CI_OnlineResource>
+          </srv:connectPoint>
+        </srv:SV_OperationMetadata>
+      </srv:containsOperations>
+      <srv:containsOperations>
+        <srv:SV_OperationMetadata>
+          <srv:operationName>
+            <gco:CharacterString>GetCapabilities</gco:CharacterString>
+          </srv:operationName>
+          <srv:DCP>
+            <srv:DCPList codeList="http://www.isotc211.org/2005/iso19119/resources/codelist/gmxCodelists.xml#DCPList" codeListValue="WebServices" />
+          </srv:DCP>
+          <srv:connectPoint>
+            <gmd:CI_OnlineResource>
+              <gmd:linkage>
+                <gmd:URL></gmd:URL>
+              </gmd:linkage>
+            </gmd:CI_OnlineResource>
+          </srv:connectPoint>
+        </srv:SV_OperationMetadata>
+      </srv:containsOperations>
+      <srv:operatesOn uuidref="" xlink:href="" />
+    </srv:SV_ServiceIdentification>
+  </gmd:identificationInfo>
+  <gmd:distributionInfo>
+    <gmd:MD_Distribution>
+      <gmd:transferOptions>
+        <gmd:MD_DigitalTransferOptions>
+          <gmd:onLine>
+            <gmd:CI_OnlineResource>
+              <gmd:linkage>
+                <gmd:URL>http://www.geo.irisnet.be/geonetwork/opensearch/dut/513cdac1-1588-41b8-a453-33820e012faf/OpenSearchDescription.xml</gmd:URL>
+              </gmd:linkage>
+              <gmd:protocol>
+                <gco:CharacterString>download</gco:CharacterString>
+              </gmd:protocol>
+            </gmd:CI_OnlineResource>
+          </gmd:onLine>
+        </gmd:MD_DigitalTransferOptions>
+      </gmd:transferOptions>
+      <gmd:transferOptions>
+        <gmd:MD_DigitalTransferOptions>
+          <gmd:onLine>
+            <gmd:CI_OnlineResource>
+              <gmd:linkage>
+                <gmd:URL>http://www.geo.irisnet.be/geonetwork/opensearch/dut/513cdac1-1588-41b8-a453-33820e012faf/describe</gmd:URL>
+              </gmd:linkage>
+              <gmd:protocol>
+                <gco:CharacterString>download</gco:CharacterString>
+              </gmd:protocol>
+            </gmd:CI_OnlineResource>
+          </gmd:onLine>
+        </gmd:MD_DigitalTransferOptions>
+      </gmd:transferOptions>
+    </gmd:MD_Distribution>
+  </gmd:distributionInfo>
+  <gmd:dataQualityInfo>
+    <gmd:DQ_DataQuality>
+      <gmd:scope>
+        <gmd:DQ_Scope>
+          <gmd:level>
+            <gmd:MD_ScopeCode codeListValue="service" codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_ScopeCode" />
+          </gmd:level>
+          <gmd:levelDescription>
+            <gmd:MD_ScopeDescription>
+              <gmd:other>
+                <gco:CharacterString>Service</gco:CharacterString>
+              </gmd:other>
+            </gmd:MD_ScopeDescription>
+          </gmd:levelDescription>
+        </gmd:DQ_Scope>
+      </gmd:scope>
+      <gmd:report>
+        <gmd:DQ_DomainConsistency>
+          <gmd:result>
+            <gmd:DQ_ConformanceResult>
+              <gmd:specification>
+                <gmd:CI_Citation>
+                  <gmd:title>
+                    <gco:CharacterString>INSPIRE Download Service</gco:CharacterString>
+                  </gmd:title>
+                  <gmd:date>
+                    <gmd:CI_Date>
+                      <gmd:date>
+                        <gco:Date>2011-05-15</gco:Date>
+                      </gmd:date>
+                      <gmd:dateType>
+                        <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication" />
+                      </gmd:dateType>
+                    </gmd:CI_Date>
+                  </gmd:date>
+                </gmd:CI_Citation>
+              </gmd:specification>
+              <gmd:explanation>
+                <gco:CharacterString>see the referenced specification</gco:CharacterString>
+              </gmd:explanation>
+              <gmd:pass>
+                <gco:Boolean>true</gco:Boolean>
+              </gmd:pass>
+            </gmd:DQ_ConformanceResult>
+          </gmd:result>
+        </gmd:DQ_DomainConsistency>
+      </gmd:report>
+      <gmd:lineage>
+        <gmd:LI_Lineage>
+          <gmd:statement>
+            <gco:CharacterString>Herkomst</gco:CharacterString>
+          </gmd:statement>
+        </gmd:LI_Lineage>
+      </gmd:lineage>
+    </gmd:DQ_DataQuality>
+  </gmd:dataQualityInfo>
+</gmd:MD_Metadata>
