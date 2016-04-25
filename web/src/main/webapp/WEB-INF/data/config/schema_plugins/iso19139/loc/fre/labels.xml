@@ -819,17 +819,19 @@
     <condition/>
     
   </element>
-  <!--<element name="gmd:address" id="525.0" context="gmd:CI_ResponsibleParty">
-    <label>Adresse</label>
-    <description>Adresse du service responsable</description>
-    <help>Adresse du service responsable</help>
-    <condition/>
-    <condition>Conditional</condition>
-  </element>-->
   <element name="gmd:address" id="389.0">
     <label>Adresse</label>
     <description>Adresse physique et électronique à laquelle la personne ou l'organisation responsable peut être contactée</description>
     <help>Adresse postale ou électronique d'un premier niveau de contact (par exemple un secrétariat). Ces informations sont du type CI_Address et sont gérées dans la classe du même nom.</help>
+	<helper rel="gmd:postalCode">
+		<option value="80 boîte 1 rue du Progrès" title="1035">80 boîte 1 rue du Progrès</option>
+		<option value="2-4 rue Royale" title="1000">2-4 rue Royale</option>
+		<option value="86C avenue du Port" title="100">86C avenue du Port</option>
+		<option value="80 boîte 1 rue du Progrès" title="1035">80 boîte 1 rue du Progrès</option>
+		<option value="21 avenue des Arts" title="1000">21 avenue des Arts</option>
+		<option value="20 boulevard du Jardin Botanique" title="1035">20 boulevard du Jardin Botanique</option>
+		<option value="76 rue Royale" title="1000">76 rue Royale</option>
+	</helper>
     <condition/>
     
   </element>
@@ -1415,7 +1417,7 @@
 		<helper rel="gmd:postalCode">
 			<option value="80 boîte 1 rue du Progrès" title="1035">80 boîte 1 rue du Progrès (Bruxelles Développement urbain / Brussel Stedelijke Ontwikkeling)</option>
 			<option value="2-4 rue Royale" title="1000">2-4 rue Royale (ADT / ATO)</option>
-			<option value="100 Gulledelle" title="1200">100 Gulledelle (Bruxelles Environnement / Leefmilieu Brussel)</option>
+			<option value="86C avenue du Port" title="100">86C avenue du Port (Bruxelles Environnement / Leefmilieu Brussel)</option>
 			<option value="80 boîte 1 rue du Progrès" title="1035">80 boîte 1 rue du Progrès (Bruxelles Mobilité / Mobiel Brussel)</option>
 			<option value="21 avenue des Arts" title="1000">21 avenue des Arts (CIRB / CIBG)</option>
 			<option value="20 boulevard du Jardin Botanique" title="1035">20 boulevard du Jardin Botanique (IBSA / BISA)</option>

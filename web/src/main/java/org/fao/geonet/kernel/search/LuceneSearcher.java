@@ -764,7 +764,9 @@ public class LuceneSearcher extends MetaSearcher {
             SortField sortField = LuceneSearcher.makeSortField(sortBy.one(), sortBy.two(), requestLanguage);
             if( sortField!=null ) sortFields.add(sortField);
         }
-        sortFields.add(SortField.FIELD_SCORE);
+        if (sortFields.size()==0) {
+            sortFields.add(SortField.FIELD_SCORE);
+        }
         return new Sort(sortFields.toArray(new SortField[sortFields.size()]));
     }
     

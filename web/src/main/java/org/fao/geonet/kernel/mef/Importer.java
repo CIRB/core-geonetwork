@@ -216,7 +216,7 @@ public class Importer {
 			 * record by default. No stylesheet used by default. If no site
 			 * identifier provided, use current node id by default. No
 			 * validation by default.
-			 * 
+			 *
 			 * If record is a template and not a MEF file always generate a new
 			 * UUID.
 			 */
@@ -242,7 +242,7 @@ public class Importer {
 				Element privileges;
 				boolean validate = false;
 
-				
+
 				// Apply a stylesheet transformation if requested
 				String style = Util.getParam(params, Params.STYLESHEET,
 				"_none_");
@@ -257,7 +257,7 @@ public class Importer {
 					md.add(index, Xml.transform(md.get(index), stylePath
 							+ FS + style));
 				}
-				
+
 
 				if (schema == null) {
 					throw new Exception("Unknown schema format : " + schema);
@@ -295,7 +295,7 @@ public class Importer {
 						privileges.addContent(new Element("operation")
 								.setAttribute("name", "featured"));
 					}
-					uuid = dm.extractUUID(schema, md.get(index));						
+					uuid = dm.extractUUID(schema, md.get(index));
 
 					validate = Util.getParam(params, Params.VALIDATE, "off").equals("on");
 
@@ -325,7 +325,7 @@ public class Importer {
 						source = Util.getParam(general, Params.SITE_ID, gc.getSiteId());
 						sourceName = general.getChildText("siteName");
 						localId = general.getChildText("localId");
-						
+
                         if(Log.isDebugEnabled(Geonet.MEF)) {
 						Log.debug(Geonet.MEF, "Assign to catalog: " + source);
 					}
@@ -473,7 +473,7 @@ public class Importer {
 
 		GeonetContext gc = (GeonetContext) context.getHandlerContext(Geonet.CONTEXT_NAME);
 		DataManager dm = gc.getDataManager();
-		
+
 		if (uuid == null || uuid.equals("")
 				|| uuidAction.equals(Params.GENERATE_UUID)) {
 			String newuuid = UUID.randomUUID().toString();
@@ -492,9 +492,9 @@ public class Importer {
 			if (source == null || source.trim().length() == 0)
 				throw new Exception("Missing siteId parameter from info.xml file");
 
-			// --- only update sources table if source is not current site 
-			if (!source.equals(gc.getSiteId())) { 
-				Lib.sources.update(dbms, source, sourceName, true); 
+			// --- only update sources table if source is not current site
+			if (!source.equals(gc.getSiteId())) {
+				Lib.sources.update(dbms, source, sourceName, true);
 			}
 		}
 
@@ -519,7 +519,7 @@ public class Importer {
         if(Log.isDebugEnabled(Geonet.MEF)) {
 		Log.debug(Geonet.MEF, "Adding metadata with uuid:" + uuid);
         }
-		
+
 		// Try to insert record with localId provided, if not use a new id.
 		boolean insertedWithLocalId = false;
 		if (localId != null && !localId.equals("")) {
@@ -529,7 +529,7 @@ public class Importer {
 				// This is an optional element. If present, indicates the
 				// id used locally by the sourceId actor to store the metadata. Its
 				// purpose is just to allow the reuse of the same local id when
-				// reimporting a metadata. 
+				// reimporting a metadata.
 				int iLocalId = Integer.parseInt(localId);
 				if (!dm.existsMetadata(dbms, iLocalId)) {
                     if(Log.isDebugEnabled(Geonet.MEF))
@@ -553,9 +553,9 @@ public class Importer {
                 if(Log.isDebugEnabled(Geonet.MEF)) {
 				Log.debug(Geonet.MEF, "Invalid localId provided: " + localId + ". Adding record with a new id.");
 			}
-		} 
-		} 
-		
+		}
+		}
+
 		if (!insertedWithLocalId) {
             //
             // insert metadata
@@ -595,7 +595,7 @@ public class Importer {
 
 	/**
 	 * Add categories registered in information file.
-	 * 
+	 *
 	 * @param context
 	 * @param dm
 	 * @param dbms
@@ -627,7 +627,7 @@ public class Importer {
 
 	/**
 	 * Add privileges according to information file.
-	 * 
+	 *
 	 * @param context
 	 * @param dm
 	 * @param dbms
@@ -646,10 +646,11 @@ public class Importer {
 			boolean groupOwner = group.getAttributeValue("groupOwner") != null;
 			String grpId = mapLocalEntity(locGrps, grpName);
 
-			if (grpId == null)
-                if(Log.isDebugEnabled(Geonet.MEF))
+			if (grpId == null) {
+                if(Log.isDebugEnabled(Geonet.MEF)) {
                     Log.debug(Geonet.MEF, " - Skipping non-existent group : " + grpName);
-			else {
+				}
+			} else {
 				// --- metadata group exists locally
 
                     if(Log.isDebugEnabled(Geonet.MEF))
@@ -665,7 +666,7 @@ public class Importer {
 
 	/**
 	 * Add operations according to information file.
-	 * 
+	 *
 	 * @param context
 	 * @param dm
 	 * @param dbms

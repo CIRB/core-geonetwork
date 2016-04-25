@@ -2,8 +2,8 @@
 <WMS_Capabilities xmlns="http://www.opengis.net/wms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.3.0" updateSequence="11993" xsi:schemaLocation="http://inspire.ec.europa.eu/schemas/inspire_vs/1.0 http://inspire.ec.europa.eu/schemas/inspire_vs/1.0/inspire_vs.xsd">
 	<Service>
 		<Name>WMS</Name>
-		<Title>BRUGIS WMS INSPIRE FRE</Title>
-		<Abstract>Service de visualisation de données cartographique de Bruxelles Développement urbain pour la directive INSPIRE</Abstract>
+		<Title>BRUGIS WMS INSPIRE ENG</Title>
+		<Abstract>Service mapping data visualization Brussels Urban Development for INSPIRE directive</Abstract>
 		<KeywordList>
 			<Keyword>WFS</Keyword>
 			<Keyword>WMS</Keyword>
@@ -29,8 +29,8 @@
 			<ContactFacsimileTelephone/>
 			<ContactElectronicMailAddress>brugis@sprb.irisnet.be</ContactElectronicMailAddress>
 		</ContactInformation>
-		<Fees>Pas de frais</Fees>
-		<AccessConstraints>Aucune condition ne s’applique. Utilisation libre sous réserve de mentionner la source et la date de la dernière mise à jour.</AccessConstraints>
+		<Fees>No Fees</Fees>
+		<AccessConstraints>No condition applies.  Free use under the condition that the source and the latest revision date are mentioned.</AccessConstraints>
 	</Service>
 	<Capability>
 		<Request>
@@ -39,10 +39,10 @@
 				<DCPType>
 					<HTTP>
 						<Get>
-							<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/wms/BRUGIS-WMS-1.3.0-static-fre.xml"/>
+							<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnetlab.be/geonetwork/wms/BRUGIS-WMS-1.3.0-static-eng.xml"/>
 						</Get>
 						<Post>
-							<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/wms/BRUGIS-WMS-1.3.0-static-fre.xml"/>
+							<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnetlab.be/geonetwork/wms/BRUGIS-WMS-1.3.0-static-eng.xml"/>
 						</Post>
 					</HTTP>
 				</DCPType>
@@ -96,7 +96,7 @@
 		</Exception>
 		<inspire_vs:ExtendedCapabilities xmlns:inspire_vs="http://inspire.ec.europa.eu/schemas/inspire_vs/1.0">
 			<inspire_common:ResourceLocator xmlns:inspire_common="http://inspire.ec.europa.eu/schemas/common/1.0">
-				<inspire_common:URL>http://www.geo.irisnet.be/geonetwork/wms/BRUGIS-WMS-1.3.0-static-fre.xml</inspire_common:URL>
+				<inspire_common:URL>http://www.geo.irisnetlab.be/geonetwork/wms/BRUGIS-WMS-1.3.0-static-eng.xml</inspire_common:URL>
 				<inspire_common:MediaType>application/vnd.ogc.wms_xml</inspire_common:MediaType>
 			</inspire_common:ResourceLocator>
 			<inspire_common:ResourceType xmlns:inspire_common="http://inspire.ec.europa.eu/schemas/common/1.0">service</inspire_common:ResourceType>
@@ -106,13 +106,13 @@
 				<inspire_common:DateOfPublication>2015-06-17</inspire_common:DateOfPublication>
 			</inspire_common:TemporalReference>
 			<inspire_common:Conformity xmlns:inspire_common="http://inspire.ec.europa.eu/schemas/common/1.0">
-				<inspire_common:Specification xsi:type="inspire_common:citationInspireInteroperabilityRegulation_fre">
-					<inspire_common:Title>RÈGLEMENT (UE) N o 1089/2010 DE LA COMMISSION du 23 novembre 2010 portant modalités d'application de la directive 2007/2/CE du Parlement européen et du Conseil en ce qui concerne l'interopérabilité des séries et des services de données géographiques</inspire_common:Title>
+				<inspire_common:Specification xsi:type="inspire_common:citationInspireInteroperabilityRegulation_eng">
+					<inspire_common:Title>COMMISSION REGULATION (EU) No 1089/2010 of 23 November 2010 implementing Directive 2007/2/EC of the European Parliament and of the Council as regards interoperability of spatial data sets and services</inspire_common:Title>
 					<inspire_common:DateOfPublication>2010-12-08</inspire_common:DateOfPublication>
-					<inspire_common:URI>OJ:L:2010:323:0011:0102:FR:PDF</inspire_common:URI>
+					<inspire_common:URI>OJ:L:2010:323:0011:0102:EN:PDF</inspire_common:URI>
 					<inspire_common:ResourceLocator>
 						<inspire_common:URL>
-									http://eur-lex.europa.eu/LexUriServ/LexUriServ.do?uri=OJ:L:2010:323:0011:0102:FR:PDF
+									http://eur-lex.europa.eu/LexUriServ/LexUriServ.do?uri=OJ:L:2010:323:0011:0102:EN:PDF
 								</inspire_common:URL>
 						<inspire_common:MediaType>application/pdf</inspire_common:MediaType>
 					</inspire_common:ResourceLocator>
@@ -128,19 +128,19 @@
 			<inspire_common:MandatoryKeyword xmlns:inspire_common="http://inspire.ec.europa.eu/schemas/common/1.0" xsi:type="inspire_common:classificationOfSpatialDataService">
 				<inspire_common:KeywordValue>infoMapAccessService</inspire_common:KeywordValue>
 			</inspire_common:MandatoryKeyword>
-			<inspire_common:Keyword xmlns:inspire_common="http://inspire.ec.europa.eu/schemas/common/1.0" xsi:type="inspire_common:inspireTheme_fre">
+			<inspire_common:Keyword xmlns:inspire_common="http://inspire.ec.europa.eu/schemas/common/1.0" xsi:type="inspire_common:inspireTheme_eng">
 				<inspire_common:OriginatingControlledVocabulary xsi:type="inspire_common:originatingControlledVocabularyGemetInspireThemes">
 					<inspire_common:Title>GEMET - INSPIRE themes</inspire_common:Title>
 					<inspire_common:DateOfPublication>2008-06-01</inspire_common:DateOfPublication>
 				</inspire_common:OriginatingControlledVocabulary>
-				<inspire_common:KeywordValue>Sites protégés</inspire_common:KeywordValue>
+				<inspire_common:KeywordValue>Protected sites</inspire_common:KeywordValue>
 			</inspire_common:Keyword>
-			<inspire_common:Keyword xmlns:inspire_common="http://inspire.ec.europa.eu/schemas/common/1.0" xsi:type="inspire_common:inspireTheme_fre">
+			<inspire_common:Keyword xmlns:inspire_common="http://inspire.ec.europa.eu/schemas/common/1.0" xsi:type="inspire_common:inspireTheme_eng">
 				<inspire_common:OriginatingControlledVocabulary xsi:type="inspire_common:originatingControlledVocabularyGemetInspireThemes">
 					<inspire_common:Title>GEMET - INSPIRE themes</inspire_common:Title>
 					<inspire_common:DateOfPublication>2008-06-01</inspire_common:DateOfPublication>
 				</inspire_common:OriginatingControlledVocabulary>
-				<inspire_common:KeywordValue>Zones de gestion, de restriction ou de réglementation et unités de déclaration</inspire_common:KeywordValue>
+				<inspire_common:KeywordValue>Area management/restriction/regulation zones and reporting units</inspire_common:KeywordValue>
 			</inspire_common:Keyword>
 			<inspire_common:SupportedLanguages xmlns:inspire_common="http://inspire.ec.europa.eu/schemas/common/1.0" xsi:type="inspire_common:supportedLanguagesType">
 				<inspire_common:DefaultLanguage>
@@ -154,10 +154,10 @@
 				</inspire_common:SupportedLanguage>
 			</inspire_common:SupportedLanguages>
 			<inspire_common:ResponseLanguage xmlns:inspire_common="http://inspire.ec.europa.eu/schemas/common/1.0">
-				<inspire_common:Language>fre</inspire_common:Language>
+				<inspire_common:Language>eng</inspire_common:Language>
 			</inspire_common:ResponseLanguage>
 			<inspire_common:MetadataUrl xmlns:inspire_common="http://inspire.ec.europa.eu/schemas/common/1.0" xsi:type="inspire_common:resourceLocatorType">
-				<inspire_common:URL>http://www.geo.irisnet.be/geonetwork/srv/fre/csw?service=CSW&amp;Request=GetRecordById&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=904b40ae-8c0a-8e6f-aef5-65a3-2471-37df-59af5e2f&amp;version=2.0.2</inspire_common:URL>
+				<inspire_common:URL>http://www.geo.irisnetlab.be/geonetwork/srv/eng/csw?service=CSW&amp;Request=GetRecordById&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=ee9866ac-8015-ff2a-cbe9-cd04-4aa2-f73c-adced3aa&amp;version=2.0.2</inspire_common:URL>
 				<inspire_common:MediaType>application/vnd.iso.19139+xml</inspire_common:MediaType>
 			</inspire_common:MetadataUrl>
 		</inspire_vs:ExtendedCapabilities>
@@ -176,11 +176,11 @@
 			</AuthorityURL>
 			<Layer queryable="1" opaque="0" noSubsets="0">
 				<Name>INSPIRENL:Beschermde_Gehelen</Name>
-				<Title>Ensembles classés</Title>
-				<Abstract>Région de Bruxelles-Capitale : "tout groupe de biens immobiliers, formant un ensemble urbain ou rural suffisamment cohérent pour faire l’objet d’une délimitation topographique et remarquable par son homogénéité ou par son intégration dans le paysage" ayant fait l'objet d'un arrêté de classement</Abstract>
+				<Title>Registered complex</Title>
+				<Abstract>Brussels-Capital Region: "any group of properties forming an urban or rural unit sufficiently coherent to be the subject of a topographic and remarkable delimitation by its homogeneity or its integration in the landscape" having been the subject of a decree for its conservation</Abstract>
 				<KeywordList>
 					<Keyword>VM_A40_CLASVGD</Keyword>
-					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Sites protégés</Keyword>
+					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Protected sites</Keyword>
 				</KeywordList>
 				<CRS>EPSG:31370</CRS>
 				<CRS>CRS:84</CRS>
@@ -195,7 +195,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_CLASVGD_ENS</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=ed4319b7-95b1-4758-9004-081d66f1d679"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnetlab.be/geonetwork/srv/fre/csw?service=CSW&amp;Request=GetRecordById&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=ee9866ac-8015-ff2a-cbe9-cd04-4aa2-f73c-adced3aa&amp;version=2.0.2"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIRENL_Beschermde_gehelen</Name>
@@ -227,11 +227,11 @@
 			</Layer>
 			<Layer queryable="1" opaque="0" noSubsets="0">
 				<Name>INSPIRENL:Beschermde_archeologische_landschappen</Name>
-				<Title>Site archéologique classé (arrêté définitif)</Title>
-				<Abstract>Région de Bruxelles-Capitale : "tout terrain, formation géologique, bâtiment, ensemble ou site qui comprend ou est susceptible de comprendre des biens archéologiques" ayant fait l'objet d'un arrêté de classement</Abstract>
+				<Title>Registered archaeological site</Title>
+				<Abstract>Brussels-Capital Region : "any territory, geological formation, building, complex or site that includes or is likely to include archaeological goods" having been the subject of a decree for its conservation</Abstract>
 				<KeywordList>
 					<Keyword>VM_A40_CLASVGD</Keyword>
-					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Sites protégés</Keyword>
+					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Protected sites</Keyword>
 				</KeywordList>
 				<CRS>EPSG:31370</CRS>
 				<CRS>CRS:84</CRS>
@@ -246,7 +246,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_CLASVGD_ARCH</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=60555a3e-8afb-496b-99c1-aa2922bc3de8"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnetlab.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=60555a3e-8afb-496b-99c1-aa2922bc3de8"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIRENL_Beschermde_archeologische_landschappen</Name>
@@ -278,11 +278,11 @@
 			</Layer>
 			<Layer queryable="1" opaque="0" noSubsets="0">
 				<Name>INSPIRENL:Beschermde_landschappen</Name>
-				<Title>Sites classés</Title>
-				<Abstract>Région de Bruxelles-Capitale : "toute  œuvre de la nature ou de l’homme ou toute œuvre combinée de l’homme et de la nature constituant un espace non ou partiellement construit et qui présente une cohérence spatiale" ayant fait l'objet d'un arrêté de classement</Abstract>
+				<Title>Registered site</Title>
+				<Abstract>Brussels-Capital Region : "any work of nature or man or any combined work of man and nature constituting a space with no or partial construction and showing space coherence" having been the subject of a decree for its conservation</Abstract>
 				<KeywordList>
 					<Keyword>VM_A40_CLASVGD</Keyword>
-					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Sites protégés</Keyword>
+					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Protected Sites</Keyword>
 				</KeywordList>
 				<CRS>EPSG:31370</CRS>
 				<CRS>CRS:84</CRS>
@@ -297,7 +297,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_CLASVGD_SITES</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=1d2baa79-ff45-46e3-8200-4e8f9ee19892"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnetlab.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=1d2baa79-ff45-46e3-8200-4e8f9ee19892"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIRENL_Beschermde_landschappen</Name>
@@ -329,11 +329,11 @@
 			</Layer>
 			<Layer queryable="1" opaque="0" noSubsets="0">
 				<Name>INSPIRENL:Beschermde_monumenten</Name>
-				<Title>Monuments classés</Title>
-				<Abstract>Région de Bruxelles-Capitale : "toute réalisation particulièrement remarquable, y compris les installations ou les éléments décoratifs faisant partie intégrante de cette réalisation" ayant fait l'objet d'un arrêté de classement</Abstract>
+				<Title>Registered monument</Title>
+				<Abstract>Brussels-Capital Region: "any particularly remarkable achievement, including the decorative installations or elements forming an integral part of this achievementԠhaving been the subject of a decree for its conservation</Abstract>
 				<KeywordList>
 					<Keyword>VM_A40_CLASVGD</Keyword>
-					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Sites protégés</Keyword>
+					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Protected sites</Keyword>
 				</KeywordList>
 				<CRS>EPSG:31370</CRS>
 				<CRS>CRS:84</CRS>
@@ -348,7 +348,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_CLASVGD_MON</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=67e995a6-9326-4bd5-86ce-bbe084a52c8f"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnetlab.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=67e995a6-9326-4bd5-86ce-bbe084a52c8f"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIRENL_Beschermde_monumenten</Name>
@@ -380,10 +380,10 @@
 			</Layer>
 			<Layer queryable="1" opaque="0" noSubsets="0">
 				<Name>INSPIREFR:Ensembles_classes</Name>
-				<Title>Ensembles classés</Title>
-				<Abstract>Région de Bruxelles-Capitale : "tout groupe de biens immobiliers, formant un ensemble urbain ou rural suffisamment cohérent pour faire l’objet d’une délimitation topographique et remarquable par son homogénéité ou par son intégration dans le paysage" ayant fait l'objet d'un arrêté de classement</Abstract>
+				<Title>Registered complex</Title>
+				<Abstract>Brussels-Capital Region: "any group of properties forming an urban or rural unit sufficiently coherent to be the subject of a topographic and remarkable delimitation by its homogeneity or its integration in the landscape" having been the subject of a decree for its conservation</Abstract>
 				<KeywordList>
-					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Sites protégés</Keyword>
+					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Protected sites</Keyword>
 				</KeywordList>
 				<CRS>EPSG:31370</CRS>
 				<CRS>CRS:84</CRS>
@@ -398,7 +398,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_CLASVGD_ENS</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=ed4319b7-95b1-4758-9004-081d66f1d679"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnetlab.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=ed4319b7-95b1-4758-9004-081d66f1d679"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIREFR_Ensemble_classé</Name>
@@ -430,11 +430,11 @@
 			</Layer>
 			<Layer queryable="1" opaque="0" noSubsets="0">
 				<Name>INSPIREEN:Green_areas_with_high_biological_value</Name>
-				<Title>Zones vertes à haute valeur biologique</Title>
-				<Abstract>Région de Bruxelles-Capitale : zones destinées à la conservation et à la régénération du milieu naturel de haute valeur biologique en ce qu'il abrite des espèces animales et végétales rares ou qu'il présente une diversité biologique importante (Extraites du PRAS : Plan Régional d'Affectation du Sol)</Abstract>
+				<Title>Green areas with high biological value</Title>
+				<Abstract>Brussels-Capital Region: areas intended for the conservation and the regeneration of a natural environment that is of high biological value as it shelters rare animal and vegetable species or boasts considerable biological diversity</Abstract>
 				<KeywordList>
 					<Keyword>BRU_BDU_INTERN.A10_AF_AFFECT</Keyword>
-					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0 GEMET - INSPIRE themes, version 1.0">Sites protégés Zones de gestion, de restriction ou de réglementation et unités de déclaration</Keyword>
+					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0 GEMET - INSPIRE themes, version 1.0">Protected sites Area management / restriction / regulation zones &amp; reporting units</Keyword>
 				</KeywordList>
 				<CRS>EPSG:31370</CRS>
 				<CRS>CRS:84</CRS>
@@ -449,7 +449,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.A10_AF_AFFECT</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=cd7ca698-975e-4ab2-babd-46581edc2eb7"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnetlab.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=cd7ca698-975e-4ab2-babd-46581edc2eb7"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIREEN_Green_areas_with_high_biological_value</Name>
@@ -481,11 +481,11 @@
 			</Layer>
 			<Layer queryable="1" opaque="0" noSubsets="0">
 				<Name>INSPIRENL:Groengebieden_met_hoogbiologische_waarde</Name>
-				<Title>Zones vertes à haute valeur biologique</Title>
-				<Abstract>Région de Bruxelles-Capitale : zones destinées à la conservation et à la régénération du milieu naturel de haute valeur biologique en ce qu'il abrite des espèces animales et végétales rares ou qu'il présente une diversité biologique importante (Extraites du PRAS : Plan Régional d'Affectation du Sol)</Abstract>
+				<Title>Green areas with high biological value</Title>
+				<Abstract>Brussels-Capital Region: areas intended for the conservation and the regeneration of a natural environment that is of high biological value as it shelters rare animal and vegetable species or boasts considerable biological diversity</Abstract>
 				<KeywordList>
 					<Keyword>A10_AF_AFFECT</Keyword>
-					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0 GEMET - INSPIRE themes, version 1.0">Sites protégés Zones de gestion, de restriction ou de réglementation et unités de déclaration</Keyword>
+					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0 GEMET - INSPIRE themes, version 1.0">Protected sites Area management / restriction / regulation zones &amp; reporting units</Keyword>
 				</KeywordList>
 				<CRS>EPSG:31370</CRS>
 				<CRS>CRS:84</CRS>
@@ -500,7 +500,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.A10_AF_AFFECT</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=cd7ca698-975e-4ab2-babd-46581edc2eb7"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnetlab.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=cd7ca698-975e-4ab2-babd-46581edc2eb7"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIRENL_Groengebieden_met_hoogbiologische_waarde</Name>
@@ -532,11 +532,11 @@
 			</Layer>
 			<Layer queryable="1" opaque="0" noSubsets="0">
 				<Name>INSPIREFR:Monuments_classes</Name>
-				<Title>Monuments classés</Title>
-				<Abstract>Région de Bruxelles-Capitale : "toute réalisation particulièrement remarquable, y compris les installations ou les éléments décoratifs faisant partie intégrante de cette réalisation" ayant fait l'objet d'un arrêté de classement</Abstract>
+				<Title>Registered monument</Title>
+				<Abstract>Brussels-Capital Region: "any particularly remarkable achievement, including the decorative installations or elements forming an integral part of this achievementԠhaving been the subject of a decree for its conservation</Abstract>
 				<KeywordList>
 					<Keyword>VM_A40_CLASVGD</Keyword>
-					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Sites protégés</Keyword>
+					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Protected sites</Keyword>
 				</KeywordList>
 				<CRS>EPSG:31370</CRS>
 				<CRS>CRS:84</CRS>
@@ -551,7 +551,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_CLASVGD_MON</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=67e995a6-9326-4bd5-86ce-bbe084a52c8f"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnetlab.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=67e995a6-9326-4bd5-86ce-bbe084a52c8f"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIREFR_Monument_classé</Name>
@@ -583,11 +583,11 @@
 			</Layer>
 			<Layer queryable="1" opaque="0" noSubsets="0">
 				<Name>INSPIREEN:Protection_area</Name>
-				<Title>Zone de protection</Title>
-				<Abstract>Région de Bruxelles-Capitale : "la zone établie autour d’un monument, d’un ensemble, d’un site ou d’un site archéologique dont le périmètre est fixé en fonction des exigences de la protection des abords du patrimoine en question" ayant fait l'objet d'un arrêté de classement</Abstract>
+				<Title>Protection area</Title>
+				<Abstract>Brussels-Capital Region: "the area established around a monument, a unit, a landscape or an archaeological site whose perimeter is fixed according to the requirements of the protection of the surroundings of the heritage in question" having been the subject of a decree for its conservation</Abstract>
 				<KeywordList>
 					<Keyword>BRU_BDU_INTERN.VM_A40_PROT_ZPROT</Keyword>
-					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Sites protégés</Keyword>
+					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Protected sites</Keyword>
 				</KeywordList>
 				<CRS>EPSG:31370</CRS>
 				<CRS>CRS:84</CRS>
@@ -602,7 +602,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_PROT_ZPROT</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=523cbba0-4373-4b61-8462-eab85c27cdb4"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnetlab.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=523cbba0-4373-4b61-8462-eab85c27cdb4"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIREEN_Protection _area</Name>
@@ -634,11 +634,11 @@
 			</Layer>
 			<Layer queryable="1" opaque="0" noSubsets="0">
 				<Name>INSPIREEN:Registered_archaeological_site</Name>
-				<Title>Site archéologique classé (arrêté définitif)</Title>
-				<Abstract>Région de Bruxelles-Capitale : "tout terrain, formation géologique, bâtiment, ensemble ou site qui comprend ou est susceptible de comprendre des biens archéologiques" ayant fait l'objet d'un arrêté de classement</Abstract>
+				<Title>Registered archaeological site</Title>
+				<Abstract>Brussels-Capital Region : "any territory, geological formation, building, complex or site that includes or is likely to include archaeological goods" having been the subject of a decree for its conservation</Abstract>
 				<KeywordList>
 					<Keyword>BRU_BDU_INTERN.VM_A40_CLASVGD</Keyword>
-					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Sites protégés</Keyword>
+					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Protected sites</Keyword>
 				</KeywordList>
 				<CRS>EPSG:31370</CRS>
 				<CRS>CRS:84</CRS>
@@ -653,7 +653,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_CLASVGD_ARCH</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=60555a3e-8afb-496b-99c1-aa2922bc3de8"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnetlab.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=60555a3e-8afb-496b-99c1-aa2922bc3de8"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIREEN_Registered_archaeological_site</Name>
@@ -685,11 +685,11 @@
 			</Layer>
 			<Layer queryable="1" opaque="0" noSubsets="0">
 				<Name>INSPIREEN:Registered_complex</Name>
-				<Title>Ensembles classés</Title>
-				<Abstract>Région de Bruxelles-Capitale : "tout groupe de biens immobiliers, formant un ensemble urbain ou rural suffisamment cohérent pour faire l’objet d’une délimitation topographique et remarquable par son homogénéité ou par son intégration dans le paysage" ayant fait l'objet d'un arrêté de classement</Abstract>
+				<Title>Registered complex</Title>
+				<Abstract>Brussels-Capital Region: "any group of properties forming an urban or rural unit sufficiently coherent to be the subject of a topographic and remarkable delimitation by its homogeneity or its integration in the landscape" having been the subject of a decree for its conservation</Abstract>
 				<KeywordList>
 					<Keyword>BRU_AATL_INTERN.VM_A40_CLASVGD</Keyword>
-					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Sites protégés</Keyword>
+					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Protected sites</Keyword>
 				</KeywordList>
 				<CRS>EPSG:31370</CRS>
 				<CRS>CRS:84</CRS>
@@ -704,7 +704,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_CLASVGD_ENS</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=ed4319b7-95b1-4758-9004-081d66f1d679"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnetlab.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=ed4319b7-95b1-4758-9004-081d66f1d679"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIREEN_Registered_complex</Name>
@@ -736,11 +736,11 @@
 			</Layer>
 			<Layer queryable="1" opaque="0" noSubsets="0">
 				<Name>INSPIREEN:Registered_monument</Name>
-				<Title>Monuments classés</Title>
-				<Abstract>Région de Bruxelles-Capitale : "toute réalisation particulièrement remarquable, y compris les installations ou les éléments décoratifs faisant partie intégrante de cette réalisation" ayant fait l'objet d'un arrêté de classement</Abstract>
+				<Title>Registered monument</Title>
+				<Abstract>Brussels-Capital Region: "any particularly remarkable achievement, including the decorative installations or elements forming an integral part of this achievementԠhaving been the subject of a decree for its conservation</Abstract>
 				<KeywordList>
 					<Keyword>BRU_BDU_INTERN.VM_A40_CLASVGD</Keyword>
-					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Sites protégés</Keyword>
+					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Protected sites</Keyword>
 				</KeywordList>
 				<CRS>EPSG:31370</CRS>
 				<CRS>CRS:84</CRS>
@@ -755,7 +755,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_CLASVGD_MON</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=67e995a6-9326-4bd5-86ce-bbe084a52c8f"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnetlab.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=67e995a6-9326-4bd5-86ce-bbe084a52c8f"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIREEN_Registered_monument</Name>
@@ -769,11 +769,11 @@
 			</Layer>
 			<Layer queryable="1" opaque="0" noSubsets="0">
 				<Name>INSPIREEN:Registered_site</Name>
-				<Title>Sites classés</Title>
-				<Abstract>Région de Bruxelles-Capitale : "toute  œuvre de la nature ou de l’homme ou toute œuvre combinée de l’homme et de la nature constituant un espace non ou partiellement construit et qui présente une cohérence spatiale" ayant fait l'objet d'un arrêté de classement</Abstract>
+				<Title>Registered site</Title>
+				<Abstract>Brussels-Capital Region : "any work of nature or man or any combined work of man and nature constituting a space with no or partial construction and showing space coherence" having been the subject of a decree for its conservation</Abstract>
 				<KeywordList>
 					<Keyword>BRU_BDU_INTERN.VM_A40_CLASVGD</Keyword>
-					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Sites protégés</Keyword>
+					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Protected Sites</Keyword>
 				</KeywordList>
 				<CRS>EPSG:31370</CRS>
 				<CRS>CRS:84</CRS>
@@ -788,7 +788,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_CLASVGD_SITES</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=1d2baa79-ff45-46e3-8200-4e8f9ee19892"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnetlab.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=1d2baa79-ff45-46e3-8200-4e8f9ee19892"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIREEN_Registered_site</Name>
@@ -820,11 +820,11 @@
 			</Layer>
 			<Layer queryable="1" opaque="0" noSubsets="0">
 				<Name>INSPIREFR:Sites_archeologiques_classes</Name>
-				<Title>Site archéologique classé (arrêté définitif)</Title>
-				<Abstract>Région de Bruxelles-Capitale : "tout terrain, formation géologique, bâtiment, ensemble ou site qui comprend ou est susceptible de comprendre des biens archéologiques" ayant fait l'objet d'un arrêté de classement</Abstract>
+				<Title>Registered archaeological site</Title>
+				<Abstract>Brussels-Capital Region : "any territory, geological formation, building, complex or site that includes or is likely to include archaeological goods" having been the subject of a decree for its conservation</Abstract>
 				<KeywordList>
 					<Keyword>VM_A40_CLASVGD</Keyword>
-					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Sites protégés</Keyword>
+					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Protected sites</Keyword>
 				</KeywordList>
 				<CRS>EPSG:31370</CRS>
 				<CRS>CRS:84</CRS>
@@ -839,7 +839,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_CLASVGD_ARCH</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=60555a3e-8afb-496b-99c1-aa2922bc3de8"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnetlab.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=60555a3e-8afb-496b-99c1-aa2922bc3de8"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIREFR_Site_archéologique_classé</Name>
@@ -871,11 +871,11 @@
 			</Layer>
 			<Layer queryable="1" opaque="0" noSubsets="0">
 				<Name>INSPIREFR:Sites_classes</Name>
-				<Title>Sites classés</Title>
-				<Abstract>Région de Bruxelles-Capitale : "toute  œuvre de la nature ou de l’homme ou toute œuvre combinée de l’homme et de la nature constituant un espace non ou partiellement construit et qui présente une cohérence spatiale" ayant fait l'objet d'un arrêté de classement</Abstract>
+				<Title>Registered site</Title>
+				<Abstract>Brussels-Capital Region : "any work of nature or man or any combined work of man and nature constituting a space with no or partial construction and showing space coherence" having been the subject of a decree for its conservation</Abstract>
 				<KeywordList>
 					<Keyword>VM_A40_CLASVGD</Keyword>
-					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Sites protégés</Keyword>
+					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Protected Sites</Keyword>
 				</KeywordList>
 				<CRS>EPSG:31370</CRS>
 				<CRS>CRS:84</CRS>
@@ -890,7 +890,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_CLASVGD_SITES</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=1d2baa79-ff45-46e3-8200-4e8f9ee19892"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnetlab.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=1d2baa79-ff45-46e3-8200-4e8f9ee19892"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIREFR_Site_classé</Name>
@@ -922,11 +922,11 @@
 			</Layer>
 			<Layer queryable="1" opaque="0" noSubsets="0">
 				<Name>INSPIRENL:Vrijwaringzone</Name>
-				<Title>Zone de protection</Title>
-				<Abstract>Région de Bruxelles-Capitale : "la zone établie autour d’un monument, d’un ensemble, d’un site ou d’un site archéologique dont le périmètre est fixé en fonction des exigences de la protection des abords du patrimoine en question" ayant fait l'objet d'un arrêté de classement</Abstract>
+				<Title>Protection area</Title>
+				<Abstract>Brussels-Capital Region: "the area established around a monument, a unit, a landscape or an archaeological site whose perimeter is fixed according to the requirements of the protection of the surroundings of the heritage in question" having been the subject of a decree for its conservation</Abstract>
 				<KeywordList>
 					<Keyword>VM_A40_ZPROT</Keyword>
-					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Sites protégés</Keyword>
+					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Protected sites</Keyword>
 				</KeywordList>
 				<CRS>EPSG:31370</CRS>
 				<CRS>CRS:84</CRS>
@@ -941,7 +941,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_PROT_ZPROT</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=523cbba0-4373-4b61-8462-eab85c27cdb4"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnetlab.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=523cbba0-4373-4b61-8462-eab85c27cdb4"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIRENL_Vrijwaringzone</Name>
@@ -973,11 +973,11 @@
 			</Layer>
 			<Layer queryable="1" opaque="0" noSubsets="0">
 				<Name>INSPIREFR:Zone_de_protection</Name>
-				<Title>Zone de protection</Title>
-				<Abstract>Région de Bruxelles-Capitale : "la zone établie autour d’un monument, d’un ensemble, d’un site ou d’un site archéologique dont le périmètre est fixé en fonction des exigences de la protection des abords du patrimoine en question" ayant fait l'objet d'un arrêté de classement</Abstract>
+				<Title>Protection area</Title>
+				<Abstract>Brussels-Capital Region: "the area established around a monument, a unit, a landscape or an archaeological site whose perimeter is fixed according to the requirements of the protection of the surroundings of the heritage in question" having been the subject of a decree for its conservation</Abstract>
 				<KeywordList>
 					<Keyword>VM_A40_ZPROT</Keyword>
-					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Sites protégés</Keyword>
+					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Protected sites</Keyword>
 				</KeywordList>
 				<CRS>EPSG:31370</CRS>
 				<CRS>CRS:84</CRS>
@@ -992,7 +992,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_PROT_ZPROT</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=523cbba0-4373-4b61-8462-eab85c27cdb4"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnetlab.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=523cbba0-4373-4b61-8462-eab85c27cdb4"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIREFR_Zone_de_protection</Name>
@@ -1024,11 +1024,11 @@
 			</Layer>
 			<Layer queryable="1" opaque="0" noSubsets="0">
 				<Name>INSPIREFR:Zones_vertes_a_haute_valeur_biologique</Name>
-				<Title>Zones vertes à haute valeur biologique</Title>
-				<Abstract>Région de Bruxelles-Capitale : zones destinées à la conservation et à la régénération du milieu naturel de haute valeur biologique en ce qu'il abrite des espèces animales et végétales rares ou qu'il présente une diversité biologique importante (Extraites du PRAS : Plan Régional d'Affectation du Sol)</Abstract>
+				<Title>Green areas with high biological value</Title>
+				<Abstract>Brussels-Capital Region: areas intended for the conservation and the regeneration of a natural environment that is of high biological value as it shelters rare animal and vegetable species or boasts considerable biological diversity</Abstract>
 				<KeywordList>
 					<Keyword>A10_AF_AFFECT</Keyword>
-					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0 GEMET - INSPIRE themes, version 1.0">Sites protégés Zones de gestion, de restriction ou de réglementation et unités de déclaration</Keyword>
+					<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0 GEMET - INSPIRE themes, version 1.0">Protected sites Area management / restriction / regulation zones &amp; reporting units</Keyword>
 				</KeywordList>
 				<CRS>EPSG:31370</CRS>
 				<CRS>CRS:84</CRS>
@@ -1043,7 +1043,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.A10_AF_AFFECT</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=cd7ca698-975e-4ab2-babd-46581edc2eb7"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnetlab.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=cd7ca698-975e-4ab2-babd-46581edc2eb7"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIREFR_Zones_vertes_a_haute_valeur_biologique</Name>

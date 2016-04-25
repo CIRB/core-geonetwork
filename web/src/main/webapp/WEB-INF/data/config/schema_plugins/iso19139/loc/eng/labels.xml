@@ -460,12 +460,13 @@
         <label>Address</label>
         <description>Physical and email address at which the organization or individual may be contacted</description>
 		<helper rel="gmd:postalCode">
-			<option value="Gulledelle 100" title="1200">Gulledelle 100</option>
-			<option value="Koningsstraat 2-4" title="1000">Koningsstraat 2-4</option>
-			<option value="Koningsstraat 76" title="1000">Koningsstraat 76</option>
-			<option value="Kruidtuinlaan 20" title="1035">Kruidtuinlaan 20</option>
-			<option value="Kunstlaan 21" title="1000">Kunstlaan 21</option>
-			<option value="Vooruitgangstraat 80 bus 1" title="1035">Vooruitgangstraat 80 bus 1</option>
+			<option value="80 boîte 1 rue du Progrès" title="1035">80 boîte 1 rue du Progrès</option>
+			<option value="2-4 rue Royale" title="1000">2-4 rue Royale</option>
+			<option value="86C avenue du Port" title="100">86C avenue du Port</option>
+			<option value="80 boîte 1 rue du Progrès" title="1035">80 boîte 1 rue du Progrès</option>
+			<option value="21 avenue des Arts" title="1000">21 avenue des Arts</option>
+			<option value="20 boulevard du Jardin Botanique" title="1035">20 boulevard du Jardin Botanique</option>
+			<option value="76 rue Royale" title="1000">76 rue Royale</option>
 		</helper>
     </element>
     <element name="gmd:administrativeArea" id="383.0">
@@ -824,7 +825,7 @@
 		<helper rel="gmd:postalCode">
 			<option value="80 boîte 1 rue du Progrès" title="1035">80 boîte 1 rue du Progrès (Bruxelles Développement urbain / Brussel Stedelijke Ontwikkeling)</option>
 			<option value="2-4 rue Royale" title="1000">2-4 rue Royale (ADT / ATO)</option>
-			<option value="100 Gulledelle" title="1200">100 Gulledelle (Bruxelles Environnement / Leefmilieu Brussel)</option>
+			<option value="86C avenue du Port" title="100">86C avenue du Port (Bruxelles Environnement / Leefmilieu Brussel)</option>
 			<option value="80 boîte 1 rue du Progrès" title="1035">80 boîte 1 rue du Progrès (Bruxelles Mobilité / Mobiel Brussel)</option>
 			<option value="21 avenue des Arts" title="1000">21 avenue des Arts (CIRB / CIBG)</option>
 			<option value="20 boulevard du Jardin Botanique" title="1035">20 boulevard du Jardin Botanique (IBSA / BISA)</option>

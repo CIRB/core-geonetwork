@@ -195,7 +195,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_CLASVGD_ENS</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork//srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=ed4319b7-95b1-4758-9004-081d66f1d679"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=ed4319b7-95b1-4758-9004-081d66f1d679"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIRENL_Beschermde_gehelen</Name>
@@ -246,7 +246,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_CLASVGD_ARCH</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork//srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=60555a3e-8afb-496b-99c1-aa2922bc3de8"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=60555a3e-8afb-496b-99c1-aa2922bc3de8"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIRENL_Beschermde_archeologische_landschappen</Name>
@@ -297,7 +297,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_CLASVGD_SITES</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork//srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=1d2baa79-ff45-46e3-8200-4e8f9ee19892"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=1d2baa79-ff45-46e3-8200-4e8f9ee19892"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIRENL_Beschermde_landschappen</Name>
@@ -348,7 +348,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_CLASVGD_MON</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork//srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=67e995a6-9326-4bd5-86ce-bbe084a52c8f"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=67e995a6-9326-4bd5-86ce-bbe084a52c8f"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIRENL_Beschermde_monumenten</Name>
@@ -398,7 +398,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_CLASVGD_ENS</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork//srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=ed4319b7-95b1-4758-9004-081d66f1d679"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=ed4319b7-95b1-4758-9004-081d66f1d679"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIREFR_Ensemble_classé</Name>
@@ -449,7 +449,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.A10_AF_AFFECT</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork//srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=cd7ca698-975e-4ab2-babd-46581edc2eb7"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=cd7ca698-975e-4ab2-babd-46581edc2eb7"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIREEN_Green_areas_with_high_biological_value</Name>
@@ -500,7 +500,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.A10_AF_AFFECT</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork//srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=cd7ca698-975e-4ab2-babd-46581edc2eb7"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=cd7ca698-975e-4ab2-babd-46581edc2eb7"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIRENL_Groengebieden_met_hoogbiologische_waarde</Name>
@@ -551,7 +551,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_CLASVGD_MON</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork//srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=67e995a6-9326-4bd5-86ce-bbe084a52c8f"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=67e995a6-9326-4bd5-86ce-bbe084a52c8f"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIREFR_Monument_classé</Name>
@@ -602,7 +602,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_PROT_ZPROT</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork//srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=523cbba0-4373-4b61-8462-eab85c27cdb4"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=523cbba0-4373-4b61-8462-eab85c27cdb4"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIREEN_Protection _area</Name>
@@ -653,7 +653,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_CLASVGD_ARCH</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork//srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=60555a3e-8afb-496b-99c1-aa2922bc3de8"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=60555a3e-8afb-496b-99c1-aa2922bc3de8"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIREEN_Registered_archaeological_site</Name>
@@ -704,7 +704,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_CLASVGD_ENS</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork//srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=ed4319b7-95b1-4758-9004-081d66f1d679"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=ed4319b7-95b1-4758-9004-081d66f1d679"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIREEN_Registered_complex</Name>
@@ -755,7 +755,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_CLASVGD_MON</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork//srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=67e995a6-9326-4bd5-86ce-bbe084a52c8f"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=67e995a6-9326-4bd5-86ce-bbe084a52c8f"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIREEN_Registered_monument</Name>
@@ -788,7 +788,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_CLASVGD_SITES</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork//srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=1d2baa79-ff45-46e3-8200-4e8f9ee19892"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=1d2baa79-ff45-46e3-8200-4e8f9ee19892"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIREEN_Registered_site</Name>
@@ -839,7 +839,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_CLASVGD_ARCH</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork//srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=60555a3e-8afb-496b-99c1-aa2922bc3de8"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=60555a3e-8afb-496b-99c1-aa2922bc3de8"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIREFR_Site_archéologique_classé</Name>
@@ -890,7 +890,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_CLASVGD_SITES</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork//srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=1d2baa79-ff45-46e3-8200-4e8f9ee19892"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=1d2baa79-ff45-46e3-8200-4e8f9ee19892"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIREFR_Site_classé</Name>
@@ -941,7 +941,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_PROT_ZPROT</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork//srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=523cbba0-4373-4b61-8462-eab85c27cdb4"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=523cbba0-4373-4b61-8462-eab85c27cdb4"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIRENL_Vrijwaringzone</Name>
@@ -992,7 +992,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.VM_A40_PROT_ZPROT</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork//srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=523cbba0-4373-4b61-8462-eab85c27cdb4"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=523cbba0-4373-4b61-8462-eab85c27cdb4"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIREFR_Zone_de_protection</Name>
@@ -1043,7 +1043,7 @@
 				<Identifier authority="BE.BRUGIS">BRU_BDU_INTERN.A10_AF_AFFECT</Identifier>
 				<MetadataURL type="ISO19115:2003">
 					<Format>text/xml</Format>
-					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork//srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=cd7ca698-975e-4ab2-babd-46581edc2eb7"/>
+					<OnlineResource xlink:type="simple" xlink:href="http://www.geo.irisnet.be/geonetwork/srv/eng/csw?Request=GetRecordById&amp;Service=CSW&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;id=cd7ca698-975e-4ab2-babd-46581edc2eb7"/>
 				</MetadataURL>
 				<Style>
 					<Name>INSPIREFR_Zones_vertes_a_haute_valeur_biologique</Name>
@@ -1061,15 +1061,6 @@
 					<LegendURL width="20" height="20">
 						<Format>image/png</Format>
 						<OnlineResource xlink:type="simple" xlink:href="http://ws.brugis.irisnet.be:80/geoserver/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=INSPIREFR%3AZones_vertes_a_haute_valeur_biologique&amp;style=INSPIRENL_Groengebieden_met_hoogbiologische_waarde"/>
-					</LegendURL>
-				</Style>
-				<Style>
-					<Name>INSPIREFR_Zones_vertes_a_haute_valeur_biologique</Name>
-					<Title>Zones vertes a haute valeur biologique</Title>
-					<Abstract/>
-					<LegendURL width="20" height="20">
-						<Format>image/png</Format>
-						<OnlineResource xlink:type="simple" xlink:href="http://ws.brugis.irisnet.be:80/geoserver/ows?service=WMS&amp;request=GetLegendGraphic&amp;format=image%2Fpng&amp;width=20&amp;height=20&amp;layer=INSPIREFR%3AZones_vertes_a_haute_valeur_biologique&amp;style=INSPIREFR_Zones_vertes_a_haute_valeur_biologique"/>
 					</LegendURL>
 				</Style>
 				<Style>
