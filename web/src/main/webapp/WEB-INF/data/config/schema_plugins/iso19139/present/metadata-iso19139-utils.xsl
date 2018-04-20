@@ -6,6 +6,8 @@
     xmlns:srv="http://www.isotc211.org/2005/srv"
     xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:geonet="http://www.fao.org/geonetwork"
+    xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:java="java:org.fao.geonet.util.XslUtil"
     version="2.0"
     exclude-result-prefixes="#all">
@@ -504,4 +506,14 @@
 			<xsl:otherwise><xsl:value-of select="$paramValue"/></xsl:otherwise>
 		</xsl:choose>
     </xsl:template>
+    
+	<xsl:template name="getAnchorByEnglishInspireTheme">
+		<xsl:param name="keyword"/>
+		<xsl:param name="inspireThemes"/>
+		<xsl:variable name="about" select="$inspireThemes[skos:prefLabel/text()=$keyword and skos:prefLabel/@xml:lang='en']/@rdf:about"/>
+		<xsl:if test="$about">
+			<xsl:value-of select="$about"/>
+		</xsl:if>
+	</xsl:template>	
+
 </xsl:stylesheet>

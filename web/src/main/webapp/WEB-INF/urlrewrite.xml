@@ -172,6 +172,13 @@
         <to type="forward">/srv/$1/atom</to>
     </rule>
 
+    <rule>
+        <note>
+          INSPIRE multilingual capabilities
+        </note>
+        <from>^/wms/(.*)/(.*)-(.*)-(.*)-(.*)-(.*)-(.*).xml?(.*)&amp;language=([a-z]{3})(.*)</from>
+        <to type="forward">/wms/$1/$2-$3-$4-$5-$6-$9.xml?$8$10</to>
+    </rule>
 
     <rule>
         <note>

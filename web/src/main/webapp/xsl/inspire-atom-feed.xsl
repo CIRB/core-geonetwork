@@ -12,13 +12,29 @@
                 xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/"
                 xmlns:opensearchextensions="http://example.com/opensearchextensions/1.0/"
                 xmlns:inspire_dls="http://inspire.ec.europa.eu/schemas/inspire_dls/1.0"
-                exclude-result-prefixes="gmx xsl gmd gco srv java">
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+                xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+                exclude-result-prefixes="gmx xsl gmd gco srv java xlink skos rdf">
 	<xsl:variable name="protocol">WWW:DOWNLOAD-1.0-HTTP--DOWNLOAD</xsl:variable>
 	<xsl:variable name="applicationProfile">INSPIRE-Download-Atom</xsl:variable>
 	<xsl:variable name="guiLang" select="/root/gui/language"/>
+	<xsl:variable name="inspire" select="/root/gui/env/inspire/enable"/>
+	<xsl:variable name="thesauriDir" select="/root/dataset/thesauriDir"/>
+	<xsl:variable name="featureconceptThesaurusAvailable" select="$inspire!='false' and $thesauriDir!=''"/>
     <xsl:variable name="baseUrl" select="concat('http://',/root/gui/env/server/host,/root/gui/url)"/>
+    <xsl:variable name="featureconceptThesaurus"
+        select="if ($featureconceptThesaurusAvailable) then document(concat('file:///', replace($thesauriDir, '\\', '/'), '/external/thesauri/theme/featureconcept.en.skos.rdf')) else ''"/>
+    <xsl:variable name="featureconcepts"
+                select="if ($featureconceptThesaurusAvailable) then $featureconceptThesaurus//skos:Concept else ''"/>
+    <xsl:variable name="featureconceptThesaurusTitle" select="'INSPIRE feature concept dictionary'" />
+    <xsl:variable name="featureconceptBaseUrl" select="'http://inspire.ec.europa.eu/featureconcept/'" />
+
 
 	<xsl:template match="/root">
+    <xsl:message select="$inspire"/>
+    <xsl:message select="$thesauriDir"/>
+    <xsl:message select="$featureconceptThesaurus"/>
 		<atom:feed xsi:schemaLocation="http://www.w3.org/2005/Atom http://inspire-geoportal.ec.europa.eu/schemas/inspire/atom/1.0/atom.xsd" xml:lang="en">
 			<xsl:apply-templates mode="service" select="service/gmd:MD_Metadata"/>
 			<xsl:apply-templates mode="dataset" select="dataset/gmd:MD_Metadata">
@@ -139,6 +155,24 @@
 				<xsl:with-param name="codeSpace"><xsl:value-of select="$identifierCodeSpace"/></xsl:with-param>
 			</xsl:call-template>
    		</atom:id>
+
+		<xsl:if test="not($isServiceEntry)">
+	        <!-- REQ 28: TODO implement thesaurus to be used in editor to select one or more INSPIRE Spatial Object Types and based on selection show here the links -->
+	        <xsl:message select="concat('FeatureconceptThesaurusAvailable : ',$featureconceptThesaurusAvailable)"/>
+	        <xsl:if test="$featureconceptThesaurusAvailable">
+		        <xsl:for-each select=".//gmd:keyword/gco:CharacterString[../../gmd:thesaurusName/gmd:CI_Citation/gmd:title/gco:CharacterString=$featureconceptThesaurusTitle]">
+		            <xsl:variable name="concept" select="."/>
+			        <xsl:message select="concat('Concept to handle is: ',.)"/>
+		            <link href="{$featureconcepts[skos:prefLabel = $concept]/@rdf:about}" rel="describedby" type="text/html" />
+		        </xsl:for-each>
+		    </xsl:if>
+	        <xsl:for-each select=".//gmd:keyword/gmx:Anchor/@xlink:href[contains(.,'featureconcept')]">
+	            <xsl:call-template name="get-inspire-spatial-object-type-link">
+	                <xsl:with-param name="anchorhref" select="."/>
+	            </xsl:call-template>
+	        </xsl:for-each>
+		</xsl:if>
+
        	<xsl:call-template name="csw-link">
 			<xsl:with-param name="lang" select="$guiLang"/>
 			<xsl:with-param name="baseUrl" select="$baseUrl"/>
@@ -345,4 +379,18 @@
 		</xsl:choose>
 	</xsl:template>
 		
+
+    <xsl:template name="get-inspire-spatial-object-type-link">
+        <xsl:param name="anchorhref"/>
+        <xsl:variable name="inspireSpatialObjectType">
+            <xsl:analyze-string select="$anchorhref" regex="featureconcept/[a-zA-Z]+" >
+                <xsl:matching-substring>
+                    <xsl:value-of select="substring-after(., 'featureconcept/')"/>
+                </xsl:matching-substring>
+            </xsl:analyze-string>
+        </xsl:variable>
+        <xsl:if test="$inspireSpatialObjectType!=''">
+            <link href="{concat($featureconceptBaseUrl,$inspireSpatialObjectType)}" rel="describedby" type="text/html" />
+        </xsl:if>
+    </xsl:template>
 </xsl:stylesheet>

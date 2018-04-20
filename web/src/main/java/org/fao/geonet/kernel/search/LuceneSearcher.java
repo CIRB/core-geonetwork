@@ -1276,6 +1276,22 @@ public class LuceneSearcher extends MetaSearcher {
 			elSummary = LuceneSearcher.addSortedSummaryKeys(elSummary, langCode, summaryMaps, summaryConfigValues);
 		} else {
 			tdocs = tfc.topDocs(startHit, endHit);
+/*
+    			if (tdocs!=null) {
+		            Log.debug(Geonet.LUCENE, "List of docs found");
+    				TopDocs topDocs = tfc.topDocs(0,startHit);
+    				int docsCounter = 1;
+    				for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
+    		            Log.debug(Geonet.LUCENE, "Record " + docsCounter + " with docid (" + scoreDoc.doc + ") has next values " + scoreDoc.toString());
+    					docsCounter++;
+    				}
+    				for (ScoreDoc scoreDoc : tdocs.scoreDocs) {
+    		            Log.debug(Geonet.LUCENE, "Record " + docsCounter + " with docid (" + scoreDoc.doc + ") has next values " + scoreDoc.toString());
+    					docsCounter++;
+    				}
+    			}
+            }
+*/
 		}
 
 		return Pair.read(tdocs,elSummary);

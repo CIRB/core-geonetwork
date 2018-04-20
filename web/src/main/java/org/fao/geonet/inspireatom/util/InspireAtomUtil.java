@@ -42,6 +42,7 @@ import org.fao.geonet.exceptions.MetadataNotFoundEx;
 import org.fao.geonet.exceptions.MultipleMetadataRecordsEx;
 import org.fao.geonet.kernel.AccessManager;
 import org.fao.geonet.kernel.DataManager;
+import org.fao.geonet.kernel.ThesaurusManager;
 import org.fao.geonet.kernel.search.LuceneSearcher;
 import org.fao.geonet.lib.Lib;
 import org.fao.geonet.services.main.Result;
@@ -52,7 +53,7 @@ import org.jdom.Namespace;
 
 /**
  * Utility class for INSPIRE Atom.
- * 
+ *
  * @author Jose García
  */
 public class InspireAtomUtil {
@@ -216,7 +217,7 @@ public class InspireAtomUtil {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param schema
 	 *            Metadata schema.
 	 * @param md
@@ -269,7 +270,7 @@ public class InspireAtomUtil {
 		switch (identifiers.getChildren().size()) {
 			case 0:
 				throw new MetadataNotFoundEx(datasetIdCode);
-			case 1: 
+			case 1:
 				String fileIdentifier = identifiers.getChildText("identifier");
 				if (!StringUtils.isBlank(fileIdentifier)) {
 					GeonetContext gc = (GeonetContext) context
@@ -277,7 +278,7 @@ public class InspireAtomUtil {
 					DataManager dm = gc.getDataManager();
 					Dbms dbms = (Dbms) context.getResourceManager()
 							.open(Geonet.Res.MAIN_DB);
-			
+
 					Log.debug(Geonet.ATOM, "Processing dataset feed  ("
 							+ InspireAtomUtil.DATASET_IDENTIFIER_CODE_PARAM + ": "
 							+ datasetIdCode);
@@ -295,8 +296,12 @@ public class InspireAtomUtil {
 					boolean bCodeSpaceValueIsEqual = false;
 					if (!StringUtils.isBlank(datasetIdNs)) {
 						List<Namespace> nss = new ArrayList<Namespace>();
-						nss.addAll(md.getAdditionalNamespaces());
-						nss.add(md.getNamespace());
+						try {
+							nss = dm.getSchema(dm.autodetectSchema(md)).getSchemaNS();
+						} catch (Exception e) {
+							nss.addAll(md.getAdditionalNamespaces());
+							nss.add(md.getNamespace());
+						}
 						Object o = Xml
 								.selectSingle(
 										md,
@@ -314,6 +319,8 @@ public class InspireAtomUtil {
 					}
 					if (bCodeSpaceValueIsEqual) {
 						Element datasetEl = new Element("dataset");
+			    		ThesaurusManager thesaurusMan = gc.getThesaurusManager();
+			    		datasetEl.addContent(new Element("thesauriDir").setText(thesaurusMan.getThesauriDirectory()));
 						try {
 							Element datasetEntryInfo = InspireAtomUtil
 									.getDatasetEntryInfo(fileIdentifier,
@@ -365,7 +372,7 @@ public class InspireAtomUtil {
 		Element identifiersEl = new Element("identifiers");
 		Element request = new Element("request");
 		if (mainSearchFieldName.equals("identifier")) {
-			request.addContent(new Element("has_atom").setText("true"));			
+			request.addContent(new Element("has_atom").setText("true"));
 		} else {
 			request.addContent(new Element("serviceType").setText(ATOM_SERVICE_TYPE));
 		}

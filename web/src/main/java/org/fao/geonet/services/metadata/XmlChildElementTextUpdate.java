@@ -97,7 +97,7 @@ public class XmlChildElementTextUpdate implements Service
 					for(Element group : userGroups) {
 						groupIdList.add(group.getText());
 					}
-					whereClause += " and id in (select metadataid from operationallowed where groupid in (" + StringUtils.join(groupIdList, ",") + ") and operationid = '2')";				
+					whereClause += " and id in (select metadataid from operationallowed where groupid in (" + StringUtils.join(groupIdList, ",") + ") and operationid = '2')";
 				} else {
 					throw new IllegalArgumentException("Update not allowed for user without usergroups");
 				}
@@ -115,8 +115,12 @@ public class XmlChildElementTextUpdate implements Service
     	            md.detach();
     	            boolean isModified = false;
                     List<Namespace> nss = new ArrayList<Namespace>();
-                    nss.addAll(md.getAdditionalNamespaces());
-                    nss.add(md.getNamespace());
+                    try {
+						nss = dm.getSchema(dm.autodetectSchema(md)).getSchemaNS();
+					} catch (Exception e) {
+						nss.addAll(md.getAdditionalNamespaces());
+						nss.add(md.getNamespace());
+					}
                     Object o = Xml.selectSingle(md, xpathExpression, nss);
                     if (o!=null && o instanceof Element) {
                     	String oldChildTextValue = ((Element)o).getText();
