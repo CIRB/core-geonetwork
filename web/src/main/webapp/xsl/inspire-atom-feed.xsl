@@ -32,9 +32,6 @@
 
 
 	<xsl:template match="/root">
-    <xsl:message select="$inspire"/>
-    <xsl:message select="$thesauriDir"/>
-    <xsl:message select="$featureconceptThesaurus"/>
 		<atom:feed xsi:schemaLocation="http://www.w3.org/2005/Atom http://inspire-geoportal.ec.europa.eu/schemas/inspire/atom/1.0/atom.xsd" xml:lang="en">
 			<xsl:apply-templates mode="service" select="service/gmd:MD_Metadata"/>
 			<xsl:apply-templates mode="dataset" select="dataset/gmd:MD_Metadata">
@@ -158,11 +155,9 @@
 
 		<xsl:if test="not($isServiceEntry)">
 	        <!-- REQ 28: TODO implement thesaurus to be used in editor to select one or more INSPIRE Spatial Object Types and based on selection show here the links -->
-	        <xsl:message select="concat('FeatureconceptThesaurusAvailable : ',$featureconceptThesaurusAvailable)"/>
 	        <xsl:if test="$featureconceptThesaurusAvailable">
 		        <xsl:for-each select=".//gmd:keyword/gco:CharacterString[../../gmd:thesaurusName/gmd:CI_Citation/gmd:title/gco:CharacterString=$featureconceptThesaurusTitle]">
 		            <xsl:variable name="concept" select="."/>
-			        <xsl:message select="concat('Concept to handle is: ',.)"/>
 		            <link href="{$featureconcepts[skos:prefLabel = $concept]/@rdf:about}" rel="describedby" type="text/html" />
 		        </xsl:for-each>
 		    </xsl:if>

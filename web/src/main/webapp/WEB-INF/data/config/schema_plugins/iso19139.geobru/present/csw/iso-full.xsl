@@ -9,7 +9,9 @@
 										xmlns:ows="http://www.opengis.net/ows"
 										xmlns:geonet="http://www.fao.org/geonetwork"
 										xmlns:skos="http://www.w3.org/2004/02/skos/core#"
-										exclude-result-prefixes="geobru">
+										xmlns:gmx="http://www.isotc211.org/2005/gmx"
+										xmlns:xlink="http://www.w3.org/1999/xlink"
+										exclude-result-prefixes="#all">
 
 	<xsl:param name="lang"/>
 	<xsl:param name="displayInfo"/>
@@ -73,11 +75,11 @@
 
 	<xsl:template match="gmd:keyword[gco:CharacterString]" priority="1000">
 		<gmd:keyword>
-			<xsl:message select="concat('Language is ',$lang)"/>
+			<!-- 
 			<xsl:variable name="localisedCharacterString" select="gmd:PT_FreeText/gmd:textGroup/gmd:LocalisedCharacterString[@locale=concat('#',upper-case($lang))]"/>
+			 -->
 			<xsl:variable name="englishCharacterString" select="gmd:PT_FreeText/gmd:textGroup/gmd:LocalisedCharacterString[@locale='#ENG']"/>
 			<xsl:variable name="edition" select="../gmd:thesaurusName/gmd:CI_Citation/gmd:edition/gco:CharacterString"/>
-			<xsl:message select="concat('Edition :',$edition)"/>
 			<xsl:if test="$edition='http://geonetwork-opensource.org/inspire-theme' and $englishCharacterString!=''">
 				<xsl:variable name="anchor">
 					<xsl:call-template name="getAnchorByEnglishInspireTheme">
@@ -85,16 +87,38 @@
 						<xsl:with-param name="inspireThemes" select="$inspireThemes"/>
 					</xsl:call-template>
 				</xsl:variable>
-				<xsl:message select="concat('Used Anchor with id ',$anchor)"/>
+				<!--<gmx:Anchor xlink:href="{$anchor}"><xsl:value-of select="$localisedCharacterString"/></gmx:Anchor>-->
+				<gmx:Anchor xlink:href="{$anchor}"><xsl:value-of select="gco:CharacterString"/></gmx:Anchor>
 			</xsl:if>
-			<xsl:if test="$localisedCharacterString!=''">
-				<xsl:message select="concat('Used translated value ',$localisedCharacterString)"/>
-				<gco:CharacterString><xsl:value-of select="$localisedCharacterString"/></gco:CharacterString>
-			</xsl:if>
-			<xsl:if test="$localisedCharacterString=''">
-				<xsl:message select="concat('Used untranslated value ',gco:CharacterString)"/>
+			<xsl:if test="not($edition='http://geonetwork-opensource.org/inspire-theme' and $englishCharacterString!='')">
+<!--
+				<xsl:if test="$localisedCharacterString!=''">
+					<xsl:message select="concat('Used translated value ',$localisedCharacterString)"/>
+					<gco:CharacterString><xsl:value-of select="$localisedCharacterString"/></gco:CharacterString>
+				</xsl:if>
+				<xsl:if test="$localisedCharacterString=''">
+					<xsl:message select="concat('Used untranslated value ',gco:CharacterString)"/>
+					<gco:CharacterString><xsl:value-of select="gco:CharacterString"/></gco:CharacterString>
+				</xsl:if>
+-->
 				<gco:CharacterString><xsl:value-of select="gco:CharacterString"/></gco:CharacterString>
 			</xsl:if>
 		</gmd:keyword>
+	</xsl:template>
+
+	<!-- ============================================================================= -->
+
+	<xsl:template match="gmd:date[../gmd:title/gco:CharacterString='GEMET - INSPIRE themes, version 1.0']" priority="1000">
+		<gmd:date>
+		   <gmd:CI_Date>
+		      <gmd:date>
+		         <gco:Date>2008-06-01</gco:Date>
+		      </gmd:date>
+		      <gmd:dateType>
+		         <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_DateTypeCode"
+		                              codeListValue="publication"/>
+		      </gmd:dateType>
+		   </gmd:CI_Date>
+		</gmd:date>
 	</xsl:template>
 </xsl:stylesheet>

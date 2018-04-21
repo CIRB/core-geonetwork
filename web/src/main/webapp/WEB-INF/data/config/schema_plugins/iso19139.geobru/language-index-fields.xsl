@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gml="http://www.opengis.net/gml" xmlns:srv="http://www.isotc211.org/2005/srv" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:java="java:org.fao.geonet.util.XslUtil" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:gmx="http://www.isotc211.org/2005/gmx " xmlns:geonet="http://www.fao.org/geonetwork" xmlns:geobru="http://geobru.irisnet.be">
+<xsl:stylesheet version="1.0" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gml="http://www.opengis.net/gml" xmlns:srv="http://www.isotc211.org/2005/srv" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:java="java:org.fao.geonet.util.XslUtil" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:geonet="http://www.fao.org/geonetwork" xmlns:geobru="http://geobru.irisnet.be">
 	<!-- This file defines what parts of the metadata are indexed by Lucene
 	     Searches can be conducted on indexes defined here.
 	     The Field@name attribute defines the name of the search variable.
