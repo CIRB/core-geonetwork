@@ -84,5 +84,18 @@
 		   </gmd:CI_Date>
 		</gmd:date>
 	</xsl:template>
+	<xsl:template match="gmd:date[../gmd:title/gco:CharacterString='INSPIRE priority data set']" priority="1000">
+		<gmd:date>
+		   <gmd:CI_Date>
+		      <gmd:date>
+		         <gco:Date>2018-04-04</gco:Date>
+		      </gmd:date>
+		      <gmd:dateType>
+		         <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#CI_DateTypeCode"
+		                              codeListValue="publication"/>
+		      </gmd:dateType>
+		   </gmd:CI_Date>
+		</gmd:date>
+	</xsl:template>
 </xsl:stylesheet>
 
