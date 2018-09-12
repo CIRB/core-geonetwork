@@ -50,8 +50,7 @@ GeoNetwork.map.NUMZOOMLEVELS = 16;
 //GeoNetwork.map.NUMZOOMLEVELS = 18;
 //GeoNetwork.map.NUMZOOMLEVELS = 23;
 GeoNetwork.map.TILESIZE = new OpenLayers.Size(256,256);
-//GeoNetwork.map.BACKGROUND_LAYERS=[new OpenLayers.Layer.WMS("Background layer","http://geoserver.gis.irisnetlab.be/geoserver/wms",{layers:"urbisFR",format:"image/jpeg"},{isBaseLayer:true,singleTile: true})];
-GeoNetwork.map.BACKGROUND_LAYERS=[new OpenLayers.Layer.WMS("Background layer","http://geoserver.gis.irisnet.be/geoserver/wms",{layers:"urbisFR",format:"image/jpeg"},{isBaseLayer:true,singleTile: true})];
+GeoNetwork.map.BACKGROUND_LAYERS=[new OpenLayers.Layer.WMS("Background layer","https://geoservices-urbis.irisnet.be/geoserver/wms",{layers:"urbisFR",format:"image/jpeg"},{isBaseLayer:true,singleTile: true})];
 GeoNetwork.map.EXTENT_MAP_OPTIONS = {
 	    projection: GeoNetwork.map.PROJECTION,
 	    units: GeoNetwork.map.UNITS,
